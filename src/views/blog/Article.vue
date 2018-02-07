@@ -263,7 +263,6 @@
                 }
             },
             loadArticles() {
-                alert(123)
                 var self = this;
                 store.dispatch('ArticleList').then(res => { // 拉取user_info
                     self.article_list = res.data.list;

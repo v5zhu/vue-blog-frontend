@@ -5,7 +5,7 @@
         </button>
         <a class="navbar-brand"></a>
         <ul class="nav navbar-nav d-md-down-none">
-            <li class="nav-item">
+            <li class="nav-item" id="sidebar_minimize">
                 <a class="nav-link navbar-toggler sidebar-toggler" @click="sidebarMinimize">&#9776;</a>
             </li>
 
@@ -13,6 +13,43 @@
 
         <ul class="nav navbar-nav d-md-down-none">
 
+            <li class="nav-item header-item">
+
+
+                <router-link tag="div" to='/blog' class="nav-link">
+                    <p>
+                        <Icon type="edit" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 博客管理 </p>
+                </router-link>
+            </li>
+            <li class="nav-item header-item">
+
+                <router-link tag="div" to='/timertask' class="nav-link">
+                    <p>
+                        <Icon type="flash-off" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 定时任务 </p>
+                </router-link>
+            </li>
+            <li class="nav-item header-item">
+
+                <router-link tag="div" to='/log' class="nav-link">
+                    <p>
+                        <Icon type="ios-paw" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 日志监控 </p>
+                </router-link>
+            </li>
+            <li class="nav-item header-item">
+
+                <router-link tag="div" to='/link' class="nav-link">
+                    <p>
+                        <Icon type="network" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 友链管理 </p>
+                </router-link>
+            </li>
             <li class="nav-item header-item">
 
 
@@ -82,7 +119,7 @@
             <Dropdown class="nav-item">
                 <a href="javascript:void(0)">
            <span slot="button">
-          <img src="static/img/avatars/6.jpg" class="img-avatar" alt="o">
+          <img src="/static/img/avatars/6.jpg" class="img-avatar" alt="o">
           <span class="d-md-down-none">admin</span>
           </span>
                 </a>
@@ -193,7 +230,7 @@
     }
 
     .header-item {
-        width: 130px;
+        width: 100px;
     }
 
     .header-item a {
@@ -202,7 +239,7 @@
 
     }
 
-    ul > li:hover {
+    ul > li:not(#sidebar_minimize):hover {
         border-bottom: 5px solid #20a0ff;
     }
 </style>
