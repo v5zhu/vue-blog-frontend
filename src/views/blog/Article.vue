@@ -86,6 +86,16 @@
                         title: '文章标题',
                         key: 'title',
                         ellipsis: 'true',
+                        render: (h, params) => {
+                            const title = params.row.title;
+                            return h('div', [
+                                h('Tooltip', {
+                                    props: {
+                                        content: title
+                                    }
+                                }, title),
+                            ]);
+                        }
                     },
                     {
                         title: '发布时间',
@@ -129,10 +139,6 @@
                         ],
                         filterMultiple: false,
                         filterMethod(value, row) {
-                            console.log("value="+value);
-
-                            console.log("row="+row);
-
                             if (value === 'publish') {
                                 return '已发布';
                             }else{
@@ -172,8 +178,8 @@
                         ellipsis: 'true',
 
                         render: (h, params) => {
-                            const task_status = parseInt(params.row.status);
-                            if (task_status === 0) {
+                            const task_status = params.row.status;
+                            if (task_status === 'publish') {
                                 return h('div', [
                                     h('Tooltip', {
                                         props: {
@@ -206,7 +212,7 @@
 
                                 ]);
                             }
-                            else if (task_status === 1) {
+                            else if (task_status === 'draft') {
                                 return h('div', [
                                     h('Button', {
                                         props: {

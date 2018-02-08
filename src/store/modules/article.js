@@ -2,10 +2,10 @@ import {articleList} from 'api/article';
 
 const article = {
     state: {
+        id: '',
         title: '',
         cover: '',
         path: '',
-        authorId: '',
         type: '',
         status: '',
         tags: '',
@@ -19,6 +19,9 @@ const article = {
     },
 
     mutations: {
+        SET_ID: (state, id) => {
+            state.id = id;
+        },
         SET_TITLE: (state, title) => {
             state.title = title;
         },
@@ -27,9 +30,6 @@ const article = {
         },
         SET_PATH: (state, path) => {
             state.path = path;
-        },
-        SET_AUTHOR_ID: (state, authorId) => {
-            state.authorId = authorId;
         },
         SET_TYPE: (state, type) => {
             state.type = type;
@@ -69,10 +69,10 @@ const article = {
             return new Promise((resolve, reject) => {
                 articleList(state.token).then(response => {
                     const data = response.data;
+                    commit('SET_ID', data.id);
                     commit('SET_TITLE', data.title);
                     commit('SET_COVER', data.cover);
                     commit('SET_PATH', data.path);
-                    commit('SET_AUTHOR_ID', data.authorId);
                     commit('SET_TYPE', data.type);
                     commit('SET_STATUS', data.status);
                     commit('SET_TAGS', data.tags);
