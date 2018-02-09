@@ -178,7 +178,7 @@
                                         }
                                     }, "待审"),
                                 ]);
-                            }else if (task_status === 'publish') {
+                            } else if (task_status === 'publish') {
                                 return h('div', [
 
                                     h('Tag', {
@@ -201,21 +201,16 @@
                         render: (h, params) => {
                             const task_status = params.row.status;
                             return h('div', [
-                                h('Tooltip', {
+                                h('Button', {
                                     props: {
-                                        content: '编辑文章',
+                                        type: 'primary',
+                                        size: 'small',
+                                        loading: false,
                                     },
-                                }, [
-                                    h('Button', {
-                                        props: {
-                                            type: 'primary',
-                                            size: 'small',
-                                            loading: false,
-                                        },
-                                        style: {
-                                            marginRight: '5px'
-                                        },
-                                    }, '编辑')]),
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                }, '编辑'),
                                 h('Button', {
                                     props: {
                                         type: 'error',
@@ -242,7 +237,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.$router.push({path: '/blog/article/preview/' + params.row.id})
                                         }
                                     }
                                 }, '预览')

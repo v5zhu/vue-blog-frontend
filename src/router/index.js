@@ -268,8 +268,27 @@ export const asyncRouterMap = [
                 path: '/blog/article',
                 name: '文章管理',
                 icon: 'ios-book',
-                component: _import('blog/Article')
-            }, {
+                redirect:'/blog/article/manage',
+                component: {
+                    render(c) {
+                        return c('router-view')
+                    }
+                },
+                children:[{
+                    path: 'manage',
+                    name: '文章管理',
+                    icon: 'stats-bars',
+                    component: _import('blog/Article'),
+                    hidden: false
+                },{
+                    path: 'preview/:id',
+                    name: '文章预览',
+                    icon: 'stats-bars',
+                    component: _import('blog/ArticleDetail'),
+                    hidden: true
+                }]
+            },
+            {
                 path: '/blog/comment',
                 name: '评论管理',
                 icon: 'chatbubble-working',
