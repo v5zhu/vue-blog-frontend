@@ -48,7 +48,7 @@
 </template>
 
 <script>
-    import expandRow from '../table-expand.vue';
+    import expandRow from './article-table-expand.vue';
 
     import {formatTime} from 'utils/index';
 
@@ -103,7 +103,7 @@
                         ellipsis: 'true',
                         render: (h, params) => {
                             const time = params.row.gmtCreate;
-                            var datetime=formatTime(time,'{y}-{m}-{d} {h}:{i}:{s}');
+                            var datetime = formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
                             return h('div', [
                                 h('Tooltip', {
                                     props: {
@@ -122,7 +122,17 @@
                     {
                         title: '所属分类',
                         key: 'categories',
-                        ellipsis: 'true'
+                        ellipsis: 'true',
+                        render: (h, params) => {
+                            const categories = params.row.categories;
+                            return h('div', [
+                                h('Tooltip', {
+                                    props: {
+                                        content: categories
+                                    }
+                                }, categories),
+                            ]);
+                        }
                     },
                     {
                         title: '发布状态',
@@ -141,33 +151,44 @@
                         filterMethod(value, row) {
                             if (value === 'publish') {
                                 return '已发布';
-                            }else{
+                            } else {
                                 return '草稿';
                             }
                         },
 
                         render: (h, params) => {
                             const task_status = params.row.status;
-                            if (task_status === 'draft')
+                            if (task_status === 'draft') {
                                 return h('div', [
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "yellow"
+                                        },
+                                    }, "草稿"),
+                                ]);
+                            }
+                            else if (task_status === 'audit') {
+                                return h('div', [
+
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "red"
+                                        }
+                                    }, "待审"),
+                                ]);
+                            }else if (task_status === 'publish') {
+                                return h('div', [
+
                                     h('Tag', {
                                         props: {
                                             type: 'dot',
                                             color: "blue"
                                         }
-                                    }, "草稿"),
+                                    }, "发布"),
                                 ]);
-
-                            else if (task_status === 'publish')
-                                return h('div', [
-
-                                    h('Tag', {
-                                        props: {
-                                            type: 'dot',
-                                            color: "green"
-                                        }
-                                    }, "已发布"),
-                                ]);
+                            }
                         }
                     },
 
@@ -179,69 +200,56 @@
 
                         render: (h, params) => {
                             const task_status = params.row.status;
-                            if (task_status === 'publish') {
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            content: '还未分析完成，暂时不能查看',
-                                        },
-                                    }, [
-                                        h('Button', {
-                                            props: {
-                                                type: 'primary',
-                                                size: 'small',
-                                                loading: true,
-                                            },
-                                            style: {
-                                                marginRight: '5px'
-                                            },
-                                        }, '处理中')]),
-                                    h('Button', {
-                                        props: {
-                                            type: 'error',
-                                            size: 'small',
-                                            disabled: true,
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(params.index)
-                                            }
-                                        }
-                                    }, '删除')
-
-
-                                ]);
-                            }
-                            else if (task_status === 'draft') {
-                                return h('div', [
+                            return h('div', [
+                                h('Tooltip', {
+                                    props: {
+                                        content: '编辑文章',
+                                    },
+                                }, [
                                     h('Button', {
                                         props: {
                                             type: 'primary',
                                             size: 'small',
+                                            loading: false,
                                         },
                                         style: {
                                             marginRight: '5px'
                                         },
-                                        on: {
-                                            click: () => {
-                                                this.$router.push({path: '/tabledetail/' + (((this.pageindex - 1) * 10) + params.index)})
-
-                                            }
-                                        },
-                                    }, '查看结果'),
-                                    h('Button', {
-                                        props: {
-                                            type: 'error',
-                                            size: 'small',
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(params.index)
-                                            }
+                                    }, '编辑')]),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small',
+                                        disabled: false,
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.remove(params.index)
                                         }
-                                    }, '删除')
-                                ]);
-                            }
+                                    },
+                                }, '删除'),
+                                h('Button', {
+                                    props: {
+                                        type: 'success',
+                                        size: 'small',
+                                        disabled: false,
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.remove(params.index)
+                                        }
+                                    }
+                                }, '预览')
+
+
+                            ]);
+
                         }//render
                     },//{
                 ],//cloumn
