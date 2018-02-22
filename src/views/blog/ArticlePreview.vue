@@ -6,19 +6,15 @@
                 <h1 class="post-title" itemprop="name headline">
                     <span>{{article.title}}</span>
                 </h1>
-                <div class="post-data">
-                    <span>发布于</span>
-                    <span>{{article.gmtCreate}}</span>
-                    浏览
+                <div class="post-data" style="margin: 20px;">
+                    <span>发布于：{{article.gmtCreate | formatDate}}</span>
+                    浏览量：<span>{{article.hits}}</span>
                 </div>
+
             </div>
-            <mavon-editor  :ishljs = "true" v-model="article.content">
-
-            </mavon-editor>
-
-            <vue-markdown v-highlight :source="article.content">
-
-            </vue-markdown>
+            <div id="editor">
+                <div v-html="compiledMarkdown"></div>
+            </div>
             <!--<div id="post-content" class="post-content" itemprop="articleBody">
                 &lt;!&ndash;<p class="post-tags" th:utext="${commons.showTags(article.tags)}"></p>&ndash;&gt;
                 &lt;!&ndash;<th:block th:utext="${commons.article(article.content)}"/>&ndash;&gt;
@@ -67,6 +63,11 @@
                 }
             }
         },
+        computed: {
+            compiledMarkdown: function () {
+                return marked(this.article.content, {sanitize: true})
+            }
+        },
         created() {
 
         },
@@ -92,17 +93,61 @@
                 }).catch(() => {
                     console.log("请求文章列表失败");
                 })
-            },
-            formatTime(ms) {
-                var datetime = formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
-                return datetime;
             }
         },
-
+        filters: {
+            formatDate(time) {
+                return formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
+            }
+        }
     }
 </script>
 
 <style type="text/css">
+
+    #editor {
+        margin: 0;
+        height: 100%;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        color: #333;
+    }
+
+    #editor div {
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        vertical-align: middle;
+        box-sizing: border-box;
+        padding: 0 20px;
+    }
+
+    code {
+        color: #bbe4dd;
+        font-size: 1.2em;
+
+    }
+
+    pre {
+        padding: 10px;
+        border-radius: 3px;
+        /*white-space: inherit;*/
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        vertical-align: middle;
+        min-height: 40px;
+        height: auto;
+        background-color: rgba(14, 16, 15, 0.8);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 20px
+    }
+
+    h1 + p, h2 + p, h3 + p, h4 + p, h5 + p, h6 + p {
+        margin-top: 10px;
+    }
+
     .demo-i-circle-custom h1 {
         color: #3f414d;
         font-size: 10px;
