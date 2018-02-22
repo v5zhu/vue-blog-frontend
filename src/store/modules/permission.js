@@ -70,7 +70,6 @@ const permission = {
        
           
           // 递归访问 accessedRouters，找到包含to 的那个路由对象，设置给siderbar_routers
-          console.log(state.addRouters)
         state.addRouters.forEach(e => {
           if(e.children&& e.children.length ){
            if( getNowRouter(e.children,to)===true)

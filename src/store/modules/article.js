@@ -1,4 +1,4 @@
-import {articleList} from 'api/article';
+import {articleList, articlePreview} from 'api/article';
 
 const article = {
     state: {
@@ -68,6 +68,31 @@ const article = {
         ArticleList({commit, state}) {
             return new Promise((resolve, reject) => {
                 articleList(state.token).then(response => {
+                    const data = response.data;
+                    commit('SET_ID', data.id);
+                    commit('SET_TITLE', data.title);
+                    commit('SET_COVER', data.cover);
+                    commit('SET_PATH', data.path);
+                    commit('SET_TYPE', data.type);
+                    commit('SET_STATUS', data.status);
+                    commit('SET_TAGS', data.tags);
+                    commit('SET_CATEGORIES', data.categories);
+                    commit('SET_HITS', data.hits);
+                    commit('SET_COMMENTS_NUM', data.commentsNum);
+                    commit('SET_ALLOW_COMMENT', data.allowComment);
+                    commit('SET_ALLOW_PING', data.allowPing);
+                    commit('SET_ALLOW_FEED', data.allowFeed);
+                    commit('SET_CONTENT', data.content);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        // 文章预览
+        ArticlePreview({commit, state},params) {
+            return new Promise((resolve, reject) => {
+                articlePreview(params.id).then(response => {
                     const data = response.data;
                     commit('SET_ID', data.id);
                     commit('SET_TITLE', data.title);

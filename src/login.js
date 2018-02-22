@@ -40,7 +40,6 @@ router.beforeEach((to, from, next) => {
         if (hasPermission(store.getters.roles, to.meta.role)) {
           next()//
 
-          console.log("has userinfo")
         } else {
           next({ path: '/', query: { noGoBack: true }})
         }

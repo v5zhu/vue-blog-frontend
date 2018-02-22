@@ -284,7 +284,7 @@ export const asyncRouterMap = [
                     path: 'preview/:id',
                     name: '文章预览',
                     icon: 'stats-bars',
-                    component: _import('blog/ArticleDetail'),
+                    component: _import('blog/ArticlePreview'),
                     hidden: true
                 }]
             },

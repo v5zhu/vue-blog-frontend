@@ -8,3 +8,11 @@ export function articleList(token) {
     });
 }
 
+export function articlePreview(id) {
+    return fetch({
+        url: '/admin/article/preview/' + id,
+        method: 'get',
+        params: {}
+    });
+}
+
