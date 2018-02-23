@@ -4,17 +4,9 @@
             <Col :md="24">
             <div>
                 <div id="container" style="margin-bottom:10px;">
-                    <Button type="primary" size="large" icon="ios-cloud-upload-outline" id='pickfiles'
-                            @click="qiniu_upload" style="padding-bottom:5px;">上传文件
+                    <Button type="primary" size="large" icon="edit"
+                            @click="editArticle(null)" style="padding-bottom:5px;">发表文章
                     </Button>
-                    <Progress :percent="progresscount" :status="progresstatus" style="width=90%;vertical-align:middle"
-                              v-if="progresshow">
-                        <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
-                        <span v-if="progresscount===100">上传成功</span>
-                        <Icon type="close-circled" v-if="progresstatus==='wrong'"></Icon>
-                        <span v-if="progresstatus==='wrong'">上传失败</span>
-                        <span style="position:absolute;left:50%;top:-5px;" v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
-                    </Progress>
                 </div>
                 <div style="position:relative;">
                     <Table :columns="columns7" :data="article_list" ref="table"></Table>
@@ -210,6 +202,11 @@
                                     style: {
                                         marginRight: '5px'
                                     },
+                                    on: {
+                                        click: () => {
+                                            this.editArticle(params.row.id);
+                                        }
+                                    }
                                 }, '编辑'),
                                 h('Button', {
                                     props: {
@@ -253,6 +250,15 @@
         methods: {
             remove(index) {
                 this.video_list.splice(index, 1);
+            },
+            editArticle(id) {
+                if (id == null) {
+                    //发表新文章
+                    this.$router.push({path: '/blog/article/publish'})
+                } else {
+                    //编辑文章
+                    this.$router.push({path: '/blog/article/edit/' + id})
+                }
             },
             qiniu_upload() {
                 uploader.start();

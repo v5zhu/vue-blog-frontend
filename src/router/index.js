@@ -286,6 +286,18 @@ export const asyncRouterMap = [
                     icon: 'stats-bars',
                     component: _import('blog/ArticlePreview'),
                     hidden: true
+                },{
+                    path: 'edit/:id',
+                    name: '文章编辑',
+                    icon: 'stats-bars',
+                    component: _import('blog/ArticleEdit'),
+                    hidden: true
+                },{
+                    path: 'publish',
+                    name: '文章发表',
+                    icon: 'stats-bars',
+                    component: _import('blog/ArticleEdit'),
+                    hidden: true
                 }]
             },
             {
