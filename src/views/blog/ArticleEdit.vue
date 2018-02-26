@@ -207,6 +207,7 @@
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success(msg + '成功!');
+                                    this.$router.push({path:'/blog/article/manage'});
                                 } else {
                                     this.$Message.error(msg + '失败!');
                                 }
@@ -218,6 +219,7 @@
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success(msg + '成功!');
+                                    this.$router.push({path:'/blog/article/manage'});
                                 } else {
                                     this.$Message.error(msg + '失败!');
                                 }
