@@ -219,7 +219,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.remove(params)
                                         }
                                     },
                                 }, '删除'),
@@ -248,8 +248,32 @@
             }//return
         },//data
         methods: {
-            remove(index) {
-                this.video_list.splice(index, 1);
+            remove(param) {
+                this.$Modal.confirm({
+                    title: '删除文章',
+                    content: '<p>点击确定1秒后将删除此文章</p>',
+                    loading: true,
+                    onOk: () => {
+                        setTimeout(() => {
+                            var articleId = param.row.id;
+                            store.dispatch('ArticleDelete', {id: articleId}).then(res => { // 拉取user_info
+                                var resp = res.data;
+                                if (resp.success == true) {
+                                    this.$Message.success('删除成功');
+                                    this.loadArticles();
+                                } else {
+                                    this.$Message.error('删除失败');
+                                }
+                            }).catch(() => {
+                                console.log("删除文章请求失败");
+                            })
+                            this.$Modal.remove();
+                        }, 1000);
+                    },
+                    onCancel: () => {
+                        this.$Message.info('点击了取消');
+                    }
+                });
             },
             editArticle(id) {
                 if (id == null) {

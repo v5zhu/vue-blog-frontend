@@ -38,3 +38,11 @@ export function articleEdit(article) {
     });
 }
 
+export function articleDelete(id) {
+    return fetch({
+        url: '/admin/article/delete',
+        method: 'delete',
+        params: {id: id},
+    });
+}
+
