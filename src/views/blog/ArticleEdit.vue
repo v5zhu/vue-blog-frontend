@@ -1,46 +1,98 @@
 <template>
-    <div class="animated fadeIn" style="margin-top:50px;">
-        <Row>
-            <Col span="18">
-            <div class="post-header">
-                <h1 class="post-title" itemprop="name headline">
-                    <span>{{article.title}}</span>
-                </h1>
-                <div class="post-data" style="margin: 20px;">
-                    <span>发布于：{{article.gmtCreate | formatDate}}</span>
-                    浏览量：<span>{{article.hits}}</span>
-                </div>
+    <div>
 
-            </div>
-            <div id="editor">
-                <div v-html="compiledMarkdown"></div>
-            </div>
-            <!--<div id="post-content" class="post-content" itemprop="articleBody">
-                &lt;!&ndash;<p class="post-tags" th:utext="${commons.showTags(article.tags)}"></p>&ndash;&gt;
-                &lt;!&ndash;<th:block th:utext="${commons.article(article.content)}"/>&ndash;&gt;
-                &lt;!&ndash;<p class="post-info">&ndash;&gt;
-                &lt;!&ndash;本站文章除注明转载/出处外，均为本站原创或翻译，转载前请务必署名,转载请标明出处<br/>最后编辑时间为:&ndash;&gt;
-                &lt;!&ndash;<th:block th:text="${commons.fmtdate(article.gmtModified, 'yyyy/MM/dd HH:mm')}"/>&ndash;&gt;
-                &lt;!&ndash;</p>&ndash;&gt;
-                <div>{{article.content}}</div>
-            </div>-->
-            </Col>
-        </Row>
+        <Form ref="articleForm" :rules="articleRule" :model="article" :label-width="80" label-position="left">
+            <Row>
+                <Col span="24">
+                <Form-item prop="title" label="文章标题">
+                    <Input v-model="article.title" size="large" placeholder="请输入文章标题"/>
+                </Form-item>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="12">
+                <Form-item prop="categoriesArray" label="分类">
+                    <Select v-model="article.categoriesArray" multiple filterable>
+                        <Option v-for="item in categories" :value="item.name" :key="item.name">{{ item.name }}
+                        </Option>
+                    </Select>
+                </Form-item>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="12">
+                <Form-item prop="tagsArray" label="标签">
+                    <Select v-model="article.tagsArray" multiple filterable>
+                        <Option v-for="item in tags" :value="item.value" :key="item.name">{{ item.name }}
+                        </Option>
+                    </Select>
+                </Form-item>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="12">
+                <Form-item prop="path" label="访问路径">
+                    <Input v-model="article.path" size="default" placeholder="请输入文章访问路径"/>
+                </Form-item>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="24">
+                <Form-item prop="content">
+                    <mavon-editor style="margin-top: 20px;position: static;" v-model="article.content"/>
+                </Form-item>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="5">
+                <Form-item prop="allowComment" label="开启评论">
+                    <iSwitch v-model="article.allowComment" size="large">
+                        <span slot="open">允许</span>
+                        <span slot="close">禁止</span>
+                    </iSwitch>
+                </Form-item>
+                </Col>
+                <Col span="5">
+                <Form-item prop="allowPing" label="允许Ping">
+                    <iSwitch v-model="article.allowPing" size="large">
+                        <span slot="open">允许</span>
+                        <span slot="close">禁止</span>
+                    </iSwitch>
+                </Form-item>
+                </Col>
+                <Col span="5">
+                <Form-item prop="allowFeed" label="允许订阅">
+                    <iSwitch v-model="article.allowFeed" size="large">
+                        <span slot="open">允许</span>
+                        <span slot="close">禁止</span>
+                    </iSwitch>
+                </Form-item>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="24">
+                <Form-item>
+                    <Button type="ghost" @click="goBack()">《 返回</Button>
+                    <Button type="default" @click="clearAll('articleForm')">全部清空</Button>
+                    <Button type="warning" @click="handleSubmit('draft','articleForm')" style="margin-left: 15px">
+                        保存为草稿
+                    </Button>
+                    <Button type="primary" @click="handleSubmit('publish','articleForm')" style="margin-left: 15px">
+                        确认发布
+                    </Button>
+                </Form-item>
+                </Col>
+            </Row>
+        </Form>
     </div>
+
 </template>
-
-
-<style scoped>
-    .expand-row {
-        margin-bottom: 16px;
-    }
-</style>
-
-
 <script>
     import {formatTime} from 'utils/index';
     import store from 'store/';
-    import VueMarkdown from 'vue-markdown' //直接作为一个组件引入
+    import {mavonEditor} from 'mavon-editor';
+    import Cookies from 'js-cookie';
+    import 'mavon-editor/dist/css/index.css';
 
     export default {
         data() {
@@ -52,38 +104,60 @@
                     path: '',
                     type: '',
                     status: '',
+                    authorId: '',
                     tags: '',
+                    tagsArray: [],
                     categories: '',
+                    categoriesArray: [],
                     hits: '',
                     commentsNum: '',
                     allowComment: true,
                     allowPing: true,
                     allowFeed: true,
                     content: ''
+                },
+                categories: [],
+                tags: [],
+                articleRule: {
+                    title: [
+                        {required: true, message: '文章标题不能为空', trigger: 'blur'}
+                    ],
+                    categoriesArray: [
+                        {required: true, type: 'array', min: 1, message: '至少选择一个分类', trigger: 'change'},
+                        {type: 'array', max: 3, message: '最多选择三个分类', trigger: 'change'}
+                    ],
+                    tagsArray: [
+                        {required: true, type: 'array', min: 1, message: '至少选择一个标签', trigger: 'change'},
+                        {type: 'array', max: 3, message: '最多选择三个标签', trigger: 'change'}
+                    ],
+                    content: [
+                        {required: true, message: '请输入文章正文', trigger: 'blur'},
+                        {type: 'string', min: 5, message: '正文不能少于5字', trigger: 'blur'}
+                    ]
                 }
             }
-        },
-        computed: {
-            compiledMarkdown: function () {
-                return marked(this.article.content, {sanitize: true})
-            }
-        },
-        created() {
-
-        },
+        },//data
         components: {
-            VueMarkdown // 声明组件
+            mavonEditor
         },
         mounted() {
             const vue = this;
             var id = this.$route.params.id;
             this.articlePreview(id);
+            this.categoryList();
+            this.tagList();
         },
         methods: {
             articlePreview(id) {
                 var self = this;
                 store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info
+                    console.log(res.data)
                     var article = res.data;
+                    var tags = article.tags.split(",");
+                    var categories = article.categories.split(",");
+                    article.tagsArray = tags;
+                    article.categoriesArray = categories;
+                    console.log(article);
                     this.article = article;
 //                    store.dispatch('GenerateRoutes', { roles }).then(() => { // 生成可访问的路由表
 //                        router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
@@ -93,94 +167,86 @@
                 }).catch(() => {
                     console.log("请求文章列表失败");
                 })
-            }
-        },
-        filters: {
-            formatDate(time) {
-                return formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
-            }
+            },
+            categoryList() {
+                store.dispatch('CategoryList', {token: null}).then(res => { // 拉取user_info
+                    var cates = res.data;
+                    this.categories = cates;
+
+                }).catch(() => {
+                    console.log("请求分类列表失败");
+                })
+            },
+            tagList() {
+                store.dispatch('TagList', {token: null}).then(res => { // 拉取user_info
+                    var tags = res.data;
+                    this.tags = tags;
+
+                }).catch(() => {
+                    console.log("请求标签列表失败");
+                })
+            },
+            goBack() {
+                this.$router.push({path:'/blog/article/manage'});
+            },
+            handleSubmit(status, refName) {
+                this.$refs[refName].validate((valid) => {
+                    if (valid) {
+                        var userId = Cookies.get("USER-ID");
+
+                        this.article.status = status;
+                        this.article.categories = this.article.categoriesArray.join(",");
+                        this.article.tags = this.article.tagsArray.join(",");
+                        this.article.authorId = userId;
+
+                        var msg = status == 'publish' ? '发布' : '保存草稿';
+                        if (!this.article.id) {
+                            this.article.id = null;
+
+                            store.dispatch('ArticlePublish', {article: this.article}).then(res => { // 拉取user_info
+                                var resp = res.data;
+                                if (resp.success == true) {
+                                    this.$Message.success(msg + '成功!');
+                                } else {
+                                    this.$Message.error(msg + '失败!');
+                                }
+                            }).catch(() => {
+                                this.$Message.success('提交失败!');
+                            })
+                        } else {
+                            store.dispatch('ArticleEdit', {article: this.article}).then(res => { // 拉取user_info
+                                var resp = res.data;
+                                if (resp.success == true) {
+                                    this.$Message.success(msg + '成功!');
+                                } else {
+                                    this.$Message.error(msg + '失败!');
+                                }
+                            }).catch(() => {
+                                this.$Message.success('提交失败!');
+                            })
+                        }
+                    } else {
+                        this.$Message.error('提交失败!');
+                    }
+                })
+            },
+            clearAll(refName) {
+                this.$refs[refName].resetFields();
+            },
+            handleAdd() {
+                this.formDynamic.items.push({
+                    value: ''
+                });
+            },
+            handleRemove(index) {
+                this.formDynamic.items.splice(index, 1);
+            },
         }
+
     }
 </script>
+<style scoped>
 
-<style type="text/css">
-
-    #editor {
-        margin: 0;
-        height: 100%;
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-        color: #333;
-    }
-
-    #editor div {
-        display: inline-block;
-        height: 100%;
-        width: 100%;
-        vertical-align: middle;
-        box-sizing: border-box;
-        padding: 0 20px;
-    }
-
-    code {
-        color: #bbe4dd;
-        font-size: 1.2em;
-
-    }
-
-    pre {
-        padding: 10px;
-        border-radius: 3px;
-        /*white-space: inherit;*/
-        overflow-x: auto;
-        overflow-y: hidden;
-
-        vertical-align: middle;
-        min-height: 40px;
-        height: auto;
-        background-color: rgba(14, 16, 15, 0.8);
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-        margin-top: 20px
-    }
-
-    h1 + p, h2 + p, h3 + p, h4 + p, h5 + p, h6 + p {
-        margin-top: 10px;
-    }
-
-    .demo-i-circle-custom h1 {
-        color: #3f414d;
-        font-size: 10px;
-        font-weight: normal;
-    }
-
-    .demo-i-circle-custom p {
-        color: #657180;
-        font-size: 8px;
-        margin: 5px 0 2px;
-    }
-
-    .demo-i-circle-custom span {
-        display: block;
-        padding-top: 15px;
-        color: #657180;
-        font-size: 10px;
-    }
-
-    .demo-i-circle-custom span :before {
-        content: '';
-        display: block;
-        width: 50px;
-        height: 1px;
-        margin: 0 auto;
-        background: #e0e3e6;
-        position: relative;
-        top: -20px;
-    }
-
-    ;
-    .demo-i-circle-custom span i {
-        font-style: normal;
-        color: #3f414d;
-    }
 </style>
+
+

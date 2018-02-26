@@ -1,7 +1,7 @@
 <template>
     <div class="animated fadeIn" style="margin-top:50px;">
         <Row>
-            <Col span="18">
+            <Col>
             <div class="post-header">
                 <h1 class="post-title" itemprop="name headline">
                     <span>{{article.title}}</span>
@@ -52,8 +52,8 @@
                     path: '',
                     type: '',
                     status: '',
-                    tags: '',
-                    categories: '',
+                    tags: [],
+                    categories: [],
                     hits: '',
                     commentsNum: '',
                     allowComment: true,

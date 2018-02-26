@@ -3,6 +3,8 @@ import Vuex from 'vuex';
 import app from './modules/app';
 import user from './modules/user';
 import article from './modules/article';
+import category from './modules/category';
+import tag from './modules/tag';
 import permission from './modules/permission';
 import getters from './getters';
 
@@ -13,6 +15,8 @@ const store = new Vuex.Store({
         app,
         user,
         article,
+        category,
+        tag,
         permission
     },
     getters

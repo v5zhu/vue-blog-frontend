@@ -16,3 +16,25 @@ export function articlePreview(id) {
     });
 }
 
+export function articlePublish(article) {
+    return fetch({
+        url: '/admin/article/publish',
+        method: 'post',
+        data: article,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export function articleEdit(article) {
+    return fetch({
+        url: '/admin/article/modify',
+        method: 'put',
+        data: article,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
