@@ -1,4 +1,4 @@
-import {articleList, articlePreview, articlePublish, articleEdit, articleDelete} from 'api/article';
+import {articleList, articlePreview, articlePublish, articleEdit, articleDelete, articleAudit} from 'api/article';
 
 const article = {
     state: {
@@ -69,7 +69,7 @@ const article = {
 
     actions: {
         // 获取文章列表
-        ArticleList({commit, state},params) {
+        ArticleList({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articleList(params).then(response => {
                     const data = response.data;
@@ -95,7 +95,7 @@ const article = {
             });
         },
         // 文章预览
-        ArticlePreview({commit, state},params) {
+        ArticlePreview({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articlePreview(params.id).then(response => {
                     const data = response.data;
@@ -122,7 +122,7 @@ const article = {
         },
 
         // 文章发布
-        ArticlePublish({commit, state},params) {
+        ArticlePublish({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articlePublish(params.article).then(response => {
                     /*const data = response.data;
@@ -148,8 +148,19 @@ const article = {
             });
         },
 
+        // 文章审核
+        ArticleAudit({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                articleAudit(params.auditInfo).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
         // 文章发布
-        ArticleEdit({commit, state},params) {
+        ArticleEdit({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articleEdit(params.article).then(response => {
                     resolve(response);
@@ -160,7 +171,7 @@ const article = {
         },
 
         // 文章删除
-        ArticleDelete({commit, state},params) {
+        ArticleDelete({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articleDelete(params.id).then(response => {
                     resolve(response);

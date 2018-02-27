@@ -199,6 +199,7 @@
 
                     {
                         title: '操作',
+                        width: '200',
                         key: 'action',
                         align: 'center',
                         ellipsis: 'true',
@@ -206,6 +207,22 @@
                         render: (h, params) => {
                             const task_status = params.row.status;
                             return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'warning',
+                                        size: 'small',
+                                        loading: false,
+                                        disabled: params.row.status != 'audit',
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.auditArticle(params.row.id);
+                                        }
+                                    }
+                                }, '审核'),
                                 h('Button', {
                                     props: {
                                         type: 'primary',
@@ -288,6 +305,46 @@
                     }
                 });
             },
+            auditArticle(articleId) {
+                this.$Modal.confirm({
+                    title: '审核文章',
+                    content: '<p>该文章是否符合发布条件</p>',
+                    loading: true,
+                    closable: true,
+                    okText: '通过',
+                    cancelText: '驳回',
+                    onOk: () => {
+                        this.doAudit(articleId, 'publish');
+                    },
+                    onCancel: () => {
+                        this.doAudit(articleId, 'draft');
+                    }
+                });
+            },
+            doAudit(articleId, status) {
+                setTimeout(() => {
+                    store.dispatch('ArticleAudit', {
+                        auditInfo: {
+                            articleId: articleId,
+                            status: status
+                        }
+                    }).then(res => { // 拉取user_info
+                        var resp = res.data;
+                        if (resp.success == true) {
+                            this.$Message.success('审批成功!');
+
+                            var pageNum = this.pageInfo.pageNum;
+                            var pageSize = this.pageInfo.pageSize;
+                            this.loadArticles();
+                        } else {
+                            this.$Message.error('审批失败!');
+                        }
+                    }).catch(() => {
+                        this.$Message.success('提交失败!');
+                    })
+                    this.$Modal.remove();
+                }, 1000);
+            },
             editArticle(id, pageNum, pageSize) {
                 if (id == null) {
                     //发表新文章
@@ -322,15 +379,23 @@
             },
             changePage(page) {
                 this.pageInfo.pageNum = page;
+                this.$router.push({
+                    path: '/blog/article/manage',
+                    query: {pageNum: this.pageInfo.pageNum, pageSize: this.pageInfo.pageSize}
+                });
                 this.loadArticles();
             },
             changePageSize(pageSize) {
                 this.pageInfo.pageSize = pageSize;
+                this.$router.push({
+                    path: '/blog/article/manage',
+                    query: {pageNum: this.pageInfo.pageNum, pageSize: this.pageInfo.pageSize}
+                });
                 this.loadArticles();
             },
             loadArticles() {
                 store.dispatch('ArticleList', {
-                    pageNo: this.pageInfo.pageNum,
+                    pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize
                 }).then(res => { // 拉取user_info
                     this.article_list = res.data.list;
@@ -351,8 +416,11 @@
             qiniuInit(vue);//初始化七牛数据
             var pageNum = this.$route.query.pageNum;
             var pageSize = this.$route.query.pageSize;
-            this.pageInfo.pageNum = pageNum;
-            this.pageInfo.pageS = pageSize;
+
+            if (pageNum && pageSize) {
+                this.pageInfo.pageNum = pageNum;
+                this.pageInfo.pageSize = pageSize;
+            }
             this.loadArticles();
         },
     }

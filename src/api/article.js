@@ -5,7 +5,7 @@ export function articleList(pageInfo) {
         url: '/admin/article/list',
         method: 'get',
         params: {
-            pageNo: pageInfo.pageNo,
+            pageNum: pageInfo.pageNum,
             pageSize: pageInfo.pageSize
         }
     });
@@ -38,6 +38,17 @@ export function articleEdit(article) {
         headers: {
             'Content-Type': 'application/json'
         }
+    });
+}
+
+export function articleAudit(auditInfo) {
+    return fetch({
+        url: '/admin/article/audit',
+        method: 'put',
+        params: {
+            articleId: auditInfo.articleId,
+            status: auditInfo.status
+        },
     });
 }
 
