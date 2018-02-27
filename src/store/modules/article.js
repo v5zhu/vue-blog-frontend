@@ -69,9 +69,9 @@ const article = {
 
     actions: {
         // 获取文章列表
-        ArticleList({commit, state}) {
+        ArticleList({commit, state},params) {
             return new Promise((resolve, reject) => {
-                articleList(state.token).then(response => {
+                articleList(params).then(response => {
                     const data = response.data;
                     commit('SET_ID', data.id);
                     commit('SET_TITLE', data.title);

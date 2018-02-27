@@ -44,7 +44,7 @@
                 </Col>
             </Row>
             <Row>
-                <Col span="5">
+                <Col span="5" style="margin-left: 80px;">
                 <Form-item prop="allowComment" label="开启评论">
                     <iSwitch v-model="article.allowComment" size="large">
                         <span slot="open">允许</span>
@@ -74,11 +74,11 @@
                 <Form-item>
                     <Button type="ghost" @click="goBack()">《 返回</Button>
                     <Button type="default" @click="clearAll('articleForm')">全部清空</Button>
-                    <Button type="warning" @click="handleSubmit('draft','articleForm')" style="margin-left: 15px">
+                    <Button type="warning" v-if="article.status!='audit'" @click="handleSubmit('draft','articleForm')" style="margin-left: 15px">
                         保存为草稿
                     </Button>
-                    <Button type="primary" @click="handleSubmit('publish','articleForm')" style="margin-left: 15px">
-                        确认发布
+                    <Button type="primary" v-if="article.status!='audit'" @click="handleSubmit('audit','articleForm')" style="margin-left: 15px">
+                        提交审核
                     </Button>
                 </Form-item>
                 </Col>
@@ -199,7 +199,7 @@
                         this.article.tags = this.article.tagsArray.join(",");
                         this.article.authorId = userId;
 
-                        var msg = status == 'publish' ? '发布' : '保存草稿';
+                        var msg = status == 'audit' ? '提交审核' : '保存草稿';
                         if (!this.article.id) {
                             this.article.id = null;
 

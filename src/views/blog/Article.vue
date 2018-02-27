@@ -17,15 +17,16 @@
                         <h6 style="color:#2d8cf0;margin-top:10px;">正在获取数据...</h6>
                     </div>
                 </div>
-                <Page :total="this.article_list.length" show-total @on-change="this.loadArticles"
+                <Page :total="this.pageInfo.total" placement="top"
+                      :current="pageInfo.pageNum"
+                      :page-size-opts="pageSizeOpts"
+                      show-elevator show-sizer show-total
+                      @on-change="changePage"
+                      @on-page-size-change="changePageSize"
                       style="text-align:right;margin-top:50px"></Page>
                 <Button type="primary" size="large" @click="exportData(1)">
                     <Icon type="ios-download-outline"></Icon>
-                    导出原始数据
-                </Button>
-                <Button type="primary" size="large" @click="exportData(2)">
-                    <Icon type="ios-download-outline"></Icon>
-                    导出排序和过滤后的数据
+                    导出文章数据
                 </Button>
             </div>
             <div style="" class="doc-content">
@@ -52,7 +53,19 @@
         name: 'buttons',
         data() {
             return {
+                pageInfo: {
+                    isFirstPage: undefined,
+                    isLastPage: undefined,
+                    pageNum: 1,
+                    pageSize: 10,
+                    pages: undefined,
+                    total: undefined,
+                    list: [],
+                    prePage: undefined,
+                    nextPage: undefined
+                },
                 article_list: [],
+                pageSizeOpts: [10, 20, 50, 100],
                 progresshow: false,
                 progresscount: 0,
                 progresstatus: 'active',
@@ -301,16 +314,21 @@
                     });
                 }
             },
+            changePage(page) {
+                this.pageInfo.pageNum = page;
+                this.loadArticles();
+            },
+            changePageSize(pageSize) {
+                this.pageInfo.pageSize = pageSize;
+                this.loadArticles();
+            },
             loadArticles() {
-                var self = this;
-                store.dispatch('ArticleList').then(res => { // 拉取user_info
-                    self.article_list = res.data.list;
-
-//                    store.dispatch('GenerateRoutes', { roles }).then(() => { // 生成可访问的路由表
-//                        router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-//                        next({ ...to }) // hack方法 确保addRoutes已完成
-//                    })
-
+                store.dispatch('ArticleList', {
+                    pageNo: this.pageInfo.pageNum,
+                    pageSize: this.pageInfo.pageSize
+                }).then(res => { // 拉取user_info
+                    this.article_list = res.data.list;
+                    this.pageInfo = res.data;
                 }).catch(() => {
                     console.log("请求文章列表失败");
                 })

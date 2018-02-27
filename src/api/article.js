@@ -1,10 +1,13 @@
 import fetch from 'utils/fetch';
 
-export function articleList(token) {
+export function articleList(pageInfo) {
     return fetch({
         url: '/admin/article/list',
         method: 'get',
-        params: {token}
+        params: {
+            pageNo: pageInfo.pageNo,
+            pageSize: pageInfo.pageSize
+        }
     });
 }
 
