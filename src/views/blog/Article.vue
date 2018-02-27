@@ -217,7 +217,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.editArticle(params.row.id);
+                                            this.editArticle(params.row.id, this.pageInfo.pageNum, this.pageInfo.pageSize);
                                         }
                                     }
                                 }, '编辑'),
@@ -288,13 +288,19 @@
                     }
                 });
             },
-            editArticle(id) {
+            editArticle(id, pageNum, pageSize) {
                 if (id == null) {
                     //发表新文章
-                    this.$router.push({path: '/blog/article/publish'})
+                    this.$router.push({
+                        path: '/blog/article/publish',
+                        query: {pageNum: pageNum, pageSize: pageSize}
+                    })
                 } else {
                     //编辑文章
-                    this.$router.push({path: '/blog/article/edit/' + id})
+                    this.$router.push({
+                        path: '/blog/article/edit/' + id,
+                        query: {pageNum: pageNum, pageSize: pageSize}
+                    })
                 }
             },
             qiniu_upload() {
@@ -343,6 +349,10 @@
 
             }, 2000)
             qiniuInit(vue);//初始化七牛数据
+            var pageNum = this.$route.query.pageNum;
+            var pageSize = this.$route.query.pageSize;
+            this.pageInfo.pageNum = pageNum;
+            this.pageInfo.pageS = pageSize;
             this.loadArticles();
         },
     }

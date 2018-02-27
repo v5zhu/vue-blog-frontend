@@ -74,10 +74,12 @@
                 <Form-item>
                     <Button type="ghost" @click="goBack()">《 返回</Button>
                     <Button type="default" @click="clearAll('articleForm')">全部清空</Button>
-                    <Button type="warning" v-if="article.status!='audit'" @click="handleSubmit('draft','articleForm')" style="margin-left: 15px">
+                    <Button type="warning" v-if="article.status!='audit'" @click="handleSubmit('draft','articleForm')"
+                            style="margin-left: 15px">
                         保存为草稿
                     </Button>
-                    <Button type="primary" v-if="article.status!='audit'" @click="handleSubmit('audit','articleForm')" style="margin-left: 15px">
+                    <Button type="primary" v-if="article.status!='audit'" @click="handleSubmit('audit','articleForm')"
+                            style="margin-left: 15px">
                         提交审核
                     </Button>
                 </Form-item>
@@ -187,7 +189,12 @@
                 })
             },
             goBack() {
-                this.$router.push({path:'/blog/article/manage'});
+                var pageNum = this.$route.query.pageNum;
+                var pageSize = this.$route.query.pageSize;
+                this.$router.push({
+                    path: '/blog/article/manage',
+                    query: {pageNum: pageNum, pageSize: pageSize}
+                });
             },
             handleSubmit(status, refName) {
                 this.$refs[refName].validate((valid) => {
@@ -207,7 +214,7 @@
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success(msg + '成功!');
-                                    this.$router.push({path:'/blog/article/manage'});
+                                    this.$router.push({path: '/blog/article/manage'});
                                 } else {
                                     this.$Message.error(msg + '失败!');
                                 }
@@ -219,7 +226,7 @@
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success(msg + '成功!');
-                                    this.$router.push({path:'/blog/article/manage'});
+                                    this.$router.push({path: '/blog/article/manage'});
                                 } else {
                                     this.$Message.error(msg + '失败!');
                                 }
