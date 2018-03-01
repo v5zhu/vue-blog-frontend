@@ -145,7 +145,9 @@
         mounted() {
             const vue = this;
             var id = this.$route.params.id;
-            this.articlePreview(id);
+            if (id) {
+                this.articlePreview(id);
+            }
             this.categoryList();
             this.tagList();
         },

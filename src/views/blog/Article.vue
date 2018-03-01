@@ -5,7 +5,8 @@
             <div>
                 <div id="container" style="margin-bottom:10px;">
                     <Button type="primary" size="large" icon="edit"
-                            @click="editArticle(null)" style="padding-bottom:5px;">发表文章
+                            @click="editArticle(null,pageInfo.pageNum, pageInfo.pageSize)"
+                            style="padding-bottom:5px;">发表文章
                     </Button>
                 </div>
                 <div style="position:relative;">
@@ -18,7 +19,7 @@
                     </div>
                 </div>
                 <Page :total="this.pageInfo.total" placement="top"
-                      :current="pageInfo.pageNum"
+                      :current="this.pageInfo.pageNum"
                       :page-size-opts="pageSizeOpts"
                       show-elevator show-sizer show-total
                       @on-change="changePage"
@@ -63,6 +64,9 @@
                     list: [],
                     prePage: undefined,
                     nextPage: undefined
+                },
+                queryParam: {
+                    status: ''
                 },
                 article_list: [],
                 pageSizeOpts: [10, 20, 50, 100],
@@ -144,21 +148,19 @@
                         ellipsis: 'true',
                         filters: [
                             {
-                                label: '已发布',
+                                label: '发布',
                                 value: 'publish'
-                            },
-                            {
+                            }, {
+                                label: '待审',
+                                value: 'audit'
+                            }, {
                                 label: '草稿',
                                 value: 'draft'
                             }
                         ],
-                        filterMultiple: false,
+                        filterMultiple: true,
                         filterMethod(value, row) {
-                            if (value === 'publish') {
-                                return '已发布';
-                            } else {
-                                return '草稿';
-                            }
+                            return row.status == value;
                         },
 
                         render: (h, params) => {
@@ -396,7 +398,8 @@
             loadArticles() {
                 store.dispatch('ArticleList', {
                     pageNum: this.pageInfo.pageNum,
-                    pageSize: this.pageInfo.pageSize
+                    pageSize: this.pageInfo.pageSize,
+                    status: this.queryParam.status
                 }).then(res => { // 拉取user_info
                     this.article_list = res.data.list;
                     this.pageInfo = res.data;
