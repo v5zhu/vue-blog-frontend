@@ -364,12 +364,6 @@
                     })
                 }
             },
-            filterChange(col) {
-                var status = col._filterChecked[0];
-                this.queryParam.status = status;
-                this.loadArticles();
-
-            },
             qiniu_upload() {
                 uploader.start();
             },
@@ -391,7 +385,11 @@
                 this.pageInfo.pageNum = page;
                 this.$router.push({
                     path: '/blog/article/manage',
-                    query: {pageNum: this.pageInfo.pageNum, pageSize: this.pageInfo.pageSize}
+                    query: {
+                        pageNum: this.pageInfo.pageNum,
+                        pageSize: this.pageInfo.pageSize,
+                        status: this.queryParam.status
+                    }
                 });
                 this.loadArticles();
             },
@@ -399,9 +397,27 @@
                 this.pageInfo.pageSize = pageSize;
                 this.$router.push({
                     path: '/blog/article/manage',
-                    query: {pageNum: this.pageInfo.pageNum, pageSize: this.pageInfo.pageSize}
+                    query: {
+                        pageNum: this.pageInfo.pageNum,
+                        pageSize: this.pageInfo.pageSize,
+                        status: this.queryParam.status
+                    }
                 });
                 this.loadArticles();
+            },
+            filterChange(col) {
+                var status = col._filterChecked[0];
+                this.queryParam.status = status;
+                this.$router.push({
+                    path: '/blog/article/manage',
+                    query: {
+                        pageNum: this.pageInfo.pageNum,
+                        pageSize: this.pageInfo.pageSize,
+                        status: this.queryParam.status
+                    }
+                });
+                this.loadArticles();
+
             },
             loadArticles() {
                 store.dispatch('ArticleList', {
