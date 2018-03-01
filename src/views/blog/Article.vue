@@ -19,7 +19,7 @@
                         </Col>
                         <Col span="6" style="margin-right: 20px">
                         <Form-item prop="categoriesList" label="分类">
-                            <Select v-model="queryParam.categoriesList" filterable clearable>
+                            <Select v-model="queryParam.categories" filterable clearable>
                                 <Option v-for="item in categories" :value="item.name" :key="item.name">{{ item.name }}
                                 </Option>
                             </Select>
@@ -27,7 +27,7 @@
                         </Col>
                         <Col span="6">
                         <Form-item prop="tagsList" label="标签">
-                            <Select v-model="queryParam.tagsList" filterable clearable>
+                            <Select v-model="queryParam.tags" filterable clearable>
                                 <Option v-for="item in tags" :value="item.value" :key="item.name">{{ item.name }}
                                 </Option>
                             </Select>
@@ -105,8 +105,8 @@
                 queryParam: {
                     status: '',
                     title: '',
-                    tagsList: '',
-                    categoriesList: ''
+                    tags: '',
+                    categories: ''
                 },
                 categories: [],
                 tags: [],
@@ -397,6 +397,9 @@
                             pageNum: pageNum,
                             pageSize: pageSize,
                             status: this.queryParam.status,
+                            title: this.queryParam.title,
+                            tags: this.queryParam.tags,
+                            categories: this.queryParam.categories,
                             sort: this.sortParam.join(',')
                         }
                     })
@@ -408,6 +411,9 @@
                             pageNum: pageNum,
                             pageSize: pageSize,
                             status: this.queryParam.status,
+                            title: this.queryParam.title,
+                            tags: this.queryParam.tags,
+                            categories: this.queryParam.categories,
                             sort: this.sortParam.join(',')
                         }
                     })
@@ -438,6 +444,9 @@
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
                         status: this.queryParam.status,
+                        title: this.queryParam.title,
+                        tags: this.queryParam.tags,
+                        categories: this.queryParam.categories,
                         sort: this.sortParam.join(',')
                     }
                 });
@@ -451,6 +460,9 @@
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
                         status: this.queryParam.status,
+                        title: this.queryParam.title,
+                        tags: this.queryParam.tags,
+                        categories: this.queryParam.categories,
                         sort: this.sortParam.join(',')
                     }
                 });
@@ -465,6 +477,9 @@
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
                         status: this.queryParam.status,
+                        title: this.queryParam.title,
+                        tags: this.queryParam.tags,
+                        categories: this.queryParam.categories,
                         sort: this.sortParam.join(',')
                     }
                 });
@@ -511,18 +526,22 @@
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
                         status: this.queryParam.status,
-                        sort: sort
+                        title: this.queryParam.title,
+                        tags: this.queryParam.tags,
+                        categories: this.queryParam.categories,
+                        sort: sort,
                     }
                 });
                 this.loadArticles();
             },
             loadArticles() {
-                if (this.pageInfo.pageNum == 0) {
-                    this.pageInfo.pageNum = 1;
+                var pageNum = this.pageInfo.pageNum;
+                if (pageNum == 0) {
+                    pageNum = 1;
                 }
 
                 store.dispatch('ArticleList', {
-                    pageNum: this.pageInfo.pageNum,
+                    pageNum: pageNum,
                     pageSize: this.pageInfo.pageSize,
                     queryParam: this.queryParam,
                     sort: this.sortParam.join(',')
@@ -580,12 +599,19 @@
             var pageNum = this.$route.query.pageNum;
             var pageSize = this.$route.query.pageSize;
             var status = this.$route.query.status;
+            var title = this.$route.query.title;
+            var tags = this.$route.query.tags;
+            var categories = this.$route.query.categories;
+
             var sort = this.$route.query.sort;
 
-            if (pageNum && pageSize && status && sort) {
+            if (pageNum && pageSize && status && sort && title && tags && categories) {
                 this.pageInfo.pageNum = pageNum;
                 this.pageInfo.pageSize = pageSize;
                 this.queryParam.status = status;
+                this.queryParam.title = title;
+                this.queryParam.tags = tags;
+                this.queryParam.categories = categories;
                 this.sortParam = sort.split(',');
             }
             this.loadArticles();

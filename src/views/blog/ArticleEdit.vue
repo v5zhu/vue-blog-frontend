@@ -194,10 +194,18 @@
                 var pageNum = this.$route.query.pageNum;
                 var pageSize = this.$route.query.pageSize;
                 var status = this.$route.query.status;
+                var title = this.$route.query.title;
+                var tags = this.$route.query.tags;
+                var categories = this.$route.query.categories;
                 var sort = this.$route.query.sort;
                 this.$router.push({
                     path: '/blog/article/manage',
-                    query: {pageNum: pageNum, pageSize: pageSize, status: status, sort: sort}
+                    query: {
+                        pageNum: pageNum, pageSize: pageSize, status: status, title: title,
+                        tags: tags,
+                        categories: categories,
+                        sort: sort
+                    }
                 });
             },
             handleSubmit(status, refName) {
