@@ -9,6 +9,40 @@
                             style="padding-bottom:5px;">发表文章
                     </Button>
                 </div>
+
+                <Form ref="articleQueryForm" :model="queryParam" :label-width="60" label-position="right">
+                    <Row>
+                        <Col span="6" style="margin-right: 20px">
+                        <Form-item prop="title" label="文章标题">
+                            <Input v-model="queryParam.title" size="large" placeholder="请输入文章标题"/>
+                        </Form-item>
+                        </Col>
+                        <Col span="6" style="margin-right: 20px">
+                        <Form-item prop="categoriesList" label="分类">
+                            <Select v-model="queryParam.categoriesList" filterable clearable>
+                                <Option v-for="item in categories" :value="item.name" :key="item.name">{{ item.name }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                        </Col>
+                        <Col span="6">
+                        <Form-item prop="tagsList" label="标签">
+                            <Select v-model="queryParam.tagsList" filterable clearable>
+                                <Option v-for="item in tags" :value="item.value" :key="item.name">{{ item.name }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                        </Col>
+                        <Col span="4" style="margin-right: 20px">
+                        <Form-item>
+                            <Button type="primary" @click="loadArticles">查询</Button>
+                            <Button type="warning" @click="clearAll('articleQueryForm')">重置</Button>
+                        </Form-item>
+                        </Col>
+                    </Row>
+
+                </Form>
+
                 <div style="position:relative;">
                     <Table :columns="columns7" :data="article_list" ref="table" @on-sort-change="sortChange"
                            @on-filter-change="filterChange">
@@ -69,8 +103,13 @@
                     nextPage: undefined
                 },
                 queryParam: {
-                    status: ''
+                    status: '',
+                    title: '',
+                    tagsList: '',
+                    categoriesList: ''
                 },
+                categories: [],
+                tags: [],
                 sortParam: [],
                 article_list: [],
                 pageSizeOpts: [10, 20, 50, 100],
@@ -339,8 +378,6 @@
                         if (resp.success == true) {
                             this.$Message.success('审批成功!');
 
-                            var pageNum = this.pageInfo.pageNum;
-                            var pageSize = this.pageInfo.pageSize;
                             this.loadArticles();
                         } else {
                             this.$Message.error('审批失败!');
@@ -400,7 +437,8 @@
                     query: {
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
-                        status: this.queryParam.status
+                        status: this.queryParam.status,
+                        sort: this.sortParam.join(',')
                     }
                 });
                 this.loadArticles();
@@ -412,7 +450,8 @@
                     query: {
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
-                        status: this.queryParam.status
+                        status: this.queryParam.status,
+                        sort: this.sortParam.join(',')
                     }
                 });
                 this.loadArticles();
@@ -425,7 +464,8 @@
                     query: {
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
-                        status: this.queryParam.status
+                        status: this.queryParam.status,
+                        sort: this.sortParam.join(',')
                     }
                 });
                 this.loadArticles();
@@ -477,10 +517,14 @@
                 this.loadArticles();
             },
             loadArticles() {
+                if (this.pageInfo.pageNum == 0) {
+                    this.pageInfo.pageNum = 1;
+                }
+
                 store.dispatch('ArticleList', {
                     pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize,
-                    status: this.queryParam.status,
+                    queryParam: this.queryParam,
                     sort: this.sortParam.join(',')
                 }).then(res => { // 拉取user_info
                     this.article_list = res.data.list;
@@ -488,7 +532,36 @@
                 }).catch(() => {
                     console.log("请求文章列表失败");
                 })
-            }
+            },
+            categoryList() {
+                store.dispatch('CategoryList', {token: null}).then(res => { // 拉取user_info
+                    var cates = res.data;
+                    this.categories = cates;
+
+                }).catch(() => {
+                    console.log("请求分类列表失败");
+                })
+            },
+            tagList() {
+                store.dispatch('TagList', {token: null}).then(res => { // 拉取user_info
+                    var tags = res.data;
+                    this.tags = tags;
+
+                }).catch(() => {
+                    console.log("请求标签列表失败");
+                })
+            },
+            clearAll(refName) {
+
+                this.queryParam = {
+                    status: '',
+                    title: '',
+                    tagsList: '',
+                    categoriesList: ''
+                };
+                this.$refs[refName].resetFields();
+
+            },
         },
         mounted() {
             const vue = this;
@@ -499,6 +572,11 @@
 
             }, 2000)
             qiniuInit(vue);//初始化七牛数据
+
+
+            this.categoryList();
+            this.tagList();
+
             var pageNum = this.$route.query.pageNum;
             var pageSize = this.$route.query.pageSize;
             var status = this.$route.query.status;

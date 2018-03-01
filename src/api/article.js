@@ -3,12 +3,12 @@ import fetch from 'utils/fetch';
 export function articleList(pageInfo) {
     return fetch({
         url: '/admin/article/list',
-        method: 'get',
-        params: {
+        method: 'post',
+        data: {
             pageNum: pageInfo.pageNum,
             pageSize: pageInfo.pageSize,
-            status: pageInfo.status,
-            sort: pageInfo.sort
+            sort: pageInfo.sort,
+            queryParam:pageInfo.queryParam
         }
     });
 }

@@ -11,8 +11,8 @@
             </Row>
             <Row>
                 <Col span="12">
-                <Form-item prop="categoriesArray" label="分类">
-                    <Select v-model="article.categoriesArray" multiple filterable>
+                <Form-item prop="categoriesList" label="分类">
+                    <Select v-model="article.categoriesList" multiple filterable>
                         <Option v-for="item in categories" :value="item.name" :key="item.name">{{ item.name }}
                         </Option>
                     </Select>
@@ -21,8 +21,8 @@
             </Row>
             <Row>
                 <Col span="12">
-                <Form-item prop="tagsArray" label="标签">
-                    <Select v-model="article.tagsArray" multiple filterable>
+                <Form-item prop="tagsList" label="标签">
+                    <Select v-model="article.tagsList" multiple filterable>
                         <Option v-for="item in tags" :value="item.value" :key="item.name">{{ item.name }}
                         </Option>
                     </Select>
@@ -108,9 +108,9 @@
                     status: '',
                     authorId: '',
                     tags: '',
-                    tagsArray: [],
+                    tagsList: [],
                     categories: '',
-                    categoriesArray: [],
+                    categoriesList: [],
                     hits: '',
                     commentsNum: '',
                     allowComment: true,
@@ -124,11 +124,11 @@
                     title: [
                         {required: true, message: '文章标题不能为空', trigger: 'blur'}
                     ],
-                    categoriesArray: [
+                    categoriesList: [
                         {required: true, type: 'array', min: 1, message: '至少选择一个分类', trigger: 'change'},
                         {type: 'array', max: 3, message: '最多选择三个分类', trigger: 'change'}
                     ],
-                    tagsArray: [
+                    tagsList: [
                         {required: true, type: 'array', min: 1, message: '至少选择一个标签', trigger: 'change'},
                         {type: 'array', max: 3, message: '最多选择三个标签', trigger: 'change'}
                     ],
@@ -159,8 +159,8 @@
                     var article = res.data;
                     var tags = article.tags.split(",");
                     var categories = article.categories.split(",");
-                    article.tagsArray = tags;
-                    article.categoriesArray = categories;
+                    article.tagsList = tags;
+                    article.categoriesList = categories;
                     console.log(article);
                     this.article = article;
 //                    store.dispatch('GenerateRoutes', { roles }).then(() => { // 生成可访问的路由表
@@ -206,8 +206,8 @@
                         var userId = Cookies.get("USER-ID");
 
                         this.article.status = status;
-                        this.article.categories = this.article.categoriesArray.join(",");
-                        this.article.tags = this.article.tagsArray.join(",");
+                        this.article.categories = this.article.categoriesList.join(",");
+                        this.article.tags = this.article.tagsList.join(",");
                         this.article.authorId = userId;
 
                         var msg = status == 'audit' ? '提交审核' : '保存草稿';
