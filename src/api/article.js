@@ -7,7 +7,8 @@ export function articleList(pageInfo) {
         params: {
             pageNum: pageInfo.pageNum,
             pageSize: pageInfo.pageSize,
-            status: pageInfo.status
+            status: pageInfo.status,
+            sort: pageInfo.sort
         }
     });
 }

@@ -10,7 +10,8 @@
                     </Button>
                 </div>
                 <div style="position:relative;">
-                    <Table :columns="columns7" :data="article_list" ref="table" @on-filter-change="filterChange">
+                    <Table :columns="columns7" :data="article_list" ref="table" @on-sort-change="sortChange"
+                           @on-filter-change="filterChange">
 
                     </Table>
                     <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
@@ -70,6 +71,7 @@
                 queryParam: {
                     status: ''
                 },
+                sortParam: [],
                 article_list: [],
                 pageSizeOpts: [10, 20, 50, 100],
                 progresshow: false,
@@ -110,8 +112,9 @@
                     },
                     {
                         title: '发布时间',
-                        key: 'gmtCreate',
+                        key: 'gmt_create',
                         ellipsis: 'true',
+                        sortable: 'custom',
                         render: (h, params) => {
                             const time = params.row.gmtCreate;
                             var datetime = formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
@@ -129,6 +132,7 @@
                         title: '浏览量',
                         key: 'hits',
                         ellipsis: 'true',
+                        sortable: 'custom'
                     },
                     {
                         title: '所属分类',
@@ -272,8 +276,6 @@
                                         }
                                     }
                                 }, '预览')
-
-
                             ]);
 
                         }//render
@@ -354,13 +356,23 @@
                     //发表新文章
                     this.$router.push({
                         path: '/blog/article/publish',
-                        query: {pageNum: pageNum, pageSize: pageSize, status: this.queryParam.status}
+                        query: {
+                            pageNum: pageNum,
+                            pageSize: pageSize,
+                            status: this.queryParam.status,
+                            sort: this.sortParam.join(',')
+                        }
                     })
                 } else {
                     //编辑文章
                     this.$router.push({
                         path: '/blog/article/edit/' + id,
-                        query: {pageNum: pageNum, pageSize: pageSize, status: this.queryParam.status}
+                        query: {
+                            pageNum: pageNum,
+                            pageSize: pageSize,
+                            status: this.queryParam.status,
+                            sort: this.sortParam.join(',')
+                        }
                     })
                 }
             },
@@ -419,11 +431,57 @@
                 this.loadArticles();
 
             },
+            sortChange(params) {
+                var key = params.key;
+                var order = params.order;
+
+                var asc = key + ' asc';
+                var desc = key + ' desc';
+
+                var ascIndex = this.sortParam.indexOf(asc);
+                var descIndex = this.sortParam.indexOf(desc);
+
+                if (order == 'normal') {
+                    if (ascIndex != -1) {
+                        this.sortParam.splice(ascIndex, 1);
+                    }
+                    if (descIndex != -1) {
+                        this.sortParam.splice(descIndex, 1);
+                    }
+                } else if (order == 'asc') {
+                    if (ascIndex == -1) {
+                        this.sortParam.push(asc);
+                    }
+                    if (descIndex != -1) {
+                        this.sortParam.splice(descIndex, 1);
+                    }
+                } else if (order == 'desc') {
+                    if (descIndex == -1) {
+                        this.sortParam.push(desc);
+                    }
+                    if (ascIndex != -1) {
+                        this.sortParam.splice(ascIndex, 1);
+                    }
+                }
+
+                var sort = this.sortParam.join(',');
+                this.$router.push({
+                    path: '/blog/article/manage',
+                    query: {
+                        pageNum: this.pageInfo.pageNum,
+                        pageSize: this.pageInfo.pageSize,
+                        status: this.queryParam.status,
+                        sort: sort
+                    }
+                });
+                this.loadArticles();
+            },
             loadArticles() {
                 store.dispatch('ArticleList', {
                     pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize,
-                    status: this.queryParam.status
+                    status: this.queryParam.status,
+                    sort: this.sortParam.join(',')
                 }).then(res => { // 拉取user_info
                     this.article_list = res.data.list;
                     this.pageInfo = res.data;
@@ -444,11 +502,13 @@
             var pageNum = this.$route.query.pageNum;
             var pageSize = this.$route.query.pageSize;
             var status = this.$route.query.status;
+            var sort = this.$route.query.sort;
 
-            if (pageNum && pageSize && status) {
+            if (pageNum && pageSize && status && sort) {
                 this.pageInfo.pageNum = pageNum;
                 this.pageInfo.pageSize = pageSize;
                 this.queryParam.status = status;
+                this.sortParam = sort.split(',');
             }
             this.loadArticles();
         },
