@@ -10,7 +10,9 @@
                     </Button>
                 </div>
                 <div style="position:relative;">
-                    <Table :columns="columns7" :data="article_list" ref="table"></Table>
+                    <Table :columns="columns7" :data="article_list" ref="table" @on-filter-change="filterChange">
+
+                    </Table>
                     <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
                             align-items: center;
                             justify-content: center;background: rgba(210, 216, 222, 0.5);" v-if="list_loadding">
@@ -158,7 +160,7 @@
                                 value: 'draft'
                             }
                         ],
-                        filterMultiple: true,
+                        filterMultiple: false,
                         filterMethod(value, row) {
                             return row.status == value;
                         },
@@ -352,15 +354,21 @@
                     //发表新文章
                     this.$router.push({
                         path: '/blog/article/publish',
-                        query: {pageNum: pageNum, pageSize: pageSize}
+                        query: {pageNum: pageNum, pageSize: pageSize, status: this.queryParam.status}
                     })
                 } else {
                     //编辑文章
                     this.$router.push({
                         path: '/blog/article/edit/' + id,
-                        query: {pageNum: pageNum, pageSize: pageSize}
+                        query: {pageNum: pageNum, pageSize: pageSize, status: this.queryParam.status}
                     })
                 }
+            },
+            filterChange(col) {
+                var status = col._filterChecked[0];
+                this.queryParam.status = status;
+                this.loadArticles();
+
             },
             qiniu_upload() {
                 uploader.start();
@@ -419,10 +427,12 @@
             qiniuInit(vue);//初始化七牛数据
             var pageNum = this.$route.query.pageNum;
             var pageSize = this.$route.query.pageSize;
+            var status = this.$route.query.status;
 
-            if (pageNum && pageSize) {
+            if (pageNum && pageSize && status) {
                 this.pageInfo.pageNum = pageNum;
                 this.pageInfo.pageSize = pageSize;
+                this.queryParam.status = status;
             }
             this.loadArticles();
         },

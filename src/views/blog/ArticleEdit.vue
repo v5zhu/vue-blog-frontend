@@ -193,9 +193,10 @@
             goBack() {
                 var pageNum = this.$route.query.pageNum;
                 var pageSize = this.$route.query.pageSize;
+                var status = this.$route.query.status;
                 this.$router.push({
                     path: '/blog/article/manage',
-                    query: {pageNum: pageNum, pageSize: pageSize}
+                    query: {pageNum: pageNum, pageSize: pageSize, status: status}
                 });
             },
             handleSubmit(status, refName) {
