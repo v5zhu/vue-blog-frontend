@@ -18,7 +18,7 @@
                         </Form-item>
                         </Col>
                         <Col span="6" style="margin-right: 20px">
-                        <Form-item prop="categoriesList" label="分类">
+                        <Form-item prop="categories" label="分类">
                             <Select v-model="queryParam.categories" filterable clearable>
                                 <Option v-for="item in categories" :value="item.name" :key="item.name">{{ item.name }}
                                 </Option>
@@ -26,7 +26,7 @@
                         </Form-item>
                         </Col>
                         <Col span="6">
-                        <Form-item prop="tagsList" label="标签">
+                        <Form-item prop="tags" label="标签">
                             <Select v-model="queryParam.tags" filterable clearable>
                                 <Option v-for="item in tags" :value="item.value" :key="item.name">{{ item.name }}
                                 </Option>
@@ -56,7 +56,6 @@
                     </div>
                 </div>
                 <Page :total="this.pageInfo.total" placement="top"
-                      :current="this.pageInfo.pageNum"
                       :page-size-opts="pageSizeOpts"
                       show-elevator show-sizer show-total
                       @on-change="changePage"
@@ -108,8 +107,8 @@
                     tags: '',
                     categories: ''
                 },
-                categories: [],
                 tags: [],
+                categories: [],
                 sortParam: [],
                 article_list: [],
                 pageSizeOpts: [10, 20, 50, 100],
@@ -605,14 +604,26 @@
 
             var sort = this.$route.query.sort;
 
-            if (pageNum && pageSize && status && sort && title && tags && categories) {
+            if (pageNum) {
                 this.pageInfo.pageNum = pageNum;
+            }
+            if (pageSize) {
                 this.pageInfo.pageSize = pageSize;
+            }
+            if (status) {
                 this.queryParam.status = status;
-                this.queryParam.title = title;
-                this.queryParam.tags = tags;
-                this.queryParam.categories = categories;
+            }
+            if (sort) {
                 this.sortParam = sort.split(',');
+            }
+            if (title) {
+                this.queryParam.title = title;
+            }
+            if (tags) {
+                this.queryParam.tags = tags;
+            }
+            if (categories) {
+                this.queryParam.categories = categories;
             }
             this.loadArticles();
         },
