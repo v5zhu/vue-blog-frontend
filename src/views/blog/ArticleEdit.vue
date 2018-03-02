@@ -230,6 +230,15 @@
                     store.dispatch('CategoryAdd', this.category).then(res => { // 拉取user_info
                         var resp = res.data;
                         if (resp.success == true) {
+                            this.category = {
+                                id: '',
+                                name: '',
+                                value: '',
+                                type: '',
+                                description: '',
+                                sort: '',
+                                parent: ''
+                            }
                             this.categoryList();
                             this.$Message.success('添加分类成功');
                         } else {
@@ -247,6 +256,15 @@
                     store.dispatch('TagAdd', this.tag).then(res => { // 拉取user_info
                         var resp = res.data;
                         if (resp.success == true) {
+                            this.tag = {
+                                id: '',
+                                name: '',
+                                value: '',
+                                type: '',
+                                description: '',
+                                sort: '',
+                                parent: ''
+                            }
                             this.tagList();
                             this.$Message.success('添加标签成功');
                         } else {
