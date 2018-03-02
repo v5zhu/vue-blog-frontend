@@ -10,7 +10,7 @@
                 </Col>
             </Row>
             <Row>
-                <Col span="12">
+                <Col span="12" style="margin-right: 10px;">
                 <Form-item prop="categoriesList" label="分类">
                     <Select v-model="article.categoriesList" multiple filterable>
                         <Option v-for="item in categories" :value="item.name" :key="item.name">{{ item.name }}
@@ -18,15 +18,22 @@
                     </Select>
                 </Form-item>
                 </Col>
+                <Col span="2">
+                <Button type="ghost" shape="circle" icon="plus-circled" @click="categoryModel=true">添加分类</Button>
+                </Col>
+
             </Row>
             <Row>
-                <Col span="12">
+                <Col span="12" style="margin-right: 10px;">
                 <Form-item prop="tagsList" label="标签">
                     <Select v-model="article.tagsList" multiple filterable>
                         <Option v-for="item in tags" :value="item.value" :key="item.name">{{ item.name }}
                         </Option>
                     </Select>
                 </Form-item>
+                </Col>
+                <Col span="2">
+                <Button type="ghost" shape="circle" icon="plus-circled" @click="tagModel=true">添加标签</Button>
                 </Col>
             </Row>
             <Row>
@@ -86,6 +93,51 @@
                 </Col>
             </Row>
         </Form>
+
+        <Modal v-model="categoryModel"
+               title="添加分类"
+               :loading="true"
+               @on-ok="addCategory">
+            <Form ref="categoryForm" :model="category" :label-width="60" label-position="right">
+                <Row style="padding-left: 50px;">
+                    <Col span="16">
+                    <Form-item prop="name" label="名称">
+                        <Input v-model="category.name" size="default" placeholder="请输入分类名称(必填)"/>
+                    </Form-item>
+                    </Col>
+                </Row>
+                <Row style="padding-left: 50px;">
+                    <Col span="16">
+                    <Form-item prop="description" label="描述">
+                        <Input v-model="category.description" type="textarea" :autosize="true"
+                               placeholder="请输入分类描述(可不填)"/>
+                    </Form-item>
+                    </Col>
+                </Row>
+            </Form>
+        </Modal>
+        <Modal v-model="tagModel"
+               title="添加标签"
+               :loading="true"
+               @on-ok="addTag">
+            <Form ref="tagForm" :model="tag" :label-width="60" label-position="right">
+                <Row style="padding-left: 50px;">
+                    <Col span="16">
+                    <Form-item prop="name" label="名称">
+                        <Input v-model="tag.name" size="default" placeholder="请输入标签名称(必填)"/>
+                    </Form-item>
+                    </Col>
+                </Row>
+                <Row style="padding-left: 50px;">
+                    <Col span="16">
+                    <Form-item prop="description" label="描述">
+                        <Input v-model="tag.description" type="textarea" :autosize="true"
+                               placeholder="请输入标签描述(可不填)"/>
+                    </Form-item>
+                    </Col>
+                </Row>
+            </Form>
+        </Modal>
     </div>
 
 </template>
@@ -118,6 +170,24 @@
                     allowFeed: true,
                     content: ''
                 },
+                category: {
+                    id: '',
+                    name: '',
+                    value: '',
+                    type: '',
+                    description: '',
+                    sort: '',
+                    parent: ''
+                },
+                tag: {
+                    id: '',
+                    name: '',
+                    value: '',
+                    type: '',
+                    description: '',
+                    sort: '',
+                    parent: ''
+                },
                 categories: [],
                 tags: [],
                 articleRule: {
@@ -136,7 +206,9 @@
                         {required: true, message: '请输入文章正文', trigger: 'blur'},
                         {type: 'string', min: 5, message: '正文不能少于5字', trigger: 'blur'}
                     ]
-                }
+                },
+                categoryModel: false,
+                tagModel: false
             }
         },//data
         components: {
@@ -152,6 +224,41 @@
             this.tagList();
         },
         methods: {
+            addCategory() {
+                setTimeout(() => {
+                    this.category.type = 'category';
+                    store.dispatch('CategoryAdd', this.category).then(res => { // 拉取user_info
+                        var resp = res.data;
+                        if (resp.success == true) {
+                            this.categoryList();
+                            this.$Message.success('添加分类成功');
+                        } else {
+                            this.$Message.error('添加分类失败');
+                        }
+                    }).catch(() => {
+                        this.$Message.error("添加分类异常");
+                    })
+                    this.categoryModel = false;
+                }, 1000);
+            },
+            addTag() {
+                setTimeout(() => {
+                    this.tag.type = 'tag';
+                    store.dispatch('TagAdd', this.tag).then(res => { // 拉取user_info
+                        var resp = res.data;
+                        if (resp.success == true) {
+                            this.tagList();
+                            this.$Message.success('添加标签成功');
+                        } else {
+                            this.$Message.error('添加标签失败');
+                        }
+                    }).catch(() => {
+                        this.$Message.error("添加标签异常");
+                    })
+
+                    this.tagModel = false;
+                }, 1000);
+            },
             articlePreview(id) {
                 var self = this;
                 store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info

@@ -8,3 +8,10 @@ export function tagList(token) {
     });
 }
 
+export function tagAdd(tag) {
+    return fetch({
+        url: '/admin/tag/save',
+        method: 'post',
+        data: tag
+    });
+}

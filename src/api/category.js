@@ -8,3 +8,11 @@ export function categoryList(token) {
     });
 }
 
+export function categoryAdd(category) {
+    return fetch({
+        url: '/admin/category/save',
+        method: 'post',
+        data: category
+    });
+}
+

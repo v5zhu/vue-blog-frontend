@@ -1,4 +1,4 @@
-import {categoryList} from 'api/category';
+import {categoryList, categoryAdd} from 'api/category';
 
 const category = {
     state: {
@@ -48,6 +48,15 @@ const category = {
                     commit('SET_DESCRIPTION', data.description);
                     commit('SET_SORT', data.sort);
                     commit('SET_PARENT', data.parent);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        }, // 添加分类
+        CategoryAdd({commit, state},params) {
+            return new Promise((resolve, reject) => {
+                categoryAdd(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

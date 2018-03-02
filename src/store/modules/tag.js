@@ -1,4 +1,4 @@
-import {tagList} from 'api/tag';
+import {tagList, tagAdd} from 'api/tag';
 
 const tag = {
     state: {
@@ -48,6 +48,15 @@ const tag = {
                     commit('SET_DESCRIPTION', data.description);
                     commit('SET_SORT', data.sort);
                     commit('SET_PARENT', data.parent);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },// 添加标签
+        TagAdd({commit, state},params) {
+            return new Promise((resolve, reject) => {
+                tagAdd(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
