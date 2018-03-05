@@ -9,7 +9,7 @@ const user = {
         email: '',
         code: '',
         auth_type: '',
-        token: '',
+        token: Cookies.get('Admin-Token'),
         name: '',
         avatar: '',
         introduction: '',
@@ -118,11 +118,11 @@ const user = {
         // 登出
         LogOut({commit, state}) {
             return new Promise((resolve, reject) => {
-                logout(state.token).then(() => {
+                logout(state.token).then(res => {
                     commit('SET_TOKEN', '');
                     commit('SET_ROLES', []);
                     Cookies.remove('Admin-Token');
-                    resolve();
+                    resolve(res);
                 }).catch(error => {
                     reject(error);
                 });
@@ -134,7 +134,6 @@ const user = {
             return new Promise(resolve => {
                 commit('SET_TOKEN', '');
                 Cookies.remove('Admin-Token');
-                alert("has logout");
                 resolve();
             });
         },

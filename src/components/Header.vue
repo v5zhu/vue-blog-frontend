@@ -187,8 +187,12 @@
         methods: {
             Logout(e) {
                 e.preventDefault();
-                this.$store.dispatch('LogOut').then(() => {
-                    this.$router.push({path: '/login'});
+                this.$store.dispatch('LogOut').then(res => {
+                    if (res.data.success == true) {
+                        this.$router.push({path: '/login'});
+                    } else {
+                        this.$Message.error('退出失败,请联系管理员');
+                    }
                 }).catch(err => {
                     this.$message.error(err);
                 });

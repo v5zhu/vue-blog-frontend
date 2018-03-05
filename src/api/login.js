@@ -12,10 +12,11 @@ export function loginByEmail(loginName, password) {
     });
 }
 
-export function logout() {
+export function logout(token) {
     return fetch({
-        url: '/login/logout',
-        method: 'post'
+        url: '/admin/logout',
+        method: 'post',
+        params:{token}
     });
 }
 
