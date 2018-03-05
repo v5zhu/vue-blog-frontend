@@ -123,7 +123,7 @@
                             this.loading = false;
                             this.$router.push({path: '/'});
                         }).catch(err => {
-                            this.$message.error(err);
+                            this.$Message.error(err);
                             this.loading = false;
                         });
                     } else {
