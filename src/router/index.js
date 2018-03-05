@@ -18,7 +18,7 @@ Vue.use(Router);
 
 export const constantRouterMap = [
     {
-        path: '/login',
+        path: '/admin/login',
         component: Login,
         hidden: true
     },
@@ -57,24 +57,24 @@ export const asyncRouterMap = [
 
     {
         name: '首页',
-        path: '/',
-        redirect: '/dashboard',
+        path: '/admin',
+        redirect: '/admin/dashboard',
         component: Full,
         hidden: false,
         children: [{
-            path: '/dashboard',
+            path: '/admin/dashboard',
             name: 'Dashboard',
             icon: 'speedometer',
             component: _import('Dashboard')
         }, {
-            path: '/introduction',
+            path: '/admin/introduction',
             name: '介绍',
             icon: 'thumbsup',
             component: _import('Introduction')
         }, {
-            path: '/components',
+            path: '/admin/components',
             name: 'component组件',
-            redirect: '/components/buttons',
+            redirect: '/admin/components/buttons',
             icon: 'bookmark',
             component: {
                 render(c) {
@@ -169,9 +169,9 @@ export const asyncRouterMap = [
             ]
         },
             {
-                path: '/charts',
+                path: '/admin/charts',
                 name: 'echart图表',
-                redirect: '/charts/shopchart',
+                redirect: '/admin/charts/shopchart',
                 icon: 'pie-graph',
                 component: {
                     render(c) {
@@ -200,7 +200,7 @@ export const asyncRouterMap = [
                 ]
             },
             {
-                path: '/table',
+                path: '/admin/table',
                 name: '表格综合实例',
                 icon: 'ios-paper',
                 component: _import('Table'),
@@ -209,25 +209,25 @@ export const asyncRouterMap = [
                 }
             },
             {
-                path: '/jsontree',
+                path: '/admin/jsontree',
                 name: 'JSON视图',
                 icon: 'merge',
                 component: _import('JsonTree')
             },
             {
-                path: '/tabledetail/:id',
+                path: '/admin/tabledetail/:id',
                 name: 'TableDetail',
                 hidden: true,
                 component: _import('TableDetail')
             },
             {
-                path: '/tinymce',
+                path: '/admin/tinymce',
                 name: 'Tinymce编辑器',
                 icon: 'android-document',
                 component: _import('Tinymce')
             },
             {
-                path: '/markdown',
+                path: '/admin/markdown',
                 name: 'Markdown',
                 icon: 'android-list',
                 component: _import('Markdown')
@@ -236,20 +236,20 @@ export const asyncRouterMap = [
     },
 
     {
-        path: '/home1',
-        redirect: '/home1/introduction',
+        path: '/admin/home1',
+        redirect: '/admin/home1/introduction',
         name: '首页2',
         component: Full2,
         hidden: false,
         children: [
             {
-                path: '/home1/dashboard',
+                path: '/admin/home1/dashboard',
                 name: 'Dashboard2',
                 icon: 'speedometer',
                 component: _import('Dashboard2')
             },
             {
-                path: '/home1/introduction',
+                path: '/admin/home1/introduction',
                 name: '介绍2',
                 icon: 'thumbsup',
                 component: _import('Introduction')
@@ -257,18 +257,18 @@ export const asyncRouterMap = [
         ]
     },
     {
-        path: '/blog',
-        redirect: '/blog/article',
+        path: '/admin/blog',
+        redirect: '/admin/blog/article',
         name: '博客管理',
         component: Full,
         hidden: false,
         children: [
 
             {
-                path: '/blog/article',
+                path: '/admin/blog/article',
                 name: '文章管理',
                 icon: 'ios-book',
-                redirect: '/blog/article/manage',
+                redirect: '/admin/blog/article/manage',
                 component: {
                     render(c) {
                         return c('router-view')
@@ -301,17 +301,17 @@ export const asyncRouterMap = [
                 }]
             },
             {
-                path: '/blog/comment',
+                path: '/admin/blog/comment',
                 name: '评论管理',
                 icon: 'chatbubble-working',
                 component: _import('blog/Comment')
             }, {
-                path: '/blog/tag',
+                path: '/admin/blog/tag',
                 name: '标签管理',
                 icon: 'ios-pricetags',
                 component: _import('blog/Tag')
             }, {
-                path: '/blog/category',
+                path: '/admin/blog/category',
                 name: '分类管理',
                 icon: 'network',
                 component: _import('blog/Category')

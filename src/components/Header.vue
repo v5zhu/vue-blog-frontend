@@ -15,8 +15,7 @@
 
             <li class="nav-item header-item">
 
-
-                <router-link tag="div" to='/blog' class="nav-link">
+                <router-link tag="div" to='/admin/blog' class="nav-link">
                     <p>
                         <Icon type="edit" size='25' color="#2d8cf0"></Icon>
                     </p>
@@ -25,7 +24,7 @@
             </li>
             <li class="nav-item header-item">
 
-                <router-link tag="div" to='/timertask' class="nav-link">
+                <router-link tag="div" to='/admin/timertask' class="nav-link">
                     <p>
                         <Icon type="flash-off" size='25' color="#2d8cf0"></Icon>
                     </p>
@@ -34,7 +33,7 @@
             </li>
             <li class="nav-item header-item">
 
-                <router-link tag="div" to='/log' class="nav-link">
+                <router-link tag="div" to='/admin/log' class="nav-link">
                     <p>
                         <Icon type="ios-paw" size='25' color="#2d8cf0"></Icon>
                     </p>
@@ -43,7 +42,7 @@
             </li>
             <li class="nav-item header-item">
 
-                <router-link tag="div" to='/link' class="nav-link">
+                <router-link tag="div" to='/admin/link' class="nav-link">
                     <p>
                         <Icon type="network" size='25' color="#2d8cf0"></Icon>
                     </p>
@@ -53,7 +52,7 @@
             <li class="nav-item header-item">
 
 
-                <router-link tag="div" to='/' class="nav-link">
+                <router-link tag="div" to='/admin' class="nav-link">
                     <p>
                         <Icon type="compose" size='25' color="#2d8cf0"></Icon>
                     </p>
@@ -62,7 +61,7 @@
             </li>
             <li class="nav-item header-item">
 
-                <router-link tag="div" to='/home1' class="nav-link">
+                <router-link tag="div" to='/admin/home1' class="nav-link">
                     <p>
                         <Icon type="stats-bars" size='25' color="#2d8cf0"></Icon>
                     </p>
@@ -76,7 +75,7 @@
                 <!--   -->
 
                 <Dropdown>
-                    <router-link tag="div" to='/' class="nav-link">
+                    <router-link tag="div" to='/admin' class="nav-link">
                         <p>
                             <Icon type="android-cloud" size='25' color="#2d8cf0"></Icon>
                         </p>
@@ -93,7 +92,7 @@
             <li class="nav-item header-item">
 
 
-                <router-link tag="div" to='/home1' class="nav-link">
+                <router-link tag="div" to='/admin/home1' class="nav-link">
                     <p>
                         <Icon type="trophy" size='25' color="#2d8cf0"></Icon>
                     </p>

@@ -121,7 +121,7 @@
                             this.$Message.success('登录成功');
 
                             this.loading = false;
-                            this.$router.push({path: '/'});
+                            this.$router.push({path: '/admin'});
                         }).catch(err => {
                             this.$Message.error(err);
                             this.loading = false;
