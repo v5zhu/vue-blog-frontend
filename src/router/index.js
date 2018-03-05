@@ -25,7 +25,7 @@ export const constantRouterMap = [
     {
         name: 'Pages',
         path: '/pages',
-        redirect: '/pages/p404',
+        redirect: '/pages/404',
         component: {
             render(c) {
                 return c('router-view')
