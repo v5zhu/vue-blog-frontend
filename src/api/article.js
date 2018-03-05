@@ -8,7 +8,7 @@ export function articleList(pageInfo) {
             pageNum: pageInfo.pageNum,
             pageSize: pageInfo.pageSize,
             sort: pageInfo.sort,
-            queryParam:pageInfo.queryParam
+            queryParam: pageInfo.queryParam
         }
     });
 }

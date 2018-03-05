@@ -54,7 +54,7 @@ const category = {
                 });
             });
         }, // 添加分类
-        CategoryAdd({commit, state},params) {
+        CategoryAdd({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 categoryAdd(params).then(response => {
                     resolve(response);

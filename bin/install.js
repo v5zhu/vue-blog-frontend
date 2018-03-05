@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const {exec} = require('child_process');
 const fs = require('fs');
 var path = require('path')
 
@@ -6,19 +6,19 @@ var path = require('path')
 let install_pulgin = require('./install/plugin')
 
 
-module.exports = function (option,package_name){
+module.exports = function (option, package_name) {
 
-	if(option==='plugin'&&package_name==='Tinymce'){
+    if (option === 'plugin' && package_name === 'Tinymce') {
 
-		install_pulgin.InstallTinymce();
+        install_pulgin.InstallTinymce();
 
-	}else if(option==='plugin'&&package_name==='Markdown'){
+    } else if (option === 'plugin' && package_name === 'Markdown') {
 
-		install_pulgin.InstallMarkdown();
+        install_pulgin.InstallMarkdown();
 
-	}else if(option==='plugin'&&package_name==='Mockjs'){
+    } else if (option === 'plugin' && package_name === 'Mockjs') {
 
-		install_pulgin.InstallMockjs();
+        install_pulgin.InstallMockjs();
 
-	}	
+    }
 }

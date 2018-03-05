@@ -1,51 +1,51 @@
 <template>
-  <div class="animated fadeIn">
+    <div class="animated fadeIn">
 
-  <Row>
-        <Col span="24" >
-             <div  class="doc-header">
- 
+        <Row>
+            <Col span="24">
+            <div class="doc-header">
 
- <Card style="width:350px">
-        <p slot="title">
-            <Icon type="ios-film-outline"></Icon>
-            经典电影
-        </p>
-        <a href="#" slot="extra" @click.prevent="changeLimit">
-            <Icon type="ios-loop-strong"></Icon>
-            换一换
-        </a>
-        <ul>
-            <li v-for="item in randomMovieList">
-                <a :href="item.url" target="_blank">{{ item.name }}</a>
-                <span>
-                    <Icon type="ios-star" v-for="n in 4" :key="n" color="#ffac2d"></Icon><Icon type="ios-star" v-if="item.rate >= 9.5" color="#ffac2d"></Icon><Icon type="ios-star-half" v-else color="#ffac2d"></Icon>
+
+                <Card style="width:350px">
+                    <p slot="title">
+                        <Icon type="ios-film-outline"></Icon>
+                        经典电影
+                    </p>
+                    <a href="#" slot="extra" @click.prevent="changeLimit">
+                        <Icon type="ios-loop-strong"></Icon>
+                        换一换
+                    </a>
+                    <ul>
+                        <li v-for="item in randomMovieList">
+                            <a :href="item.url" target="_blank">{{ item.name }}</a>
+                            <span>
+                    <Icon type="ios-star" v-for="n in 4" :key="n" color="#ffac2d"></Icon><Icon type="ios-star"
+                                                                                               v-if="item.rate >= 9.5"
+                                                                                               color="#ffac2d"></Icon><Icon
+                                    type="ios-star-half" v-else color="#ffac2d"></Icon>
                     {{ item.rate }}
                 </span>
-            </li>
-        </ul>
-    </Card>
+                        </li>
+                    </ul>
+                </Card>
 
             </div>
             <div style="" class="doc-content">
-             		   <h5>基本用法</h5>
-     			   <p>自定义标题、额外操作和主体内容，可以完全自由控制各个部分，也可以结合其它组件一起使用，较为灵活。</p>
+                <h5>基本用法</h5>
+                <p>自定义标题、额外操作和主体内容，可以完全自由控制各个部分，也可以结合其它组件一起使用，较为灵活。</p>
             </div>
-        </Col>
+            </Col>
 
 
-       
-    </Row> 
+        </Row>
 
 
-
-
-</div>
+    </div>
 </template>
 
 <script>
     export default {
-        data () {
+        data() {
             return {
                 movieList: [
                     {
@@ -103,16 +103,16 @@
             }
         },
         methods: {
-            changeLimit () {
+            changeLimit() {
                 function getArrayItems(arr, num) {
                     const temp_array = [];
                     for (let index in arr) {
                         temp_array.push(arr[index]);
                     }
                     const return_array = [];
-                    for (let i = 0; i<num; i++) {
-                        if (temp_array.length>0) {
-                            const arrIndex = Math.floor(Math.random()*temp_array.length);
+                    for (let i = 0; i < num; i++) {
+                        if (temp_array.length > 0) {
+                            const arrIndex = Math.floor(Math.random() * temp_array.length);
                             return_array[i] = temp_array[arrIndex];
                             temp_array.splice(arrIndex, 1);
                         } else {
@@ -121,10 +121,11 @@
                     }
                     return return_array;
                 }
+
                 this.randomMovieList = getArrayItems(this.movieList, 5);
             }
         },
-        mounted () {
+        mounted() {
             this.changeLimit();
         }
     }

@@ -54,7 +54,7 @@ const tag = {
                 });
             });
         },// 添加标签
-        TagAdd({commit, state},params) {
+        TagAdd({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 tagAdd(params).then(response => {
                     resolve(response);

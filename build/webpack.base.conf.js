@@ -6,6 +6,7 @@ var vueLoaderConfig = require('./vue-loader.conf');
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
 }
+
 var src = path.resolve(__dirname, '../src');
 
 module.exports = {
@@ -15,9 +16,9 @@ module.exports = {
     output: {
         path: config.build.assetsRoot,
         filename: '[name].js',
-        publicPath: process.env.NODE_ENV !== 'development' ?  config.build.assetsPublicPath: config.dev.assetsPublicPath
+        publicPath: process.env.NODE_ENV !== 'development' ? config.build.assetsPublicPath : config.dev.assetsPublicPath
     },
-   
+
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
@@ -52,7 +53,8 @@ module.exports = {
             //         formatter: require('eslint-friendly-formatter')
             //     }
             // },
-            { test: /\.vue$/,
+            {
+                test: /\.vue$/,
                 loader: 'vue-loader',
                 options: vueLoaderConfig
             },

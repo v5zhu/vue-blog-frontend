@@ -68,7 +68,7 @@ var webpackConfig = merge(baseWebpackConfig, {
                 minifyCSS: true,
                 minifyURLs: true
             },
-             path:config.build.staticPath,
+            path: config.build.staticPath,
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }),
@@ -88,7 +88,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         }),
         // split echarts into its own file
         new webpack.optimize.CommonsChunkPlugin({
-            async:'echarts',
+            async: 'echarts',
             minChunks(module) {
                 var context = module.context;
                 return context && (context.indexOf('echarts') >= 0 || context.indexOf('zrender') >= 0);

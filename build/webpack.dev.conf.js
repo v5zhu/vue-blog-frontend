@@ -20,7 +20,7 @@ module.exports = merge(baseWebpackConfig, {
     module: {
         rules: utils.styleLoaders({sourceMap: config.dev.cssSourceMap})
     },
-    
+
     // cheap-source-map is faster for development
     devtool: '#cheap-source-map',
     cache: true,
@@ -41,7 +41,7 @@ module.exports = merge(baseWebpackConfig, {
             template: 'index.html',
             favicon: resolveApp('favicon.ico'),
             inject: true,
-            path:config.dev.staticPath
+            path: config.dev.staticPath
         }),
         new FriendlyErrorsPlugin()
     ]

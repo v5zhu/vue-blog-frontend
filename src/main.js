@@ -21,12 +21,12 @@ Vue.directive('highlight', (el) => {
     })
 });
 
-var vm=new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
+var vm = new Vue({
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: {App}
 });
 
 
