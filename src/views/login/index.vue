@@ -46,8 +46,8 @@
             };
             return {
                 loginForm: {
-                    email: 'admin@wz.com',
-                    password: ''
+                    email: 'admin@sonnx.com',
+                    password: '123456'
                 },
                 loginRules: {
                     email: [

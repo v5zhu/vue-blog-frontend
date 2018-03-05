@@ -9,7 +9,7 @@ const user = {
         email: '',
         code: '',
         auth_type: '',
-        token: Cookies.get('Admin-Token'),
+        token: '',
         name: '',
         avatar: '',
         introduction: '',
@@ -67,10 +67,12 @@ const user = {
             const email = userInfo.email.trim();
             return new Promise((resolve, reject) => {
                 loginByEmail(email, userInfo.password).then(response => {
-                    const data = response.data;
-                    Cookies.set('Admin-Token', response.data.token);
-                    Cookies.set('USER-ID', response.data.id);
+                    const data = response.data.payload;
+                    Cookies.set('Admin-Token', data.token);
+                    Cookies.set('USER-ID', data.id);
                     commit('SET_ID', data.id);
+                    console.error(data);
+
                     commit('SET_TOKEN', data.token);
                     commit('SET_EMAIL', email);
                     resolve();
@@ -85,9 +87,9 @@ const user = {
         GetInfo({commit, state}) {
             return new Promise((resolve, reject) => {
                 getInfo(state.token).then(response => {
-                    const data = response.data;
+                    const data = response.data.payload;
                     commit('SET_ID', data.id);
-                    commit('SET_ROLES', data.role);
+                    commit('SET_ROLES', data.roles);
                     commit('SET_NAME', data.name);
                     commit('SET_AVATAR', data.avatar);
                     commit('SET_INTRODUCTION', data.introduction);

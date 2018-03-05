@@ -26,8 +26,8 @@ const userMap = {
 
 export default {
     loginByEmail: config => {
-        const {email} = JSON.parse(config.body);
-        return userMap[email.split('@')[0]];
+        const {loginName} = JSON.parse(config.body);
+        return userMap[loginName.split('@')[0]];
     },
     getInfo: config => {
         const {token} = param2Obj(config.url);
