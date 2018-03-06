@@ -59,6 +59,10 @@ export const constantRouterMap = [
             name: '友链',
             path: '/links',
             component: _import('visitor/Links')
+        }, {
+            name: '文章详情页',
+            path: '/article/:id',
+            component: _import('visitor/ArticleView')
         }]
     }
 ]

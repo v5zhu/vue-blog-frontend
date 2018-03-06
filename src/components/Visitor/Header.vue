@@ -1,17 +1,15 @@
 <template>
     <navbar>
 
-        <!--<a class="navbar-brand"></a>-->
-
         <ul class="nav navbar-nav d-md-down-none">
 
             <li class="nav-item header-item">
 
                 <router-link tag="div" to='/articles' class="nav-link">
                     <p>
-                        <Icon type="ios-book-outline" size='18' color="black"></Icon>
+                        <Icon type="ios-book-outline" size='28' color="white"></Icon>
                     </p>
-                    <p style="color:black"> 首页 </p>
+                    <p style="color:white"> 首页 </p>
                 </router-link>
             </li>
 
@@ -19,20 +17,19 @@
 
                 <router-link tag="div" to='/archives' class="nav-link">
                     <p>
-                        <Icon type="map" size='18' color="black"></Icon>
+                        <Icon type="map" size='28' color="white"></Icon>
                     </p>
-                    <p style="color:black"> 归档 </p>
+                    <p style="color:white"> 归档 </p>
                 </router-link>
             </li>
             <li class="nav-item header-item">
 
                 <router-link tag="div" to='/links' class="nav-link">
                     <p>
-                        <Icon type="social-github" size='18' color="black"></Icon>
+                        <Icon type="social-github" size='28' color="white"></Icon>
                     </p>
-                    <p style="color:black"> 友链 </p>
+                    <p style="color:white"> 友链 </p>
                 </router-link>
-
 
             </li>
             <li class="nav-item d-md-down-none" style="position: absolute;right:0;">

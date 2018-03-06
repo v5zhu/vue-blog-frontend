@@ -1,6 +1,45 @@
 <template>
     <aside class="aside-menu px-4">
         <div class="aside-options">
+            <Row>
+                <Col>
+                <author-right-bar></author-right-bar>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                <author-right-bar></author-right-bar>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                <author-right-bar></author-right-bar>
+                </Col>
+            </Row>
+            <div class="clearfix mt-4">
+                <h1><b>作者信息</b>
+                </h1>
+            </div>
+            <div>
+                <div>
+                    <p>用户名:{{user.loginName}}</p>
+                </div>
+                <div>
+                    <p>邮箱:{{user.email}}</p>
+                </div>
+                <div>
+                    <p>上次在线:{{user.lastLoginTime | formatDate}}</p>
+                </div>
+                <div>
+                    <p>角色类型:{{user.roles}}</p>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="aside-options">
             <div class="clearfix mt-4">
                 <h6><b>待办事项 1</b>
                     <i-switch class="float-right">
@@ -63,8 +102,50 @@
 </template>
 
 <script>
+    import {formatTime} from 'utils/index';
+    import store from 'store/';
+    import AuthorRightBar from './../Visitor/AuthorRightBar';
+
     export default {
-        name: 'aside'
+        name: 'aside',
+        data() {
+            return {
+                user: {
+                    id: '',
+                    loginName: '',
+                    email: '',
+                    homeUrl: '',
+                    screenName: '',
+                    gmtCreate: '',
+                    gmtModified: '',
+                    lastLoginTime: '',
+                    roles: []
+                }
+            }
+        },
+        computed: {},
+        created() {
+        },
+        components: {AuthorRightBar},
+        mounted() {
+            this.getAuthorInfo(1);
+        },
+        methods: {
+            getAuthorInfo(authorId) {
+                store.dispatch('AuthorInfo', {authorId: authorId}).then(res => { // 拉取user_info
+                    var user = res.data;
+                    this.user = user;
+                    console.log(this.user);
+                }).catch(() => {
+                    console.log("获取文章作者信息失败");
+                })
+            }
+        },
+        filters: {
+            formatDate(time) {
+                return formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
+            }
+        }
     }
 </script>
 <style type="text/css">

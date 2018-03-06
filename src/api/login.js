@@ -28,4 +28,12 @@ export function getInfo(token) {
     });
 }
 
+export function getAuthorInfo(params) {
+    return fetch({
+        url: '/author',
+        method: 'get',
+        params: params
+    });
+}
+
 

@@ -1,4 +1,12 @@
-import {articleList, articlePreview, articlePublish, articleEdit, articleDelete, articleAudit} from 'api/article';
+import {
+    articleList,
+    articlePreview,
+    articlePublish,
+    articleEdit,
+    articleDelete,
+    articleAudit,
+    articles
+} from 'api/article';
 
 const article = {
     state: {
@@ -88,6 +96,16 @@ const article = {
                     commit('SET_ALLOW_PING', data.allowPing);
                     commit('SET_ALLOW_FEED', data.allowFeed);
                     commit('SET_CONTENT', data.content);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        // 获取文章列表
+        Articles({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                articles(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

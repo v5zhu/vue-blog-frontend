@@ -9,3 +9,8 @@
         name: 'footer'
     }
 </script>
+<style type="text/css" scoped>
+    .app-footer {
+        margin-left: 0px
+    }
+</style>

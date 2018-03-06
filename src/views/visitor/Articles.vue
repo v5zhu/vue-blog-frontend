@@ -1,288 +1,55 @@
 <template>
     <div class="animated fadeIn">
-        <Row>
-            <Col :sm="24" :md="8">
-            <h3>👍WZ后台管理框架👍</h3>
-            <h5><a href="https://github.com/herozhou/vue-framework-wz" target="_blank">github地址（喜欢就点个start呗）</a></h5>
-            </Col>
+        <Row :gutter="16" style="margin-top: 45px;">
 
 
-            <div class="state-info">
+            <Col :xs="16" :sm="16" :md="16" :lg="16">
 
-                <section class="panel">
-                    <div class="panel-body">
-                        <div class="summary">
-                            <span>yearly  income</span>
-                            <h3 class="green-txt">$ 45,600</h3>
-                        </div>
+            <div class="state-overview" v-for="article in pageInfo.list">
+                <Col span="8">
 
-                        <div id="expense" class="chart-bar"><img src="static/img/greenincome.png"></div>
-                    </div>
-                </section>
+                <div class="panel deep article-background" style="width: auto;height:150px;margin: 5px;">
 
-
-                <section class="panel">
-
-                    <div class="panel-body">
-
-                        <div class="summary">
-                            <span>yearly expense</span>
-                            <h3 class="red-txt">$ 45,600</h3>
-                        </div>
-                        <div id="income" class="chart-bar">
-                            <img src="static/img/redincome.png">
-
-
-                        </div>
-                    </div>
-                </section>
-
-
-            </div>
-
-
-        </Row>
-
-
-        <Row :gutter="16" style="margin-top:45px">
-
-
-            <Col :xs="24" :sm="12" :md="12" :lg="12">
-
-            <div class="state-overview">
-                <Col span="12">
-
-                <div class="panel purple">
                     <div class="symbol">
-                        <Icon type="clipboard" size="50" color="white"></Icon>
+                        <img style="position: absolute;left: 22px;top: 22px;width: 30%;height:60%;" size="32" src="static/img/avatars/6.jpg"/>
 
+                        <div style="position: absolute;left: 22px;top: 132px;">
+                            <Icon type="eye" size="13"
+                                  color="white"></Icon>
+                            {{article.hits}}
+                        </div>
+                        <div style="position: absolute;left: 62px;top: 132px;">
+                            <Icon type="heart" size="12"
+                                  color="white"></Icon>
+                            {{article.hits}}
+                        </div>
                     </div>
                     <div class="state-value">
-                        <div class="value">
-                            230
-                        </div>
-                        <div class="title">
-                            New Order
-                        </div>
-                    </div>
-                </div>
-
-
-                </Col>
-                <Col span="12">
-                <div class="panel red">
-                    <div class="symbol">
-                        <Icon type="pricetags" size="50" color="white"></Icon>
-                    </div>
-                    <div class="state-value">
-                        <div class="value">
-                            3490
-                        </div>
-                        <div class="title">
-                            Copy Sold
-                        </div>
-                    </div>
-
-                </div>
-                </Col>
-            </div>
-
-
-            <div class="state-overview">
-                <Col span="12">
-
-                <div class="panel blue">
-                    <div class="symbol">
-                        <Icon type="cash" size="50" color="white"></Icon>
-
-                    </div>
-                    <div class="state-value">
-                        <div class="value">
-                            22014
-                        </div>
-                        <div class="title">
-                            Total Revenue
-                        </div>
-                    </div>
-                </div>
-
-                </Col>
-                <Col span="12">
-                <div class="panel green">
-                    <div class="symbol">
-                        <Icon type="eye" size="50" color="white"></Icon>
-
-                    </div>
-                    <div class="state-value">
-                        <div class="value">
-                            390
-                        </div>
-                        <div class="title">
-                            Unique Visitors
-                        </div>
-                    </div>
-                </div>
-                </Col>
-            </div>
-
-
-            </Col>
-
-
-            <Col :xs="24" :sm="12" :md="12" :lg="12">
-
-
-            <dash-chart-visitor></dash-chart-visitor>
-
-
-            </Col>
-
-        </Row>
-
-        <Row :gutter="16">
-
-            <Col :xs="24" :sm="12" :md="16" :lg="16">
-
-            <dash-chart-large></dash-chart-large>
-
-
-            </Col>
-
-            <Col :xs="24" :sm="12" :md="8" :lg="8">
-
-            <div style="background-color:white;">
-                <ul>
-                    <li>
-                        <div class="staff_list">
-                            <div class="staff_avatar">
-                                <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
-                                        size="large"/>
-                            </div>
-                            <div class="staff_progress">
-                                <p><span class="staff_name"> Jhon James </span><span> - Project Lead</span></p>
-                                <Progress :percent="85" :stroke-width="8" status="active"></Progress>
-                            </div>
-                        </div>
-
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
-
-                    </li>
-
-                    <li>
-                        <div class="staff_list">
-                            <div class="staff_avatar">
-                                <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user2.png"
-                                        size="large"/>
-                            </div>
-                            <div class="staff_progress">
-                                <p><span class="staff_name"> Jhon James </span><span> - Project Lead</span></p>
-                                <Progress :percent="90" :stroke-width="8" status="success"></Progress>
-                            </div>
-                        </div>
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
-
-                    </li>
-
-
-                    <li>
-                        <div class="staff_list">
-                            <div class="staff_avatar">
-                                <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user3.png"
-                                        size="large"/>
-                            </div>
-                            <div class="staff_progress">
-                                <p><span class="staff_name"> Hoffman Doe </span><span> - Support</span></p>
-                                <Progress :percent="10" :stroke-width="8" status="wrong"></Progress>
-                            </div>
-                        </div>
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
-
-                    </li>
-
-
-                    <li>
-                        <div class="staff_list">
-                            <div class="staff_avatar">
-                                <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user4.png"
-                                        size="large"/>
-                            </div>
-                            <div class="staff_progress">
-                                <p><span class="staff_name"> Jane Doe  </span><span> - Marketing</span></p>
-                                <Progress :percent="60" :stroke-width="8"></Progress>
-                            </div>
-                        </div>
-
-                    </li>
-
-                </ul>
-            </div>
-
-            </Col>
-
-        </Row>
-
-        <Row :gutter="16">
-            <Col :xs="12" :sm="12" :md="8" :lg="8">
-
-            <vue-calendar></vue-calendar>
-            </Col>
-
-
-            <Col :xs="12" :sm="12" :md="9" :lg="9">
-            <todo-list></todo-list>
-            </Col>
-
-
-            <Col :xs="24" :sm="24" :md="7" :lg="7">
-
-            <div class="panel blue-box twt-info">
-                <div class="panel-body">
-                    <h3>19 Februay 2014</h3>
-
-                    <p>AdminEx is new model of admin
-                        dashboard <a href="#">http://t.co/3laCVziTw4</a>
-                        4 days ago by John Doe</p>
-                </div>
-            </div>
-
-
-            <div class="panel" style="margin-top:30px">
-                <div class="panel-body">
-                    <div class="media usr-info">
-                        <a href="#" class="pull-left">
-                            <img class="thumb"
-                                 src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user2.png" alt="">
+                        <a class="value article-title" style="color: white;" @click="viewArticle(article.id)">
+                            {{article.title}}
                         </a>
-                        <div class="media-body">
-                            <h4 class="media-heading">Mila Watson</h4>
-                            <span>Senior UI Designer</span>
-                            <p>I use to design websites and applications for the web.</p>
-                        </div>
                     </div>
                 </div>
-                <div class="panel-footer custom-trq-footer">
-                    <ul class="user-states">
-                        <li>
-                            <Icon type="heart" size="25"></Icon>
-                            127
-                        </li>
-                        <li>
-                            <Icon type="eye" size="25"></Icon>
-                            853
-                        </li>
-                        <li>
-                            <Icon type="person-add" size="25"></Icon>
-                            311
-                        </li>
-                    </ul>
-                </div>
+
+                </Col>
             </div>
+
 
             </Col>
 
+            <Col :xs="8" :sm="8" :md="8" :lg="8">
+            <dash-chart-visitor></dash-chart-visitor>
+            </Col>
+
         </Row>
-
-
+        <Row :gutter="16">
+            <Page :total="this.pageInfo.total" placement="top"
+                  :page-size-opts="pageSizeOpts"
+                  show-elevator show-sizer show-total
+                  @on-change="changePage"
+                  @on-page-size-change="changePageSize"
+                  style="text-align:center;margin-top:50px;"></Page>
+        </Row>
     </div>
 </template>
 
@@ -298,6 +65,18 @@
         name: 'dashboard',
         data() {
             return {
+                pageInfo: {
+                    isFirstPage: undefined,
+                    isLastPage: undefined,
+                    pageNum: 1,
+                    pageSize: 12,
+                    pages: undefined,
+                    total: undefined,
+                    list: [],
+                    prePage: undefined,
+                    nextPage: undefined
+                },
+                pageSizeOpts: [10, 20, 50, 100],
                 value1: 0,
                 value2: 0,
                 value3: 0,
@@ -310,13 +89,34 @@
                 this.$store.dispatch('LogOut').then(() => {
                     this.$router.push({path: '/login'});
                 }).catch(err => {
-                    this.$message.error(err);
+                    this.$Message.error(err);
                 });
-            }
+            },
+            articles() {
+                this.$store.dispatch('Articles', {
+                    pageNum: this.pageInfo.pageNum,
+                    pageSize: this.pageInfo.pageSize
+                }).then(res => {
+                    this.pageInfo = res.data;
+                }).catch(err => {
+                    this.$Message.error(err);
+                });
+            },
+            viewArticle(articleId) {
+                this.$router.push({path: '/article/' + articleId})
+            },
+            changePage(page) {
+                this.pageInfo.pageNum = page;
+                this.articles();
+            },
+            changePageSize(pageSize) {
+                this.pageInfo.pageSize = pageSize;
+                this.articles();
+            },
+
         },
         mounted() {
-            const token = this.$store.getters.token;
-
+            this.articles();
 
         }
     }
@@ -324,8 +124,14 @@
 
 
 <style type="text/css" scoped>
+
+    .article-title:hover {
+        color: #8cc886 !important;
+        text-decoration: underline;
+    }
+
     .state-overview {
-        color: #fff
+        color: #f9d4ff
     }
 
     .state-overview .ivu-col {
@@ -333,8 +139,8 @@
     }
 
     .state-overview .state-value .value {
-        font-size: 24px;
-        font-weight: 700;
+        font-size: 20px;
+        font-weight: 500;
         margin-bottom: 5px
     }
 
@@ -374,7 +180,12 @@
 
     .panel.green {
         background: #4acacb;
-        box-shadow: 0 5px 0 #42b5b6
+        box-shadow: 0 2px 0 #42b5b6
+    }
+
+    .panel.deep {
+        background: #49586e;
+        box-shadow: 0 2px 0 #495864
     }
 
     .dash_income_chart {
@@ -412,10 +223,6 @@
         height: 90px;
         display: flex;
         align-items: center
-    }
-
-    .animated {
-        background-color: #eff0f4
     }
 
     li {
@@ -485,7 +292,6 @@
     }
 
     .panel {
-        background-color: #fff;
         border: 1px solid transparent;
         border-radius: 4px;
         -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);

@@ -2000,7 +2000,7 @@ a.badge:focus, a.badge:hover {
 
 .aside-menu {
     z-index: 900;
-    width: 250px;
+    width: 350px;
     color: #263238;
     background: #fff;
     border-left: 1px solid #cfd8dc
@@ -2852,11 +2852,11 @@ base-chart.chart {
 }
 
 .aside-menu-hidden .aside-menu {
-    margin-right: -250px
+    margin-right: -350px;
 }
 
 .aside-menu-fixed .aside-menu {
-    position: fixed;
+    /*position: fixed;*/
     right: 0;
     height: 100%
 }
@@ -2866,7 +2866,7 @@ base-chart.chart {
 }
 
 .aside-menu-fixed .app-footer, .aside-menu-fixed .main {
-    margin-right: 250px
+    /*margin-right: 250px*/
 }
 
 .aside-menu-fixed.aside-menu-hidden .app-footer, .aside-menu-fixed.aside-menu-hidden .main {
@@ -2951,7 +2951,7 @@ base-chart.chart {
     }
 
     .aside-menu {
-        margin-right: -250px
+        margin-right: -350px
     }
 
     .sidebar-mobile-show .sidebar {

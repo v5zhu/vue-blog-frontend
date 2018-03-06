@@ -13,6 +13,14 @@ export function articleList(pageInfo) {
     });
 }
 
+export function articles(params) {
+    return fetch({
+        url: '/articles',
+        method: 'get',
+        params: params
+    });
+}
+
 export function articlePreview(id) {
     return fetch({
         url: '/admin/article/preview/' + id,

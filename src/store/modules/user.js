@@ -1,4 +1,4 @@
-import {loginByEmail, logout, getInfo} from 'api/login';
+import {loginByEmail, logout, getInfo, getAuthorInfo} from 'api/login';
 import Cookies from 'js-cookie';
 
 const user = {
@@ -93,6 +93,17 @@ const user = {
                     commit('SET_NAME', data.name);
                     commit('SET_AVATAR', data.avatar);
                     commit('SET_INTRODUCTION', data.introduction);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
+        // 获取用户信息
+        AuthorInfo({commit, state},params) {
+            return new Promise((resolve, reject) => {
+                getAuthorInfo(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
