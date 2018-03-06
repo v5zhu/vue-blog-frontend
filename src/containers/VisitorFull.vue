@@ -1,0 +1,65 @@
+<template>
+    <div class="app">
+        <AppHeader/>
+        <div class="app-body">
+            <main class="main">
+                <div class="container-fluid">
+                    <router-view></router-view>
+                </div>
+            </main>
+            <AppAside/>
+        </div>
+        <AppFooter/>
+    </div>
+</template>
+
+<script>
+    import AppHeader from '../components/Visitor/Header';
+    import AppAside from '../components/Visitor/Aside';
+    import AppFooter from '../components/Visitor/Footer';
+
+    export default {
+        name: 'full',
+        components: {
+            AppHeader,
+            AppAside,
+            AppFooter
+        },
+        computed: {
+            name() {
+                return this.$route.name
+            },
+
+            list() {
+                return this.$route.matched
+            }
+        }
+    }
+</script>
+<style scoped>
+    .app-body {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        overflow-x: hidden;
+        margin-top: 55px
+    }
+
+    .app-body .main {
+        flex: 1;
+        min-width: 0;
+        margin-left: 0 !important;
+        background-color: white;
+        transition: margin-left .25s, margin-right .25s, width .25s, flex .25s
+    }
+
+    .app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh
+    }
+
+    .main .container-fluid{
+        padding: 0px;
+    }
+</style>

@@ -4,6 +4,7 @@ import Router from 'vue-router';
 const _import = require('./_import_' + process.env.NODE_ENV);
 import Full from '@/containers/Full'
 import Full2 from '@/containers/Full2'
+import VisitorFull from '@/containers/VisitorFull'
 
 import Buttons from '@/views/components/Buttons'
 
@@ -40,9 +41,26 @@ export const constantRouterMap = [
             path: '500',
             component: _import('errorPages/Page404')
         }]
+    },
+    {
+        name: '访客首页',
+        path: '/',
+        redirect: '/articles',
+        component: VisitorFull,
+        children: [{
+            name: '文章页',
+            path: '/articles',
+            component: _import('visitor/Articles')
+        },{
+            name: '文章归档',
+            path: '/archives',
+            component: _import('visitor/Archives')
+        }, {
+            name: '友链',
+            path: '/links',
+            component: _import('visitor/Links')
+        }]
     }
-
-
 ]
 //使用浏览器历史访问模式，可使用浏览器前进后退功能
 export default new Router({
@@ -321,6 +339,9 @@ export const asyncRouterMap = [
     {
         path: '*',
         redirect: '/pages/404',
-        hidden: true
+        hidden: true,
+        meta: {
+            role: ['admin', 'visitor']
+        }
     }
 ];

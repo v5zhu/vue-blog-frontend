@@ -15,7 +15,7 @@ function hasPermission(roles, permissionRoles) {
 const whiteList = ['/admin/login', '/authredirect']// 不重定向白名单
 router.beforeEach((to, from, next) => {
     NProgress.start() // 开启Progress
-    console.log(to.path)
+    console.log(to.path);
     if (store.getters.token) { // 判断是否有token
         if (to.path === '/admin/login') {
             next({path: '/admin'})
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
         } else {
             if (to.path.indexOf('admin') == -1) {
                 next();
-            }else{
+            } else {
                 next('/admin/login') // 否则全部重定向到登录页
                 NProgress.done() // 在hash模式下 改变手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！
             }
