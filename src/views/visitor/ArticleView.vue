@@ -6,10 +6,10 @@
             </Col>
             <Col :xs="17" :sm="17" :md="17" :lg="17">
             <div class="post-header" style="">
-                <div class="post-title" style="text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;" itemprop="name headline">
+                <div class="post-title" style="color: orange;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;" itemprop="name headline">
                     {{article.title}}
                 </div>
-                <div class="post-data" style="text-align: right;margin-top: 50px;margin-right: 5px;">
+                <div class="post-data" style="color: #808080;text-align: right;margin-top: 50px;margin-right: 5px;">
                     <span>发布于：{{article.gmtCreate | formatDate}}</span>
                     浏览量：<span>{{article.hits}}</span>
                 </div>
@@ -32,7 +32,8 @@
         margin-bottom: 16px;
     }
     .post-header,.post-content{
-        border: 1px dotted gray;
+        border: 1px solid rgba(255,165,0,0.2);
+        box-shadow: 0px 2px 18px 2px #ffa5002b;
     }
     .post-content{
         padding-top: 40px;
@@ -142,7 +143,7 @@
     }
 
     code {
-        color: #bbe4dd;
+        color: #808080;
         font-size: 1.2em;
 
     }
@@ -156,7 +157,8 @@
         vertical-align: middle;
         min-height: 40px;
         max-height: 550px;
-        background-color: rgba(14, 16, 15, 0.8);
+        background-color: #f6faff;
+        box-shadow: inset 0px 2px 18px 1px #ffa5002b;
     }
 
     h1, h2, h3, h4, h5, h6 {
