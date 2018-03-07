@@ -130,13 +130,12 @@
     pre {
         padding: 10px;
         border-radius: 3px;
-        /*white-space: inherit;*/
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: auto;
 
         vertical-align: middle;
         min-height: 40px;
-        height: auto;
+        max-height: 550px;
         background-color: rgba(14, 16, 15, 0.8);
     }
 

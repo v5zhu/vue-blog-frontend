@@ -310,7 +310,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.$router.push({path: '/blog/article/preview/' + params.row.id})
+                                            this.$router.push({path: '/admin/blog/article/preview/' + params.row.id})
                                         }
                                     }
                                 }, '预览')
@@ -391,7 +391,7 @@
                 if (id == null) {
                     //发表新文章
                     this.$router.push({
-                        path: '/blog/article/publish',
+                        path: '/admin/blog/article/publish',
                         query: {
                             pageNum: pageNum,
                             pageSize: pageSize,
@@ -405,7 +405,7 @@
                 } else {
                     //编辑文章
                     this.$router.push({
-                        path: '/blog/article/edit/' + id,
+                        path: '/admin/blog/article/edit/' + id,
                         query: {
                             pageNum: pageNum,
                             pageSize: pageSize,
@@ -438,7 +438,7 @@
             changePage(page) {
                 this.pageInfo.pageNum = page;
                 this.$router.push({
-                    path: '/blog/article/manage',
+                    path: '/admin/blog/article/manage',
                     query: {
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
@@ -454,7 +454,7 @@
             changePageSize(pageSize) {
                 this.pageInfo.pageSize = pageSize;
                 this.$router.push({
-                    path: '/blog/article/manage',
+                    path: '/admin/blog/article/manage',
                     query: {
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
@@ -471,7 +471,7 @@
                 var status = col._filterChecked[0];
                 this.queryParam.status = status;
                 this.$router.push({
-                    path: '/blog/article/manage',
+                    path: '/admin/blog/article/manage',
                     query: {
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,
@@ -520,7 +520,7 @@
 
                 var sort = this.sortParam.join(',');
                 this.$router.push({
-                    path: '/blog/article/manage',
+                    path: '/admin/blog/article/manage',
                     query: {
                         pageNum: this.pageInfo.pageNum,
                         pageSize: this.pageInfo.pageSize,

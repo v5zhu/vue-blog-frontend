@@ -324,7 +324,7 @@
                 var categories = this.$route.query.categories;
                 var sort = this.$route.query.sort;
                 this.$router.push({
-                    path: '/blog/article/manage',
+                    path: '/admin/blog/article/manage',
                     query: {
                         pageNum: pageNum, pageSize: pageSize, status: status, title: title,
                         tags: tags,
@@ -351,7 +351,7 @@
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success(msg + '成功!');
-                                    this.$router.push({path: '/blog/article/manage'});
+                                    this.$router.push({path: '/admin/blog/article/manage'});
                                 } else {
                                     this.$Message.error(msg + '失败!');
                                 }
@@ -363,7 +363,7 @@
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success(msg + '成功!');
-                                    this.$router.push({path: '/blog/article/manage'});
+                                    this.$router.push({path: '/admin/blog/article/manage'});
                                 } else {
                                     this.$Message.error(msg + '失败!');
                                 }

@@ -4,21 +4,12 @@
         <Row>
             <Col>
             <div class="clearfix mt-4">
-                <h1><b>作者信息</b>
+                <h1><b>分类</b>
                 </h1>
             </div>
-            <div>
-                <div>
-                    <p>用户名:{{user.loginName}}</p>
-                </div>
-                <div>
-                    <p>邮箱:{{user.email}}</p>
-                </div>
-                <div>
-                    <p>上次在线:{{user.lastLoginTime | formatDate}}</p>
-                </div>
-                <div>
-                    <p>角色类型:{{user.roles}}</p>
+            <div style="padding: 5px;">
+                <div v-for="(item,index) in categories" style="margin: 2px;float: left">
+                    <Button type="primary" size="small" @click="filterCategories(item.name)">{{item.name}}</Button>
                 </div>
             </div>
             </Col>
@@ -49,33 +40,32 @@
     export default {
         mounted() {
             var id = this.$route.params.id;
-            this.getAuthorInfo(1);
+            this.categoryList();
         },
         data() {
             return {
-                user: {
-                    id: '',
-                    loginName: '',
-                    email: '',
-                    homeUrl: '',
-                    screenName: '',
-                    gmtCreate: '',
-                    gmtModified: '',
-                    lastLoginTime: '',
-                    roles: []
-                },
+                categories: [],
+                buttonTypes: [
+                    'primary',
+                    'ghost',
+                    'info',
+                    'success',
+                    'warning',
+                    'error'
+                ]
             }
-        }
-        ,
+        },
         methods: {
-            getAuthorInfo(authorId) {
-                store.dispatch('AuthorInfo', {authorId: authorId}).then(res => { // 拉取user_info
-                    var user = res.data;
-                    this.user = user;
-                    console.log(this.user);
+            categoryList() {
+                store.dispatch('CategoryList', {}).then(res => { // 拉取user_info
+                    var categories = res.data;
+                    this.categories = categories;
                 }).catch(() => {
                     console.log("获取文章作者信息失败");
                 })
+            },
+            filterCategories(categoryName) {
+                this.$router.push({path: '/category/' + categoryName});
             }
         }
         ,

@@ -50,7 +50,7 @@
         ,
         methods: {
             getArchives() {
-                store.dispatch('Archives', {year: null, month: null}).then(res => { // 拉取user_info
+                store.dispatch('Archives', {year: null, month: null,category:'',tag:''}).then(res => { // 拉取user_info
                     var archives = res.data;
                     this.archives = archives;
                 }).catch(() => {

@@ -59,7 +59,9 @@
             return {
                 params: {
                     year: '',
-                    month: ''
+                    month: '',
+                    category: '',
+                    tag: ''
                 },
                 archives: [],
                 value1: 0,
@@ -79,7 +81,12 @@
                 });
             },
             getArchives() {
-                store.dispatch('Archives', {year: this.params.year, month: this.params.month}).then(res => { // 拉取user_info
+                store.dispatch('Archives', {
+                    year: this.params.year,
+                    month: this.params.month,
+                    category: this.params.category,
+                    tag: this.params.tag
+                }).then(res => { // 拉取user_info
                     var archives = res.data;
                     this.archives = archives;
                     console.log(this.archives)
@@ -99,9 +106,14 @@
         mounted() {
             var year = this.$route.params.year;
             var month = this.$route.params.month;
+            var category = this.$route.params.category;
+            var tag = this.$route.params.tag;
 
+            console.log(year + month + category + tag);
             this.params.year = year;
             this.params.month = month;
+            this.params.category = category;
+            this.params.tag = tag;
             this.getArchives();
         }
     }
