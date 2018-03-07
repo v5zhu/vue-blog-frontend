@@ -53,7 +53,7 @@
                     </div>
 
                 </div>
-                <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px dashed #0066CC;"/>
+                <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.4);"/>
 
             </div>
             </Col>

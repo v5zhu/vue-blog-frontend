@@ -3,24 +3,15 @@
     <div class="echarts">
         <Row>
             <Col>
-            <div class="clearfix mt-4">
-                <h1><b>作者信息</b>
-                </h1>
+            <div class="clearfix">
+                <h4 style="text-align: center;font-family: serif;">关于作者</h4>
             </div>
+            <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
             <div>
-                <div>
-                    <Icon type="person" size="20" color="white"></Icon>
-                    <span style="font-size: 14px;">{{user.loginName}}</span>
-                </div>
-                <div>
-                    <Icon type="email" size="20" color="white"></Icon>
-                    <span style="font-size: 14px;">{{user.email}}</span>
-                </div>
-
-                <div>
-                    <span style="font-size: 14px;">最后在线:{{user.lastLoginTime | formatDate}}</span>
-
-                </div>
+                <ul>
+                    <li style="margin: 15px;">邮箱：{{user.email}}</li>
+                    <li style="margin: 15px;">最后在线：{{user.lastLoginTime}}</li>
+                </ul>
             </div>
             </Col>
         </Row>
@@ -34,10 +25,10 @@
         border-radius: 4px;
         height: 150px;
         width: 100%;
-        border: 1px solid #49586e;
-        background: #49586e;
-        box-shadow: 0 2px 0 #495864;
-        color: white;
+        border: 1px solid rgba(255, 165, 0, 0.2);
+        background: #f6faff;
+        box-shadow: 0px 2px 18px 4px #ffa5002b;
+        color: black;
     }
 
 
