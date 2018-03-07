@@ -16,7 +16,7 @@
         flex-direction: row;
         height: 55px;
         margin: 0;
-        background: #49586e;
+        background: #f6faff;
 
         display: flex;
         flex-wrap: wrap;

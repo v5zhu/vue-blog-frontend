@@ -8,22 +8,21 @@
             <Col span="12">
             <div class="state-overview" v-for="article in pageInfo.list">
 
-                <div class="panel deep article-background"
+                <div class="panel like-header article-background"
                      style="width: auto;height:150px;margin: 5px;position: relative;">
 
                     <div class="symbol">
-                        <!--<img style="position: absolute;left: 22px;top: 22px;width: 30%;height:60%;" size="32" src="static/img/avatars/6.jpg"/>-->
                     </div>
                     <div class="state-value">
                         <div>
                             <ul>
                                 <li>
-                                    <a class="value article-title" style="color: white;"
+                                    <a class="value article-title" style="color: orange;"
                                        @click="viewArticle(article.id)">
                                         {{article.title}}
                                     </a>
                                 </li>
-                                <li>{{article.outline}}</li>
+                                <li style="color: #808080">{{article.outline}}</li>
                             </ul>
 
                         </div>
@@ -31,23 +30,23 @@
                             <ul>
                                 <li style="float: left;position:absolute;right:150px;bottom:-10px">
                                     <Icon type="ios-paw-outline" size="18"
-                                          color="white"></Icon>
-                                    <label style="position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.hits}}）</label>
+                                          color="orange"></Icon>
+                                    <label style="color:orange;position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.hits}}）</label>
                                 </li>
                                 <li style="float: left;position:absolute;right:100px;bottom:-10px">
                                     <Icon type="ios-chatbubble-outline" size="18"
-                                          color="white"></Icon>
-                                    <label style="position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
+                                          color="orange"></Icon>
+                                    <label style="color:orange;position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
                                 </li>
                                 <li style="float: left;position:absolute;right:50px;bottom:-10px">
-                                    <Icon type="thumbsup" size="18"
-                                          color="white"></Icon>
-                                    <label style="position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
+                                    <Icon type="ios-heart-outline" size="18"
+                                          color="orange"></Icon>
+                                    <label style="color:orange;position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
                                 </li>
                                 <li style="float: left;position:absolute;right:0px;bottom:-10px">
-                                    <Icon type="thumbsdown" size="18"
-                                          color="white"></Icon>
-                                    <label style="position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
+                                    <Icon type="sad-outline" size="18"
+                                          color="orange"></Icon>
+                                    <label style="color:orange;position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
                                 </li>
                             </ul>
                         </div>
@@ -148,7 +147,7 @@
 <style type="text/css" scoped>
 
     .article-title:hover {
-        color: #8cc886 !important;
+        color: #7689c8 !important;
         text-decoration: underline;
     }
 
@@ -163,7 +162,8 @@
     .state-overview .state-value .value {
         font-size: 20px;
         font-weight: 500;
-        margin-bottom: 5px
+        margin-bottom: 5px;
+        font-family: fantasy;
     }
 
     .state-overview .state-value .title {
@@ -205,9 +205,9 @@
         box-shadow: 0 2px 0 #42b5b6
     }
 
-    .panel.deep {
-        background: #49586e;
-        box-shadow: 0 2px 0 #495864
+    .panel.like-header {
+        background: #f6faff;
+        box-shadow: 0px 2px 18px 4px #ffa5002b;
     }
 
     .dash_income_chart {
