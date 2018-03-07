@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <AppHeader/>
+        <AppHeader :isShow="isShow"/>
         <div class="app-body">
             <main class="main">
                 <div class="container-fluid">
@@ -20,10 +20,29 @@
 
     export default {
         name: 'full',
+        data() {
+            return {
+                isShow: true
+            }
+        },
         components: {
             AppHeader,
             AppAside,
             AppFooter
+        },
+        mounted() {
+            window.addEventListener('scroll', this.handleScroll)
+        },
+        methods: {
+            handleScroll() {
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+                if (scrollTop < 500) {
+                    this.isShow = true;
+                } else {
+                    this.isShow = false;
+                }
+            }
+
         },
         computed: {
             name() {
@@ -59,7 +78,7 @@
         min-height: 100vh
     }
 
-    .main .container-fluid{
+    .main .container-fluid {
         padding: 0px;
     }
 </style>

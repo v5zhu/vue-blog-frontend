@@ -14,10 +14,10 @@
 <style type="text/css" scoped>
     .app-header.navbar {
         flex-direction: row;
-        height: 55px;
+        height: 60px;
         margin: 0;
         background: #f6faff;
-
+        box-shadow: 0 0px 20px 1px rgba(255,165,0,0.5);
         display: flex;
         flex-wrap: wrap;
         align-items: center;
