@@ -41,7 +41,6 @@
     export default {
         mounted() {
             var id = this.$route.params.id;
-            alert(id)
         },
         data: function () {
 

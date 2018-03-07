@@ -1,20 +1,25 @@
 <template>
     <div class="animated fadeIn" style="margin-top:50px;">
         <Row>
-            <Col>
-            <div class="post-header" style="margin-bottom: 50px;">
-                <h1 class="post-title" style="text-align: center;" itemprop="name headline">
-                    <span>{{article.title}}</span>
-                </h1>
-                <div class="post-data" style="text-align: center;">
+            <Col :xs="3" :sm="3" :md="3" :lg="3">
+            &nbsp;
+            </Col>
+            <Col :xs="17" :sm="17" :md="17" :lg="17">
+            <div class="post-header" style="">
+                <div class="post-title" style="text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;" itemprop="name headline">
+                    {{article.title}}
+                </div>
+                <div class="post-data" style="text-align: right;margin-top: 50px;margin-right: 5px;">
                     <span>发布于：{{article.gmtCreate | formatDate}}</span>
                     浏览量：<span>{{article.hits}}</span>
                 </div>
 
             </div>
-            <div id="editor">
+            <div class="post-content" id="editor">
                 <div v-html="compiledMarkdown"></div>
             </div>
+            </Col>
+            <Col :xs="4" :sm="4" :md="4" :lg="4">
             </Col>
         </Row>
     </div>
@@ -25,6 +30,25 @@
 <style scoped>
     .expand-row {
         margin-bottom: 16px;
+    }
+    .post-header,.post-content{
+        border: 1px dotted gray;
+    }
+    .post-content{
+        padding-top: 40px;
+        border-top:none !important;
+     }
+    .post-header{
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    .post-content{
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
     }
 </style>
 

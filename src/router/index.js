@@ -55,6 +55,10 @@ export const constantRouterMap = [
             name: '文章归档',
             path: '/archives',
             component: _import('visitor/Archives')
+        },{
+            name: '文章归档(按时间筛选)',
+            path: '/archives/:year/:month',
+            component: _import('visitor/Archives')
         }, {
             name: '友链',
             path: '/links',

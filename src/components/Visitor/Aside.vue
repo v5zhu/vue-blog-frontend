@@ -8,34 +8,19 @@
             </Row>
             <Row>
                 <Col>
-                <author-right-bar></author-right-bar>
+                <archives-right-bar></archives-right-bar>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                <author-right-bar></author-right-bar>
+                <category-right-bar></category-right-bar>
                 </Col>
             </Row>
-            <div class="clearfix mt-4">
-                <h1><b>作者信息</b>
-                </h1>
-            </div>
-            <div>
-                <div>
-                    <p>用户名:{{user.loginName}}</p>
-                </div>
-                <div>
-                    <p>邮箱:{{user.email}}</p>
-                </div>
-                <div>
-                    <p>上次在线:{{user.lastLoginTime | formatDate}}</p>
-                </div>
-                <div>
-                    <p>角色类型:{{user.roles}}</p>
-                </div>
-            </div>
-
-
+            <Row>
+                <Col>
+                <tag-right-bar></tag-right-bar>
+                </Col>
+            </Row>
         </div>
 
 
@@ -105,41 +90,26 @@
     import {formatTime} from 'utils/index';
     import store from 'store/';
     import AuthorRightBar from './../Visitor/AuthorRightBar';
+    import ArchivesRightBar from './../Visitor/ArchivesRightBar';
+    import CategoryRightBar from './../Visitor/CategoryRightBar';
+    import TagRightBar from './../Visitor/TagRightBar';
 
     export default {
         name: 'aside',
         data() {
             return {
-                user: {
-                    id: '',
-                    loginName: '',
-                    email: '',
-                    homeUrl: '',
-                    screenName: '',
-                    gmtCreate: '',
-                    gmtModified: '',
-                    lastLoginTime: '',
-                    roles: []
-                }
+
             }
         },
         computed: {},
         created() {
         },
-        components: {AuthorRightBar},
+        components: {AuthorRightBar, ArchivesRightBar, CategoryRightBar, TagRightBar},
         mounted() {
             this.getAuthorInfo(1);
         },
         methods: {
-            getAuthorInfo(authorId) {
-                store.dispatch('AuthorInfo', {authorId: authorId}).then(res => { // 拉取user_info
-                    var user = res.data;
-                    this.user = user;
-                    console.log(this.user);
-                }).catch(() => {
-                    console.log("获取文章作者信息失败");
-                })
-            }
+
         },
         filters: {
             formatDate(time) {

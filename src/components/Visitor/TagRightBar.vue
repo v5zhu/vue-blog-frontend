@@ -9,17 +9,16 @@
             </div>
             <div>
                 <div>
-                    <Icon type="person" size="20" color="white"></Icon>
-                    <span style="font-size: 14px;">{{user.loginName}}</span>
+                    <p>用户名:{{user.loginName}}</p>
                 </div>
                 <div>
-                    <Icon type="email" size="20" color="white"></Icon>
-                    <span style="font-size: 14px;">{{user.email}}</span>
+                    <p>邮箱:{{user.email}}</p>
                 </div>
-
                 <div>
-                    <span style="font-size: 14px;">最后在线:{{user.lastLoginTime | formatDate}}</span>
-
+                    <p>上次在线:{{user.lastLoginTime | formatDate}}</p>
+                </div>
+                <div>
+                    <p>角色类型:{{user.roles}}</p>
                 </div>
             </div>
             </Col>
@@ -30,7 +29,7 @@
 
 <style scoped>
     .echarts {
-        margin-top: 45px;
+        margin-top: 30px;
         border-radius: 4px;
         height: 150px;
         width: 100%;

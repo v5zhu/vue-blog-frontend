@@ -1,216 +1,33 @@
 <template>
     <div class="animated fadeIn">
-        <Row>
-            <Col :sm="24" :md="8">
-            <h3>👍WZ后台管理框架👍</h3>
-            <h5><a href="https://github.com/herozhou/vue-framework-wz" target="_blank">github地址（喜欢就点个start呗）</a></h5>
-            </Col>
 
+        <Row :gutter="16" style="margin-top: 45px;">
 
-            <div class="state-info">
+            <Col>
 
-                <section class="panel">
-                    <div class="panel-body">
-                        <div class="summary">
-                            <span>yearly  income</span>
-                            <h3 class="green-txt">$ 45,600</h3>
-                        </div>
-
-                        <div id="expense" class="chart-bar"><img src="static/img/greenincome.png"></div>
-                    </div>
-                </section>
-
-
-                <section class="panel">
-
-                    <div class="panel-body">
-
-                        <div class="summary">
-                            <span>yearly expense</span>
-                            <h3 class="red-txt">$ 45,600</h3>
-                        </div>
-                        <div id="income" class="chart-bar">
-                            <img src="static/img/redincome.png">
-
-
-                        </div>
-                    </div>
-                </section>
-
-
-            </div>
-
-
-        </Row>
-
-
-        <Row :gutter="16" style="margin-top:45px">
-
-
-            <Col :xs="24" :sm="12" :md="12" :lg="12">
-
-            <div class="state-overview">
-                <Col span="12">
-
-                <div class="panel purple">
-                    <div class="symbol">
-                        <Icon type="clipboard" size="50" color="white"></Icon>
-
-                    </div>
-                    <div class="state-value">
-                        <div class="value">
-                            230
-                        </div>
-                        <div class="title">
-                            New Order
-                        </div>
-                    </div>
-                </div>
-
-
-                </Col>
-                <Col span="12">
-                <div class="panel red">
-                    <div class="symbol">
-                        <Icon type="pricetags" size="50" color="white"></Icon>
-                    </div>
-                    <div class="state-value">
-                        <div class="value">
-                            3490
-                        </div>
-                        <div class="title">
-                            Copy Sold
-                        </div>
-                    </div>
-
-                </div>
-                </Col>
-            </div>
-
-
-            <div class="state-overview">
-                <Col span="12">
-
-                <div class="panel blue">
-                    <div class="symbol">
-                        <Icon type="cash" size="50" color="white"></Icon>
-
-                    </div>
-                    <div class="state-value">
-                        <div class="value">
-                            22014
-                        </div>
-                        <div class="title">
-                            Total Revenue
-                        </div>
-                    </div>
-                </div>
-
-                </Col>
-                <Col span="12">
-                <div class="panel green">
-                    <div class="symbol">
-                        <Icon type="eye" size="50" color="white"></Icon>
-
-                    </div>
-                    <div class="state-value">
-                        <div class="value">
-                            390
-                        </div>
-                        <div class="title">
-                            Unique Visitors
-                        </div>
-                    </div>
-                </div>
-                </Col>
-            </div>
-
-
-            </Col>
-
-
-            <Col :xs="24" :sm="12" :md="12" :lg="12">
-
-
-            <dash-chart-visitor></dash-chart-visitor>
-
-
-            </Col>
-
-        </Row>
-
-        <Row :gutter="16">
-
-            <Col :xs="24" :sm="12" :md="16" :lg="16">
-
-            <dash-chart-large></dash-chart-large>
-
-
-            </Col>
-
-            <Col :xs="24" :sm="12" :md="8" :lg="8">
-
-            <div style="background-color:white;">
+            <div>
                 <ul>
-                    <li>
+                    <li v-for="archive in archives">
                         <div class="staff_list">
                             <div class="staff_avatar">
                                 <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
                                         size="large"/>
                             </div>
                             <div class="staff_progress">
-                                <p><span class="staff_name"> Jhon James </span><span> - Project Lead</span></p>
-                                <Progress :percent="85" :stroke-width="8" status="active"></Progress>
+                                <div><span
+                                        class="staff_name"> {{archive.date}} </span><span> - (共{{archive.count}}篇)</span>
+                                    <ul>
+                                        <li v-for="article in archive.articles">
+                                            <p>【{{article.gmtCreate | formatDate}}】<a @click="articleView(article.id)">{{article.title}}</a>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+
                             </div>
                         </div>
 
                         <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
-
-                    </li>
-
-                    <li>
-                        <div class="staff_list">
-                            <div class="staff_avatar">
-                                <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user2.png"
-                                        size="large"/>
-                            </div>
-                            <div class="staff_progress">
-                                <p><span class="staff_name"> Jhon James </span><span> - Project Lead</span></p>
-                                <Progress :percent="90" :stroke-width="8" status="success"></Progress>
-                            </div>
-                        </div>
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
-
-                    </li>
-
-
-                    <li>
-                        <div class="staff_list">
-                            <div class="staff_avatar">
-                                <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user3.png"
-                                        size="large"/>
-                            </div>
-                            <div class="staff_progress">
-                                <p><span class="staff_name"> Hoffman Doe </span><span> - Support</span></p>
-                                <Progress :percent="10" :stroke-width="8" status="wrong"></Progress>
-                            </div>
-                        </div>
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
-
-                    </li>
-
-
-                    <li>
-                        <div class="staff_list">
-                            <div class="staff_avatar">
-                                <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user4.png"
-                                        size="large"/>
-                            </div>
-                            <div class="staff_progress">
-                                <p><span class="staff_name"> Jane Doe  </span><span> - Marketing</span></p>
-                                <Progress :percent="60" :stroke-width="8"></Progress>
-                            </div>
-                        </div>
 
                     </li>
 
@@ -221,68 +38,6 @@
 
         </Row>
 
-        <Row :gutter="16">
-            <Col :xs="12" :sm="12" :md="8" :lg="8">
-
-            <vue-calendar></vue-calendar>
-            </Col>
-
-
-            <Col :xs="12" :sm="12" :md="9" :lg="9">
-            <todo-list></todo-list>
-            </Col>
-
-
-            <Col :xs="24" :sm="24" :md="7" :lg="7">
-
-            <div class="panel blue-box twt-info">
-                <div class="panel-body">
-                    <h3>19 Februay 2014</h3>
-
-                    <p>AdminEx is new model of admin
-                        dashboard <a href="#">http://t.co/3laCVziTw4</a>
-                        4 days ago by John Doe</p>
-                </div>
-            </div>
-
-
-            <div class="panel" style="margin-top:30px">
-                <div class="panel-body">
-                    <div class="media usr-info">
-                        <a href="#" class="pull-left">
-                            <img class="thumb"
-                                 src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user2.png" alt="">
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-heading">Mila Watson</h4>
-                            <span>Senior UI Designer</span>
-                            <p>I use to design websites and applications for the web.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer custom-trq-footer">
-                    <ul class="user-states">
-                        <li>
-                            <Icon type="heart" size="25"></Icon>
-                            127
-                        </li>
-                        <li>
-                            <Icon type="eye" size="25"></Icon>
-                            853
-                        </li>
-                        <li>
-                            <Icon type="person-add" size="25"></Icon>
-                            311
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            </Col>
-
-        </Row>
-
-
     </div>
 </template>
 
@@ -291,18 +46,28 @@
     import DashChartVisitor from './../charts/DashChartVisitor';
     import DashChartLarge from './../charts/DashChartLarge';
     import VueCalendar from './../components/VueCalendar';
-    import TodoList from '@/components/TodoList'
+    import TodoList from '@/components/TodoList';
+
+    import {formatTime} from 'utils/index';
+    import store from 'store/';
+
 
     export default {
         components: {DashChartCount, DashChartVisitor, DashChartLarge, VueCalendar, TodoList},
         name: 'dashboard',
         data() {
             return {
+                params: {
+                    year: '',
+                    month: ''
+                },
+                archives: [],
                 value1: 0,
                 value2: 0,
                 value3: 0,
 
                 speed: 10000,
+
             }
         },
         methods: {
@@ -310,14 +75,34 @@
                 this.$store.dispatch('LogOut').then(() => {
                     this.$router.push({path: '/login'});
                 }).catch(err => {
-                    this.$message.error(err);
+                    this.$Message.error(err);
                 });
+            },
+            getArchives() {
+                store.dispatch('Archives', {year: this.params.year, month: this.params.month}).then(res => { // 拉取user_info
+                    var archives = res.data;
+                    this.archives = archives;
+                    console.log(this.archives)
+                }).catch(() => {
+                    console.log("获取文章历史归档信息失败");
+                })
+            },
+            articleView(articleId) {
+                this.$router.push({path: '/article/' + articleId});
+            }
+        },
+        filters: {
+            formatDate(time) {
+                return formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
             }
         },
         mounted() {
-            const token = this.$store.getters.token;
+            var year = this.$route.params.year;
+            var month = this.$route.params.month;
 
-
+            this.params.year = year;
+            this.params.month = month;
+            this.getArchives();
         }
     }
 </script>
@@ -409,13 +194,8 @@
     .staff_list {
         border-radius: 4px;
         margin-top: 0;
-        height: 90px;
         display: flex;
         align-items: center
-    }
-
-    .animated {
-        background-color: #eff0f4
     }
 
     li {

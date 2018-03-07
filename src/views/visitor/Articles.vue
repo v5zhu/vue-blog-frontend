@@ -3,10 +3,10 @@
         <Row :gutter="16" style="margin-top: 45px;">
 
 
-            <Col :xs="16" :sm="16" :md="16" :lg="16">
+            <Col :xs="20" :sm="20" :md="20" :lg="20">
 
             <div class="state-overview" v-for="article in pageInfo.list">
-                <Col span="8">
+                <Col span="6">
 
                 <div class="panel deep article-background" style="width: auto;height:150px;margin: 5px;">
 
@@ -37,18 +37,15 @@
 
             </Col>
 
-            <Col :xs="8" :sm="8" :md="8" :lg="8">
-            <dash-chart-visitor></dash-chart-visitor>
-            </Col>
-
         </Row>
         <Row :gutter="16">
             <Page :total="this.pageInfo.total" placement="top"
                   :page-size-opts="pageSizeOpts"
+                  :current="this.pageInfo.pageNum"
                   show-elevator show-sizer show-total
                   @on-change="changePage"
                   @on-page-size-change="changePageSize"
-                  style="text-align:center;margin-top:50px;"></Page>
+                  style="text-align:left;margin-top:50px;margin-left: 20px;"></Page>
         </Row>
     </div>
 </template>
@@ -69,7 +66,7 @@
                     isFirstPage: undefined,
                     isLastPage: undefined,
                     pageNum: 1,
-                    pageSize: 12,
+                    pageSize: 10,
                     pages: undefined,
                     total: undefined,
                     list: [],
