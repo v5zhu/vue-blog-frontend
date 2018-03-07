@@ -12,6 +12,7 @@ const article = {
     state: {
         id: '',
         title: '',
+        outline: '',
         cover: '',
         path: '',
         type: '',
@@ -33,6 +34,9 @@ const article = {
         },
         SET_TITLE: (state, title) => {
             state.title = title;
+        },
+        SET_OUTLINE: (state, outline) => {
+            state.outline = outline;
         },
         SET_COVER: (state, cover) => {
             state.cover = cover;
@@ -83,6 +87,7 @@ const article = {
                     const data = response.data;
                     commit('SET_ID', data.id);
                     commit('SET_TITLE', data.title);
+                    commit('SET_OUTLINE', data.outline);
                     commit('SET_COVER', data.cover);
                     commit('SET_PATH', data.path);
                     commit('SET_TYPE', data.type);
@@ -119,6 +124,7 @@ const article = {
                     const data = response.data;
                     commit('SET_ID', data.id);
                     commit('SET_TITLE', data.title);
+                    commit('SET_OUTLINE', data.outline);
                     commit('SET_COVER', data.cover);
                     commit('SET_PATH', data.path);
                     commit('SET_TYPE', data.type);

@@ -2,39 +2,64 @@
     <div class="animated fadeIn">
         <Row :gutter="16" style="margin-top: 45px;">
 
-
-            <Col :xs="20" :sm="20" :md="20" :lg="20">
-
+            <Col span="3">
+            &nbsp;
+            </Col>
+            <Col span="12">
             <div class="state-overview" v-for="article in pageInfo.list">
-                <Col span="6">
 
-                <div class="panel deep article-background" style="width: auto;height:150px;margin: 5px;">
+                <div class="panel deep article-background"
+                     style="width: auto;height:150px;margin: 5px;position: relative;">
 
                     <div class="symbol">
-                        <img style="position: absolute;left: 22px;top: 22px;width: 30%;height:60%;" size="32" src="static/img/avatars/6.jpg"/>
-
-                        <div style="position: absolute;left: 22px;top: 132px;">
-                            <Icon type="eye" size="13"
-                                  color="white"></Icon>
-                            {{article.hits}}
-                        </div>
-                        <div style="position: absolute;left: 62px;top: 132px;">
-                            <Icon type="heart" size="12"
-                                  color="white"></Icon>
-                            {{article.hits}}
-                        </div>
+                        <!--<img style="position: absolute;left: 22px;top: 22px;width: 30%;height:60%;" size="32" src="static/img/avatars/6.jpg"/>-->
                     </div>
                     <div class="state-value">
-                        <a class="value article-title" style="color: white;" @click="viewArticle(article.id)">
-                            {{article.title}}
-                        </a>
+                        <div>
+                            <ul>
+                                <li>
+                                    <a class="value article-title" style="color: white;"
+                                       @click="viewArticle(article.id)">
+                                        {{article.title}}
+                                    </a>
+                                </li>
+                                <li>{{article.outline}}</li>
+                            </ul>
+
+                        </div>
+                        <div>
+                            <ul>
+                                <li style="float: left;position:absolute;right:150px;bottom:-10px">
+                                    <Icon type="ios-paw-outline" size="18"
+                                          color="white"></Icon>
+                                    <label style="position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.hits}}）</label>
+                                </li>
+                                <li style="float: left;position:absolute;right:100px;bottom:-10px">
+                                    <Icon type="ios-chatbubble-outline" size="18"
+                                          color="white"></Icon>
+                                    <label style="position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
+                                </li>
+                                <li style="float: left;position:absolute;right:50px;bottom:-10px">
+                                    <Icon type="thumbsup" size="18"
+                                          color="white"></Icon>
+                                    <label style="position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
+                                </li>
+                                <li style="float: left;position:absolute;right:0px;bottom:-10px">
+                                    <Icon type="thumbsdown" size="18"
+                                          color="white"></Icon>
+                                    <label style="position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+
                 </div>
+                <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px dashed #0066CC;"/>
 
-                </Col>
             </div>
-
-
+            </Col>
+            <Col span="4">
+            &nbsp;
             </Col>
 
         </Row>
@@ -146,18 +171,18 @@
     }
 
     .state-value {
-        width: 60%;
+        width: 68%;
         display: inline-block
     }
 
     .symbol {
-        width: 35%;
+        width: 30%;
         display: inline-block
     }
 
     .state-overview .panel {
         border-radius: 4px;
-        padding: 25px 20px
+        padding: 10px 10px
     }
 
     .panel.purple {
