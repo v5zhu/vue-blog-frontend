@@ -47,7 +47,6 @@
         },
         components: {AuthorRightBar, ArchivesRightBar, CategoryRightBar, TagRightBar},
         mounted() {
-            this.getAuthorInfo(1);
         },
         methods: {
 

@@ -6,6 +6,7 @@ import article from './modules/article';
 import archive from './modules/archives';
 import category from './modules/category';
 import tag from './modules/tag';
+import link from './modules/link';
 import permission from './modules/permission';
 import getters from './getters';
 
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
         archive,
         category,
         tag,
+        link,
         permission
     },
     getters

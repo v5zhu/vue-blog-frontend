@@ -1,20 +1,20 @@
 <template>
     <div class="animated fadeIn">
 
-
+        <h3 style="text-align:center">概况</h3>
+        <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
         <Row>
-            <Col :md="24">
-            <intro-chart-count></intro-chart-count>
-
-            </Col>
-
-        </Row>
-
-        <Row>
-            <Col span="24">
-            <h3 style="text-align:center">特性</h3>
-
-            </Col>
+            <div v-for="link in links">
+                <Col span="6"  class="link-piece">
+                <div class="echarts">
+                    <ul>
+                        <li style="margin: 10px;">友链名称：<a :href="link.value" target="_blank">{{link.name}}</a></li>
+                        <li style="margin: 10px;">链接地址：{{link.value}}</li>
+                        <li style="margin: 10px;">描述信息：{{link.description}}</li>
+                    </ul>
+                </div>
+                </Col>
+            </div>
         </Row>
 
 
@@ -40,7 +40,6 @@
                 <h5>自适应</h5>
                 <p>自适应布局 可缩小侧边栏 Logo自动居中 </p>
                 <p>完美适配大屏、平板、手机</p>
-                <p><a style="    color: #2d8cf0;cursor: pointer;">调整浏览器大小查看</a></p>
             </div>
 
             </Col>
@@ -50,8 +49,6 @@
                 <h5>登录鉴权</h5>
                 <p>在前端截获路由跳转，控制登录及鉴权功能</p>
                 <p>极大简化后端工作量</p>
-
-                <p><a style="    color: #2d8cf0;cursor: pointer;" @click="test_logout">点击立即退出登录测试</a></p>
             </div>
 
             </Col>
@@ -135,12 +132,14 @@
 <script>
     import IntroChartCount from './../charts/IntroChartCount';
     import IntroChartPie from './../charts/IntroChartPie';
+    import store from 'store/';
 
     export default {
         components: {IntroChartCount, IntroChartPie},
         name: 'dashboard',
         data() {
             return {
+                links: [],
                 value1: 0,
                 value2: 0,
                 value3: 0,
@@ -149,17 +148,18 @@
             }
         },
         methods: {
-            test_logout() {
-                this.$store.dispatch('LogOut').then(() => {
-                    this.$router.push({path: '/login'});
+            linkList() {
+                store.dispatch('LinkList', {}).then(res => {
+                    var links = res.data;
+                    this.links = links;
                 }).catch(err => {
-                    this.$message.error(err);
+                    this.$Message.error(err);
                 });
             }
         },
         mounted() {
             const token = this.$store.getters.token;
-
+            this.linkList();
 
         }
     }
@@ -167,6 +167,21 @@
 
 
 <style type="text/css" scoped>
+    .link-piece {
+        margin: 10px 25px;
+    }
+
+    .echarts {
+        margin-top: 45px;
+        border-radius: 4px;
+        height: 150px;
+        width: 100%;
+        border: 1px solid rgba(255, 165, 0, 0.2);
+        background: #f6faff;
+        box-shadow: 0px 2px 18px 4px #ffa5002b;
+        color: black;
+    }
+
     .time {
         font-size: 14px;
         font-weight: bold;
