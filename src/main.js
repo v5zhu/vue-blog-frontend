@@ -9,8 +9,12 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/googlecode.css';
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
+import { quillEditor } from 'vue-quill-editor';
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
 
 Vue.use(mavonEditor);
+Vue.use(quillEditor);
 
 Vue.config.productionTip = false;
 

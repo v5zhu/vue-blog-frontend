@@ -1,12 +1,14 @@
 <template>
     <div class="animated fadeIn" style="margin-top:50px;">
         <Row>
-            <Col :xs="3" :sm="3" :md="3" :lg="3">
+            <Col :xs="2" :sm="2" :md="2" :lg="2">
             &nbsp;
             </Col>
             <Col :xs="17" :sm="17" :md="17" :lg="17">
             <div class="post-header" style="">
-                <div class="post-title" style="color: orange;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;" itemprop="name headline">
+                <div class="post-title"
+                     style="color: orange;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;"
+                     itemprop="name headline">
                     {{article.title}}
                 </div>
                 <div class="post-data" style="color: #808080;text-align: right;margin-top: 50px;margin-right: 5px;">
@@ -17,41 +19,92 @@
             </div>
             <div class="post-content" id="editor">
                 <div v-html="compiledMarkdown"></div>
+                <div style="max-height:90px; height:90px;margin-top: 50px;position: relative;box-shadow: 0px 2px 20px 2px #ffa5002b;border:1px solid rgba(255,165,0,0.2);border-radius: 3px;">
+                    <ul>
+                        <li style="float: left;position:absolute;left:50px;bottom:10px">
+                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">浏览量：{{article.hits}}</label>
+                        </li>
+                        <li style="float: left;position:absolute;left:150px;bottom:10px">
+                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">评论数：{{article.commentsNum}}</label>
+                        </li>
+                        <li style="float: left;position:absolute;left:250px;bottom:10px">
+                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">支持：{{article.commentsNum}}</label>
+                        </li>
+                        <li style="float: left;position:absolute;left:350px;bottom:10px">
+                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">反对：{{article.commentsNum}}</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div style="background: url('https://static.segmentfault.com/v-5a9fa408/global/img/ad_bg.svg');max-height:90px; height:90px;margin-top: 50px;">
+
+            </div>
+            <div style="position: relative;margin-top:50px;margin-bottom:50px;">
+                <Row>
+                    <Col span="9">
+                    <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
+                    </Col>
+                    <Col span="6">
+                    <div style="position: relative;text-align: center;top:-15px;font-size: 20px;font-weight: 500">
+                        【共{{article.commentsNum}}条评论】
+                    </div>
+                    </Col>
+                    <Col span="9">
+                    <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
+                    </Col>
+                </Row>
             </div>
             </Col>
             <Col :xs="4" :sm="4" :md="4" :lg="4">
             </Col>
         </Row>
+
+        <Row style="position: relative;margin-bottom:50px;">
+            <Col :xs="2" :sm="2" :md="2" :lg="2">
+            &nbsp;
+            </Col>
+            <Col :xs="17" :sm="17" :md="17" :lg="17">
+            <div v-for="c in comments.list">
+
+                <div class="staff_list">
+                    <div class="staff_avatar">
+                        <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
+                                size="large"/>
+                    </div>
+                    <div class="staff_progress">
+                        {{c.content}}
+                    </div>
+                </div>
+                <hr style="height:5px;margin-top:10px;margin-bottom10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
+
+            </div>
+            </Col>
+            <Col :xs="4" :sm="4" :md="4" :lg="4">
+            </Col>
+        </Row>
+
+
+        <Form ref="tagForm" :model="article">
+            <Row>
+                <Col :xs="2" :sm="2" :md="2" :lg="2">
+                &nbsp;
+                </Col>
+                <Col :xs="17" :sm="17" :md="17" :lg="17">
+                <Form-item prop="content">
+                    <quill-editor ref="myTextEditor"
+                                  :content="content"
+                                  :options="editorOption"
+                                  @change="onEditorChange($event)">
+                    </quill-editor>
+                </Form-item>
+                </Col>
+                <Col :xs="4" :sm="4" :md="4" :lg="4">
+                </Col>
+            </Row>
+        </Form>
     </div>
 
 </template>
-
-
-<style scoped>
-    .expand-row {
-        margin-bottom: 16px;
-    }
-    .post-header,.post-content{
-        border: 1px solid rgba(255,165,0,0.2);
-        box-shadow: 0px 2px 18px 2px #ffa5002b;
-    }
-    .post-content{
-        padding-top: 40px;
-        border-top:none !important;
-     }
-    .post-header{
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-    .post-content{
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-    }
-</style>
 
 
 <script>
@@ -59,6 +112,7 @@
     import store from 'store/';
     import VueMarkdown from 'vue-markdown' //直接作为一个组件引入
     import DashChartVisitor from './../charts/DashChartVisitor';
+    import {quillEditor} from 'vue-quill-editor';
 
     export default {
         data() {
@@ -78,6 +132,25 @@
                     allowPing: true,
                     allowFeed: true,
                     content: ''
+                },
+                comments: {
+                    isFirstPage: undefined,
+                    isLastPage: undefined,
+                    pageNum: 1,
+                    pageSize: 10,
+                    pages: undefined,
+                    total: undefined,
+                    list: [],
+                    prePage: undefined,
+                    nextPage: undefined
+                },
+                commentParams: {
+                    pageNum: 1,
+                    pageSize: 6
+                },
+                content: '<h2>I am Example</h2>',
+                editorOption: {
+                    // something config
                 }
             }
         },
@@ -90,30 +163,47 @@
 
         },
         components: {
-            VueMarkdown, DashChartVisitor // 声明组件
+            VueMarkdown, DashChartVisitor, quillEditor // 声明组件
         },
         mounted() {
             const vue = this;
             var id = this.$route.params.id;
             this.articlePreview(id);
+            this.getArticleComments(id);
         },
         methods: {
             articlePreview(id) {
                 store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info
                     var article = res.data;
                     this.article = article;
-                    this.getAuthorInfo(article.authorId);
                 }).catch(() => {
                     console.log("获取文章详情失败");
                 })
             },
-            getAuthorInfo(authorId) {
-                store.dispatch('AuthorInfo', {authorId: authorId}).then(res => { // 拉取user_info
-                    var user = res.data;
-                    console.log(user)
+            getArticleComments(articleId) {
+                store.dispatch('ArticleComments', {
+                    articleId: articleId,
+                    pageNum: this.commentParams.pageNum,
+                    pageSize: this.commentParams.pageSize
+                }).then(res => { // 拉取user_info
+                    var comments = res.data;
+                    this.comments = comments;
                 }).catch(() => {
-                    console.log("获取文章作者信息失败");
+                    console.log("获取文章详情失败");
                 })
+            },
+            onEditorBlur(editor) {
+                console.log('editor blur!', editor)
+            },
+            onEditorFocus(editor) {
+                console.log('editor focus!', editor)
+            },
+            onEditorReady(editor) {
+                console.log('editor ready!', editor)
+            },
+            onEditorChange({editor, html, text}) {
+                // console.log('editor change!', editor, html, text)
+                this.content = html
             }
         },
         filters: {
@@ -124,6 +214,47 @@
     }
 </script>
 
+<style scoped>
+    .staff_list {
+        border-radius: 4px;
+        margin-top: 0;
+        display: flex;
+        align-items: center
+    }
+
+    .staff_progress {
+        margin-left: 10px;
+        width: 90%
+    }
+
+    .expand-row {
+        margin-bottom: 16px;
+    }
+
+    .post-header, .post-content {
+        border: 1px solid rgba(255, 165, 0, 0.2);
+        box-shadow: 0px 2px 18px 2px #ffa5002b;
+    }
+
+    .post-content {
+        padding-top: 40px;
+        border-top: none !important;
+    }
+
+    .post-header {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .post-content {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+</style>
 <style type="text/css">
 
     #editor {
