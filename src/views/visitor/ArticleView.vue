@@ -215,9 +215,10 @@
                 })
             },
             commitComment() {
+                var marktext = h2m(this.content);
                 store.dispatch('CommitComment', {
                     articleId: this.article.id,
-                    content: h2m(this.content)
+                    content: marktext
                 }).then(res => { // 拉取user_info
                     var data = res.data;
                     if (data.success == true) {
