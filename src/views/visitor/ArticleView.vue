@@ -25,7 +25,7 @@
                             <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">浏览量：{{article.hits}}</label>
                         </li>
                         <li style="float: left;position:absolute;left:150px;bottom:10px">
-                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">评论数：{{comments.list.length}}</label>
+                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">评论数：{{article.commentsNum}}</label>
                         </li>
                         <li style="float: left;position:absolute;left:250px;bottom:10px">
                             <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">支持：{{article.commentsNum}}</label>
@@ -46,7 +46,7 @@
                     </Col>
                     <Col span="6">
                     <div style="position: relative;text-align: center;top:-15px;font-size: 20px;font-weight: 500">
-                        【共{{comments.list.length}}条评论】
+                        【共{{article.commentsNum}}条评论】
                     </div>
                     </Col>
                     <Col span="9">
@@ -223,6 +223,7 @@
                     var data = res.data;
                     if (data.success == true) {
                         this.$Message.success('发表评论成功');
+                        this.articlePreview(this.article.id);
                         this.getArticleComments(this.article.id);
                     } else {
                         this.$Message.error(data.msg);
