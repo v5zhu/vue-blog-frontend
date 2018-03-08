@@ -10,7 +10,7 @@
 
             <div v-for="archive in archives">
                 <div style="margin: 5px;">
-                    <a @click="filterArchives(archive.year,archive.month)">{{archive.date}}({{archive.count}})</a>
+                    <a @click="filterArchives(archive.year,archive.month)">{{archive.date}}(共{{archive.count}}篇)</a>
                 </div>
             </div>
             </Col>

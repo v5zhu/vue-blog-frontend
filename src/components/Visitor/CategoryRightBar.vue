@@ -8,9 +8,13 @@
             </div>
             <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
 
-            <div style="padding: 5px;">
-                <div v-for="(item,index) in categories" style="margin: 2px;float: left">
-                    <Button type="info" size="small" @click="filterCategories(item.name)">{{item.name}}</Button>
+            <div style="padding: 5px;height:auto;">
+                <div v-for="(item,index) in categories" style="margin:2px;float: left;">
+                    <!--<Tag type="dot" style="min-width: 120px;" @click="filterCategories(item.name)">{{item.name}}</Tag>-->
+                    <Button type="ghost" shape="circle" style="min-width: 120px;text-align: left;"
+                            @click="filterCategories(item.name)">
+                        {{item.name}}({{item.count}})
+                    </Button>
                 </div>
             </div>
             </Col>
@@ -23,9 +27,9 @@
     .echarts {
         margin-top: 30px;
         border-radius: 4px;
-        height: 150px;
+        height: auto;
         width: 100%;
-        border: 1px solid rgba(255,165,0,0.2);
+        border: 1px solid rgba(255, 165, 0, 0.2);
         background: #f6faff;
         box-shadow: 0px 2px 18px 4px #ffa5002b;
         color: black;

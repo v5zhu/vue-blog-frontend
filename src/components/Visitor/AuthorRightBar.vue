@@ -9,8 +9,8 @@
             <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
             <div>
                 <ul>
-                    <li style="margin: 15px;">邮箱：{{user.email}}</li>
-                    <li style="margin: 15px;">最后在线：{{user.lastLoginTime}}</li>
+                    <li style="margin: 10px;">邮箱：{{user.email}}</li>
+                    <li style="margin: 10px;">最后在线：{{user.lastLoginTime | formatDate}}</li>
                 </ul>
             </div>
             </Col>

@@ -8,6 +8,14 @@
             </div>
             <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
 
+            <div style="padding: 5px;height:auto;">
+                <div v-for="(item,index) in tags" style="margin:2px;float: left;">
+                    <Button :type="getButtonType()" shape="circle" color="orange" style="text-align: center;"
+                            @click="filterTags(item.name)">
+                        {{item.name}}({{item.count}})
+                    </Button>
+                </div>
+            </div>
             </Col>
         </Row>
     </div>
@@ -15,15 +23,23 @@
 </template>
 
 <style scoped>
+    .demo-badge {
+        width: 42px;
+        height: 42px;
+        background: #eee;
+        border-radius: 6px;
+        display: inline-block;
+    }
+
     .echarts {
         margin-top: 30px;
         border-radius: 4px;
-        height: 150px;
+        height: auto;
         width: 100%;
-        border: 1px solid rgba(255,165,0,0.2);
+        border: 1px solid rgba(255, 165, 0, 0.2);
         background: #f6faff;
         box-shadow: 0px 2px 18px 4px #ffa5002b;
-        color: #808080;
+        color: black;
     }
 
 
@@ -36,33 +52,38 @@
     export default {
         mounted() {
             var id = this.$route.params.id;
-            this.getAuthorInfo(1);
+            this.tagList();
         },
         data() {
             return {
-                user: {
-                    id: '',
-                    loginName: '',
-                    email: '',
-                    homeUrl: '',
-                    screenName: '',
-                    gmtCreate: '',
-                    gmtModified: '',
-                    lastLoginTime: '',
-                    roles: []
-                },
+                tags: [],
+                buttonTypes: [
+                    'primary',
+                    'ghost',
+                    'info',
+                    'success',
+                    'warning',
+                    'error',
+                    'dashed'
+                ]
             }
-        }
-        ,
+        },
         methods: {
-            getAuthorInfo(authorId) {
-                store.dispatch('AuthorInfo', {authorId: authorId}).then(res => { // 拉取user_info
-                    var user = res.data;
-                    this.user = user;
-                    console.log(this.user);
+            tagList() {
+                store.dispatch('TagList', {}).then(res => { // 拉取user_info
+                    var tags = res.data;
+                    this.tags = tags;
                 }).catch(() => {
-                    console.log("获取文章作者信息失败");
+                    console.log("获取标签云信息失败");
                 })
+            },
+            filterTags(categoryName) {
+                this.$router.push({path: '/tag/' + categoryName});
+            },
+            getButtonType() {
+                var num = Math.floor(Math.random() * 10);
+                var index = num % 7;
+                return this.buttonTypes[index];
             }
         }
         ,

@@ -36,7 +36,7 @@
         methods: {
             handleScroll() {
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-                if (scrollTop < 500) {
+                if (scrollTop < 400) {
                     this.isShow = true;
                 } else {
                     this.isShow = false;
