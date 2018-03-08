@@ -20,6 +20,7 @@
     "iview": "^2.3.0",
     "jquery": "3.1.1",
     "js-cookie": "2.1.4",
+    "marked": "^0.3.17",
     "mavon-editor": "^2.2.4",
     "mockjs": "1.0.1-beta3",
     "normalize.css": "3.0.2",

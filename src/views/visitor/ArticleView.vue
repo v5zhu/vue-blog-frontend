@@ -25,7 +25,7 @@
                             <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">浏览量：{{article.hits}}</label>
                         </li>
                         <li style="float: left;position:absolute;left:150px;bottom:10px">
-                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">评论数：{{article.commentsNum}}</label>
+                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">评论数：{{comments.list.length}}</label>
                         </li>
                         <li style="float: left;position:absolute;left:250px;bottom:10px">
                             <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">支持：{{article.commentsNum}}</label>
@@ -46,7 +46,7 @@
                     </Col>
                     <Col span="6">
                     <div style="position: relative;text-align: center;top:-15px;font-size: 20px;font-weight: 500">
-                        【共{{article.commentsNum}}条评论】
+                        【共{{comments.list.length}}条评论】
                     </div>
                     </Col>
                     <Col span="9">
@@ -59,11 +59,11 @@
             </Col>
         </Row>
 
-        <Row style="position: relative;margin-bottom:50px;">
+        <Row style="position: relative;margin-bottom:50px; ">
             <Col :xs="2" :sm="2" :md="2" :lg="2">
             &nbsp;
             </Col>
-            <Col :xs="17" :sm="17" :md="17" :lg="17">
+            <Col :xs="17" :sm="17" :md="17" :lg="17" style="border: 2px solid rgba(265,165,0,0.2);padding: 10px;">
             <div v-for="c in comments.list">
 
                 <div class="staff_list">
@@ -72,10 +72,10 @@
                                 size="large"/>
                     </div>
                     <div class="staff_progress">
-                        {{c.content}}
+                        <comment :OneComment="c"></comment>
                     </div>
                 </div>
-                <hr style="height:5px;margin-top:10px;margin-bottom10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
+                <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
 
             </div>
             </Col>
@@ -97,6 +97,7 @@
                                   @change="onEditorChange($event)">
                     </quill-editor>
                 </Form-item>
+                <Button type="warning" icon="ios-chatbubble-outline" size="large" @click="commitComment">提交评论</Button>
                 </Col>
                 <Col :xs="4" :sm="4" :md="4" :lg="4">
                 </Col>
@@ -112,7 +113,10 @@
     import store from 'store/';
     import VueMarkdown from 'vue-markdown' //直接作为一个组件引入
     import DashChartVisitor from './../charts/DashChartVisitor';
+    import Comment from './Comment';
     import {quillEditor} from 'vue-quill-editor';
+    import h2m from 'h2m';
+
 
     export default {
         data() {
@@ -148,7 +152,7 @@
                     pageNum: 1,
                     pageSize: 6
                 },
-                content: '<h2>I am Example</h2>',
+                content: '<h2>在此输入评论内容...</h2>',
                 editorOption: {
                     // something config
                 }
@@ -156,17 +160,35 @@
         },
         computed: {
             compiledMarkdown: function () {
-                return marked(this.article.content, {sanitize: true})
+                var rendererMD = new marked.Renderer();
+                marked.setOptions({
+                    renderer: rendererMD,
+                    gfm: true,
+                    tables: true,
+                    breaks: true,
+                    pedantic: false,
+                    sanitize: true,
+                    smartLists: true,
+                    smartypants: true
+                });
+                marked.setOptions({
+                    highlight: function (code) {
+                        return hljs.highlightAuto(code).value;
+                    }
+                });
+
+                return marked(this.article.content);
             }
+
         },
         created() {
 
         },
         components: {
-            VueMarkdown, DashChartVisitor, quillEditor // 声明组件
+            VueMarkdown, DashChartVisitor, quillEditor, Comment // 声明组件
         },
         mounted() {
-            const vue = this;
+
             var id = this.$route.params.id;
             this.articlePreview(id);
             this.getArticleComments(id);
@@ -192,6 +214,22 @@
                     console.log("获取文章详情失败");
                 })
             },
+            commitComment() {
+                store.dispatch('CommitComment', {
+                    articleId: this.article.id,
+                    content: h2m(this.content)
+                }).then(res => { // 拉取user_info
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.$Message.success('发表评论成功');
+                        this.getArticleComments(this.article.id);
+                    } else {
+                        this.$Message.error(data.msg);
+                    }
+                }).catch(() => {
+                    console.log("提交评论失败");
+                })
+            },
             onEditorBlur(editor) {
                 console.log('editor blur!', editor)
             },
@@ -202,7 +240,6 @@
                 console.log('editor ready!', editor)
             },
             onEditorChange({editor, html, text}) {
-                // console.log('editor change!', editor, html, text)
                 this.content = html
             }
         },
@@ -274,7 +311,7 @@
     }
 
     code {
-        color: #808080;
+        /*color: #808080;*/
         font-size: 1.2em;
 
     }
@@ -330,7 +367,6 @@
         top: -20px;
     }
 
-    ;
     .demo-i-circle-custom span i {
         font-style: normal;
         color: #3f414d;

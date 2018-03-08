@@ -7,14 +7,16 @@ import './login.js';
 import './ui.js' ;
 import hljs from 'highlight.js';
 import 'highlight.js/styles/googlecode.css';
+import h2m from 'h2m';
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
-import { quillEditor } from 'vue-quill-editor';
+import {quillEditor} from 'vue-quill-editor';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 
 Vue.use(mavonEditor);
 Vue.use(quillEditor);
+Vue.use(h2m);
 
 Vue.config.productionTip = false;
 

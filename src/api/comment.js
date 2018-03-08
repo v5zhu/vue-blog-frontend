@@ -11,3 +11,11 @@ export function articleComments(params) {
     });
 }
 
+export function commitComment(data) {
+    return fetch({
+        url: '/article/' + data.articleId + '/comment',
+        method: 'post',
+        data: data
+    });
+}
+

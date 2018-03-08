@@ -1,4 +1,4 @@
-import {articleComments} from 'api/comment';
+import {articleComments, commitComment} from 'api/comment';
 
 const comment = {
     state: {
@@ -56,6 +56,15 @@ const comment = {
         ArticleComments({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articleComments(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        CommitComment({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                commitComment(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
