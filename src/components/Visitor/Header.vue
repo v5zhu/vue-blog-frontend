@@ -1,7 +1,7 @@
 <template>
     <div>
         <transition name="fade">
-            <navbar v-show="isShow" transiton="fade">
+            <navbar v-show="scrollShow || moveShow" transiton="fade">
 
                 <ul class="nav navbar-nav d-md-down-none">
 
@@ -50,7 +50,7 @@
 
     export default {
         name: 'header',
-        props: ['isShow'],
+        props: ['scrollShow', 'moveShow'],
         components: {
             navbar,
         },

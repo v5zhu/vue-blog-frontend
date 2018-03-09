@@ -5,7 +5,7 @@
                 <li style="margin-bottom: 20px;position: relative">
                     <Button @click="updateStatistics('hits')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="mouse" color="#FF6666" size="24"></Icon>
+                        <Icon class="left-icon-class" type="eye" color="#FF6666" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.hits}}
@@ -56,7 +56,150 @@
 
             </div>
             <div class="post-content" id="editor">
-                <div v-html="compiledMarkdown"></div>
+                <div highlight v-html="compiledMarkdown"></div>
+                <div style="min-height:150px;height:auto;margin-top: 50px;position: relative;box-shadow: 0px 2px 20px 5px #ffa5002b;border:1px solid rgba(255,165,0,0.2);border-radius: 3px;">
+                    <ul style="width:100%;">
+                        <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
+                            <Button type="error" @click="awardModal=true"
+                                    style="height:80px;width:80px;border-radius:10px;font-size: 16px;background: url(/static/img/hongbao.jpg);background-size: 80px 80px;border:none;">
+                                <p style="margin-top: 50px;">赞赏</p>
+                            </Button>
+
+                            <Modal v-model="awardModal" width="550" :maskClosable="false"
+                                   @on-visible-change="changeModalVisible">
+                                <p slot="header" style="color:#f60;text-align:left">
+                                    <Icon type="information-circled"></Icon>
+                                    <span>赞赏</span>
+                                </p>
+                                <div style="text-align:center">
+                                    <Form ref="awardForm" :model="award" :label-width="120" label-position="right">
+                                        <Row style="padding-left: 20px;">
+                                            <Col span="14">
+                                            <Form-item style="margin-left: 60px;" prop="name" label="赞赏金额:(RMB)"
+                                                       label-position="top">
+                                                <i-circle
+                                                        :size="100"
+                                                        :trail-width="5"
+                                                        :stroke-width="6"
+                                                        :percent="award.money"
+                                                        stroke-linecap="square"
+                                                        stroke-color="red">
+                                                    <div class="demo-i-circle-custom">
+                                                        <p>赞赏金额</p>
+                                                        <span>
+                                                    &nbsp;
+                                                    <i>¥{{award.money}}</i>
+                                                    </span>
+                                                    </div>
+                                                </i-circle>
+                                            </Form-item>
+
+                                            </Col>
+                                            <Col span="24">
+                                            <RadioGroup v-model="award.money" type="button">
+                                                <Radio label="2">2元</Radio>
+                                                <Radio label="5">5元</Radio>
+                                                <Radio label="10">10元</Radio>
+                                                <Radio label="20">20元</Radio>
+                                                <Radio label="50">50元</Radio>
+                                                <Radio label="100">100元</Radio>
+                                            </RadioGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row style="padding-left: 20px;margin-top: 20px;" v-show="isAward">
+                                            <Col span="12">
+                                            <Avatar shape="square" style="height:150px;width:150px;"
+                                                    src="/static/img/alipay_qrcode.png"></Avatar>
+                                            <p style="margin-left: 15px;margin-top: 10px;">打开支付宝扫一扫赞赏</p>
+                                            </Col>
+                                            <Col span="12">
+                                            <Avatar shape="square" style="height:150px;width:150px;"
+                                                    src="/static/img/alipay_qrcode.png"></Avatar>
+                                            <p style="margin-left: 15px;margin-top: 10px;">打开微信扫一扫赞赏</p>
+                                            </Col>
+                                        </Row>
+                                    </Form>
+                                </div>
+                                <div slot="footer" style="text-align: center">
+                                    <Button type="error" size="large" :loading="false" v-show="!isAward" @click="awardOk">赞赏</Button>
+                                </div>
+                            </Modal>
+                            <!--  <Modal v-model="awardModal"
+                                     title="赞赏"
+                                     :loading="false"
+                                     okText="赞赏"
+                                     @on-ok="awardOk">
+                                  <Form ref="awardForm" :model="award" :label-width="120" label-position="right">
+                                      <Row style="padding-left: 80px;">
+                                          <Col span="14">
+                                          <Form-item prop="name" label="赞赏金额:(RMB)" label-position="top">
+                                              <i-circle
+                                                      :size="100"
+                                                      :trail-width="5"
+                                                      :stroke-width="6"
+                                                      :percent="award.money"
+                                                      stroke-linecap="square"
+                                                      stroke-color="red">
+                                                  <div class="demo-i-circle-custom">
+                                                      <p>赞赏金额</p>
+                                                      <span>
+                                                      &nbsp;
+                                                      <i>¥{{award.money}}</i>
+                                                      </span>
+                                                  </div>
+                                              </i-circle>
+                                          </Form-item>
+
+                                          </Col>
+                                          <Col span="24">
+                                          <RadioGroup v-model="award.money" type="button">
+                                              <Radio label="2">2元</Radio>
+                                              <Radio label="5">5元</Radio>
+                                              <Radio label="10">10元</Radio>
+                                              <Radio label="20">20元</Radio>
+                                              <Radio label="50">50元</Radio>
+                                              <Radio label="100">100元</Radio>
+                                          </RadioGroup>
+                                          </Col>
+                                      </Row>
+                                      <Row style="padding-left: 80px;margin-top: 20px;" v-show="isAward">
+                                          <Col span="12">
+                                          <Avatar shape="square" style="height:150px;width:150px;"
+                                                  src="/static/img/alipay_qrcode.png"></Avatar>
+                                          <p style="margin-left: 15px;margin-top: 10px;">打开支付宝扫一扫赞赏</p>
+                                          </Col>
+                                          <Col span="12">
+                                          <Avatar shape="square" style="height:150px;width:150px;"
+                                                  src="/static/img/alipay_qrcode.png"></Avatar>
+                                          <p style="margin-left: 15px;margin-top: 10px;">打开微信扫一扫赞赏</p>
+                                          </Col>
+                                      </Row>
+                                  </Form>
+                              </Modal>-->
+
+
+                        </li>
+                        <li style="float: left;position:relative;top:20px;margin-right: 20px;">
+                            <Button type="error" @click="updateStatistics('likes')"
+                                    style="height:80px;width:80px;font-size: 16px;padding-top: 20px;">
+                                <Icon type="heart" size="32" color="yellow"></Icon>
+                                <p>{{article.likes}}喜欢</p>
+                            </Button>
+                        </li>
+                        <li style="float: left;position:relative;top:20px">
+                            <Button type="warning" @click="updateStatistics('dislikes')"
+                                    style="height:80px;width:80px;font-size: 16px;padding-top: 20px;">
+                                <Icon type="heart-broken" size="32"></Icon>
+                                <p>{{article.dislikes}}反对</p>
+                            </Button>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li style="clear: both;position:relative;margin-left:30%;top:30px;color:#808080;">
+                            <p style="margin-top: 50px;">宇轩哥哥、熙羽妹妹等已赞赏</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div style="background: url('https://static.segmentfault.com/v-5a9fa408/global/img/ad_bg.svg');max-height:90px; height:90px;margin-top: 50px;">
 
@@ -81,16 +224,13 @@
             </Col>
         </Row>
 
-        <Row style="position: relative;margin-bottom:50px; ">
-            <Col :xs="2" :sm="2" :md="2" :lg="2">
-            &nbsp;
-            </Col>
+        <Row style="position: relative;margin-bottom:50px;margin-left: 50px;">
             <Col :xs="17" :sm="17" :md="17" :lg="17" style="padding: 10px;">
             <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
             <div v-for="(c,index) in comments.list">
                 <div class="staff_list" style="position: relative;margin-left: 50px;">
                     <div class="staff_progress" style="position: relative">
-                        <div style="text-align: right;position: relative;right:-50px;">
+                        <div style="text-align: right;position: relative;right:-80px;">
                             <Tag color="yellow">{{index + 1}}楼</Tag>
                         </div>
 
@@ -111,12 +251,8 @@
             </Col>
         </Row>
 
-
-        <Form ref="tagForm" :model="article">
+        <Form ref="tagForm" :model="article" style="margin-left: 50px;">
             <Row>
-                <Col :xs="2" :sm="2" :md="2" :lg="2">
-                &nbsp;
-                </Col>
                 <Col :xs="17" :sm="17" :md="17" :lg="17">
                 <Form-item prop="content">
                     <quill-editor ref="myTextEditor"
@@ -125,7 +261,8 @@
                                   @change="onEditorChange($event)">
                     </quill-editor>
                 </Form-item>
-                <Button type="warning" icon="ios-chatbubble-outline" size="large" @click="commitComment">提交评论</Button>
+                <Button type="warning" icon="ios-chatbubble-outline" size="large" @click="commitComment">提交评论
+                </Button>
                 </Col>
                 <Col :xs="4" :sm="4" :md="4" :lg="4">
                 </Col>
@@ -143,11 +280,16 @@
     import Comment from './Comment';
     import {quillEditor} from 'vue-quill-editor';
     import h2m from 'h2m';
+    import hljs from 'highlight.js/lib/highlight';
 
 
     export default {
         data() {
             return {
+                awardModal: false,
+                award: {
+                    money: 2
+                },
                 article: {
                     id: '',
                     title: '',
@@ -189,7 +331,8 @@
                     pageSize: 6
                 },
                 loadingComments: false,
-                content: '<h2>在此输入评论内容...</h2>',
+                isAward: false,
+                content: '在此输入评论内容...',
                 editorOption: {
                     // something config
                 }
@@ -231,6 +374,15 @@
             this.getArticleComments(id);
         },
         methods: {
+            awardOk() {
+                this.awardModal = true;
+                this.isAward = true;
+            },
+            changeModalVisible(visible) {
+                if (visible == false) {
+                    this.isAward = false;
+                }
+            },
             articlePreview(id) {
                 store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info
                     var article = res.data;
@@ -396,7 +548,6 @@
         margin: 0;
         height: 100%;
         font-family: 'Helvetica Neue', Arial, sans-serif;
-        color: #333;
     }
 
     #editor div {

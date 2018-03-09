@@ -1,7 +1,7 @@
 <template>
-    <div class="app">
-        <AppHeader :isShow="isShow"/>
-        <div class="app-body">
+    <div class="app" @mousemove="toggleHeader">
+        <AppHeader :scrollShow="scrollShow" :moveShow="moveShow"/>
+        <div class="app-body" @mousemove="toggleHeader">
             <main class="main">
                 <div class="container-fluid">
                     <router-view></router-view>
@@ -22,7 +22,8 @@
         name: 'full',
         data() {
             return {
-                isShow: true
+                scrollShow: true,
+                moveShow: true
             }
         },
         components: {
@@ -37,12 +38,20 @@
             handleScroll() {
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
                 if (scrollTop < 400) {
-                    this.isShow = true;
+                    this.scrollShow = true;
                 } else {
-                    this.isShow = false;
+                    this.scrollShow = false;
+                }
+            },
+            toggleHeader(event) {
+                event = event || window.event;
+                var y = event.clientY;
+                if (y < 100) {
+                    this.moveShow = true;
+                } else {
+                    this.moveShow = false;
                 }
             }
-
         },
         computed: {
             name() {
