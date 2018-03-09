@@ -70,3 +70,12 @@ export function articleDelete(id) {
     });
 }
 
+
+export function updateStatistics(statistics) {
+    return fetch({
+        url: '/article/statistics',
+        method: 'put',
+        data: statistics
+    });
+}
+

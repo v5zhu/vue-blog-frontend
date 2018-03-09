@@ -5,7 +5,8 @@ import {
     articleEdit,
     articleDelete,
     articleAudit,
-    articles
+    articles,
+    updateStatistics
 } from 'api/article';
 
 const article = {
@@ -22,6 +23,8 @@ const article = {
         categories: '',
         hits: '',
         commentsNum: '',
+        likes: '',
+        dislikes: '',
         allowComment: true,
         allowPing: true,
         allowFeed: true,
@@ -65,6 +68,12 @@ const article = {
         SET_COMMENTS_NUM: (state, commentsNum) => {
             state.commentsNum = commentsNum;
         },
+        SET_LIKES: (state, likes) => {
+            state.likes = likes;
+        },
+        SET_DISLIKES: (state, dislikes) => {
+            state.dislikes = dislikes;
+        },
         SET_ALLOW_COMMENT: (state, allowComment) => {
             state.allowComment = allowComment;
         },
@@ -97,6 +106,8 @@ const article = {
                     commit('SET_CATEGORIES', data.categories);
                     commit('SET_HITS', data.hits);
                     commit('SET_COMMENTS_NUM', data.commentsNum);
+                    commit('SET_LIKES', data.likes);
+                    commit('SET_DISLIKES', data.dislikes);
                     commit('SET_ALLOW_COMMENT', data.allowComment);
                     commit('SET_ALLOW_PING', data.allowPing);
                     commit('SET_ALLOW_FEED', data.allowFeed);
@@ -134,6 +145,8 @@ const article = {
                     commit('SET_CATEGORIES', data.categories);
                     commit('SET_HITS', data.hits);
                     commit('SET_COMMENTS_NUM', data.commentsNum);
+                    commit('SET_LIKES', data.likes);
+                    commit('SET_DISLIKES', data.dislikes);
                     commit('SET_ALLOW_COMMENT', data.allowComment);
                     commit('SET_ALLOW_PING', data.allowPing);
                     commit('SET_ALLOW_FEED', data.allowFeed);
@@ -149,22 +162,6 @@ const article = {
         ArticlePublish({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articlePublish(params.article).then(response => {
-                    /*const data = response.data;
-                    commit('SET_ID', data.id);
-                    commit('SET_TITLE', data.title);
-                    commit('SET_COVER', data.cover);
-                    commit('SET_PATH', data.path);
-                    commit('SET_TYPE', data.type);
-                    commit('SET_STATUS', data.status);
-                    commit('SET_AUTHOR_ID', data.authorId);
-                    commit('SET_TAGS', data.tags);
-                    commit('SET_CATEGORIES', data.categories);
-                    commit('SET_HITS', data.hits);
-                    commit('SET_COMMENTS_NUM', data.commentsNum);
-                    commit('SET_ALLOW_COMMENT', data.allowComment);
-                    commit('SET_ALLOW_PING', data.allowPing);
-                    commit('SET_ALLOW_FEED', data.allowFeed);
-                    commit('SET_CONTENT', data.content);*/
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -198,6 +195,17 @@ const article = {
         ArticleDelete({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articleDelete(params.id).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
+        // 更新文章统计信息
+        UpdateStatistics({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                updateStatistics(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

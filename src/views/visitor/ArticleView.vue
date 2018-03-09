@@ -3,7 +3,8 @@
         <div style="min-height:400px;min-width:50px;position: fixed;left:20px;top:120px;">
             <ul>
                 <li style="margin-bottom: 20px;position: relative">
-                    <Button type="ghost" class="left-circle" style="border-radius: 50%;">
+                    <Button @click="updateStatistics('hits')" type="ghost" class="left-circle"
+                            style="border-radius: 50%;">
                         <Icon class="left-icon-class" type="mouse" color="#FF6666" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
@@ -11,7 +12,8 @@
                     </div>
                 </li>
                 <li style="margin-bottom: 20px;position: relative">
-                    <Button type="ghost" class="left-circle" style="border-radius: 50%;">
+                    <Button @click="updateStatistics('commentsNum')" type="ghost" class="left-circle"
+                            style="border-radius: 50%;">
                         <Icon class="left-icon-class" type="ios-chatbubble" color="#FF6666" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
@@ -19,28 +21,28 @@
                     </div>
                 </li>
                 <li style="margin-bottom: 20px;position: relative">
-                    <Button type="ghost" class="left-circle" style="border-radius: 50%;">
+                    <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
+                            style="border-radius: 50%;">
                         <Icon class="left-icon-class" type="heart" color="#FF6666" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
-                        {{article.commentsNum}}
+                        {{article.likes}}
                     </div>
                 </li>
                 <li style="margin-bottom: 20px;position: relative">
-                    <Button type="ghost" class="left-circle" style="border-radius: 50%;">
+                    <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
+                            style="border-radius: 50%;">
                         <Icon class="left-icon-class" type="heart-broken" color="#FF6666" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
-                        {{article.commentsNum}}
+                        {{article.dislikes}}
                     </div>
                 </li>
             </ul>
         </div>
         <Row>
-            <Col :xs="2" :sm="2" :md="2" :lg="2">
-            &nbsp;
-            </Col>
-            <Col :xs="17" :sm="17" :md="17" :lg="17">
+
+            <Col style="margin-left: 50px;" :xs="17" :sm="17" :md="17" :lg="17">
             <div class="post-header" style="">
                 <div class="post-title"
                      style="color: orange;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;"
@@ -133,7 +135,6 @@
 
 </template>
 
-
 <script>
     import {formatTime} from 'utils/index';
     import store from 'store/';
@@ -156,12 +157,21 @@
                     status: '',
                     tags: [],
                     categories: [],
-                    hits: '',
-                    commentsNum: '',
+                    hits: null,
+                    commentsNum: null,
+                    likes: null,
+                    dislikes: null,
                     allowComment: true,
                     allowPing: true,
                     allowFeed: true,
                     content: ''
+                },
+                statistics: {
+                    articleId: null,
+                    hits: null,
+                    commentsNum: null,
+                    likes: null,
+                    dislikes: null,
                 },
                 comments: {
                     isFirstPage: undefined,
@@ -264,6 +274,43 @@
                     }
                 }).catch(() => {
                     console.log("提交评论失败");
+                })
+            },
+            updateStatistics(type) {
+                this.statistics.articleId = this.article.id;
+                if (type == 'hits') {
+                    this.statistics.hits = this.article.hits + 1;
+                    this.statistics.commentsNum = this.article.commentsNum;
+                    this.statistics.likes = this.article.likes;
+                    this.statistics.dislikes = this.article.dislikes;
+                } else if (type == 'commentsNum') {
+                    this.statistics.hits = this.article.hits;
+                    this.statistics.commentsNum = this.article.commentsNum + 1;
+                    this.statistics.likes = this.article.likes;
+                    this.statistics.dislikes = this.article.dislikes;
+                } else if (type == 'likes') {
+                    this.statistics.hits = this.article.hits;
+                    this.statistics.commentsNum = this.article.commentsNum;
+                    this.statistics.likes = this.article.likes + 1;
+                    this.statistics.dislikes = this.article.dislikes;
+                } else if (type == 'dislikes') {
+                    this.statistics.hits = this.article.hits;
+                    this.statistics.commentsNum = this.article.commentsNum;
+                    this.statistics.likes = this.article.likes;
+                    this.statistics.dislikes = this.article.dislikes + 1;
+                }
+
+                store.dispatch('UpdateStatistics', this.statistics).then(res => { // 拉取user_info
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.$Message.success('操作成功,期待您下次点赞!!!');
+                        this.articlePreview(this.article.id);
+                        this.getArticleComments(this.article.id);
+                    } else {
+                        this.$Message.error('操作失败');
+                    }
+                }).catch(error => {
+                    console.log(error);
                 })
             },
             onEditorBlur(editor) {

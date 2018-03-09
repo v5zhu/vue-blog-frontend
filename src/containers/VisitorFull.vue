@@ -67,7 +67,7 @@
     .app-body .main {
         flex: 1;
         min-width: 0;
-        margin-left: 0 !important;
+        margin-left: 65px;
         background-color: white;
         transition: margin-left .25s, margin-right .25s, width .25s, flex .25s
     }
