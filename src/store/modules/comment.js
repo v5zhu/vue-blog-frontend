@@ -4,7 +4,7 @@ const comment = {
     state: {
         id: '',
         articleId: '',
-        author: '',
+        author: {},
         authorId: '',
         ownerId: '',
         email: '',

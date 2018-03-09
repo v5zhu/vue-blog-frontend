@@ -60,7 +60,7 @@
         display: flex;
         flex-direction: row;
         flex-grow: 1;
-        overflow-x: hidden;
+        overflow: hidden;
         margin-top: 55px
     }
 

@@ -5,14 +5,13 @@
                 <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
                         size="large" style="line-height: 0px"/>
             </div>
-            <div>{{OneComment.author.screenName}}</div>
+            <div>{{CommentChild.author.screenName}}@{{CommentChild.parent}}</div>
         </div>
-        <div style="min-height:50px;" v-html="compiledComment">
+        <div style="min-height:20px;" v-html="compiledComment">
         </div>
-        <div style="color: #bbbbbb;min-height:20px;">{{OneComment.gmtCreate | formatDate}}&nbsp;&nbsp;&nbsp;&nbsp;
+        <div style="color: #bbbbbb;min-height:20px;">{{CommentChild.gmtCreate | formatDate}}&nbsp;&nbsp;&nbsp;&nbsp;
             <a @click="showReply">回复</a>
         </div>
-
 
         <Form ref="replyForm" :model="comment" v-show="isShowReply">
             <Row>
@@ -29,13 +28,12 @@
             </Row>
         </Form>
 
-        <div style="min-height:20px;margin-left: 50px;" v-for="child in OneComment.children">
+        <div style="min-height:20px;margin-left: 30px;" v-for="ch in CommentChild.children">
             <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
-            <comment-reply style="margin-top: -25px;" :CommentChild="child" @loadArticleInfo="loadArticle"
-                           @loadArticleCommentList="loadArticleComments"></comment-reply>
+            <comment-reply style="margin-top: -10px;" :CommentChild="ch" @loadArticleInfo="loadArticleInfo"
+                           @loadArticleCommentList="loadArticleCommentList"></comment-reply>
         </div>
     </div>
-
 
 </template>
 <script>
@@ -43,10 +41,9 @@
     import store from 'store/';
     import CommentReply from './CommentReply';
 
-
     export default {
-        name: 'comment',
-        props: ['OneComment'],
+        name: 'comment-reply',
+        props: ['CommentChild'],
         components: {CommentReply},
         data() {
             return {
@@ -60,7 +57,7 @@
         },
         computed: {
             compiledComment: function (param) {
-                return marked(param.OneComment.content, {sanitize: false})
+                return marked(param.CommentChild.content, {sanitize: false})
             }
         },
         methods: {
@@ -72,10 +69,10 @@
                 this.comment = {};
             },
             reply(refName) {
-                this.comment.parent = this.OneComment.id;
+                this.comment.parent = this.CommentChild.id;
                 this.comment.type = 'reply';
                 store.dispatch('CommitComment', {
-                    articleId: this.OneComment.articleId,
+                    articleId: this.CommentChild.articleId,
                     content: this.comment.content,
                     parent: this.comment.parent,
                     type: this.comment.type
@@ -83,8 +80,8 @@
                     var data = res.data;
                     if (data.success == true) {
                         this.$Message.success('回复成功');
-                        this.loadArticle(this.OneComment.articleId);
-                        this.loadArticleComments(this.OneComment.articleId);
+                        this.loadArticleInfo(this.CommentChild.articleId);
+                        this.loadArticleCommentList(this.CommentChild.articleId);
                         this.comment = {};
                         this.isShowReply = false;
                     } else {
@@ -94,11 +91,11 @@
                     console.log("回复失败");
                 })
             },
-            loadArticle(articleId) {
-                this.$emit('articlePreview', articleId);
+            loadArticleInfo(articleId) {
+                this.$emit('loadArticleInfo', articleId);
             },
-            loadArticleComments(articleId) {
-                this.$emit('getArticleComments', articleId);
+            loadArticleCommentList(articleId) {
+                this.$emit('loadArticleCommentList', articleId);
             }
         },
         filters: {

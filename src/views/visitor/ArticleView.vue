@@ -1,5 +1,41 @@
 <template>
     <div class="animated fadeIn" style="margin-top:50px;">
+        <div style="min-height:400px;min-width:50px;position: fixed;left:20px;top:120px;">
+            <ul>
+                <li style="margin-bottom: 20px;position: relative">
+                    <Button type="ghost" class="left-circle" style="border-radius: 50%;">
+                        <Icon class="left-icon-class" type="mouse" color="#FF6666" size="24"></Icon>
+                    </Button>
+                    <div style="position:relative;left:55px;top: -30px;">
+                        {{article.hits}}
+                    </div>
+                </li>
+                <li style="margin-bottom: 20px;position: relative">
+                    <Button type="ghost" class="left-circle" style="border-radius: 50%;">
+                        <Icon class="left-icon-class" type="ios-chatbubble" color="#FF6666" size="24"></Icon>
+                    </Button>
+                    <div style="position:relative;left:55px;top: -30px;">
+                        {{article.commentsNum}}
+                    </div>
+                </li>
+                <li style="margin-bottom: 20px;position: relative">
+                    <Button type="ghost" class="left-circle" style="border-radius: 50%;">
+                        <Icon class="left-icon-class" type="heart" color="#FF6666" size="24"></Icon>
+                    </Button>
+                    <div style="position:relative;left:55px;top: -30px;">
+                        {{article.commentsNum}}
+                    </div>
+                </li>
+                <li style="margin-bottom: 20px;position: relative">
+                    <Button type="ghost" class="left-circle" style="border-radius: 50%;">
+                        <Icon class="left-icon-class" type="heart-broken" color="#FF6666" size="24"></Icon>
+                    </Button>
+                    <div style="position:relative;left:55px;top: -30px;">
+                        {{article.commentsNum}}
+                    </div>
+                </li>
+            </ul>
+        </div>
         <Row>
             <Col :xs="2" :sm="2" :md="2" :lg="2">
             &nbsp;
@@ -19,22 +55,6 @@
             </div>
             <div class="post-content" id="editor">
                 <div v-html="compiledMarkdown"></div>
-                <div style="max-height:90px; height:90px;margin-top: 50px;position: relative;box-shadow: 0px 2px 20px 2px #ffa5002b;border:1px solid rgba(255,165,0,0.2);border-radius: 3px;">
-                    <ul>
-                        <li style="float: left;position:absolute;left:50px;bottom:10px">
-                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">浏览量：{{article.hits}}</label>
-                        </li>
-                        <li style="float: left;position:absolute;left:150px;bottom:10px">
-                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">评论数：{{article.commentsNum}}</label>
-                        </li>
-                        <li style="float: left;position:absolute;left:250px;bottom:10px">
-                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">支持：{{article.commentsNum}}</label>
-                        </li>
-                        <li style="float: left;position:absolute;left:350px;bottom:10px">
-                            <label style="color:#808080;position: relative;bottom:1px;left:-8px;font-size:16px;">反对：{{article.commentsNum}}</label>
-                        </li>
-                    </ul>
-                </div>
             </div>
             <div style="background: url('https://static.segmentfault.com/v-5a9fa408/global/img/ad_bg.svg');max-height:90px; height:90px;margin-top: 50px;">
 
@@ -63,19 +83,25 @@
             <Col :xs="2" :sm="2" :md="2" :lg="2">
             &nbsp;
             </Col>
-            <Col :xs="17" :sm="17" :md="17" :lg="17" style="border: 2px solid rgba(265,165,0,0.2);padding: 10px;">
-            <div v-for="c in comments.list">
+            <Col :xs="17" :sm="17" :md="17" :lg="17" style="padding: 10px;">
+            <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
+            <div v-for="(c,index) in comments.list">
+                <div class="staff_list" style="position: relative;margin-left: 50px;">
+                    <div class="staff_progress" style="position: relative">
+                        <div style="text-align: right;position: relative;right:-50px;">
+                            <Tag color="yellow">{{index + 1}}楼</Tag>
+                        </div>
 
-                <div class="staff_list">
-                    <div class="staff_avatar">
-                        <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
-                                size="large"/>
-                    </div>
-                    <div class="staff_progress">
-                        <comment :OneComment="c"></comment>
+                        <comment style="margin-top: -45px;" :OneComment="c" @articlePreview="articlePreview"
+                                 @getArticleComments="getArticleComments"></comment>
                     </div>
                 </div>
                 <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
+            </div>
+            <div v-if="comments.total > commentParams.pageSize" style="text-align: center">
+                <Button :loading="loadingComments" @click="loadMoreComments" size="large" type="ghost">
+                    加载更多
+                </Button>
 
             </div>
             </Col>
@@ -152,6 +178,7 @@
                     pageNum: 1,
                     pageSize: 6
                 },
+                loadingComments: false,
                 content: '<h2>在此输入评论内容...</h2>',
                 editorOption: {
                     // something config
@@ -210,15 +237,22 @@
                 }).then(res => { // 拉取user_info
                     var comments = res.data;
                     this.comments = comments;
+                    this.loadingComments = false;
                 }).catch(() => {
                     console.log("获取文章详情失败");
                 })
+            },
+            loadMoreComments() {
+                this.loadingComments = true;
+                this.commentParams.pageSize += 6;
+                this.getArticleComments(this.article.id);
             },
             commitComment() {
                 var marktext = h2m(this.content);
                 store.dispatch('CommitComment', {
                     articleId: this.article.id,
-                    content: marktext
+                    content: marktext,
+                    type: 'comment'
                 }).then(res => { // 拉取user_info
                     var data = res.data;
                     if (data.success == true) {
@@ -254,6 +288,21 @@
 </script>
 
 <style scoped>
+    .left-icon-class {
+        margin-left: -3px;
+        margin-top: 3px;
+    }
+
+    .left-circle {
+        height: 45px;
+        width: 45px;
+        position: relative;
+        font-size: 12px;
+        box-shadow: 0px 0px 20px 3px #ffa5002b;
+        border-color: white;
+
+    }
+
     .staff_list {
         border-radius: 4px;
         margin-top: 0;
