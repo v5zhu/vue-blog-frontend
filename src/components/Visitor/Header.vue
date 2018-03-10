@@ -34,6 +34,26 @@
                         </router-link>
 
                     </li>
+                    <li class="nav-item header-item">
+
+                        <router-link tag="div" to='/awards' class="nav-link">
+                            <p>
+                                <Icon type="trophy" size='28' color="orange"></Icon>
+                            </p>
+                            <p style="color:orange"> 赞赏榜 </p>
+                        </router-link>
+
+                    </li>
+                    <li class="nav-item header-item">
+
+                        <router-link tag="div" to='/feedback' class="nav-link">
+                            <p>
+                                <Icon type="ios-chatboxes-outline" size='28' color="orange"></Icon>
+                            </p>
+                            <p style="color:orange"> 意见反馈 </p>
+                        </router-link>
+
+                    </li>
                     <li class="nav-item d-md-down-none" style="position: absolute;right:0;">
                         <a class="nav-link navbar-toggler aside-menu-toggler" style="color: orange"
                            @click="asideToggle">&#9776;</a>
