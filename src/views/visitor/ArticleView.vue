@@ -65,7 +65,7 @@
                                 <p style="margin-top: 50px;">赞赏</p>
                             </Button>
 
-                            <Modal v-model="awardModal" width="550" :maskClosable="false"
+                            <Modal v-model="awardModal" width="600" :maskClosable="false"
                                    @on-visible-change="changeModalVisible">
                                 <p slot="header" style="color:#f60;text-align:left">
                                     <Icon type="information-circled"></Icon>
@@ -81,7 +81,7 @@
                                                         :size="100"
                                                         :trail-width="5"
                                                         :stroke-width="6"
-                                                        :percent="award.money"
+                                                        :percent="parseInt(award.money)"
                                                         stroke-linecap="square"
                                                         stroke-color="red">
                                                     <div class="demo-i-circle-custom">
@@ -96,88 +96,38 @@
 
                                             </Col>
                                             <Col span="24">
-                                            <RadioGroup v-model="award.money" type="button">
+                                            <RadioGroup v-model="award.money" type="button" @on-change="changeMoney">
+                                                <Radio label="0.01">一分也是爱</Radio>
                                                 <Radio label="2">2元</Radio>
                                                 <Radio label="5">5元</Radio>
                                                 <Radio label="10">10元</Radio>
                                                 <Radio label="20">20元</Radio>
                                                 <Radio label="50">50元</Radio>
                                                 <Radio label="100">100元</Radio>
+                                                <Radio label="666.66">任性的土豪</Radio>
                                             </RadioGroup>
                                             </Col>
                                         </Row>
                                         <Row style="padding-left: 20px;margin-top: 20px;" v-show="isAward">
                                             <Col span="12">
                                             <Avatar shape="square" style="height:150px;width:150px;"
-                                                    src="/static/img/alipay_qrcode.png"></Avatar>
-                                            <p style="margin-left: 5px;margin-top: 10px;">打开支付宝扫一扫赞赏</p>
+                                                    :src="award.alipayQrcode"></Avatar>
+                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开支付宝扫一扫赞赏</p>
                                             </Col>
                                             <Col span="12">
                                             <Avatar shape="square" style="height:150px;width:150px;"
-                                                    src="/static/img/alipay_qrcode.png"></Avatar>
-                                            <p style="margin-left: 5px;margin-top: 10px;">打开微信扫一扫赞赏</p>
+                                                    :src="award.weixinQrcode"></Avatar>
+                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开微信扫一扫赞赏</p>
                                             </Col>
                                         </Row>
                                     </Form>
                                 </div>
                                 <div slot="footer" style="text-align: center">
-                                    <Button type="error" size="large" :loading="false" v-show="!isAward" @click="awardOk">赞赏</Button>
+                                    <Button type="error" size="large" :loading="false" v-show="!isAward"
+                                            @click="awardOk">赞赏
+                                    </Button>
                                 </div>
                             </Modal>
-                            <!--  <Modal v-model="awardModal"
-                                     title="赞赏"
-                                     :loading="false"
-                                     okText="赞赏"
-                                     @on-ok="awardOk">
-                                  <Form ref="awardForm" :model="award" :label-width="120" label-position="right">
-                                      <Row style="padding-left: 80px;">
-                                          <Col span="14">
-                                          <Form-item prop="name" label="赞赏金额:(RMB)" label-position="top">
-                                              <i-circle
-                                                      :size="100"
-                                                      :trail-width="5"
-                                                      :stroke-width="6"
-                                                      :percent="award.money"
-                                                      stroke-linecap="square"
-                                                      stroke-color="red">
-                                                  <div class="demo-i-circle-custom">
-                                                      <p>赞赏金额</p>
-                                                      <span>
-                                                      &nbsp;
-                                                      <i>¥{{award.money}}</i>
-                                                      </span>
-                                                  </div>
-                                              </i-circle>
-                                          </Form-item>
-
-                                          </Col>
-                                          <Col span="24">
-                                          <RadioGroup v-model="award.money" type="button">
-                                              <Radio label="2">2元</Radio>
-                                              <Radio label="5">5元</Radio>
-                                              <Radio label="10">10元</Radio>
-                                              <Radio label="20">20元</Radio>
-                                              <Radio label="50">50元</Radio>
-                                              <Radio label="100">100元</Radio>
-                                          </RadioGroup>
-                                          </Col>
-                                      </Row>
-                                      <Row style="padding-left: 80px;margin-top: 20px;" v-show="isAward">
-                                          <Col span="12">
-                                          <Avatar shape="square" style="height:150px;width:150px;"
-                                                  src="/static/img/alipay_qrcode.png"></Avatar>
-                                          <p style="margin-left: 15px;margin-top: 10px;">打开支付宝扫一扫赞赏</p>
-                                          </Col>
-                                          <Col span="12">
-                                          <Avatar shape="square" style="height:150px;width:150px;"
-                                                  src="/static/img/alipay_qrcode.png"></Avatar>
-                                          <p style="margin-left: 15px;margin-top: 10px;">打开微信扫一扫赞赏</p>
-                                          </Col>
-                                      </Row>
-                                  </Form>
-                              </Modal>-->
-
-
                         </li>
                         <li style="float: left;position:relative;top:20px;margin-right: 20px;">
                             <Button type="error" @click="updateStatistics('likes')"
@@ -288,7 +238,29 @@
             return {
                 awardModal: false,
                 award: {
-                    money: 2
+                    money: 2,
+                    alipayQrcode: '/static/img/qrcode/alipay_qrcode_2.png',
+                    alipayQrcodes: {
+                        key_1: '/static/img/qrcode/alipay_qrcode_001.png',
+                        key_2: '/static/img/qrcode/alipay_qrcode_2.png',
+                        key_5: '/static/img/qrcode/alipay_qrcode_5.png',
+                        key_10: '/static/img/qrcode/alipay_qrcode_10.png',
+                        key_20: '/static/img/qrcode/alipay_qrcode_20.png',
+                        key_50: '/static/img/qrcode/alipay_qrcode_50.png',
+                        key_100: '/static/img/qrcode/alipay_qrcode_100.png',
+                        key_666: '/static/img/qrcode/alipay_qrcode_666.png'
+                    },
+                    weixinQrcode: '/static/img/qrcode/weixin_qrcode_2.png',
+                    weixinQrcodes: {
+                        key_1: '/static/img/qrcode/weixin_qrcode_001.png',
+                        key_2: '/static/img/qrcode/weixin_qrcode_2.png',
+                        key_5: '/static/img/qrcode/weixin_qrcode_5.png',
+                        key_10: '/static/img/qrcode/weixin_qrcode_10.png',
+                        key_20: '/static/img/qrcode/weixin_qrcode_20.png',
+                        key_50: '/static/img/qrcode/weixin_qrcode_50.png',
+                        key_100: '/static/img/qrcode/weixin_qrcode_100.png',
+                        key_666: '/static/img/qrcode/weixin_qrcode_666.png'
+                    }
                 },
                 article: {
                     id: '',
@@ -360,29 +332,63 @@
                 return marked(this.article.content);
             }
 
-        },
+        }
+        ,
         created() {
 
-        },
+        }
+        ,
         components: {
             VueMarkdown, DashChartVisitor, quillEditor, Comment // 声明组件
-        },
+        }
+        ,
         mounted() {
 
             var id = this.$route.params.id;
             this.articlePreview(id);
             this.getArticleComments(id);
-        },
+        }
+        ,
         methods: {
+            changeMoney() {
+                var key = this.award.money;
+                if (key == 0.01) {
+                    this.award.alipayQrcode = this.award.alipayQrcodes.key_1;
+                    this.award.weixinQrcode = this.award.weixinQrcodes.key_1;
+                } else if (key == 2) {
+                    this.award.alipayQrcode = this.award.alipayQrcodes.key_2;
+                    this.award.weixinQrcode = this.award.weixinQrcodes.key_2;
+                } else if (key == 5) {
+                    this.award.alipayQrcode = this.award.alipayQrcodes.key_5;
+                    this.award.weixinQrcode = this.award.weixinQrcodes.key_5;
+                } else if (key == 10) {
+                    this.award.alipayQrcode = this.award.alipayQrcodes.key_10;
+                    this.award.weixinQrcode = this.award.weixinQrcodes.key_10;
+                } else if (key == 20) {
+                    this.award.alipayQrcode = this.award.alipayQrcodes.key_20;
+                    this.award.weixinQrcode = this.award.weixinQrcodes.key_20;
+                } else if (key == 50) {
+                    this.award.alipayQrcode = this.award.alipayQrcodes.key_50;
+                    this.award.weixinQrcode = this.award.weixinQrcodes.key_50;
+                } else if (key == 100) {
+                    this.award.alipayQrcode = this.award.alipayQrcodes.key_100;
+                    this.award.weixinQrcode = this.award.weixinQrcodes.key_100;
+                } else if (key == 666.66) {
+                    this.award.alipayQrcode = this.award.alipayQrcodes.key_666;
+                    this.award.weixinQrcode = this.award.weixinQrcodes.key_666;
+                }
+            },
             awardOk() {
                 this.awardModal = true;
                 this.isAward = true;
-            },
+            }
+            ,
             changeModalVisible(visible) {
                 if (visible == false) {
                     this.isAward = false;
                 }
-            },
+            }
+            ,
             articlePreview(id) {
                 store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info
                     var article = res.data;
@@ -390,7 +396,8 @@
                 }).catch(() => {
                     console.log("获取文章详情失败");
                 })
-            },
+            }
+            ,
             getArticleComments(articleId) {
                 store.dispatch('ArticleComments', {
                     articleId: articleId,
@@ -403,12 +410,14 @@
                 }).catch(() => {
                     console.log("获取文章详情失败");
                 })
-            },
+            }
+            ,
             loadMoreComments() {
                 this.loadingComments = true;
                 this.commentParams.pageSize += 6;
                 this.getArticleComments(this.article.id);
-            },
+            }
+            ,
             commitComment() {
                 var marktext = h2m(this.content);
                 store.dispatch('CommitComment', {
@@ -427,7 +436,8 @@
                 }).catch(() => {
                     console.log("提交评论失败");
                 })
-            },
+            }
+            ,
             updateStatistics(type) {
                 this.statistics.articleId = this.article.id;
                 if (type == 'hits') {
@@ -464,20 +474,25 @@
                 }).catch(error => {
                     console.log(error);
                 })
-            },
+            }
+            ,
             onEditorBlur(editor) {
                 console.log('editor blur!', editor)
-            },
+            }
+            ,
             onEditorFocus(editor) {
                 console.log('editor focus!', editor)
-            },
+            }
+            ,
             onEditorReady(editor) {
                 console.log('editor ready!', editor)
-            },
+            }
+            ,
             onEditorChange({editor, html, text}) {
                 this.content = html
             }
-        },
+        }
+        ,
         filters: {
             formatDate(time) {
                 return formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
