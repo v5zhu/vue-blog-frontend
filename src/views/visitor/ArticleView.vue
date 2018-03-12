@@ -112,12 +112,12 @@
                                             <Col span="12">
                                             <Avatar shape="square" style="height:150px;width:150px;"
                                                     :src="award.alipayQrcode"></Avatar>
-                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开支付宝扫一扫赞赏</p>
+                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开<span style="color:blue;font-size: 16px;">【支付宝】</span>扫一扫赞赏</p>
                                             </Col>
                                             <Col span="12">
                                             <Avatar shape="square" style="height:150px;width:150px;"
                                                     :src="award.weixinQrcode"></Avatar>
-                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开微信扫一扫赞赏</p>
+                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开<span style="color:blue;font-size: 16px;">【微信】</span>扫一扫赞赏</p>
                                             </Col>
                                         </Row>
                                     </Form>

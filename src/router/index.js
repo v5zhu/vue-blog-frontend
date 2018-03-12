@@ -68,13 +68,21 @@ export const constantRouterMap = [
             path: '/tag/:tag',
             component: _import('visitor/Archives')
         }, {
+            name: '文章详情页',
+            path: '/article/:id',
+            component: _import('visitor/ArticleView')
+        }, {
             name: '友链',
             path: '/links',
             component: _import('visitor/Links')
         }, {
-            name: '文章详情页',
-            path: '/article/:id',
-            component: _import('visitor/ArticleView')
+            name: '赞赏榜',
+            path: '/awards',
+            component: _import('visitor/Awards')
+        }, {
+            name: '意见反馈',
+            path: '/feedback',
+            component: _import('visitor/Feedback')
         }]
     }
 ]
