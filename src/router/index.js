@@ -88,7 +88,7 @@ export const constantRouterMap = [
 ]
 //使用浏览器历史访问模式，可使用浏览器前进后退功能
 export default new Router({
-    mode: 'history',
+    mode: 'hash',
     // mode: 'hash',
     linkActiveClass: 'open active',
     scrollBehavior: () => ({y: 0}),

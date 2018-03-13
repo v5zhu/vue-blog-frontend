@@ -36,11 +36,11 @@
                     </li>
                     <li class="nav-item header-item">
 
-                        <router-link tag="div" to='/awards' class="nav-link">
+                        <router-link tag="div" to='#' class="nav-link">
                             <p>
                                 <Icon type="trophy" size='28' color="orange"></Icon>
                             </p>
-                            <p style="color:orange"> 赞赏榜 </p>
+                            <p style="color:#8c8c8c"> 赞赏榜(建设中...) </p>
                         </router-link>
 
                     </li>
