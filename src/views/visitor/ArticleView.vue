@@ -462,6 +462,15 @@
                         this.$Message.success('操作成功,期待您下次点赞!!!');
                     } else {
                         this.$Message.error('操作失败');
+                        if (type == 'hits') {
+                            this.article.hits--;
+                        } else if (type == 'commentsNum') {
+                            this.article.commentsNum--;
+                        } else if (type == 'likes') {
+                            this.article.likes--;
+                        } else if (type == 'dislikes') {
+                            this.article.dislikes--;
+                        }
                     }
                 }).catch(error => {
                     console.log(error);
