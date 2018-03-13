@@ -112,12 +112,14 @@
                                             <Col span="12">
                                             <Avatar shape="square" style="height:150px;width:150px;"
                                                     :src="award.alipayQrcode"></Avatar>
-                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开<span style="color:blue;font-size: 16px;">【支付宝】</span>扫一扫赞赏</p>
+                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开<span
+                                                    style="color:blue;font-size: 16px;">【支付宝】</span>扫一扫赞赏</p>
                                             </Col>
                                             <Col span="12">
                                             <Avatar shape="square" style="height:150px;width:150px;"
                                                     :src="award.weixinQrcode"></Avatar>
-                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开<span style="color:blue;font-size: 16px;">【微信】</span>扫一扫赞赏</p>
+                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开<span
+                                                    style="color:blue;font-size: 16px;">【微信】</span>扫一扫赞赏</p>
                                             </Col>
                                         </Row>
                                     </Form>
@@ -428,7 +430,7 @@
                     var data = res.data;
                     if (data.success == true) {
                         this.$Message.success('发表评论成功');
-                        this.articlePreview(this.article.id);
+                        this.article.commentsNum++;
                         this.getArticleComments(this.article.id);
                     } else {
                         this.$Message.error(data.msg);
@@ -441,33 +443,23 @@
             updateStatistics(type) {
                 this.statistics.articleId = this.article.id;
                 if (type == 'hits') {
-                    this.statistics.hits = this.article.hits + 1;
-                    this.statistics.commentsNum = this.article.commentsNum;
-                    this.statistics.likes = this.article.likes;
-                    this.statistics.dislikes = this.article.dislikes;
+                    this.article.hits++;
                 } else if (type == 'commentsNum') {
-                    this.statistics.hits = this.article.hits;
-                    this.statistics.commentsNum = this.article.commentsNum + 1;
-                    this.statistics.likes = this.article.likes;
-                    this.statistics.dislikes = this.article.dislikes;
+                    this.article.commentsNum++;
                 } else if (type == 'likes') {
-                    this.statistics.hits = this.article.hits;
-                    this.statistics.commentsNum = this.article.commentsNum;
-                    this.statistics.likes = this.article.likes + 1;
-                    this.statistics.dislikes = this.article.dislikes;
+                    this.article.likes++;
                 } else if (type == 'dislikes') {
-                    this.statistics.hits = this.article.hits;
-                    this.statistics.commentsNum = this.article.commentsNum;
-                    this.statistics.likes = this.article.likes;
-                    this.statistics.dislikes = this.article.dislikes + 1;
+                    this.article.dislikes++;
                 }
+                this.statistics.hits = this.article.hits;
+                this.statistics.commentsNum = this.article.commentsNum;
+                this.statistics.likes = this.article.likes;
+                this.statistics.dislikes = this.article.dislikes;
 
                 store.dispatch('UpdateStatistics', this.statistics).then(res => { // 拉取user_info
                     var data = res.data;
                     if (data.success == true) {
                         this.$Message.success('操作成功,期待您下次点赞!!!');
-                        this.articlePreview(this.article.id);
-                        this.getArticleComments(this.article.id);
                     } else {
                         this.$Message.error('操作失败');
                     }
