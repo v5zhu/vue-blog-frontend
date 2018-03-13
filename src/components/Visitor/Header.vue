@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="top">
         <transition name="fade">
             <navbar v-show="scrollShow || moveShow" transiton="fade">
 

@@ -2,6 +2,7 @@
     <div class="app" @mousemove="toggleHeader">
         <AppHeader :scrollShow="scrollShow" :moveShow="moveShow"/>
         <div class="app-body" @mousemove="toggleHeader">
+            <Sidebar/>
             <main class="main">
                 <div class="container-fluid">
                     <router-view></router-view>
@@ -17,6 +18,7 @@
     import AppHeader from '../components/Visitor/Header';
     import AppAside from '../components/Visitor/Aside';
     import AppFooter from '../components/Visitor/Footer';
+    import Sidebar from '../components/Visitor/Sidebar'
 
     export default {
         name: 'full',
@@ -29,7 +31,8 @@
         components: {
             AppHeader,
             AppAside,
-            AppFooter
+            AppFooter,
+            Sidebar
         },
         mounted() {
             window.addEventListener('scroll', this.handleScroll)
