@@ -9,9 +9,9 @@
 
                         <router-link tag="div" to='/articles' class="nav-link">
                             <p>
-                                <Icon type="ios-book-outline" size='28' color="orange"></Icon>
+                                <Icon type="ios-book-outline" size='28' color="#0d5477"></Icon>
                             </p>
-                            <p style="color:orange"> 首页 </p>
+                            <p style="color:#0d5477"> 首页 </p>
                         </router-link>
                     </li>
 
@@ -19,18 +19,18 @@
 
                         <router-link tag="div" to='/archives' class="nav-link">
                             <p>
-                                <Icon type="map" size='28' color="orange"></Icon>
+                                <Icon type="map" size='28' color="#0d5477"></Icon>
                             </p>
-                            <p style="color:orange"> 归档 </p>
+                            <p style="color:#0d5477"> 归档 </p>
                         </router-link>
                     </li>
                     <li class="nav-item header-item">
 
                         <router-link tag="div" to='/links' class="nav-link">
                             <p>
-                                <Icon type="social-github" size='28' color="orange"></Icon>
+                                <Icon type="social-github" size='28' color="#0d5477"></Icon>
                             </p>
-                            <p style="color:orange"> 友链 </p>
+                            <p style="color:#0d5477"> 友链 </p>
                         </router-link>
 
                     </li>
@@ -38,7 +38,7 @@
 
                         <router-link tag="div" to='#' class="nav-link">
                             <p>
-                                <Icon type="trophy" size='28' color="orange"></Icon>
+                                <Icon type="trophy" size='28' color="#0d5477"></Icon>
                             </p>
                             <p style="color:#8c8c8c"> 赞赏榜(建设中...) </p>
                         </router-link>
@@ -48,14 +48,14 @@
 
                         <router-link tag="div" to='/feedback' class="nav-link">
                             <p>
-                                <Icon type="ios-chatboxes-outline" size='28' color="orange"></Icon>
+                                <Icon type="ios-chatboxes-outline" size='28' color="#0d5477"></Icon>
                             </p>
-                            <p style="color:orange"> 意见反馈 </p>
+                            <p style="color:#0d5477"> 意见反馈 </p>
                         </router-link>
 
                     </li>
                     <li class="nav-item d-md-down-none" style="position: absolute;right:0;">
-                        <a class="nav-link navbar-toggler aside-menu-toggler" style="color: orange"
+                        <a class="nav-link navbar-toggler aside-menu-toggler" style="color: #0d5477"
                            @click="asideToggle">&#9776;</a>
                     </li>
 

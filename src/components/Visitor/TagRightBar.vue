@@ -10,7 +10,7 @@
 
             <div style="padding: 5px;height:auto;">
                 <div v-for="(item,index) in tags" style="margin:2px;float: left;">
-                    <Button :type="getButtonType()" shape="circle" color="orange" style="text-align: center;"
+                    <Button :type="getButtonType()" shape="circle" color="#0d5477" style="text-align: center;"
                             @click="filterTags(item.name)">
                         {{item.name}}({{item.count}})
                     </Button>

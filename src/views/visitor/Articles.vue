@@ -7,54 +7,60 @@
             </Col>
             <Col span="12">
             <div class="state-overview" v-for="article in pageInfo.list">
+                <navbar>
+                    <ul class="nav navbar-nav d-md-down-none">
+                        <li class="nav-item header-item">
 
-                <div class="panel like-header article-background"
-                     style="width: auto;height:150px;margin: 5px;position: relative;">
+                            <router-link tag="div" to='/articles' class="nav-link">
+                                <Button type="default" size="small"
+                                        style="height:60px;width:45px;margin-bottom: 15px;margin-left: -35px;">
+                                    <Icon type="thumbsup" color="red" size="24"></Icon>
+                                    <p>{{article.likes}}</p>
+                                </Button>
+                            </router-link>
+                        </li>
 
-                    <div class="symbol">
-                    </div>
-                    <div class="state-value">
-                        <div>
-                            <ul>
-                                <li>
-                                    <a class="value article-title" style="color: orange;"
-                                       @click="viewArticle(article.id)">
-                                        {{article.title}}
-                                    </a>
-                                </li>
-                                <li style="color: #808080">{{article.outline}}</li>
-                            </ul>
+                        <li class="nav-item header-item" style="margin-left: -15px;margin-top: -15px;">
+                            <router-link tag="div" to='/archives' class="nav-link">
+                                <a class="article-title"
+                                   style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
+                                   @click="viewArticle(article.id)">
+                                    {{article.title}}
+                                </a>
+                                <div style="color: #808080">&nbsp;{{article.outline}}</div>
+                                <div style="color: #808080;text-align: left;">&nbsp;@{{article.authorId}}</div>
+                            </router-link>
+                        </li>
+                        <li class="nav-item header-item" style="position: absolute;right:100px;bottom:20px;">
 
-                        </div>
-                        <div>
-                            <ul>
-                                <li style="float: left;position:absolute;right:150px;bottom:-10px">
-                                    <Icon type="ios-paw-outline" size="18"
-                                          color="orange"></Icon>
-                                    <label style="color:orange;position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.hits}}）</label>
-                                </li>
-                                <li style="float: left;position:absolute;right:100px;bottom:-10px">
-                                    <Icon type="ios-chatbubble-outline" size="18"
-                                          color="orange"></Icon>
-                                    <label style="color:orange;position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
-                                </li>
-                                <li style="float: left;position:absolute;right:50px;bottom:-10px">
-                                    <Icon type="ios-heart-outline" size="18"
-                                          color="orange"></Icon>
-                                    <label style="color:orange;position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
-                                </li>
-                                <li style="float: left;position:absolute;right:0px;bottom:-10px">
-                                    <Icon type="sad-outline" size="18"
-                                          color="orange"></Icon>
-                                    <label style="color:orange;position: relative;bottom:1px;left:-8px;font-size:14px;">（{{article.commentsNum}}）</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                            <router-link tag="div" to='/links' class="nav-link">
+                                <Icon type="ios-clock" size="18"
+                                      color="#808080"></Icon>
+                                <label style="color:#808080;position: relative;">{{article.hits}}</label>
+                            </router-link>
 
-                </div>
+                        </li>
+                        <li class="nav-item header-item"  style="position: absolute;right:40px;bottom:20px;">
+
+                            <router-link tag="div" to='#' class="nav-link">
+                                <Icon type="chatbox-working" size="18"
+                                      color="#808080"></Icon>
+                                <label style="color:#808080;position: relative;">{{article.commentsNum}}</label>
+                            </router-link>
+
+                        </li>
+                        <li class="nav-item header-item"  style="position: absolute;right:-20px;bottom:20px;">
+
+                            <router-link tag="div" to='/feedback' class="nav-link">
+                                <Icon type="thumbsdown" size="18"
+                                      color="#808080"></Icon>
+                                <label style="color:#808080;position: relative;">{{article.dislikes}}</label>
+                            </router-link>
+
+                        </li>
+                    </ul>
+                </navbar>
                 <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.4);"/>
-
             </div>
             </Col>
             <Col span="4">
@@ -79,10 +85,12 @@
     import DashChartVisitor from './../charts/DashChartVisitor';
     import DashChartLarge from './../charts/DashChartLarge';
     import VueCalendar from './../components/VueCalendar';
-    import TodoList from '@/components/TodoList'
+    import TodoList from '@/components/TodoList';
+    import navbar from '@/components/Visitor/ArticleNavbar';
+
 
     export default {
-        components: {DashChartCount, DashChartVisitor, DashChartLarge, VueCalendar, TodoList},
+        components: {DashChartCount, DashChartVisitor, DashChartLarge, VueCalendar, TodoList, navbar},
         name: 'dashboard',
         data() {
             return {
@@ -146,6 +154,11 @@
 
 <style type="text/css" scoped>
 
+    .nav-item.header-item {
+        margin-bottom: -40px;
+        margin-left: 15px;
+    }
+
     .article-title:hover {
         color: #7689c8 !important;
         text-decoration: underline;
@@ -163,7 +176,6 @@
         font-size: 20px;
         font-weight: 500;
         margin-bottom: 5px;
-        font-family: fantasy;
     }
 
     .state-overview .state-value .title {
@@ -172,12 +184,12 @@
 
     .state-value {
         width: 68%;
-        display: inline-block
     }
 
     .symbol {
-        width: 30%;
-        display: inline-block
+        width: 50px;
+        display: inline-block;
+        position: relative;
     }
 
     .state-overview .panel {
@@ -206,8 +218,8 @@
     }
 
     .panel.like-header {
-        background: #f6faff;
-        box-shadow: 0px 2px 18px 4px #ffa5002b;
+        /*background: #f6faff;*/
+        /*box-shadow: 0px 2px 18px 4px #ffa5002b;*/
     }
 
     .dash_income_chart {

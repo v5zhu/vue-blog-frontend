@@ -2,37 +2,37 @@
     <div class="animated fadeIn" style="margin-top:50px;">
         <div style="min-height:200px;min-width:50px;position: fixed;left:20px;top:120px;">
             <ul>
-                <li style="margin-bottom: 20px;position: relative">
+                <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('hits')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="eye" color="#FF6666" size="24"></Icon>
+                        <Icon class="left-icon-class" type="ios-clock" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.hits}}
                     </div>
                 </li>
-                <li style="margin-bottom: 20px;position: relative">
+                <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('commentsNum')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-chatbubble" color="#FF6666" size="24"></Icon>
+                        <Icon class="left-icon-class" type="ios-chatbubble" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.commentsNum}}
                     </div>
                 </li>
-                <li style="margin-bottom: 20px;position: relative">
+                <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="heart" color="#FF6666" size="24"></Icon>
+                        <Icon class="left-icon-class" type="heart" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.likes}}
                     </div>
                 </li>
-                <li style="margin-bottom: 20px;position: relative">
+                <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="heart-broken" color="#FF6666" size="24"></Icon>
+                        <Icon class="left-icon-class" type="heart-broken" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.dislikes}}
@@ -45,7 +45,7 @@
             <Col style="margin-left: 50px;" :xs="17" :sm="17" :md="17" :lg="17">
             <div class="post-header" style="">
                 <div class="post-title"
-                     style="color: orange;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;"
+                     style="color: #0d5477;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;"
                      itemprop="name headline">
                     {{article.title}}
                 </div>
@@ -535,8 +535,9 @@
     }
 
     .post-header, .post-content {
-        border: 1px solid rgba(255, 165, 0, 0.2);
-        box-shadow: 0px 2px 18px 2px #ffa5002b;
+        border: 1px solid rgba(255, 165, 0, 0.1);
+        /*box-shadow: 0px 2px 18px 2px #ffa5002b;*/
+        padding: 10px;
     }
 
     .post-content {

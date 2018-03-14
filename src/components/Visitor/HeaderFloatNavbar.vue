@@ -12,11 +12,14 @@
     }
 </script>
 <style type="text/css" scoped>
+    .app-header{
+        position: relative;
+    }
     .app-header.navbar {
         flex-direction: row;
-        height: 60px;
-        margin: 0;
-        background: #f6faff;
+        height: 160px;
+        margin-top: 60px;
+        background: #0d5477;
         /*box-shadow: 0 0px 20px 1px rgba(255,165,0,0.5);*/
         display: flex;
         flex-wrap: wrap;

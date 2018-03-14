@@ -1,8 +1,11 @@
 <template>
     <div class="app" @mousemove="toggleHeader">
         <AppHeader :scrollShow="scrollShow" :moveShow="moveShow"/>
+        <AppHeaderFloat :scrollShow="scrollShow" :moveShow="moveShow" v-show="headerFloatShow" @closeHeaderFloat="closeHeaderFloat"/>
+
+        <Sidebar/>
         <div class="app-body" @mousemove="toggleHeader">
-            <Sidebar/>
+
             <main class="main">
                 <div class="container-fluid">
                     <router-view></router-view>
@@ -16,6 +19,7 @@
 
 <script>
     import AppHeader from '../components/Visitor/Header';
+    import AppHeaderFloat from '../components/Visitor/AppHeaderFloat';
     import AppAside from '../components/Visitor/Aside';
     import AppFooter from '../components/Visitor/Footer';
     import Sidebar from '../components/Visitor/Sidebar'
@@ -25,11 +29,13 @@
         data() {
             return {
                 scrollShow: true,
-                moveShow: true
+                moveShow: true,
+                headerFloatShow: true
             }
         },
         components: {
             AppHeader,
+            AppHeaderFloat,
             AppAside,
             AppFooter,
             Sidebar
@@ -40,7 +46,7 @@
         methods: {
             handleScroll() {
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-                if (scrollTop < 400) {
+                if (scrollTop < 100) {
                     this.scrollShow = true;
                 } else {
                     this.scrollShow = false;
@@ -54,6 +60,9 @@
                 } else {
                     this.moveShow = false;
                 }
+            },
+            closeHeaderFloat() {
+                this.headerFloatShow = false;
             }
         },
         computed: {
