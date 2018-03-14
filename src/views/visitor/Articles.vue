@@ -1,9 +1,19 @@
 <template>
     <div class="animated fadeIn">
         <Row :gutter="16" style="margin-top: 45px;">
-
             <Col span="3">
-            &nbsp;
+            <nav class="sidebar-nav-visitor">
+                <div style="">
+                    <ul>
+                        <li class="li-nav-tag" style="background: #0d5477;color: white">
+                            <p>今日推荐</p>
+                        </li>
+                        <li v-for="tag in tags" class="li-nav-tag" @click="filterTags(tag.name)">
+                            <p>{{tag.name}}</p>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
             </Col>
             <Col span="12">
             <div class="state-overview" v-for="article in pageInfo.list">
@@ -11,71 +21,60 @@
                     <ul class="nav navbar-nav d-md-down-none">
                         <li class="nav-item header-item">
 
-                            <router-link tag="div" to='/articles' class="nav-link">
-                                <Button type="default" size="small"
-                                        style="height:60px;width:45px;margin-bottom: 15px;margin-left: -35px;">
-                                    <Icon type="thumbsup" color="red" size="24"></Icon>
-                                    <p>{{article.likes}}</p>
-                                </Button>
-                            </router-link>
+                            <Button type="default" size="small"
+                                    style="height:60px;width:45px;margin-bottom: 15px;margin-left: -35px;">
+                                <Icon type="thumbsup" color="red" size="24"></Icon>
+                                <p>{{article.likes}}</p>
+                            </Button>
                         </li>
 
                         <li class="nav-item header-item" style="margin-left: -15px;margin-top: -15px;">
-                            <router-link tag="div" to='/archives' class="nav-link">
-                                <a class="article-title"
-                                   style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
-                                   @click="viewArticle(article.id)">
-                                    {{article.title}}
-                                </a>
-                                <div style="color: #808080">&nbsp;{{article.outline}}</div>
-                                <div style="color: #808080;text-align: left;">&nbsp;@{{article.authorId}}</div>
-                            </router-link>
+                            <a class="article-title"
+                               style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
+                               @click="viewArticle(article.id)">
+                                {{article.title}}
+                            </a>
+                            <div style="color: rgba(128.128.128,0.28);text-align: left;">&nbsp;{{article.outline}}</div>
+                            <div style="color: #0d5477;text-align: left;">&nbsp;<a href="#">@{{article.author.screenName}}</a>
+                            </div>
                         </li>
                         <li class="nav-item header-item" style="position: absolute;right:100px;bottom:20px;">
 
-                            <router-link tag="div" to='/links' class="nav-link">
-                                <Icon type="ios-clock" size="18"
-                                      color="#808080"></Icon>
-                                <label style="color:#808080;position: relative;">{{article.hits}}</label>
-                            </router-link>
+                            <Icon type="ios-clock" size="18"
+                                  color="rgba(128.128.128,0.28)"></Icon>
+                            <label style="color:rgba(128.128.128,0.28);position: relative;">{{article.hits}}</label>
 
                         </li>
-                        <li class="nav-item header-item"  style="position: absolute;right:40px;bottom:20px;">
+                        <li class="nav-item header-item" style="position: absolute;right:40px;bottom:20px;">
 
-                            <router-link tag="div" to='#' class="nav-link">
-                                <Icon type="chatbox-working" size="18"
-                                      color="#808080"></Icon>
-                                <label style="color:#808080;position: relative;">{{article.commentsNum}}</label>
-                            </router-link>
+                            <Icon type="chatbox-working" size="18"
+                                  color="rgba(128.128.128,0.28)"></Icon>
+                            <label style="color:rgba(128.128.128,0.28);position: relative;">{{article.commentsNum}}</label>
 
                         </li>
-                        <li class="nav-item header-item"  style="position: absolute;right:-20px;bottom:20px;">
+                        <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:20px;">
 
-                            <router-link tag="div" to='/feedback' class="nav-link">
-                                <Icon type="thumbsdown" size="18"
-                                      color="#808080"></Icon>
-                                <label style="color:#808080;position: relative;">{{article.dislikes}}</label>
-                            </router-link>
+                            <Icon type="thumbsdown" size="18"
+                                  color="rgba(128.128.128,0.28)"></Icon>
+                            <label style="color:rgba(128.128.128,0.28);position: relative;">{{article.dislikes}}</label>
 
                         </li>
                     </ul>
                 </navbar>
                 <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.4);"/>
             </div>
-            </Col>
-            <Col span="4">
-            &nbsp;
-            </Col>
-
-        </Row>
-        <Row :gutter="16">
             <Page :total="this.pageInfo.total" placement="top"
                   :page-size-opts="pageSizeOpts"
                   :current="this.pageInfo.pageNum"
                   show-elevator show-sizer show-total
                   @on-change="changePage"
                   @on-page-size-change="changePageSize"
-                  style="text-align:left;margin-top:50px;margin-left: 20px;"></Page>
+                  style="text-align:right;margin-top:50px;"></Page>
+            </Col>
+            <Col span="4">
+            &nbsp;
+            </Col>
+
         </Row>
     </div>
 </template>
@@ -87,6 +86,8 @@
     import VueCalendar from './../components/VueCalendar';
     import TodoList from '@/components/TodoList';
     import navbar from '@/components/Visitor/ArticleNavbar';
+
+    import store from 'store/';
 
 
     export default {
@@ -106,6 +107,7 @@
                     nextPage: undefined
                 },
                 pageSizeOpts: [10, 20, 50, 100],
+                tags: [],
                 value1: 0,
                 value2: 0,
                 value3: 0,
@@ -142,17 +144,57 @@
                 this.pageInfo.pageSize = pageSize;
                 this.articles();
             },
-
+            tagList() {
+                store.dispatch('TagList', {token: null}).then(res => { // 拉取user_info
+                    var tags = res.data;
+                    this.tags = tags;
+                    console.log(this.tags)
+                }).catch(() => {
+                    console.log("请求标签列表失败");
+                })
+            },
+            filterTags(categoryName) {
+                this.$router.push({path: '/tag/' + categoryName});
+            }
         },
         mounted() {
             this.articles();
-
+            this.tagList();
         }
     }
 </script>
 
 
 <style type="text/css" scoped>
+    .li-nav-tag {
+        padding: 1px 10px;
+        width: 140px;
+        height: 37px;
+        border-radius: 3px;
+        font-size: 12px;
+        color: #0d5477;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .li-nav-tag:hover {
+        background: rgba(255,165,0,0.2);
+    }
+
+    .sidebar-nav-visitor {
+        position: relative;
+        left: 20px;
+        width: 200px;
+        padding: 20px;
+        min-height: 400px;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        transition: margin-left .25s, margin-right .25s, width .25s, flex .25s;
+        color: #fff;
+        /*background: #0d5477*/
+    }
 
     .nav-item.header-item {
         margin-bottom: -40px;
