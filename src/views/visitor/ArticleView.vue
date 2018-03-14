@@ -1,6 +1,6 @@
 <template>
     <div class="animated fadeIn" style="margin-top:50px;">
-        <div style="min-height:400px;min-width:50px;position: fixed;left:20px;top:120px;">
+        <div style="min-height:200px;min-width:50px;position: fixed;left:20px;top:120px;">
             <ul>
                 <li style="margin-bottom: 20px;position: relative">
                     <Button @click="updateStatistics('hits')" type="ghost" class="left-circle"

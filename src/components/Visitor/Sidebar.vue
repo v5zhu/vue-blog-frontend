@@ -1,16 +1,16 @@
 <template>
     <div class="sidebar-visitor">
         <nav class="sidebar-nav-visitor">
-            <div style="min-height:150px;min-width:50px;position: fixed;left:20px;bottom:50px;">
+            <div style="min-height:80px;min-width:50px;position: fixed;left:20px;bottom:20px;">
                 <ul>
                     <li style="margin-bottom: 20px;position: relative">
-                        <Button type="ghost" class="left-circle" @click="scrollTop('#top')"
+                        <Button type="ghost" class="left-circle" @click="scrollToTop"
                                 style="border-radius: 50%;">
                             <Icon class="left-icon-class" type="arrow-up-b" color="#FF6666" size="24"></Icon>
                         </Button>
                     </li>
                     <li style="margin-bottom: 20px;position: relative">
-                        <Button type="ghost" class="left-circle" @click="scrollBottom('#bottom')"
+                        <Button type="ghost" class="left-circle" @click="scrollBottom"
                                 style="border-radius: 50%;">
                             <Icon class="left-icon-class" type="arrow-down-b" color="#FF6666" size="24"></Icon>
                         </Button>
@@ -22,20 +22,40 @@
 </template>
 <script>
 
+    import {scrollTo} from "../../utils/scroll";
+
     export default {
         name: 'sidebar',
         data() {
-            return {}
+            return {
+                timer: null,
+                showReturnToTop: true,
+                documentHeight: ''
+            }
         },
         components: {},
         computed: {},
-        methods: {
-            scrollTop(el) {
-                var anchor = this.$el.querySelector(el)
-                document.body.scrollTop = anchor.offsetTop
-            },
-            scrollBottom(el) {
+        mounted() {
 
+        },
+        created() {
+            window.addEventListener('scroll', this.currentPageYOffset);
+        },
+        beforeDestroy() {
+            window.removeEventListener('scroll', this.currentPageYOffset)
+        },
+        methods: {
+            currentPageYOffset() {
+                // 判断滚动区域大于多少的时候显示返回顶部的按钮
+                window.pageYOffset > this.pageY ? this.showReturnToTop = true : this.showReturnToTop = false;
+            },
+            scrollToTop() {
+                scrollTo(0, 1500, this.transitionName, this.currentPageYOffset);
+            },
+            scrollBottom() {
+                var height = $(document).height() - $(window).height();//全程要滚动的高度
+                var t = height / 2;
+                scrollTo(height, t, this.transitionName, this.currentPageYOffset);
             }
         }
     }

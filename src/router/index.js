@@ -50,48 +50,100 @@ export const constantRouterMap = [
         children: [{
             name: '文章页',
             path: '/articles',
-            component: _import('visitor/Articles')
-        },{
+            component: _import('visitor/Articles'),
+            meta: {
+                scrollToTop: true
+            }
+        }, {
             name: '文章归档',
             path: '/archives',
-            component: _import('visitor/Archives')
-        },{
+            component: _import('visitor/Archives'),
+            meta: {
+                scrollToTop: true
+            }
+        }, {
             name: '文章归档(按时间筛选)',
             path: '/archives/:year/:month',
-            component: _import('visitor/Archives')
-        },{
+            component: _import('visitor/Archives'),
+            meta: {
+                scrollToTop: true
+            }
+        }, {
             name: '文章归档(按分类筛选)',
             path: '/category/:category',
-            component: _import('visitor/Archives')
-        },{
+            component: _import('visitor/Archives'),
+            meta: {
+                scrollToTop: true
+            }
+        }, {
             name: '文章归档(按标签筛选)',
             path: '/tag/:tag',
-            component: _import('visitor/Archives')
+            component: _import('visitor/Archives'),
+            meta: {
+                scrollToTop: true
+            }
         }, {
             name: '文章详情页',
             path: '/article/:id',
-            component: _import('visitor/ArticleView')
+            component: _import('visitor/ArticleView'),
+            meta: {
+                scrollToTop: true
+            }
         }, {
             name: '友链',
             path: '/links',
-            component: _import('visitor/Links')
+            component: _import('visitor/Links'),
+            meta: {
+                scrollToTop: true
+            }
         }, {
             name: '赞赏榜',
             path: '/awards',
-            component: _import('visitor/Awards')
+            component: _import('visitor/Awards'),
+            meta: {
+                scrollToTop: true
+            }
         }, {
             name: '意见反馈',
             path: '/feedback',
-            component: _import('visitor/Feedback')
+            component: _import('visitor/Feedback'),
+            meta: {
+                scrollToTop: true
+            }
         }]
     }
 ]
+
+const scrollBehavior = (to, from, savedPosition) => {
+    if (savedPosition) {
+        // savedPosition is only available for popstate navigations.
+        return savedPosition
+    } else {
+        const position = {}
+        // new navigation.
+        // scroll to anchor by returning the selector
+        if (to.hash) {
+            position.selector = to.hash
+        }
+        // check if any matched route config has meta that requires scrolling to top
+        if (to.matched.some(m => m.meta.scrollToTop)) {
+            // cords will be used if no selector is provided,
+            // or if the selector didn't match any element.
+            position.x = 0
+            position.y = 0
+        }
+        // if the returned position is falsy or an empty object,
+        // will retain current scroll position.
+        return position
+    }
+}
+
 //使用浏览器历史访问模式，可使用浏览器前进后退功能
 export default new Router({
-    mode: 'hash',
+    mode: 'history',
     // mode: 'hash',
     linkActiveClass: 'open active',
-    scrollBehavior: () => ({y: 0}),
+    scrollBehavior: scrollBehavior,
     routes: constantRouterMap
 });
 

@@ -61,4 +61,5 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
     NProgress.done() // 结束Progress
+    // window.scrollTo(0,0);// 每个路由都回到顶部
 })

@@ -1,5 +1,5 @@
 <template>
-    <footer class="app-footer">
+    <footer class="app-footer" id="app-footer">
         <div>
             &copy; 2018 Copyright Reserved.
             <span class="float-right">Powered by <a href="http://www.sonnx.com">zhuxl</a></span>
