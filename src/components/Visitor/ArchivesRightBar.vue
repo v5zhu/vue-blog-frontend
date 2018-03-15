@@ -25,7 +25,7 @@
         border-radius: 4px;
         height: 150px;
         width: 100%;
-        border: 1px solid rgba(255,165,0,0.2);
+        border: 1px solid rgba(255, 165, 0, 0.2);
         background: #f6faff;
         box-shadow: 0px 2px 18px 4px #ffa5002b;
         color: black;
@@ -51,7 +51,7 @@
         ,
         methods: {
             getArchives() {
-                store.dispatch('Archives', {year: null, month: null,category:'',tag:''}).then(res => { // 拉取user_info
+                store.dispatch('Archives', {year: null, month: null, category: '', tag: ''}).then(res => { // 拉取user_info
                     var archives = res.data;
                     this.archives = archives;
                 }).catch(() => {
@@ -59,7 +59,8 @@
                 })
             },
             filterArchives(year, month) {
-                this.$router.push({path: '/archives/' + year + '/' + month});
+                // this.$router.push({path: '/archives/' + year + '/' + month});
+                window.open('/archives/' + year + '/' + month);
             }
         }
         ,

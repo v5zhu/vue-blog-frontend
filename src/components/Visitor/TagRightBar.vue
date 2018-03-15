@@ -78,7 +78,8 @@
                 })
             },
             filterTags(categoryName) {
-                this.$router.push({path: '/tag/' + categoryName});
+                // this.$router.push({path: '/tag/' + categoryName});
+                window.open('/tag/' + categoryName);
             },
             getButtonType() {
                 var num = Math.floor(Math.random() * 10);

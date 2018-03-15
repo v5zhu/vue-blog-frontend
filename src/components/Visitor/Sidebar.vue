@@ -50,7 +50,9 @@
                 window.pageYOffset > this.pageY ? this.showReturnToTop = true : this.showReturnToTop = false;
             },
             scrollToTop() {
-                scrollTo(0, 1500, this.transitionName, this.currentPageYOffset);
+                var height = $(document).height() - $(window).height();//全程要滚动的高度
+                var t = height / 2;
+                scrollTo(0, t, this.transitionName, this.currentPageYOffset);
             },
             scrollBottom() {
                 var height = $(document).height() - $(window).height();//全程要滚动的高度

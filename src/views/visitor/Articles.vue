@@ -1,7 +1,7 @@
 <template>
     <div class="animated fadeIn">
         <Row :gutter="16" style="margin-top: 45px;">
-            <Col span="3">
+            <Col span="4">
             <nav class="sidebar-nav-visitor">
                 <div style="">
                     <ul>
@@ -15,7 +15,7 @@
                 </div>
             </nav>
             </Col>
-            <Col span="12">
+            <Col span="14">
             <div class="state-overview" v-for="article in pageInfo.list">
                 <navbar>
                     <ul class="nav navbar-nav d-md-down-none">
@@ -134,7 +134,8 @@
                 });
             },
             viewArticle(articleId) {
-                this.$router.push({path: '/article/' + articleId})
+                // this.$router.push({path: '/article/' + articleId})
+                window.open('/article/' + articleId, '_blank');
             },
             changePage(page) {
                 this.pageInfo.pageNum = page;
@@ -154,7 +155,8 @@
                 })
             },
             filterTags(categoryName) {
-                this.$router.push({path: '/tag/' + categoryName});
+                // this.$router.push({path: '/tag/' + categoryName});
+                window.open('/tag/' + categoryName, '_blank');
             }
         },
         mounted() {
@@ -178,14 +180,14 @@
     }
 
     .li-nav-tag:hover {
-        background: rgba(255,165,0,0.2);
+        background: rgba(255, 165, 0, 0.2);
     }
 
     .sidebar-nav-visitor {
         position: relative;
-        left: 20px;
+        /*left: 20px;*/
         width: 200px;
-        padding: 20px;
+        padding: 15px 20px;
         min-height: 400px;
         height: auto;
         overflow-x: hidden;

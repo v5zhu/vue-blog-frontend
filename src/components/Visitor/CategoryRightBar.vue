@@ -70,7 +70,8 @@
                 })
             },
             filterCategories(categoryName) {
-                this.$router.push({path: '/category/' + categoryName});
+                // this.$router.push({path: '/category/' + categoryName});
+                window.open('/category/' + categoryName);
             }
         }
         ,

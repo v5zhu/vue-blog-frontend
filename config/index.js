@@ -32,8 +32,8 @@ module.exports = {
         staticPath: '/static/',
         proxyTable: {
             '/sonnxblog': {
-                target: 'http://47.96.28.236:8080',
-                // target: 'http://localhost:8888',
+                // target: 'http://47.96.28.236:8080',
+                target: 'http://localhost:8888',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/': ''
