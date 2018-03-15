@@ -3,7 +3,7 @@
         <div style="min-height:200px;min-width:50px;position: fixed;left:20px;top:120px;">
             <ul>
                 <li style="margin-bottom: 10px;position: relative">
-                    <Button @click="updateStatistics('hits')" type="ghost" class="left-circle"
+                    <Button :disabled="true" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
                         <Icon class="left-icon-class" type="ios-clock" color="#0d5477" size="24"></Icon>
                     </Button>
@@ -12,9 +12,9 @@
                     </div>
                 </li>
                 <li style="margin-bottom: 10px;position: relative">
-                    <Button @click="updateStatistics('commentsNum')" type="ghost" class="left-circle"
+                    <Button :disabled="true" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-chatbubble" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="chatbox-working" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.commentsNum}}
@@ -23,7 +23,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="heart" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="thumbsup" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.likes}}
@@ -32,7 +32,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="heart-broken" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="thumbsdown" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.dislikes}}
@@ -60,9 +60,9 @@
                 <div style="min-height:150px;height:auto;margin-top: 50px;position: relative;box-shadow: 0px 2px 20px 5px #ffa5002b;border:1px solid rgba(255,165,0,0.2);border-radius: 3px;">
                     <ul style="width:100%;">
                         <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
-                            <Button type="error" @click="awardModal=true"
-                                    style="height:80px;width:80px;border-radius:10px;font-size: 16px;background: url(/static/img/hongbao.jpg);background-size: 80px 80px;border:none;">
-                                <p style="margin-top: 50px;">赞赏</p>
+                            <Button type="ghost" @click="awardModal=true"
+                                    style="height:60px;width:60px;border-radius:2px;font-size: 16px;">
+                                <p style="margin-top: 10px;">赞赏</p>
                             </Button>
 
                             <Modal v-model="awardModal" width="600" :maskClosable="false"
@@ -132,16 +132,16 @@
                             </Modal>
                         </li>
                         <li style="float: left;position:relative;top:20px;margin-right: 20px;">
-                            <Button type="error" @click="updateStatistics('likes')"
-                                    style="height:80px;width:80px;font-size: 16px;padding-top: 20px;">
-                                <Icon type="heart" size="32" color="yellow"></Icon>
+                            <Button type="ghost" @click="updateStatistics('likes')"
+                                    style="height:60px;width:60px;font-size: 12px;">
+                                <Icon type="thumbsup" size="24" color="#0d5477"></Icon>
                                 <p>{{article.likes}}喜欢</p>
                             </Button>
                         </li>
                         <li style="float: left;position:relative;top:20px">
-                            <Button type="warning" @click="updateStatistics('dislikes')"
-                                    style="height:80px;width:80px;font-size: 16px;padding-top: 20px;">
-                                <Icon type="heart-broken" size="32"></Icon>
+                            <Button type="ghost" @click="updateStatistics('dislikes')"
+                                    style="height:60px;width:60px;font-size: 12px;">
+                                <Icon type="thumbsdown" size="24" color="#0d5477"></Icon>
                                 <p>{{article.dislikes}}反对</p>
                             </Button>
                         </li>

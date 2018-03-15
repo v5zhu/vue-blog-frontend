@@ -29,34 +29,44 @@
                         </li>
 
                         <li class="nav-item header-item" style="margin-left: -15px;margin-top: -15px;">
-                            <a class="article-title"
-                               style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
-                               @click="viewArticle(article.id)">
-                                {{article.title}}
-                            </a>
-                            <div style="color: rgba(128.128.128,0.28);text-align: left;">&nbsp;{{article.outline}}</div>
+                            <ul>
+                                <li>
+                                    <a class="article-title"
+                                       style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
+                                       @click="viewArticle(article.id)">{{article.title}}
+                                    </a>
+                                    <a class="article-tags" v-show="article.tags!=null && article.tags.length!=0"
+                                       @click="filterTags(tag)"
+                                       v-for="tag in article.tags.split(',')">
+                                        {{tag}}
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div style="color: rgba(128,128,128,0.4);text-align: left;">&nbsp;{{article.outline}}</div>
                             <div style="color: #0d5477;text-align: left;">&nbsp;<a href="#">@{{article.author.screenName}}</a>
                             </div>
                         </li>
+
                         <li class="nav-item header-item" style="position: absolute;right:100px;bottom:20px;">
 
                             <Icon type="ios-clock" size="18"
-                                  color="rgba(128.128.128,0.28)"></Icon>
-                            <label style="color:rgba(128.128.128,0.28);position: relative;">{{article.hits}}</label>
+                                  color="rgba(128,128,128,0.28)"></Icon>
+                            <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.hits}}</label>
 
                         </li>
                         <li class="nav-item header-item" style="position: absolute;right:40px;bottom:20px;">
 
                             <Icon type="chatbox-working" size="18"
-                                  color="rgba(128.128.128,0.28)"></Icon>
-                            <label style="color:rgba(128.128.128,0.28);position: relative;">{{article.commentsNum}}</label>
+                                  color="rgba(128,128,128,0.28)"></Icon>
+                            <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.commentsNum}}</label>
 
                         </li>
                         <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:20px;">
 
                             <Icon type="thumbsdown" size="18"
-                                  color="rgba(128.128.128,0.28)"></Icon>
-                            <label style="color:rgba(128.128.128,0.28);position: relative;">{{article.dislikes}}</label>
+                                  color="rgba(128,128,128,0.28)"></Icon>
+                            <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.dislikes}}</label>
 
                         </li>
                     </ul>
@@ -187,7 +197,7 @@
         position: relative;
         /*left: 20px;*/
         width: 200px;
-        padding: 15px 20px;
+        padding: 10px 20px;
         min-height: 400px;
         height: auto;
         overflow-x: hidden;
@@ -199,13 +209,29 @@
     }
 
     .nav-item.header-item {
-        margin-bottom: -40px;
+        margin-bottom: -30px;
         margin-left: 15px;
     }
 
     .article-title:hover {
         color: #7689c8 !important;
         text-decoration: underline;
+    }
+
+    .article-tags {
+        height: 20px;
+        min-width: 40px;
+        margin-left: 20px;
+        padding: 3px 5px;
+        border-radius: 2px;
+        cursor: pointer;
+        background: rgba(128, 128, 128, 0.2);
+    }
+
+    .article-tags:hover {
+        cursor: pointer !important;
+        background: #0d5477;
+        color: orange;
     }
 
     .state-overview {

@@ -71,9 +71,10 @@
                     </li>
 
 
-                    <li class="nav-item d-md-down-none" style="position: absolute;right:0;">
+                    <li class="nav-item d-md-down-none" style="position: absolute;right:0;top:26px;">
                         <a class="nav-link navbar-toggler aside-menu-toggler" style="color: #0d5477"
-                           @click="asideToggle">&#9776;</a>
+                           @click="asideToggle">&#9776;
+                        </a>
                     </li>
 
                 </ul>
