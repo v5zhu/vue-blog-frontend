@@ -13,8 +13,10 @@ import 'mavon-editor/dist/css/index.css';
 import {quillEditor} from 'vue-quill-editor';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
+import Validator from 'vue-validator';
 
 
+Vue.use(Validator)
 Vue.use(mavonEditor);
 Vue.use(quillEditor);
 Vue.use(h2m);
