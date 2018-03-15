@@ -1,5 +1,13 @@
 import fetch from 'utils/fetch';
 
+export function register(user) {
+    return fetch({
+        url: '/user/register',
+        method: 'post',
+        data: user
+    });
+}
+
 export function loginByEmail(loginName, password) {
     const data = {
         loginName,
@@ -16,7 +24,7 @@ export function logout(token) {
     return fetch({
         url: '/admin/logout',
         method: 'post',
-        params:{token}
+        params: {token}
     });
 }
 

@@ -126,19 +126,17 @@
             register(refName) {
                 this.$refs[refName].validate((valid) => {
                     if (valid) {
-                        alert('通过')
-                        /*store.dispatch('ArticlePublish', {article: this.article}).then(res => { // 拉取user_info
+                        store.dispatch('Register', this.user).then(res => { // 拉取user_info
                             var resp = res.data;
                             if (resp.success == true) {
-                                this.$Message.success(msg + '成功!');
-                                this.$router.push({path: '/admin/blog/article/manage'});
+                                this.$Message.success('注册成功!');
                             } else {
-                                this.$Message.error(msg + '失败!');
+                                this.$Message.error('注册失败:' + resp.msg);
                             }
                         }).catch(() => {
                             this.$Message.success('提交失败!');
-                        })*/
-                    }else{
+                        })
+                    } else {
                         this.$Message.error('请检查未填写正确的信息再提交');
                     }
                 })

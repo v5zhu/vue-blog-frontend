@@ -1,4 +1,4 @@
-import {loginByEmail, logout, getInfo, getAuthorInfo} from 'api/login';
+import {loginByEmail, logout, getInfo, getAuthorInfo, register} from 'api/login';
 import Cookies from 'js-cookie';
 
 const user = {
@@ -62,6 +62,15 @@ const user = {
     },
 
     actions: {
+        Register({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                register(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
         // 邮箱登录
         LoginByEmail({commit}, userInfo) {
             const email = userInfo.email.trim();
@@ -101,7 +110,7 @@ const user = {
         },
 
         // 获取用户信息
-        AuthorInfo({commit, state},params) {
+        AuthorInfo({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 getAuthorInfo(params).then(response => {
                     resolve(response);

@@ -50,7 +50,7 @@
                     loginName: '',
                     email: '',
                     homeUrl: '',
-                    screenName: '',
+                    nickname: '',
                     gmtCreate: '',
                     gmtModified: '',
                     lastLoginTime: '',

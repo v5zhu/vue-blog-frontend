@@ -5,7 +5,7 @@
                 <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
                         size="large" style="line-height: 0px"/>
             </div>
-            <div>{{CommentChild.author.screenName}}@{{CommentChild.parent}}</div>
+            <div>{{CommentChild.author.nickname}}@{{CommentChild.parent}}</div>
         </div>
         <div style="min-height:20px;" v-html="compiledComment">
         </div>

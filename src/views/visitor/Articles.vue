@@ -44,7 +44,7 @@
                             </ul>
 
                             <div style="color: rgba(128,128,128,0.4);text-align: left;">&nbsp;{{article.outline}}</div>
-                            <div style="color: #0d5477;text-align: left;">&nbsp;<a href="#">@{{article.author.screenName}}</a>
+                            <div style="color: #0d5477;text-align: left;">&nbsp;<a href="#">@{{article.author.nickname}}</a>
                             </div>
                         </li>
 
