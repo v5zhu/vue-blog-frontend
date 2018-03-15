@@ -9,12 +9,12 @@
                 </ul>
                 <ul class="nav navbar-nav d-md-down-none">
 
-                    <li class="nav-item header-item">
-                        <Button type="default" icon="ios-pulse-strong" size="large">免费注册</Button>
+                    <li class="nav-item header-item reg-login-btn">
+                        <Button class="reg-login-btn" type="default" icon="ios-pulse-strong" size="large">免费注册</Button>
                     </li>
 
-                    <li class="nav-item header-item">
-                        <Button type="info" icon="paper-airplane" size="large">立即登录</Button>
+                    <li class="nav-item header-item reg-login">
+                        <Button class="reg-login-btn" type="info" icon="paper-airplane" size="large">立即登录</Button>
                     </li>
                 </ul>
                 <ul>
@@ -84,6 +84,12 @@
 </script>
 
 <style type="text/css" scoped>
+    .header-item .reg-login-btn:hover {
+        background: inherit;
+        border-radius: 2px;
+        box-shadow: 0px 0px 20px 3px orange;
+    }
+
     .navbar-nav {
         position: absolute;
         top: 50px;

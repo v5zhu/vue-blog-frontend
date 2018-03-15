@@ -9,9 +9,9 @@
 
                         <router-link tag="div" to='/articles' class="nav-link">
                             <p>
-                                <Icon type="ios-book-outline" size='28' color="#0d5477"></Icon>
+                                <Icon type="ios-book-outline" size='28' class="color-0d5477"></Icon>
                             </p>
-                            <p style="color:#0d5477"> 首页 </p>
+                            <p class="color-0d5477"> 首页 </p>
                         </router-link>
                     </li>
 
@@ -19,18 +19,18 @@
 
                         <router-link tag="div" to='/archives' class="nav-link">
                             <p>
-                                <Icon type="map" size='28' color="#0d5477"></Icon>
+                                <Icon type="map" size='28' class="color-0d5477"></Icon>
                             </p>
-                            <p style="color:#0d5477"> 归档 </p>
+                            <p class="color-0d5477"> 归档 </p>
                         </router-link>
                     </li>
                     <li class="nav-item header-item">
 
                         <router-link tag="div" to='/links' class="nav-link">
                             <p>
-                                <Icon type="social-github" size='28' color="#0d5477"></Icon>
+                                <Icon type="social-github" size='28' class="color-0d5477"></Icon>
                             </p>
-                            <p style="color:#0d5477"> 友链 </p>
+                            <p class="color-0d5477"> 友链 </p>
                         </router-link>
 
                     </li>
@@ -38,7 +38,7 @@
 
                         <router-link tag="div" to='#' class="nav-link">
                             <p>
-                                <Icon type="trophy" size='28' color="#0d5477"></Icon>
+                                <Icon type="trophy" size='28' class="color-0d5477"></Icon>
                             </p>
                             <p style="color:#8c8c8c"> 赞赏榜(建设中...) </p>
                         </router-link>
@@ -48,12 +48,29 @@
 
                         <router-link tag="div" to='/feedback' class="nav-link">
                             <p>
-                                <Icon type="ios-chatboxes-outline" size='28' color="#0d5477"></Icon>
+                                <Icon type="ios-chatboxes-outline" size='28' class="color-0d5477"></Icon>
                             </p>
-                            <p style="color:#0d5477"> 意见反馈 </p>
+                            <p class="color-0d5477"> 意见反馈 </p>
                         </router-link>
 
                     </li>
+
+                    <li class="nav-item header-item reg-login" style="position: absolute;right:140px;width: 70px;">
+                        <p>
+                            <Icon type="paper-airplane" size='14' class="color-0d5477"></Icon>
+                        </p>
+                        <p class="color-0d5477"> 立即登录 </p>
+                    </li>
+
+
+                    <li class="nav-item header-item reg-login" style="position: absolute;right:50px;width: 70px;">
+                        <p>
+                            <Icon type="ios-pulse-strong" size='14' class="color-0d5477"></Icon>
+                        </p>
+                        <p class="color-0d5477"> 免费注册 </p>
+                    </li>
+
+
                     <li class="nav-item d-md-down-none" style="position: absolute;right:0;">
                         <a class="nav-link navbar-toggler aside-menu-toggler" style="color: #0d5477"
                            @click="asideToggle">&#9776;</a>
@@ -120,8 +137,14 @@
         padding: 10px;
     }
 
-    .header-item .ivu-dropdown-item {
-        padding: 15px;
+    .header-item .color-0d5477 {
+        color: #0d5477;
+    }
+
+    .header-item:not(.reg-login):hover {
+        border-radius: 2px;
+        border-bottom: 5px solid orange;
+        box-shadow: 0px 0px 20px 0px #ff00002e;
     }
 
     .header-item {
