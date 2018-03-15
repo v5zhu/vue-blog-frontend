@@ -4,7 +4,7 @@
             <header-float-navbar v-show="floatLayerShow" transiton="fade">
                 <ul class="nav navbar-nav-left d-md-down-none">
                     <li class="nav-item header-item">
-                        加入我们不仅可以更好的解决您的问题，同时和可以和业界大师近距离接触交流，管理您的技术积累!
+                        加入我们不仅可以更好的解决您的问题，同时还可以和业界大师近距离接触交流，管理您的技术积累!
                     </li>
                 </ul>
                 <ul class="nav navbar-nav d-md-down-none">

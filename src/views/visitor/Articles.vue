@@ -44,7 +44,9 @@
                             </ul>
 
                             <div style="color: rgba(128,128,128,0.4);text-align: left;">&nbsp;{{article.outline}}</div>
-                            <div style="color: #0d5477;text-align: left;">&nbsp;<a href="#">@{{article.author.nickname}}</a>
+                            <div style="color: #0d5477;text-align: left;">&nbsp;
+                                <img src="/static/img/avatars/man-avatar.png" style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
                             </div>
                         </li>
 

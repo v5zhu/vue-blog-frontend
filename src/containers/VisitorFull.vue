@@ -1,7 +1,8 @@
 <template>
     <div class="app" @mousemove="toggleHeader">
-        <AppHeader :scrollShow="scrollShow" :moveShow="moveShow"/>
-        <AppHeaderFloat :scrollShow="scrollShow" :moveShow="moveShow" v-show="headerFloatShow" @closeHeaderFloat="closeHeaderFloat"/>
+        <AppHeader :loginUser="loginUser" :scrollShow="scrollShow" :moveShow="moveShow"/>
+        <AppHeaderFloat :scrollShow="scrollShow" :moveShow="moveShow" v-show="headerFloatShow"
+                        @closeHeaderFloat="closeHeaderFloat"/>
 
         <Sidebar/>
         <div class="app-body" @mousemove="toggleHeader">
@@ -22,7 +23,9 @@
     import AppHeaderFloat from '../components/Visitor/AppHeaderFloat';
     import AppAside from '../components/Visitor/Aside';
     import AppFooter from '../components/Visitor/Footer';
-    import Sidebar from '../components/Visitor/Sidebar'
+    import Sidebar from '../components/Visitor/Sidebar';
+
+    import Cookies from 'js-cookie';
 
     export default {
         name: 'full',
@@ -30,7 +33,8 @@
             return {
                 scrollShow: true,
                 moveShow: true,
-                headerFloatShow: true
+                headerFloatShow: true,
+                loginUser: {}
             }
         },
         components: {
@@ -39,6 +43,14 @@
             AppAside,
             AppFooter,
             Sidebar
+        },
+        created() {
+            var user = Cookies.get('USER-INFO');
+            var token = Cookies.get('USER-TOKEN');
+            if (user) {
+                this.loginUser = JSON.parse(user);
+                this.headerFloatShow = false;
+            }
         },
         mounted() {
             window.addEventListener('scroll', this.handleScroll)

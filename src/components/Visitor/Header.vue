@@ -55,7 +55,8 @@
 
                     </li>
 
-                    <li @click="showLoginModalFunction" class="nav-item header-item reg-login"
+                    <li v-show="loginUser.token==undefined" @click="showLoginModalFunction"
+                        class="nav-item header-item reg-login"
                         style="position: absolute;right:140px;width: 70px;">
                         <p>
                             <Icon type="paper-airplane" size='14' class="color-0d5477"></Icon>
@@ -64,7 +65,8 @@
                     </li>
 
 
-                    <li @click="showRegModalFunction" class="nav-item header-item reg-login"
+                    <li v-show="loginUser.token==undefined" @click="showRegModalFunction"
+                        class="nav-item header-item reg-login"
                         style="position: absolute;right:50px;width: 70px;">
                         <p>
                             <Icon type="ios-pulse-strong" size='14' class="color-0d5477"></Icon>
@@ -73,12 +75,62 @@
                     </li>
 
 
-                    <li class="nav-item d-md-down-none"
+                    <li v-show="loginUser.token!=undefined" class="nav-item d-md-down-none"
                         style="position: absolute;right:0;top:26px;">
                         <a class="nav-link navbar-toggler aside-menu-toggler" style="color: #0d5477"
                            @click="asideToggle">&#9776;
                         </a>
                     </li>
+
+
+                    <li v-show="loginUser.token!=undefined" class="nav-item d-md-down-none"
+                        style="position: absolute;right:120px;top:12px;">
+                        <a class="nav-link">
+                            <Icon type="android-notifications" size="20"></Icon>
+                            <span class="badge badge-pill badge-danger">5</span></a>
+                    </li>
+                    <Dropdown v-show="loginUser.token!=undefined" class="nav-item"
+                              style="position: absolute;right:80px;top:12px;">
+
+                        <a href="javascript:void(0)" style="position: relative;">
+                           <span slot="button">
+                                <img src="/static/img/avatars/man-avatar.png" class="img-avatar" alt="o">
+                          </span>
+                            <div style="position: relative;left:40px;bottom:20px;" class="d-md-down-none">
+                                {{loginUser.nickname}}
+                            </div>
+                        </a>
+                        <Dropdown-menu slot="list">
+
+                            <Dropdown-item>
+                                <p class="dropdown-itemp">
+                                    <Icon type="chatbox-working"></Icon>
+                                    未读消息<span class="badge badge-danger">42</span></p>
+
+                            </Dropdown-item>
+                            <Dropdown-item divided>
+                                <p class="dropdown-itemp">
+                                    <Icon type="android-contact"></Icon>
+                                    个人主页
+                                </p>
+
+                            </Dropdown-item>
+                            <Dropdown-item>
+                                <p class="dropdown-itemp">
+                                    <Icon type="android-settings"></Icon>
+                                    设置中心
+                                </p>
+                            </Dropdown-item>
+
+                            <Dropdown-item><a href="" @click="Logout">
+                                <p class="dropdown-itemp">
+                                    <Icon type="power"></Icon>
+                                    退出登录
+                                </p>
+                            </a></Dropdown-item>
+
+                        </Dropdown-menu>
+                    </Dropdown>
 
                     <Modal v-model="showLoginModal" width="600" :maskClosable="false"
                            @on-visible-change="changeModalVisible">
@@ -93,7 +145,7 @@
                              <span style="font-size:14px;">注册</span>
                          </p>-->
 
-                        <reg-modal-body></reg-modal-body>
+                        <reg-modal-body style="min-height: 300px;"></reg-modal-body>
 
                         <div slot="footer" style="text-align: center">
                         </div>
@@ -111,7 +163,7 @@
 
     export default {
         name: 'header',
-        props: ['scrollShow', 'moveShow'],
+        props: ['scrollShow', 'moveShow', 'loginUser'],
         data() {
             return {
                 showRegModal: false,
@@ -120,6 +172,8 @@
         },
         components: {
             navbar, RegModalBody, LoginModalBody
+        },
+        created() {
         },
         methods: {
             changeModalVisible() {

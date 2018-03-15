@@ -4,7 +4,7 @@
             <Icon type="ios-pulse-strong" size="20"></Icon>
             <span style="font-size:14px;">注册</span>
         </p>
-        <div slot="main" style="text-align:center">
+        <div slot="main" style="text-align:center;margin-top: 50px;">
             <Form ref="regForm" :model="user" :rules="userRegRule" :label-width="70" label-position="right">
                 <Row style="padding-left: 20px;">
                     <Col span="20">
@@ -12,7 +12,7 @@
                         <TabPane label="手机验证》" icon="iphone">
                             <FormItem
                                     label="手机号"
-                                    prop="loginName">
+                                    prop="loginName" style="margin-top: 30px;">
                                 <Row>
                                     <Col span="15">
                                     <Input type="text" v-model="user.loginName" placeholder="请输入手机号"></Input>
@@ -35,7 +35,7 @@
                         <TabPane label="设置密码》" icon="ios-locked-outline">
                             <FormItem
                                     label="密码"
-                                    prop="password">
+                                    prop="password" style="margin-top: 30px;">
                                 <Row>
                                     <Col span="15">
                                     <Input type="text" v-model="user.password" placeholder="请输入密码"></Input>
@@ -55,7 +55,7 @@
                         <TabPane label="设置网名" icon="social-github">
                             <FormItem
                                     label="昵称"
-                                    prop="nickname">
+                                    prop="nickname" style="margin-top: 30px;">
                                 <Row>
                                     <Col span="15">
                                     <Input type="text" v-model="user.nickname" placeholder="请输入昵称"></Input>
@@ -79,6 +79,7 @@
 </template>
 <script>
     import store from 'store/';
+    import Cookies from 'js-cookie';
 
     export default {
         name: 'header',
@@ -130,6 +131,10 @@
                             var resp = res.data;
                             if (resp.success == true) {
                                 this.$Message.success('注册成功!');
+                                var user = resp.payload;
+                                Cookies.set('USER-TOKEN', user.token);
+                                Cookies.set('USER-INFO', user);
+                                window.location.reload();
                             } else {
                                 this.$Message.error('注册失败:' + resp.msg);
                             }
