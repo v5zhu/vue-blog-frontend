@@ -1,42 +1,51 @@
 <template>
     <div>
         <p slot="header" style="color:#f60;text-align:left">
-            <Icon type="information-circled"></Icon>
-            <span>赞赏</span>
+            <Icon type="log-in" size="20"></Icon>
+            <span style="font-size:14px;">登录</span>
         </p>
-        <div style="text-align:center">
-            <Form ref="awardForm" :model="user" :label-width="120" label-position="right">
+        <div slot="main" style="text-align:center;margin-top: 50px;">
+            <Form ref="loginForm" :model="user" :rules="userLoginRule" :label-width="70" label-position="right">
                 <Row style="padding-left: 20px;">
-                    <Col span="14">
-                    <Form-item style="margin-left: 60px;" prop="name" label="金额:(RMB)"
-                               label-position="top">
-                        <i-circle
-                                :size="100"
-                                :trail-width="5"
-                                :stroke-width="6"
-                                :percent="6"
-                                stroke-linecap="square"
-                                stroke-color="red">
-                            <div class="demo-i-circle-custom">
-                            </div>
-                        </i-circle>
-                    </Form-item>
-
-                    </Col>
-                    <Col span="24">
+                    <Col span="20">
+                    <Tabs>
+                        <TabPane label="身份验证》" icon="person">
+                            <FormItem
+                                    label="手机号"
+                                    prop="loginName" style="margin-top: 30px;">
+                                <Row>
+                                    <Col span="15">
+                                    <Input type="text" v-model="user.loginName" placeholder="请输入手机号"></Input>
+                                    </Col>
+                                </Row>
+                            </FormItem>
+                            <FormItem
+                                    label="密码"
+                                    prop="password" style="margin-top: 30px;">
+                                <Row>
+                                    <Col span="15">
+                                    <Input type="text" v-model="user.password" placeholder="请输入密码"></Input>
+                                    </Col>
+                                </Row>
+                            </FormItem>
+                            <FormItem>
+                                <div style="text-align: left;">
+                                    <Button @click="login('loginForm')" type="ghost" size="large" :loading="false"
+                                            style="min-width: 100px;">登录
+                                    </Button>
+                                </div>
+                            </FormItem>
+                        </TabPane>
+                    </Tabs>
                     </Col>
                 </Row>
             </Form>
         </div>
-        <div slot="footer" style="text-align: center">
-            <Button type="error" size="large" :loading="false"
-            >赞赏
-            </Button>
-        </div>
     </div>
 </template>
 <script>
-
+    import store from 'store/';
+    import Cookies from 'js-cookie';
 
     export default {
         name: 'header',
@@ -44,18 +53,46 @@
         data() {
             return {
                 user: {
-                    id: '',
                     loginName: '',
-                    password: '',
-                    email: '',
-                    homeUrl: '',
-
+                    password: ''
+                },
+                userLoginRule: {
+                    loginName: [
+                        {required: true, message: '登录账号不能为空', trigger: 'blur'}
+                    ],
+                    password: [
+                        {required: true, message: '密码不能为空', trigger: 'blur'}
+                    ]
                 }
             }
         },
         components: {},
         methods: {
+            sendVerifyCode() {
 
+            },
+            login(refName) {
+                this.$refs[refName].validate((valid) => {
+                    if (valid) {
+                        store.dispatch('Login', this.user).then(res => { // 拉取user_info
+                            var resp = res.data;
+                            if (resp.success == true) {
+                                this.$Message.success('登录成功!');
+                                var user = resp.payload;
+                                Cookies.set('USER-TOKEN', user.token);
+                                Cookies.set('USER-INFO', user);
+                                window.location.reload();
+                            } else {
+                                this.$Message.error('登录失败:' + resp.msg);
+                            }
+                        }).catch(() => {
+                            this.$Message.success('提交失败!');
+                        })
+                    } else {
+                        this.$Message.error('请检查后在登录');
+                    }
+                })
+            }
         }
     }
 </script>

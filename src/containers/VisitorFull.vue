@@ -67,7 +67,7 @@
             toggleHeader(event) {
                 event = event || window.event;
                 var y = event.clientY;
-                if (y < 100) {
+                if (y < 200) {
                     this.moveShow = true;
                 } else {
                     this.moveShow = false;

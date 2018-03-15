@@ -8,6 +8,14 @@ export function register(user) {
     });
 }
 
+export function login(loginData) {
+    return fetch({
+        url: '/user/login',
+        method: 'put',
+        data: loginData
+    });
+}
+
 export function loginByEmail(loginName, password) {
     const data = {
         loginName,
@@ -22,9 +30,9 @@ export function loginByEmail(loginName, password) {
 
 export function logout(token) {
     return fetch({
-        url: '/admin/logout',
-        method: 'post',
-        params: {token}
+        url: '/user/logout',
+        method: 'put',
+        params: token
     });
 }
 

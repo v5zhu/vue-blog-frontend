@@ -134,8 +134,9 @@
 
                     <Modal v-model="showLoginModal" width="600" :maskClosable="false"
                            @on-visible-change="changeModalVisible">
-                        <login-modal-body></login-modal-body>
-
+                        <login-modal-body style="min-height: 300px;"></login-modal-body>
+                        <div slot="footer" style="text-align: center">
+                        </div>
                     </Modal>
 
                     <Modal v-model="showRegModal" width="600" :maskClosable="false"
@@ -160,6 +161,8 @@
     import navbar from './Navbar';
     import RegModalBody from './RegModalBody';
     import LoginModalBody from './LoginModalBody';
+    import store from 'store/';
+    import Cookies from 'js-cookie';
 
     export default {
         name: 'header',
@@ -181,9 +184,11 @@
             },
             Logout(e) {
                 e.preventDefault();
-                this.$store.dispatch('LogOut').then(res => {
+                store.dispatch('LogOut', {token: this.loginUser.token}).then(res => {
                     if (res.data.success == true) {
-                        this.$router.push({path: '/admin/login'});
+                        Cookies.remove('USER-INFO');
+                        Cookies.remove('USER-TOKEN');
+                        window.location.reload();
                     } else {
                         this.$Message.error('退出失败,请联系管理员');
                     }

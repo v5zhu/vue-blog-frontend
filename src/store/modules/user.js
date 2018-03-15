@@ -1,4 +1,4 @@
-import {loginByEmail, logout, getInfo, getAuthorInfo, register} from 'api/login';
+import {loginByEmail, logout, getInfo, getAuthorInfo, register, login} from 'api/login';
 import Cookies from 'js-cookie';
 
 const user = {
@@ -62,6 +62,15 @@ const user = {
     },
 
     actions: {
+        Login({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                login(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
         Register({commit, state}, data) {
             return new Promise((resolve, reject) => {
                 register(data).then(response => {
@@ -136,12 +145,9 @@ const user = {
 
 
         // 登出
-        LogOut({commit, state}) {
+        LogOut({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                logout(state.token).then(res => {
-                    commit('SET_TOKEN', '');
-                    commit('SET_ROLES', []);
-                    Cookies.remove('Admin-Token');
+                logout(params).then(res => {
                     resolve(res);
                 }).catch(error => {
                     reject(error);
