@@ -2770,7 +2770,7 @@ base-chart.chart {
 
 .header-fixed .app-header {
     position: fixed;
-    z-index: 1020;
+    z-index: 900;
     width: 100%
 }
 
@@ -2889,7 +2889,7 @@ base-chart.chart {
 .footer-fixed .app-footer {
     position: fixed;
     bottom: 0;
-    z-index: 1020;
+    z-index: 900;
     width: 100%
 }
 
@@ -2904,7 +2904,7 @@ base-chart.chart {
 @media (max-width: 991px) {
     .app-header {
         position: fixed !important;
-        z-index: 1020;
+        z-index: 900;
         width: 100%
     }
 

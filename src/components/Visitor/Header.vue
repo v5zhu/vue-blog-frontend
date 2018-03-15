@@ -55,7 +55,8 @@
 
                     </li>
 
-                    <li class="nav-item header-item reg-login" style="position: absolute;right:140px;width: 70px;">
+                    <li @click="showLoginModalFunction" class="nav-item header-item reg-login"
+                        style="position: absolute;right:140px;width: 70px;">
                         <p>
                             <Icon type="paper-airplane" size='14' class="color-0d5477"></Icon>
                         </p>
@@ -63,7 +64,8 @@
                     </li>
 
 
-                    <li class="nav-item header-item reg-login" style="position: absolute;right:50px;width: 70px;">
+                    <li @click="showRegModalFunction" class="nav-item header-item reg-login"
+                        style="position: absolute;right:50px;width: 70px;">
                         <p>
                             <Icon type="ios-pulse-strong" size='14' class="color-0d5477"></Icon>
                         </p>
@@ -71,12 +73,31 @@
                     </li>
 
 
-                    <li class="nav-item d-md-down-none" style="position: absolute;right:0;top:26px;">
+                    <li class="nav-item d-md-down-none"
+                        style="position: absolute;right:0;top:26px;">
                         <a class="nav-link navbar-toggler aside-menu-toggler" style="color: #0d5477"
                            @click="asideToggle">&#9776;
                         </a>
                     </li>
 
+                    <Modal v-model="showLoginModal" width="600" :maskClosable="false"
+                           @on-visible-change="changeModalVisible">
+                        <login-modal-body></login-modal-body>
+
+                    </Modal>
+
+                    <Modal v-model="showRegModal" width="600" :maskClosable="false"
+                           @on-visible-change="changeModalVisible">
+                        <!-- <p slot="header" style="color:#f60;text-align:left">
+                             <Icon type="ios-pulse-strong" size="20"></Icon>
+                             <span style="font-size:14px;">注册</span>
+                         </p>-->
+
+                        <reg-modal-body></reg-modal-body>
+
+                        <div slot="footer" style="text-align: center">
+                        </div>
+                    </Modal>
                 </ul>
             </navbar>
         </transition>
@@ -84,15 +105,26 @@
 </template>
 <script>
 
-    import navbar from './Navbar'
+    import navbar from './Navbar';
+    import RegModalBody from './RegModalBody';
+    import LoginModalBody from './LoginModalBody';
 
     export default {
         name: 'header',
         props: ['scrollShow', 'moveShow'],
+        data() {
+            return {
+                showRegModal: false,
+                showLoginModal: false
+            }
+        },
         components: {
-            navbar,
+            navbar, RegModalBody, LoginModalBody
         },
         methods: {
+            changeModalVisible() {
+
+            },
             Logout(e) {
                 e.preventDefault();
                 this.$store.dispatch('LogOut').then(res => {
@@ -102,11 +134,16 @@
                         this.$Message.error('退出失败,请联系管理员');
                     }
                 }).catch(err => {
-                    this.$message.error(err);
+                    this.$Message.error(err);
                 });
             },
-            click() {
-                // do nothing
+            showRegModalFunction() {
+                this.showLoginModal = false;
+                this.showRegModal = true;
+            },
+            showLoginModalFunction() {
+                this.showRegModal = false;
+                this.showLoginModal = true;
             },
             sidebarToggle(e) {
                 e.preventDefault()
@@ -131,12 +168,6 @@
 </script>
 
 <style type="text/css" scoped>
-
-    .dropdown-itemp {
-        text-align: left;
-        font-size: 15px;
-        padding: 10px;
-    }
 
     .header-item .color-0d5477 {
         color: #0d5477;
