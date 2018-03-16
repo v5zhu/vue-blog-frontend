@@ -35,17 +35,20 @@
                                        style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
                                        @click="viewArticle(article.id)">{{article.title}}
                                     </a>
-                                    <a class="article-tags" v-show="article.tags!=null && article.tags.length!=0"
-                                       @click="filterTags(tag)"
-                                       v-for="tag in article.tags.split(',')">
-                                        {{tag}}
-                                    </a>
+                                    <span v-if="article.tags!=null && article.tags.length!=0">
+                                        <a class="article-tags"
+                                           @click="filterTags(tag)"
+                                           v-for="tag in article.tags.split(',')">
+                                            {{tag}}
+                                        </a>
+                                    </span>
                                 </li>
                             </ul>
 
                             <div style="color: rgba(128,128,128,0.4);text-align: left;">&nbsp;{{article.outline}}</div>
                             <div style="color: #0d5477;text-align: left;">&nbsp;
-                                <img src="/static/img/avatars/man-avatar.png" style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                <img src="/static/img/avatars/man-avatar.png"
+                                     style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
                                 <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
                             </div>
                         </li>

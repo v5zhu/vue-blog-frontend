@@ -7,9 +7,9 @@ import Cookies from 'js-cookie';
 
 // permissiom judge
 function hasPermission(roles, permissionRoles) {
-    if (roles.indexOf('admin') >= 0) return true // admin权限 直接通过
-    if (!permissionRoles) return true
-    return roles.some(role => permissionRoles.indexOf(role) >= 0)
+    if (roles.roles.indexOf('admin') >= 0) return true // admin权限 直接通过
+    if (!permissionRoles) return true;
+    return roles.roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
 
 // register global progress.
@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
     if (jsonString) {
         user = JSON.parse(jsonString);
     }
-    console.log(user);
+    console.log("用户：" + user);
 
     if (user && user.token) { // 判断是否有token
         var roles = user.roles;
@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
 
             store.dispatch('getNowRoutes', to);
 
-            if (hasPermission(roles, to.meta.role)) {
+            if (hasPermission({roles}, to.meta.role)) {
                 next()//
             } else {
                 next({path: '/admin', query: {noGoBack: true}})
@@ -53,7 +53,18 @@ router.beforeEach((to, from, next) => {
             next();
         } else {
             if (to.path.indexOf('admin') == -1) {
-                next();
+                store.dispatch('GenerateRoutes', {roles: []}).then(() => { // 生成可访问的路由表
+                    router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+                    next({...to}) // hack方法 确保addRoutes已完成
+                })
+
+                store.dispatch('getNowRoutes', to);
+
+                if (hasPermission({roles: []}, to.meta.role)) {
+                    next()
+                } else {
+                    next({path: '/', query: {noGoBack: true}})
+                }
             } else {
                 next('/admin/login') // 否则全部重定向到登录页
                 NProgress.done() // 在hash模式下 改变手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！

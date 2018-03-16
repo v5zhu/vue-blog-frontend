@@ -47,6 +47,9 @@ export const constantRouterMap = [
         path: '/',
         redirect: '/articles',
         component: VisitorFull,
+        meta: {
+            role: []
+        },
         children: [{
             name: '文章页',
             path: '/articles',
