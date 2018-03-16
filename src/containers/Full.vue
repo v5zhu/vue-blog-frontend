@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <AppHeader/>
+        <AppHeader :loginUser="loginUser"/>
         <div class="app-body">
             <Sidebar/>
             <main class="main">
@@ -21,9 +21,22 @@
     import AppAside from '../components/Aside'
     import AppFooter from '../components/Footer'
     import Breadcrumb from '../components/Breadcrumb'
+    import Cookies from 'js-cookie';
 
     export default {
         name: 'full',
+        data() {
+            return {
+                loginUser: {}
+
+            }
+        },
+        created() {
+            var user = Cookies.get('USER-INFO');
+            if (user) {
+                this.loginUser = JSON.parse(user);
+            }
+        },
         components: {
             AppHeader,
             Sidebar,

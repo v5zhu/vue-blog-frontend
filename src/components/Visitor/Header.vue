@@ -109,11 +109,12 @@
 
                             </Dropdown-item>
                             <Dropdown-item divided>
-                                <p class="dropdown-itemp">
-                                    <Icon type="android-contact"></Icon>
-                                    个人主页
-                                </p>
-
+                                <a href="" @click="gotoHomepage">
+                                    <p class="dropdown-itemp">
+                                        <Icon type="android-contact"></Icon>
+                                        个人主页
+                                    </p>
+                                </a>
                             </Dropdown-item>
                             <Dropdown-item>
                                 <p class="dropdown-itemp">
@@ -122,12 +123,14 @@
                                 </p>
                             </Dropdown-item>
 
-                            <Dropdown-item><a href="" @click="Logout">
-                                <p class="dropdown-itemp">
-                                    <Icon type="power"></Icon>
-                                    退出登录
-                                </p>
-                            </a></Dropdown-item>
+                            <Dropdown-item>
+                                <a href="" @click="Logout">
+                                    <p class="dropdown-itemp">
+                                        <Icon type="power"></Icon>
+                                        退出登录
+                                    </p>
+                                </a>
+                            </Dropdown-item>
 
                         </Dropdown-menu>
                     </Dropdown>
@@ -181,6 +184,10 @@
         methods: {
             changeModalVisible() {
 
+            },
+            gotoHomepage(e) {
+                e.preventDefault();
+                window.open("/admin/dashboard");
             },
             Logout(e) {
                 e.preventDefault();

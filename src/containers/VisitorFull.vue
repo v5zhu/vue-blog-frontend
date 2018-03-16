@@ -46,7 +46,6 @@
         },
         created() {
             var user = Cookies.get('USER-INFO');
-            var token = Cookies.get('USER-TOKEN');
             if (user) {
                 this.loginUser = JSON.parse(user);
                 this.headerFloatShow = false;

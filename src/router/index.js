@@ -115,6 +115,10 @@ export const constantRouterMap = [
             }
         }]
     },
+
+
+    /*以下路由为管理端路由*/
+
     {
         name: '首页',
         path: '/admin',
@@ -338,7 +342,7 @@ export const constantRouterMap = [
                     path: 'manage',
                     name: '文章管理',
                     icon: 'stats-bars',
-                    component: _import('blog/Article'),
+                    component: _import('blog/ArticleMgr'),
                     hidden: false
                 }, {
                     path: 'preview/:id',

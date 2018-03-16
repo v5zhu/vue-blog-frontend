@@ -28,7 +28,7 @@
                         <Col span="6">
                         <Form-item prop="tags" label="标签">
                             <Select v-model="queryParam.tags" filterable clearable>
-                                <Option v-for="item in tags" :value="item.value" :key="item.name">{{ item.name }}
+                                <Option v-for="item in tags" :value="item.name" :key="item.name">{{ item.name }}
                                 </Option>
                             </Select>
                         </Form-item>
@@ -44,7 +44,7 @@
                 </Form>
 
                 <div style="position:relative;">
-                    <Table :columns="columns7" :data="article_list" ref="table" @on-sort-change="sortChange"
+                    <Table :columns="tableDataList" :data="article_list" ref="table" @on-sort-change="sortChange"
                            @on-filter-change="filterChange">
 
                     </Table>
@@ -60,7 +60,7 @@
                       show-elevator show-sizer show-total
                       @on-change="changePage"
                       @on-page-size-change="changePageSize"
-                      style="text-align:right;margin-top:50px"></Page>
+                      style="text-align:left;margin:50px 0"></Page>
                 <Button type="primary" size="large" @click="exportData(1)">
                     <Icon type="ios-download-outline"></Icon>
                     导出文章数据
@@ -119,7 +119,7 @@
                 pageindex: 1,
                 lodding: false,
                 list_loadding: false,
-                columns7: [
+                tableDataList: [
                     {
                         type: 'expand',
                         width: "30",
@@ -150,6 +150,7 @@
                     },
                     {
                         title: '发布时间',
+                        width: 120,
                         key: 'gmt_create',
                         ellipsis: 'true',
                         sortable: 'custom',
@@ -168,12 +169,14 @@
                     },
                     {
                         title: '浏览量',
+                        width: 90,
                         key: 'hits',
                         ellipsis: 'true',
                         sortable: 'custom'
                     },
                     {
                         title: '所属分类',
+                        width: 100,
                         key: 'categories',
                         ellipsis: 'true',
                         render: (h, params) => {
@@ -190,6 +193,7 @@
                     {
                         title: '发布状态',
                         ellipsis: 'true',
+                        width: 100,
                         filters: [
                             {
                                 label: '发布',
@@ -245,7 +249,7 @@
 
                     {
                         title: '操作',
-                        width: '200',
+                        width: '400',
                         key: 'action',
                         align: 'center',
                         ellipsis: 'true',
@@ -310,7 +314,8 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.$router.push({path: '/admin/blog/article/preview/' + params.row.id})
+                                            // this.$router.push({path: '/admin/blog/article/preview/' + params.row.id})
+                                            window.open('/article/' + params.row.id);
                                         }
                                     }
                                 }, '预览')

@@ -24,33 +24,6 @@
             </li>
             <li class="nav-item header-item">
 
-                <router-link tag="div" to='/admin/timertask' class="nav-link">
-                    <p>
-                        <Icon type="flash-off" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 定时任务 </p>
-                </router-link>
-            </li>
-            <li class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/log' class="nav-link">
-                    <p>
-                        <Icon type="ios-paw" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 日志监控 </p>
-                </router-link>
-            </li>
-            <li class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/link' class="nav-link">
-                    <p>
-                        <Icon type="network" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 友链管理 </p>
-                </router-link>
-            </li>
-            <li class="nav-item header-item">
-
 
                 <router-link tag="div" to='/admin' class="nav-link">
                     <p>
@@ -61,47 +34,52 @@
             </li>
             <li class="nav-item header-item">
 
-                <router-link tag="div" to='/admin/home1' class="nav-link">
+
+                <router-link tag="div" to='/message' class="nav-link">
                     <p>
-                        <Icon type="stats-bars" size='25' color="#2d8cf0"></Icon>
+                        <Icon type="chatbox-working" size='25' color="#2d8cf0"></Icon>
                     </p>
-                    <p style="color:white"> 浏览排行 </p>
+                    <p style="color:white"> 消息中心 </p>
                 </router-link>
-
-
-            </li>
-
-            <li class="nav-item header-item">
-                <!--   -->
-
-                <Dropdown>
-                    <router-link tag="div" to='/admin' class="nav-link">
-                        <p>
-                            <Icon type="android-cloud" size='25' color="#2d8cf0"></Icon>
-                        </p>
-                        <p style="color:white"> 云服务器 </p>
-                    </router-link>
-                    <DropdownMenu slot="list">
-                        <DropdownItem>Linux</DropdownItem>
-                        <DropdownItem>Mac OS X</DropdownItem>
-                        <DropdownItem>Windows</DropdownItem>
-                        <DropdownItem>Core OS</DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>
             </li>
             <li class="nav-item header-item">
 
 
-                <router-link tag="div" to='/admin/home1' class="nav-link">
+                <router-link tag="div" to='/setting' class="nav-link">
                     <p>
-                        <Icon type="trophy" size='25' color="#2d8cf0"></Icon>
+                        <Icon type="settings" size='25' color="#2d8cf0"></Icon>
                     </p>
-                    <p style="color:white"> 销量排行 </p>
+                    <p style="color:white"> 设置中心 </p>
                 </router-link>
-
-
             </li>
 
+            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
+
+                <router-link tag="div" to='/admin/timertask' class="nav-link">
+                    <p>
+                        <Icon type="flash-off" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 定时任务 </p>
+                </router-link>
+            </li>
+            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
+
+                <router-link tag="div" to='/admin/log' class="nav-link">
+                    <p>
+                        <Icon type="ios-paw" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 日志监控 </p>
+                </router-link>
+            </li>
+            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
+
+                <router-link tag="div" to='/admin/link' class="nav-link">
+                    <p>
+                        <Icon type="network" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 友链管理 </p>
+                </router-link>
+            </li>
 
         </ul>
 
@@ -118,7 +96,7 @@
             <Dropdown class="nav-item">
                 <a href="javascript:void(0)">
            <span slot="button">
-          <img src="/static/img/avatars/6.jpg" class="img-avatar" alt="o">
+          <img src="/static/img/avatars/man-avatar.png" class="img-avatar" alt="o">
           <span class="d-md-down-none">admin</span>
           </span>
                 </a>
@@ -178,10 +156,14 @@
     import navbar from './Navbar'
 
     export default {
+        props: ['loginUser'],
         name: 'header',
         components: {
             navbar,
 
+        },
+        created() {
+            console.log(this.loginUser);
         },
         methods: {
             Logout(e) {
