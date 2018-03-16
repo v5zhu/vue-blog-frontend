@@ -15,7 +15,7 @@
                         </router-link>
                     </li>
 
-                    <li class="nav-item header-item">
+                    <li v-if="loginUser.token!=undefined" class="nav-item header-item">
 
                         <router-link tag="div" to='/archives' class="nav-link">
                             <p>
@@ -30,11 +30,11 @@
                             <p>
                                 <Icon type="social-github" size='28' class="color-0d5477"></Icon>
                             </p>
-                            <p class="color-0d5477"> 友链 </p>
+                            <p class="color-0d5477"> 合作 </p>
                         </router-link>
 
                     </li>
-                    <li class="nav-item header-item">
+                    <!--<li class="nav-item header-item">
 
                         <router-link tag="div" to='#' class="nav-link">
                             <p>
@@ -43,7 +43,7 @@
                             <p style="color:#8c8c8c"> 赞赏榜(建设中...) </p>
                         </router-link>
 
-                    </li>
+                    </li>-->
                     <li class="nav-item header-item">
 
                         <router-link tag="div" to='/feedback' class="nav-link">
@@ -55,7 +55,7 @@
 
                     </li>
 
-                    <li v-show="loginUser.token==undefined" @click="showLoginModalFunction"
+                    <li v-if="loginUser.token==undefined" @click="showLoginModalFunction"
                         class="nav-item header-item reg-login"
                         style="position: absolute;right:140px;width: 70px;">
                         <p>
@@ -65,7 +65,7 @@
                     </li>
 
 
-                    <li v-show="loginUser.token==undefined" @click="showRegModalFunction"
+                    <li v-if="loginUser.token==undefined" @click="showRegModalFunction"
                         class="nav-item header-item reg-login"
                         style="position: absolute;right:50px;width: 70px;">
                         <p>
@@ -75,7 +75,7 @@
                     </li>
 
 
-                    <li v-show="loginUser.token!=undefined" class="nav-item d-md-down-none"
+                    <li v-if="loginUser.token!=undefined" class="nav-item d-md-down-none"
                         style="position: absolute;right:0;top:26px;">
                         <a class="nav-link navbar-toggler aside-menu-toggler" style="color: #0d5477"
                            @click="asideToggle">&#9776;
@@ -83,13 +83,13 @@
                     </li>
 
 
-                    <li v-show="loginUser.token!=undefined" class="nav-item d-md-down-none"
+                    <li v-if="loginUser.token!=undefined" class="nav-item d-md-down-none"
                         style="position: absolute;right:120px;top:12px;">
                         <a class="nav-link">
                             <Icon type="android-notifications" size="20"></Icon>
                             <span class="badge badge-pill badge-danger">5</span></a>
                     </li>
-                    <Dropdown v-show="loginUser.token!=undefined" class="nav-item"
+                    <Dropdown v-if="loginUser.token!=undefined" class="nav-item"
                               style="position: absolute;right:80px;top:12px;">
 
                         <a href="javascript:void(0)" style="position: relative;">

@@ -25,27 +25,19 @@ router.beforeEach((to, from, next) => {
     console.log("用户：" + user);
 
     if (user && user.token) { // 判断是否有token
+
         var roles = user.roles;
-        if (roles.length === 0) { // 没有赋予权限
+        store.dispatch('GenerateRoutes', {roles}).then(() => { // 生成可访问的路由表
+            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+            next({...to}) // hack方法 确保addRoutes已完成
+        })
 
-            store.dispatch('GenerateRoutes', {roles}).then(() => { // 生成可访问的路由表
-                router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-                next({...to}) // hack方法 确保addRoutes已完成
-            })
+        store.dispatch('getNowRoutes', to);
 
+        if (hasPermission({roles}, to.meta.role)) {
+            next()//
         } else {
-            store.dispatch('GenerateRoutes', {roles}).then(() => { // 生成可访问的路由表
-                router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-                next({...to}) // hack方法 确保addRoutes已完成
-            })
-
-            store.dispatch('getNowRoutes', to);
-
-            if (hasPermission({roles}, to.meta.role)) {
-                next()//
-            } else {
-                next({path: '/admin', query: {noGoBack: true}})
-            }
+            next({path: '/admin', query: {noGoBack: true}})
         }
 
     } else {
