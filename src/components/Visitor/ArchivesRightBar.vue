@@ -52,14 +52,13 @@
         methods: {
             getArchives() {
                 store.dispatch('Archives', {year: null, month: null, category: '', tag: ''}).then(res => { // 拉取user_info
-                    var archives = res.data;
+                    var archives = res.data.payload;
                     this.archives = archives;
                 }).catch(() => {
                     console.log("获取文章历史归档信息失败");
                 })
             },
             filterArchives(year, month) {
-                // this.$router.push({path: '/archives/' + year + '/' + month});
                 window.open('/archives/' + year + '/' + month);
             }
         }

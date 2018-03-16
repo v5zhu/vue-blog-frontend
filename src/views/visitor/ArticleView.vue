@@ -393,8 +393,8 @@
             }
             ,
             articlePreview(id) {
-                store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info
-                    var article = res.data;
+                store.dispatch('ArticleDetail', {id: id}).then(res => { // 拉取user_info
+                    var article = res.data.payload;
                     this.article = article;
                 }).catch(() => {
                     console.log("获取文章详情失败");
@@ -407,11 +407,11 @@
                     pageNum: this.commentParams.pageNum,
                     pageSize: this.commentParams.pageSize
                 }).then(res => { // 拉取user_info
-                    var comments = res.data;
+                    var comments = res.data.payload;
                     this.comments = comments;
                     this.loadingComments = false;
                 }).catch(() => {
-                    console.log("获取文章详情失败");
+                    console.log("获取文章评论列表失败");
                 })
             }
             ,

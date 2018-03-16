@@ -71,14 +71,13 @@
         methods: {
             tagList() {
                 store.dispatch('TagList', {}).then(res => { // 拉取user_info
-                    var tags = res.data;
+                    var tags = res.data.payload;
                     this.tags = tags;
                 }).catch(() => {
                     console.log("获取标签云信息失败");
                 })
             },
             filterTags(categoryName) {
-                // this.$router.push({path: '/tag/' + categoryName});
                 window.open('/tag/' + categoryName);
             },
             getButtonType() {

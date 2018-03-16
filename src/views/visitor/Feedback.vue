@@ -3,7 +3,7 @@
 
         <h3 style="text-align:left;margin-top: 50px;">你有些什么问题或好的建议呢，欢迎您的提议!!!</h3>
         <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
-        <Form :model="feedback" :label-width="80">
+        <Form ref="feedbackForm" :model="feedback" :label-width="80">
             <Row>
                 <Col span="6" class="link-piece">
                 <div class="echarts">
@@ -82,6 +82,7 @@
                     var data = res.data;
                     if (data.success == true) {
                         this.$Message.success('反馈成功');
+                        // window.close();
                     } else {
                         this.$Message.error('反馈提交失败');
                     }

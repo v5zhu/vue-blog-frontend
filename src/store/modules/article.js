@@ -1,6 +1,7 @@
 import {
     articleList,
     articlePreview,
+    articleDetail,
     articlePublish,
     articleEdit,
     articleDelete,
@@ -93,25 +94,6 @@ const article = {
         ArticleList({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articleList(params).then(response => {
-                    const data = response.data;
-                    commit('SET_ID', data.id);
-                    commit('SET_TITLE', data.title);
-                    commit('SET_OUTLINE', data.outline);
-                    commit('SET_COVER', data.cover);
-                    commit('SET_PATH', data.path);
-                    commit('SET_TYPE', data.type);
-                    commit('SET_STATUS', data.status);
-                    commit('SET_AUTHOR_ID', data.authorId);
-                    commit('SET_TAGS', data.tags);
-                    commit('SET_CATEGORIES', data.categories);
-                    commit('SET_HITS', data.hits);
-                    commit('SET_COMMENTS_NUM', data.commentsNum);
-                    commit('SET_LIKES', data.likes);
-                    commit('SET_DISLIKES', data.dislikes);
-                    commit('SET_ALLOW_COMMENT', data.allowComment);
-                    commit('SET_ALLOW_PING', data.allowPing);
-                    commit('SET_ALLOW_FEED', data.allowFeed);
-                    commit('SET_CONTENT', data.content);
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -132,25 +114,16 @@ const article = {
         ArticlePreview({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articlePreview(params.id).then(response => {
-                    const data = response.data;
-                    commit('SET_ID', data.id);
-                    commit('SET_TITLE', data.title);
-                    commit('SET_OUTLINE', data.outline);
-                    commit('SET_COVER', data.cover);
-                    commit('SET_PATH', data.path);
-                    commit('SET_TYPE', data.type);
-                    commit('SET_STATUS', data.status);
-                    commit('SET_AUTHOR_ID', data.authorId);
-                    commit('SET_TAGS', data.tags);
-                    commit('SET_CATEGORIES', data.categories);
-                    commit('SET_HITS', data.hits);
-                    commit('SET_COMMENTS_NUM', data.commentsNum);
-                    commit('SET_LIKES', data.likes);
-                    commit('SET_DISLIKES', data.dislikes);
-                    commit('SET_ALLOW_COMMENT', data.allowComment);
-                    commit('SET_ALLOW_PING', data.allowPing);
-                    commit('SET_ALLOW_FEED', data.allowFeed);
-                    commit('SET_CONTENT', data.content);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        // 文章详情
+        ArticleDetail({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                articleDetail(params.id).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -172,7 +145,7 @@ const article = {
         // 文章审核
         ArticleAudit({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                articleAudit(params.auditInfo).then(response => {
+                articleAudit(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -194,7 +167,7 @@ const article = {
         // 文章删除
         ArticleDelete({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                articleDelete(params.id).then(response => {
+                articleDelete(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

@@ -46,7 +46,7 @@
                     </li>-->
                     <li class="nav-item header-item">
 
-                        <router-link tag="div" to='/feedback' class="nav-link">
+                        <router-link tag="div" to='/feedback'  class="nav-link">
                             <p>
                                 <Icon type="ios-chatboxes-outline" size='28' class="color-0d5477"></Icon>
                             </p>
@@ -84,19 +84,21 @@
 
 
                     <li v-if="loginUser.token!=undefined" class="nav-item d-md-down-none"
-                        style="position: absolute;right:120px;top:12px;">
+                        style="position: absolute;right:140px;top:12px;">
                         <a class="nav-link">
                             <Icon type="android-notifications" size="20"></Icon>
                             <span class="badge badge-pill badge-danger">5</span></a>
                     </li>
                     <Dropdown v-if="loginUser.token!=undefined" class="nav-item"
-                              style="position: absolute;right:80px;top:12px;">
+                              style="position: absolute;right:85px;top:12px;">
 
                         <a href="javascript:void(0)" style="position: relative;">
-                           <span slot="button">
+                            <div slot="button">
                                 <img src="/static/img/avatars/man-avatar.png" class="img-avatar" alt="o">
-                          </span>
-                            <div style="position: relative;left:40px;bottom:20px;" class="d-md-down-none">
+                            </div>
+                            <div :title="loginUser.nickname"
+                                 style="position: relative;left:55px;bottom:20px;max-width: 80px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;"
+                                 class="d-md-down-none">
                                 {{loginUser.nickname}}
                             </div>
                         </a>

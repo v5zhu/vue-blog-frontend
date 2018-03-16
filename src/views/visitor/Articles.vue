@@ -143,13 +143,12 @@
                     pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize
                 }).then(res => {
-                    this.pageInfo = res.data;
+                    this.pageInfo = res.data.payload;
                 }).catch(err => {
                     this.$Message.error(err);
                 });
             },
             viewArticle(articleId) {
-                // this.$router.push({path: '/article/' + articleId})
                 window.open('/article/' + articleId, '_blank');
             },
             changePage(page) {
@@ -162,15 +161,13 @@
             },
             tagList() {
                 store.dispatch('TagList', {token: null}).then(res => { // 拉取user_info
-                    var tags = res.data;
+                    var tags = res.data.payload;
                     this.tags = tags;
-                    console.log(this.tags)
                 }).catch(() => {
                     console.log("请求标签列表失败");
                 })
             },
             filterTags(categoryName) {
-                // this.$router.push({path: '/tag/' + categoryName});
                 window.open('/tag/' + categoryName, '_blank');
             }
         },

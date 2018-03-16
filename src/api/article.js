@@ -2,7 +2,7 @@ import fetch from 'utils/fetch';
 
 export function articleList(pageInfo) {
     return fetch({
-        url: '/admin/article/list',
+        url: '/admin/article/list.token',
         method: 'post',
         data: {
             pageNum: pageInfo.pageNum,
@@ -23,7 +23,15 @@ export function articles(params) {
 
 export function articlePreview(id) {
     return fetch({
-        url: '/admin/article/preview/' + id,
+        url: '/admin/article/preview/' + id + ".token",
+        method: 'get',
+        params: {}
+    });
+}
+
+export function articleDetail(id) {
+    return fetch({
+        url: '/admin/article/preview/' + id + ".open",
         method: 'get',
         params: {}
     });
@@ -31,7 +39,7 @@ export function articlePreview(id) {
 
 export function articlePublish(article) {
     return fetch({
-        url: '/admin/article/publish',
+        url: '/admin/article/publish.token',
         method: 'post',
         data: article,
         headers: {
@@ -42,7 +50,7 @@ export function articlePublish(article) {
 
 export function articleEdit(article) {
     return fetch({
-        url: '/admin/article/modify',
+        url: '/admin/article/modify.token',
         method: 'put',
         data: article,
         headers: {
@@ -53,7 +61,7 @@ export function articleEdit(article) {
 
 export function articleAudit(auditInfo) {
     return fetch({
-        url: '/admin/article/audit',
+        url: '/admin/article/audit.token',
         method: 'put',
         params: {
             articleId: auditInfo.articleId,
@@ -64,9 +72,9 @@ export function articleAudit(auditInfo) {
 
 export function articleDelete(id) {
     return fetch({
-        url: '/admin/article/delete',
+        url: '/admin/article/delete.token',
         method: 'delete',
-        params: {id: id},
+        params: id,
     });
 }
 

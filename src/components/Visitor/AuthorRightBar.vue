@@ -62,9 +62,8 @@
         methods: {
             getAuthorInfo(authorId) {
                 store.dispatch('AuthorInfo', {authorId: authorId}).then(res => { // 拉取user_info
-                    var user = res.data;
+                    var user = res.data.payload;
                     this.user = user;
-                    console.log(this.user);
                 }).catch(() => {
                     console.log("获取文章作者信息失败");
                 })

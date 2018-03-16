@@ -27,7 +27,7 @@
                 <Col span="12" style="margin-right: 10px;">
                 <Form-item prop="tagsList" label="标签">
                     <Select v-model="article.tagsList" multiple filterable>
-                        <Option v-for="item in tags" :value="item.value" :key="item.name">{{ item.name }}
+                        <Option v-for="item in tags" :value="item.name" :key="item.name">{{ item.name }}
                         </Option>
                     </Select>
                 </Form-item>
@@ -278,28 +278,21 @@
                 }, 1000);
             },
             articlePreview(id) {
-                var self = this;
                 store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info
-                    console.log(res.data)
-                    var article = res.data;
+                    var article = res.data.payload;
                     var tags = article.tags.split(",");
                     var categories = article.categories.split(",");
                     article.tagsList = tags;
                     article.categoriesList = categories;
-                    console.log(article);
                     this.article = article;
-//                    store.dispatch('GenerateRoutes', { roles }).then(() => { // 生成可访问的路由表
-//                        router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-//                        next({ ...to }) // hack方法 确保addRoutes已完成
-//                    })
 
                 }).catch(() => {
-                    console.log("请求文章列表失败");
+                    console.log("请求文章详情失败");
                 })
             },
             categoryList() {
                 store.dispatch('CategoryList', {token: null}).then(res => { // 拉取user_info
-                    var cates = res.data;
+                    var cates = res.data.payload;
                     this.categories = cates;
 
                 }).catch(() => {
@@ -308,7 +301,7 @@
             },
             tagList() {
                 store.dispatch('TagList', {token: null}).then(res => { // 拉取user_info
-                    var tags = res.data;
+                    var tags = res.data.payload;
                     this.tags = tags;
 
                 }).catch(() => {
@@ -316,32 +309,16 @@
                 })
             },
             goBack() {
-                var pageNum = this.$route.query.pageNum;
-                var pageSize = this.$route.query.pageSize;
-                var status = this.$route.query.status;
-                var title = this.$route.query.title;
-                var tags = this.$route.query.tags;
-                var categories = this.$route.query.categories;
-                var sort = this.$route.query.sort;
                 this.$router.push({
-                    path: '/admin/blog/article/manage',
-                    query: {
-                        pageNum: pageNum, pageSize: pageSize, status: status, title: title,
-                        tags: tags,
-                        categories: categories,
-                        sort: sort
-                    }
+                    path: '/admin/blog/article/manage'
                 });
             },
             handleSubmit(status, refName) {
                 this.$refs[refName].validate((valid) => {
                     if (valid) {
-                        var userId = Cookies.get("USER-ID");
-
                         this.article.status = status;
                         this.article.categories = this.article.categoriesList.join(",");
                         this.article.tags = this.article.tagsList.join(",");
-                        this.article.authorId = userId;
 
                         var msg = status == 'audit' ? '提交审核' : '保存草稿';
                         if (!this.article.id) {

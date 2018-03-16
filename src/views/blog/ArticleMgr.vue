@@ -82,7 +82,8 @@
 
     import {formatTime} from 'utils/index';
 
-    import store from 'store/'
+    import store from 'store/';
+    import Cookies from 'js-cookie';
 
     export default {
         components: {expandRow},
@@ -90,6 +91,7 @@
         name: 'buttons',
         data() {
             return {
+                loginUser: {},
                 pageInfo: {
                     isFirstPage: undefined,
                     isLastPage: undefined,
@@ -373,10 +375,8 @@
             doAudit(articleId, status) {
                 setTimeout(() => {
                     store.dispatch('ArticleAudit', {
-                        auditInfo: {
-                            articleId: articleId,
-                            status: status
-                        }
+                        articleId: articleId,
+                        status: status
                     }).then(res => { // 拉取user_info
                         var resp = res.data;
                         if (resp.success == true) {
@@ -395,32 +395,10 @@
             editArticle(id, pageNum, pageSize) {
                 if (id == null) {
                     //发表新文章
-                    this.$router.push({
-                        path: '/admin/blog/article/publish',
-                        query: {
-                            pageNum: pageNum,
-                            pageSize: pageSize,
-                            status: this.queryParam.status,
-                            title: this.queryParam.title,
-                            tags: this.queryParam.tags,
-                            categories: this.queryParam.categories,
-                            sort: this.sortParam.join(',')
-                        }
-                    })
+                    window.open('/admin/blog/article/publish')
                 } else {
                     //编辑文章
-                    this.$router.push({
-                        path: '/admin/blog/article/edit/' + id,
-                        query: {
-                            pageNum: pageNum,
-                            pageSize: pageSize,
-                            status: this.queryParam.status,
-                            title: this.queryParam.title,
-                            tags: this.queryParam.tags,
-                            categories: this.queryParam.categories,
-                            sort: this.sortParam.join(',')
-                        }
-                    })
+                    window.open('/admin/blog/article/edit/' + id)
                 }
             },
             qiniu_upload() {
@@ -442,51 +420,15 @@
             },
             changePage(page) {
                 this.pageInfo.pageNum = page;
-                this.$router.push({
-                    path: '/admin/blog/article/manage',
-                    query: {
-                        pageNum: this.pageInfo.pageNum,
-                        pageSize: this.pageInfo.pageSize,
-                        status: this.queryParam.status,
-                        title: this.queryParam.title,
-                        tags: this.queryParam.tags,
-                        categories: this.queryParam.categories,
-                        sort: this.sortParam.join(',')
-                    }
-                });
                 this.loadArticles();
             },
             changePageSize(pageSize) {
                 this.pageInfo.pageSize = pageSize;
-                this.$router.push({
-                    path: '/admin/blog/article/manage',
-                    query: {
-                        pageNum: this.pageInfo.pageNum,
-                        pageSize: this.pageInfo.pageSize,
-                        status: this.queryParam.status,
-                        title: this.queryParam.title,
-                        tags: this.queryParam.tags,
-                        categories: this.queryParam.categories,
-                        sort: this.sortParam.join(',')
-                    }
-                });
                 this.loadArticles();
             },
             filterChange(col) {
                 var status = col._filterChecked[0];
                 this.queryParam.status = status;
-                this.$router.push({
-                    path: '/admin/blog/article/manage',
-                    query: {
-                        pageNum: this.pageInfo.pageNum,
-                        pageSize: this.pageInfo.pageSize,
-                        status: this.queryParam.status,
-                        title: this.queryParam.title,
-                        tags: this.queryParam.tags,
-                        categories: this.queryParam.categories,
-                        sort: this.sortParam.join(',')
-                    }
-                });
                 this.loadArticles();
 
             },
@@ -522,56 +464,41 @@
                         this.sortParam.splice(ascIndex, 1);
                     }
                 }
-
-                var sort = this.sortParam.join(',');
-                this.$router.push({
-                    path: '/admin/blog/article/manage',
-                    query: {
-                        pageNum: this.pageInfo.pageNum,
-                        pageSize: this.pageInfo.pageSize,
-                        status: this.queryParam.status,
-                        title: this.queryParam.title,
-                        tags: this.queryParam.tags,
-                        categories: this.queryParam.categories,
-                        sort: sort,
-                    }
-                });
                 this.loadArticles();
             },
             loadArticles() {
-                var pageNum = this.pageInfo.pageNum;
-                if (pageNum == 0) {
-                    pageNum = 1;
-                }
-
                 store.dispatch('ArticleList', {
-                    pageNum: pageNum,
+                    pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize,
                     queryParam: this.queryParam,
                     sort: this.sortParam.join(',')
                 }).then(res => { // 拉取user_info
-                    this.article_list = res.data.list;
-                    this.pageInfo = res.data;
-                }).catch(() => {
-                    console.log("请求文章列表失败");
+                    this.article_list = res.data.payload.list;
+                    this.pageInfo = res.data.payload;
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5 * 1000,
+                        closable: true
+                    });
                 })
             },
             categoryList() {
-                store.dispatch('CategoryList', {token: null}).then(res => { // 拉取user_info
-                    var cates = res.data;
+                store.dispatch('CategoryList', {token: this.loginUser.token}).then(res => { // 拉取user_info
+                    var cates = res.data.payload;
                     this.categories = cates;
 
-                }).catch(() => {
-                    console.log("请求分类列表失败");
+                }).catch(res => {
+                    console.log(res);
                 })
             },
             tagList() {
-                store.dispatch('TagList', {token: null}).then(res => { // 拉取user_info
-                    var tags = res.data;
+                store.dispatch('TagList', {}).then(res => { // 拉取user_info
+                    var tags = res.data.payload;
                     this.tags = tags;
 
-                }).catch(() => {
-                    console.log("请求标签列表失败");
+                }).catch(res => {
+                    console.log(res);
                 })
             },
             clearAll(refName) {
@@ -594,42 +521,16 @@
                 vue.list_loadding = false;
 
             }, 2000)
-            qiniuInit(vue);//初始化七牛数据
+            // qiniuInit(vue);//初始化七牛数据
 
 
+            var jsonString = Cookies.get('USER-INFO');
+            if (jsonString) {
+                this.loginUser = JSON.parse(jsonString);
+            }
             this.categoryList();
             this.tagList();
 
-            var pageNum = this.$route.query.pageNum;
-            var pageSize = this.$route.query.pageSize;
-            var status = this.$route.query.status;
-            var title = this.$route.query.title;
-            var tags = this.$route.query.tags;
-            var categories = this.$route.query.categories;
-
-            var sort = this.$route.query.sort;
-
-            if (pageNum) {
-                this.pageInfo.pageNum = pageNum;
-            }
-            if (pageSize) {
-                this.pageInfo.pageSize = pageSize;
-            }
-            if (status) {
-                this.queryParam.status = status;
-            }
-            if (sort) {
-                this.sortParam = sort.split(',');
-            }
-            if (title) {
-                this.queryParam.title = title;
-            }
-            if (tags) {
-                this.queryParam.tags = tags;
-            }
-            if (categories) {
-                this.queryParam.categories = categories;
-            }
             this.loadArticles();
         },
     }

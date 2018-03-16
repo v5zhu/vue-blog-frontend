@@ -2,7 +2,7 @@ import fetch from 'utils/fetch';
 
 export function categoryList(token) {
     return fetch({
-        url: '/admin/category/list',
+        url: '/admin/category/list.token',
         method: 'get',
         params: {token}
     });

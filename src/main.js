@@ -15,6 +15,12 @@ import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import Validator from 'vue-validator';
 
+import {Message} from 'iview';
+import 'iview/dist/styles/iview.css';
+Vue.prototype.$Message = Message;
+
+
+
 
 Vue.use(Validator)
 Vue.use(mavonEditor);

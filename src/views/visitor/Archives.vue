@@ -73,13 +73,6 @@
             }
         },
         methods: {
-            test_logout() {
-                this.$store.dispatch('LogOut').then(() => {
-                    this.$router.push({path: '/login'});
-                }).catch(err => {
-                    this.$Message.error(err);
-                });
-            },
             getArchives() {
                 store.dispatch('Archives', {
                     year: this.params.year,
@@ -87,15 +80,14 @@
                     category: this.params.category,
                     tag: this.params.tag
                 }).then(res => { // 拉取user_info
-                    var archives = res.data;
+                    var archives = res.data.payload;
                     this.archives = archives;
-                    console.log(this.archives)
                 }).catch(() => {
                     console.log("获取文章历史归档信息失败");
                 })
             },
             articleView(articleId) {
-                this.$router.push({path: '/article/' + articleId});
+                window.open('/article/' + articleId);
             }
         },
         filters: {
@@ -109,7 +101,6 @@
             var category = this.$route.params.category;
             var tag = this.$route.params.tag;
 
-            console.log(year + month + category + tag);
             this.params.year = year;
             this.params.month = month;
             this.params.category = category;

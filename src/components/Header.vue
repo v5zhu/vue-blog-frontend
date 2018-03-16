@@ -3,7 +3,8 @@
         <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
             &#9776;
         </button>
-        <a class="navbar-brand"></a>
+        <a class="navbar-brand" href="/articles" target="_blank"></a>
+
         <ul class="nav navbar-nav d-md-down-none">
             <li class="nav-item" id="sidebar_minimize">
                 <a class="nav-link navbar-toggler sidebar-toggler" @click="sidebarMinimize">&#9776;</a>

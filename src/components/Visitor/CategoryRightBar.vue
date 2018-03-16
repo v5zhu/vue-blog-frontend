@@ -63,14 +63,13 @@
         methods: {
             categoryList() {
                 store.dispatch('CategoryList', {}).then(res => { // 拉取user_info
-                    var categories = res.data;
+                    var categories = res.data.payload;
                     this.categories = categories;
                 }).catch(() => {
                     console.log("获取文章作者信息失败");
                 })
             },
             filterCategories(categoryName) {
-                // this.$router.push({path: '/category/' + categoryName});
                 window.open('/category/' + categoryName);
             }
         }

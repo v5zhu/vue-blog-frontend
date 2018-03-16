@@ -147,18 +147,9 @@
             }
         },
         methods: {
-            linkList() {
-                store.dispatch('LinkList', {}).then(res => {
-                    var links = res.data;
-                    this.links = links;
-                }).catch(err => {
-                    this.$Message.error(err);
-                });
-            }
+
         },
         mounted() {
-            const token = this.$store.getters.token;
-            this.linkList();
 
         }
     }

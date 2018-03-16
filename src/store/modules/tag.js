@@ -36,18 +36,10 @@ const tag = {
     },
 
     actions: {
-        // 获取文章列表
-        TagList({commit, state}) {
+        // 获取列表
+        TagList({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                tagList(state.token).then(response => {
-                    const data = response.data;
-                    commit('SET_ID', data.id);
-                    commit('SET_NAME', data.name);
-                    commit('SET_VALUE', data.value);
-                    commit('SET_TYPE', data.type);
-                    commit('SET_DESCRIPTION', data.description);
-                    commit('SET_SORT', data.sort);
-                    commit('SET_PARENT', data.parent);
+                tagList(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
