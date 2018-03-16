@@ -3,8 +3,8 @@
         <div id="canvascontainer" ref='can'></div>
 
         <Form ref="loginForm" autoComplete="on" :model="loginForm" :rules="loginRules" class="card-box login-form">
-            <Form-item prop="email">
-                <Input type="text" v-model="loginForm.email" placeholder="Username" autoComplete="on">
+            <Form-item prop="loginName">
+                <Input type="text" v-model="loginForm.loginName" placeholder="Username" autoComplete="on">
                 <Icon type="ios-person-outline" slot="prepend"></Icon>
                 </Input>
             </Form-item>
@@ -26,6 +26,7 @@
 
 <script>
     import {isWscnEmail} from 'utils/validate';
+    import Cookies from 'js-cookie';
 
     export default {
         name: 'login',
@@ -46,11 +47,11 @@
             };
             return {
                 loginForm: {
-                    email: 'admin@sonnx.com',
+                    loginName: 'admin@sonnx.com',
                     password: '123456'
                 },
                 loginRules: {
-                    email: [
+                    loginName: [
                         {required: true, trigger: 'blur', validator: validateEmail}
                     ],
                     password: [
@@ -93,8 +94,8 @@
                 for (var iy = 0; iy < AMOUNTY; iy++) {
 
                     particle = particles[i++] = new THREE.Particle(material);
-                    particle.position.x = ix * SEPARATION - ( ( AMOUNTX * SEPARATION ) / 2 );
-                    particle.position.z = iy * SEPARATION - ( ( AMOUNTY * SEPARATION ) / 2 );
+                    particle.position.x = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
+                    particle.position.z = iy * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
                     scene.add(particle);
 
                 }
@@ -117,15 +118,17 @@
                 this.$refs.loginForm.validate(valid => {
                     if (valid) {
                         this.loading = true;
-                        this.$store.dispatch('LoginByEmail', this.loginForm).then(() => {
+                        this.$store.dispatch('Login', this.loginForm).then(res => {
                             this.$Message.success('登录成功');
-
+                            var user = res.data.payload;
+                            Cookies.set('USER-INFO', user);
                             this.loading = false;
                             this.$router.push({path: '/admin'});
                         }).catch(err => {
                             this.$Message.error(err);
                             this.loading = false;
                         });
+
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -238,8 +241,8 @@
 
     function render() {
 
-        camera.position.x += ( mouseX - camera.position.x ) * .05;
-        camera.position.y += ( -mouseY - camera.position.y ) * .05;
+        camera.position.x += (mouseX - camera.position.x) * .05;
+        camera.position.y += (-mouseY - camera.position.y) * .05;
         camera.lookAt(scene.position);
 
         var i = 0;
@@ -249,8 +252,8 @@
             for (var iy = 0; iy < AMOUNTY; iy++) {
 
                 particle = particles[i++];
-                particle.position.y = ( Math.sin(( ix + count ) * 0.3) * 50 ) + ( Math.sin(( iy + count ) * 0.5) * 50 );
-                particle.scale.x = particle.scale.y = ( Math.sin(( ix + count ) * 0.3) + 1 ) * 2 + ( Math.sin(( iy + count ) * 0.5) + 1 ) * 2;
+                particle.position.y = (Math.sin((ix + count) * 0.3) * 50) + (Math.sin((iy + count) * 0.5) * 50);
+                particle.scale.x = particle.scale.y = (Math.sin((ix + count) * 0.3) + 1) * 2 + (Math.sin((iy + count) * 0.5) + 1) * 2;
 
             }
 

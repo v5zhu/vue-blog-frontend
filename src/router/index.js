@@ -111,6 +111,277 @@ export const constantRouterMap = [
                 scrollToTop: true
             }
         }]
+    },
+    {
+        name: '首页',
+        path: '/admin',
+        redirect: '/admin/dashboard',
+        component: Full,
+        hidden: false,
+        children: [{
+            path: '/admin/dashboard',
+            name: 'Dashboard',
+            icon: 'speedometer',
+            component: _import('Dashboard')
+        }, {
+            path: '/admin/introduction',
+            name: '介绍',
+            icon: 'thumbsup',
+            component: _import('Introduction')
+        }, {
+            path: '/admin/components',
+            name: 'component组件',
+            redirect: '/admin/components/buttons',
+            icon: 'bookmark',
+            component: {
+                render(c) {
+                    return c('router-view')
+                }
+            },
+            children: [{
+                path: 'buttons',
+                name: 'Buttons按钮',
+                icon: 'social-youtube',
+                component: _import('components/Buttons'),
+                hidden: false
+            },
+                {
+                    path: 'hoverbuttons',
+                    name: '悬停特效按钮',
+                    icon: 'wand',
+                    component: _import('components/HoverButtons')
+                },
+                {
+                    path: 'alert',
+                    name: 'Alert警告提示',
+                    icon: 'alert',
+                    component: _import('components/Alert')
+                },
+                {
+                    path: 'card',
+                    name: 'Card卡片',
+                    icon: 'ios-browsers-outline',
+                    component: _import('components/Card')
+                },
+                {
+                    path: 'datepicker',
+                    name: 'DatePicker',
+                    icon: 'ios-calendar-outline',
+                    component: _import('components/DatePicker')
+                },
+                {
+                    path: 'form',
+                    name: 'Form表单',
+                    icon: 'ios-list-outline',
+                    component: _import('components/Form')
+                },
+                {
+                    path: 'modal',
+                    name: 'Modal对话框',
+                    icon: 'ios-chatbubble-outline',
+                    component: _import('components/Modal')
+                },
+                {
+                    path: 'select',
+                    name: 'Select选择器',
+                    icon: 'ios-arrow-down',
+                    component: _import('components/Select')
+                },
+                {
+                    path: 'spin',
+                    name: 'Spin加载中',
+                    icon: 'load-d ',
+                    component: _import('components/Spin')
+                },
+                {
+                    path: 'steps',
+                    name: 'Steps步骤条',
+                    icon: 'ios-checkmark-outline',
+                    component: _import('components/Steps')
+                },
+                {
+                    path: 'timeline',
+                    name: 'Timeline时间轴',
+                    icon: 'android-more-vertical',
+                    component: _import('components/Timeline')
+                },
+                {
+                    path: 'transfer',
+                    name: 'Transfer穿梭框',
+                    icon: 'ios-pause-outline',
+                    component: _import('components/Transfer')
+                },
+                {
+                    path: 'timepicker',
+                    name: 'Timepicker',
+                    icon: 'ios-clock-outline',
+                    component: _import('components/Timepicker')
+                },
+                {
+                    path: 'upload',
+                    name: 'Upload上传',
+                    icon: 'ios-cloud-upload-outline',
+                    component: _import('components/Upload')
+                }
+            ]
+        },
+            {
+                path: '/admin/charts',
+                name: 'echart图表',
+                redirect: '/admin/charts/shopchart',
+                icon: 'pie-graph',
+                component: {
+                    render(c) {
+                        return c('router-view')
+                    }
+                },
+                children: [{
+                    path: 'shopchart',
+                    name: '商场统计图表',
+                    icon: 'stats-bars',
+                    component: _import('charts/ShopChart'),
+                    hidden: false
+                },
+                    {
+                        path: 'radarchart',
+                        name: '雷达图',
+                        icon: 'arrow-graph-up-right',
+                        component: _import('charts/RadarChart')
+                    },
+                    {
+                        path: 'cakechart',
+                        name: '蛋糕销量图表',
+                        icon: 'ios-analytics',
+                        component: _import('charts/CakeChart')
+                    }
+                ]
+            },
+            {
+                path: '/admin/table',
+                name: '表格综合实例',
+                icon: 'ios-paper',
+                component: _import('Table'),
+                meta: {
+                    role: ['admin']
+                }
+            },
+            {
+                path: '/admin/jsontree',
+                name: 'JSON视图',
+                icon: 'merge',
+                component: _import('JsonTree')
+            },
+            {
+                path: '/admin/tabledetail/:id',
+                name: 'TableDetail',
+                hidden: true,
+                component: _import('TableDetail')
+            },
+            {
+                path: '/admin/tinymce',
+                name: 'Tinymce编辑器',
+                icon: 'android-document',
+                component: _import('Tinymce')
+            },
+            {
+                path: '/admin/markdown',
+                name: 'Markdown',
+                icon: 'android-list',
+                component: _import('Markdown')
+            }
+        ]
+    },
+
+    {
+        path: '/admin/home1',
+        redirect: '/admin/home1/introduction',
+        name: '首页2',
+        component: Full2,
+        hidden: false,
+        children: [
+            {
+                path: '/admin/home1/dashboard',
+                name: 'Dashboard2',
+                icon: 'speedometer',
+                component: _import('Dashboard2')
+            },
+            {
+                path: '/admin/home1/introduction',
+                name: '介绍2',
+                icon: 'thumbsup',
+                component: _import('Introduction')
+            }
+        ]
+    },
+    {
+        path: '/admin/blog',
+        redirect: '/admin/blog/article',
+        name: '博客管理',
+        component: Full,
+        hidden: false,
+        children: [
+
+            {
+                path: '/admin/blog/article',
+                name: '文章管理',
+                icon: 'ios-book',
+                redirect: '/admin/blog/article/manage',
+                component: {
+                    render(c) {
+                        return c('router-view')
+                    }
+                },
+                children: [{
+                    path: 'manage',
+                    name: '文章管理',
+                    icon: 'stats-bars',
+                    component: _import('blog/Article'),
+                    hidden: false
+                }, {
+                    path: 'preview/:id',
+                    name: '文章预览',
+                    icon: 'stats-bars',
+                    component: _import('blog/ArticlePreview'),
+                    hidden: true
+                }, {
+                    path: 'edit/:id',
+                    name: '文章编辑',
+                    icon: 'stats-bars',
+                    component: _import('blog/ArticleEdit'),
+                    hidden: true
+                }, {
+                    path: 'publish',
+                    name: '文章发表',
+                    icon: 'stats-bars',
+                    component: _import('blog/ArticleEdit'),
+                    hidden: true
+                }]
+            },
+            {
+                path: '/admin/blog/comment',
+                name: '评论管理',
+                icon: 'chatbubble-working',
+                component: _import('blog/Comment')
+            }, {
+                path: '/admin/blog/tag',
+                name: '标签管理',
+                icon: 'ios-pricetags',
+                component: _import('blog/Tag')
+            }, {
+                path: '/admin/blog/category',
+                name: '分类管理',
+                icon: 'network',
+                component: _import('blog/Category')
+            }
+        ]
+    },
+    {
+        path: '*',
+        redirect: '/pages/404',
+        hidden: true,
+        meta: {
+            role: ['admin', 'visitor']
+        }
     }
 ]
 
@@ -146,7 +417,7 @@ export default new Router({
     scrollBehavior: scrollBehavior,
     routes: constantRouterMap
 });
-
+/*
 export const asyncRouterMap = [
 
     {
@@ -420,4 +691,4 @@ export const asyncRouterMap = [
             role: ['admin', 'visitor']
         }
     }
-];
+];*/

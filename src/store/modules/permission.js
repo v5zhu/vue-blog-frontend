@@ -1,4 +1,4 @@
-import {asyncRouterMap, constantRouterMap} from 'src/router';
+import {constantRouterMap} from 'src/router';
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -16,11 +16,11 @@ function hasPermission(roles, route) {
 
 /**
  * 递归过滤异步路由表，返回符合用户角色权限的路由表
- * @param asyncRouterMap
+ * @param constantRouterMap
  * @param roles
  */
-function filterAsyncRouter(asyncRouterMap, roles) {
-    const accessedRouters = asyncRouterMap.filter(route => {
+function filterAsyncRouter(constantRouterMap, roles) {
+    const accessedRouters = constantRouterMap.filter(route => {
         if (hasPermission(roles, route)) {
 
             if (route.children && route.children.length) {
@@ -34,8 +34,8 @@ function filterAsyncRouter(asyncRouterMap, roles) {
 }
 
 
-function getNowRouter(asyncRouterMap, to) {
-    return asyncRouterMap.some(route => {
+function getNowRouter(constantRouterMap, to) {
+    return constantRouterMap.some(route => {
         if (to.path.indexOf(route.path) !== -1) {
             return true;
         }
@@ -67,8 +67,6 @@ const permission = {
 
         },
         SET_NOW_ROUTERS: (state, to) => {
-
-
             // 递归访问 accessedRouters，找到包含to 的那个路由对象，设置给siderbar_routers
             state.addRouters.forEach(e => {
                 if (e.children && e.children.length) {
@@ -77,8 +75,6 @@ const permission = {
                 }
 
             })
-
-
         }
 
     },
@@ -88,9 +84,9 @@ const permission = {
                 const {roles} = data
                 let accessedRouters
                 if (roles.indexOf('admin') >= 0) {
-                    accessedRouters = asyncRouterMap
+                    accessedRouters = constantRouterMap
                 } else {
-                    accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+                    accessedRouters = filterAsyncRouter(constantRouterMap, roles)
                 }
 
 
