@@ -10,11 +10,11 @@
                 <ul class="nav navbar-nav d-md-down-none">
 
                     <li class="nav-item header-item reg-login-btn">
-                        <Button class="reg-login-btn" type="default" icon="ios-pulse-strong" size="large">免费注册</Button>
+                        <Button class="reg-login-btn" type="default" icon="ios-pulse" size="large">免费注册</Button>
                     </li>
 
                     <li class="nav-item header-item reg-login">
-                        <Button class="reg-login-btn" type="info" icon="paper-airplane" size="large">立即登录</Button>
+                        <Button class="reg-login-btn" type="info" icon="log-in" size="large">立即登录</Button>
                     </li>
                 </ul>
                 <ul>

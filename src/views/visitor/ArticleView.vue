@@ -60,9 +60,9 @@
                 <div style="min-height:150px;height:auto;margin-top: 50px;position: relative;box-shadow: 0px 2px 20px 5px #ffa5002b;border:1px solid rgba(255,165,0,0.2);border-radius: 3px;">
                     <ul style="width:100%;">
                         <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
-                            <Button type="ghost" @click="awardModal=true"
-                                    style="height:60px;width:60px;border-radius:2px;font-size: 16px;">
-                                <p style="margin-top: 10px;">赞赏</p>
+                            <Button type="ghost" @click="awardModal=true">
+                                <Icon type="ios-flame-outline" size="24" color="#0d5477"></Icon>
+                                <p>赞赏</p>
                             </Button>
 
                             <Modal v-model="awardModal" width="600" :maskClosable="false"
@@ -134,14 +134,14 @@
                         <li style="float: left;position:relative;top:20px;margin-right: 20px;">
                             <Button type="ghost" @click="updateStatistics('likes')"
                                     style="height:60px;width:60px;font-size: 12px;">
-                                <Icon type="thumbsup" size="24" color="#0d5477"></Icon>
+                                <Icon type="ios-sunny-outline" size="24" color="#0d5477"></Icon>
                                 <p>{{article.likes}}喜欢</p>
                             </Button>
                         </li>
                         <li style="float: left;position:relative;top:20px">
                             <Button type="ghost" @click="updateStatistics('dislikes')"
                                     style="height:60px;width:60px;font-size: 12px;">
-                                <Icon type="thumbsdown" size="24" color="#0d5477"></Icon>
+                                <Icon type="ios-rainy-outline" size="24" color="#0d5477"></Icon>
                                 <p>{{article.dislikes}}反对</p>
                             </Button>
                         </li>
