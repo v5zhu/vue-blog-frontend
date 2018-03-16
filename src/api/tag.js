@@ -1,10 +1,19 @@
 import fetch from 'utils/fetch';
 
-export function tagList(params) {
+export function filterTagList(params) {
     return fetch({
         url: '/admin/tag/list.token',
         method: 'get',
-        params:params
+        params: params
+    });
+}
+
+
+export function tagList(params) {
+    return fetch({
+        url: '/admin/tag/list.open',
+        method: 'get',
+        params: params
     });
 }
 

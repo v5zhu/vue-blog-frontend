@@ -6,13 +6,13 @@
                     <li style="margin-bottom: 20px;position: relative">
                         <Button type="ghost" class="left-circle" @click="scrollToTop"
                                 style="border-radius: 50%;">
-                            <Icon class="left-icon-class" type="arrow-up-b" color="#0d5477" size="24"></Icon>
+                            <Icon class="left-icon-class" type="ios-arrow-up" color="#0d5477" size="24"></Icon>
                         </Button>
                     </li>
                     <li style="margin-bottom: 20px;position: relative">
                         <Button type="ghost" class="left-circle" @click="scrollBottom"
                                 style="border-radius: 50%;">
-                            <Icon class="left-icon-class" type="arrow-down-b" color="#0d5477" size="24"></Icon>
+                            <Icon class="left-icon-class" type="ios-arrow-down" color="#0d5477" size="24"></Icon>
                         </Button>
                     </li>
                 </ul>

@@ -22,18 +22,18 @@
                         <li class="nav-item header-item">
 
                             <Button type="default" size="small"
-                                    style="height:60px;width:45px;margin-bottom: 15px;margin-left: -35px;">
+                                    style="height:70px;width:45px;margin-bottom: 15px;margin-left: -35px;">
                                 <Icon type="thumbsup" color="red" size="24"></Icon>
                                 <p>{{article.likes}}</p>
                             </Button>
                         </li>
 
-                        <li class="nav-item header-item" style="margin-left: -15px;margin-top: -15px;">
-                            <ul>
+                        <li class="nav-item header-item" style="margin-left: -25px;margin-top: -15px;">
+                            <ul style="height:30px;">
                                 <li>
                                     <a class="article-title"
                                        style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
-                                       @click="viewArticle(article.id)">{{article.title}}
+                                       @click="viewArticle(article.path)">{{article.title}}
                                     </a>
                                     <span v-if="article.tags!=null && article.tags.length!=0">
                                         <a class="article-tags"
@@ -45,7 +45,7 @@
                                 </li>
                             </ul>
 
-                            <div style="color: rgba(128,128,128,0.4);text-align: left;">&nbsp;{{article.outline}}</div>
+                            <div style="color: rgba(128,128,128,0.4);text-align: left;padding-left: 10px;">&nbsp;{{article.outline}}</div>
                             <div style="color: #0d5477;text-align: left;">&nbsp;
                                 <img src="/static/img/avatars/man-avatar.png"
                                      style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
@@ -78,13 +78,15 @@
                 </navbar>
                 <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.4);"/>
             </div>
-            <Page :total="this.pageInfo.total" placement="top"
-                  :page-size-opts="pageSizeOpts"
-                  :current="this.pageInfo.pageNum"
-                  show-elevator show-sizer show-total
-                  @on-change="changePage"
-                  @on-page-size-change="changePageSize"
-                  style="text-align:right;margin-top:50px;"></Page>
+
+            <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
+                <p @click="loadMoreArticles" style="border: none;cursor: pointer;">
+                    <Icon type="ios-more-outline" size="32"></Icon>
+                    <Icon type="ios-more-outline" size="32"></Icon>
+                </p>
+            </div>
+            <div style="text-align: center;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">全部加载完成</div>
+
             </Col>
             <Col span="4">
             &nbsp;
@@ -130,26 +132,36 @@
                 speed: 10000,
             }
         },
+        mounted() {
+            this.articles();
+            this.tagList();
+        },
         methods: {
-            test_logout() {
-                this.$store.dispatch('LogOut').then(() => {
-                    this.$router.push({path: '/login'});
-                }).catch(err => {
-                    this.$Message.error(err);
+            loadMoreArticles() {
+                this.pageInfo.pageSize += 6;
+                this.articles();
+                this.$Notice.success({
+                    title: '温馨提醒',
+                    desc: '更新6条新文章,请浏览!'
                 });
             },
             articles() {
+                this.$Loading.start()
+
                 this.$store.dispatch('Articles', {
                     pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize
                 }).then(res => {
                     this.pageInfo = res.data.payload;
+                    this.loadMoreFinished = true;
+                    this.$Loading.finish();
                 }).catch(err => {
                     this.$Message.error(err);
+                    this.$Loading.error()
                 });
             },
-            viewArticle(articleId) {
-                window.open('/article/' + articleId, '_blank');
+            viewArticle(path) {
+                window.open('/article/detail/' + path);
             },
             changePage(page) {
                 this.pageInfo.pageNum = page;
@@ -170,16 +182,28 @@
             filterTags(categoryName) {
                 window.open('/tag/' + categoryName, '_blank');
             }
-        },
-        mounted() {
-            this.articles();
-            this.tagList();
         }
     }
 </script>
 
 
 <style type="text/css" scoped>
+    .demo-spin-icon-load {
+        animation: ani-demo-spin 1s linear infinite;
+    }
+
+    @keyframes ani-demo-spin {
+        from {
+            transform: rotate(0deg);
+        }
+        50% {
+            transform: rotate(180deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
     .li-nav-tag {
         padding: 1px 10px;
         width: 140px;

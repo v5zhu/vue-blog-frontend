@@ -5,7 +5,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button :disabled="true" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-clock-outline" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="ios-clock" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.hits}}
@@ -14,7 +14,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button :disabled="true" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-chatboxes-outline" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="chatbox-working" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.commentsNum}}
@@ -23,7 +23,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-sunny-outline" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="thumbsup" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.likes}}
@@ -32,7 +32,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-rainy-outline" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="thumbsdown" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.dislikes}}
@@ -186,7 +186,7 @@
                             <Tag color="yellow">{{index + 1}}楼</Tag>
                         </div>
 
-                        <comment style="margin-top: -45px;" :OneComment="c" @articleDetail="articleDetail"
+                        <comment style="margin-top: -45px;" :OneComment="c" @articlePreview="articlePreview"
                                  @getArticleComments="getArticleComments"></comment>
                     </div>
                 </div>
@@ -330,9 +330,8 @@
                         return hljs.highlightAuto(code).value;
                     }
                 });
-                if (this.article.content) {
-                    return marked(this.article.content);
-                }
+
+                return marked(this.article.content);
             }
 
         }
@@ -348,8 +347,14 @@
         mounted() {
             window.scrollTo(0, 0);
 
+            var id = this.$route.params.id;
             var path = this.$route.params.path;
-            this.articleDetail(path);
+            if (id) {
+                this.articlePreview(id + '.token');
+                this.getArticleComments(id);
+            } else {
+
+            }
         }
         ,
         methods: {
@@ -392,11 +397,10 @@
                 }
             }
             ,
-            articleDetail(path) {
-                store.dispatch('ArticleDetail', {path: path}).then(res => { // 拉取user_info
+            articlePreview(id) {
+                store.dispatch('ArticleDetail', {id: id}).then(res => { // 拉取user_info
                     var article = res.data.payload;
                     this.article = article;
-                    this.getArticleComments(article.id);
                 }).catch(() => {
                     console.log("获取文章详情失败");
                 })
@@ -423,7 +427,6 @@
             }
             ,
             commitComment() {
-                this.$Loading.start();
                 var marktext = h2m(this.content);
                 store.dispatch('CommitComment', {
                     articleId: this.article.id,
@@ -435,10 +438,8 @@
                         this.$Message.success('发表评论成功');
                         this.article.commentsNum++;
                         this.getArticleComments(this.article.id);
-                        this.$Loading.finish();
                     } else {
                         this.$Message.error(data.msg);
-                        this.$Loading.error();
                     }
                 }).catch(() => {
                     console.log("提交评论失败");

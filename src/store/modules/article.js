@@ -123,7 +123,7 @@ const article = {
         // 文章详情
         ArticleDetail({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                articleDetail(params.id).then(response => {
+                articleDetail(params.path).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

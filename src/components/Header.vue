@@ -81,6 +81,15 @@
                     <p style="color:white"> 友链管理 </p>
                 </router-link>
             </li>
+            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
+
+                <router-link tag="div" to='/admin/usermgr' class="nav-link">
+                    <p>
+                        <Icon type="person" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 用户中心 </p>
+                </router-link>
+            </li>
 
         </ul>
 

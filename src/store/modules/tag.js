@@ -1,4 +1,4 @@
-import {tagList, tagAdd} from 'api/tag';
+import {tagList, filterTagList, tagAdd} from 'api/tag';
 
 const tag = {
     state: {
@@ -36,10 +36,20 @@ const tag = {
     },
 
     actions: {
-        // 获取列表
+        // 获取所有标签列表
         TagList({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 tagList(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        // 获取列表
+        FilterTagList({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                filterTagList(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

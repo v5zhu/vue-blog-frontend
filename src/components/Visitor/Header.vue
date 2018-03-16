@@ -9,7 +9,7 @@
 
                         <router-link tag="div" to='/articles' class="nav-link">
                             <p>
-                                <Icon type="ios-book-outline" size='28' class="color-0d5477"></Icon>
+                                <Icon type="ios-barcode-outline" size='28' class="color-0d5477"></Icon>
                             </p>
                             <p class="color-0d5477"> 首页 </p>
                         </router-link>
@@ -28,7 +28,7 @@
 
                         <router-link tag="div" to='/links' class="nav-link">
                             <p>
-                                <Icon type="social-github" size='28' class="color-0d5477"></Icon>
+                                <Icon type="social-github-outline" size='28' class="color-0d5477"></Icon>
                             </p>
                             <p class="color-0d5477"> 合作 </p>
                         </router-link>
@@ -46,7 +46,7 @@
                     </li>-->
                     <li class="nav-item header-item">
 
-                        <router-link tag="div" to='/feedback'  class="nav-link">
+                        <router-link tag="div" to='/feedback' class="nav-link">
                             <p>
                                 <Icon type="ios-chatboxes-outline" size='28' class="color-0d5477"></Icon>
                             </p>
@@ -54,12 +54,17 @@
                         </router-link>
 
                     </li>
+                    <li style="margin-left: 100px;">
+                        <Input v-model="q" :class="qfocus?'q-long':'q-short'" icon="ios-search" placeholder="关键字搜索..."
+                               @on-focus="searchFocus" @on-blur="searchBlur" size="large">
+                        </Input>
+                    </li>
 
                     <li v-if="loginUser.token==undefined" @click="showLoginModalFunction"
                         class="nav-item header-item reg-login"
                         style="position: absolute;right:140px;width: 70px;">
                         <p>
-                            <Icon type="paper-airplane" size='14' class="color-0d5477"></Icon>
+                            <Icon type="log-in" size='28' class="color-0d5477"></Icon>
                         </p>
                         <p class="color-0d5477"> 立即登录 </p>
                     </li>
@@ -69,7 +74,7 @@
                         class="nav-item header-item reg-login"
                         style="position: absolute;right:50px;width: 70px;">
                         <p>
-                            <Icon type="ios-pulse-strong" size='14' class="color-0d5477"></Icon>
+                            <Icon type="ios-pulse" size='28' class="color-0d5477"></Icon>
                         </p>
                         <p class="color-0d5477"> 免费注册 </p>
                     </li>
@@ -175,7 +180,9 @@
         data() {
             return {
                 showRegModal: false,
-                showLoginModal: false
+                showLoginModal: false,
+                q: '',
+                qfocus: false,
             }
         },
         components: {
@@ -184,6 +191,12 @@
         created() {
         },
         methods: {
+            searchFocus(e) {
+                this.qfocus = true;
+            },
+            searchBlur() {
+                this.qfocus = false;
+            },
             changeModalVisible() {
 
             },
@@ -237,11 +250,43 @@
 
 <style type="text/css" scoped>
 
+    .q-short {
+        width: 200px;
+        animation: longToShort 1s 1;
+    }
+
+    .q-long {
+        width: 400px;
+        border: orange;
+        box-shadow: 2px 2px 10px 2px orange;
+        animation: shortToLong 1s 1;
+    }
+
+    @keyframes shortToLong {
+        from {
+            width: 200px;
+        }
+        to {
+            width: 400px;
+            border: orange;
+            box-shadow: 2px 2px 10px 2px orange;
+        }
+    }
+
+    @keyframes longToShort {
+        from {
+            width: 400px;
+        }
+        to {
+            width: 200px;
+        }
+    }
+
     .header-item .color-0d5477 {
         color: #0d5477;
     }
 
-    .header-item:not(.reg-login):hover {
+    .header-item:hover {
         border-radius: 2px;
         border-bottom: 5px solid orange;
         box-shadow: 0px 0px 20px 0px #ff00002e;

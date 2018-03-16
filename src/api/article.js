@@ -29,9 +29,9 @@ export function articlePreview(id) {
     });
 }
 
-export function articleDetail(id) {
+export function articleDetail(path) {
     return fetch({
-        url: '/admin/article/preview/' + id + ".open",
+        url: '/admin/article/detail/' + path + ".open",
         method: 'get',
         params: {}
     });

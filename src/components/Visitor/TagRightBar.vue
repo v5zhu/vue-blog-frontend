@@ -70,7 +70,7 @@
         },
         methods: {
             tagList() {
-                store.dispatch('TagList', {}).then(res => { // 拉取user_info
+                store.dispatch('FilterTagList', {}).then(res => { // 拉取user_info
                     var tags = res.data.payload;
                     this.tags = tags;
                 }).catch(() => {

@@ -316,7 +316,6 @@
                                     },
                                     on: {
                                         click: () => {
-                                            // this.$router.push({path: '/admin/blog/article/preview/' + params.row.id})
                                             window.open('/article/' + params.row.id);
                                         }
                                     }
@@ -476,6 +475,7 @@
                     this.article_list = res.data.payload.list;
                     this.pageInfo = res.data.payload;
                 }).catch(err => {
+                    console.log(err)
                     this.$Message.error({
                         content: err.data.msg,
                         duration: 5 * 1000,
@@ -493,7 +493,7 @@
                 })
             },
             tagList() {
-                store.dispatch('TagList', {}).then(res => { // 拉取user_info
+                store.dispatch('FilterTagList', {}).then(res => { // 拉取user_info
                     var tags = res.data.payload;
                     this.tags = tags;
 

@@ -12,7 +12,7 @@
                     <router-view></router-view>
                 </div>
             </main>
-            <AppAside/>
+            <AppAside v-if="loginUser.token!=undefined"/>
         </div>
         <AppFooter/>
     </div>
@@ -52,7 +52,7 @@
             }
         },
         mounted() {
-            window.addEventListener('scroll', this.handleScroll)
+            // window.addEventListener('scroll', this.handleScroll)
         },
         methods: {
             handleScroll() {

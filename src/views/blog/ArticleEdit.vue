@@ -1,9 +1,8 @@
 <template>
     <div>
-
-        <Form ref="articleForm" :rules="articleRule" :model="article" :label-width="80" label-position="left">
+        <Form ref="articleForm" :rules="articleRule" :model="article" :label-width="70" label-position="right">
             <Row>
-                <Col span="24">
+                <Col span="22">
                 <Form-item prop="title" label="文章标题">
                     <Input v-model="article.title" size="large" placeholder="请输入文章标题"/>
                 </Form-item>
@@ -44,7 +43,7 @@
                 </Col>
             </Row>
             <Row>
-                <Col span="24">
+                <Col span="22">
                 <Form-item prop="content">
                     <mavon-editor style="margin-top: 20px;position: static;" v-model="article.content"/>
                 </Form-item>
@@ -300,7 +299,7 @@
                 })
             },
             tagList() {
-                store.dispatch('TagList', {token: null}).then(res => { // 拉取user_info
+                store.dispatch('FilterTagList', {token: null}).then(res => { // 拉取user_info
                     var tags = res.data.payload;
                     this.tags = tags;
 

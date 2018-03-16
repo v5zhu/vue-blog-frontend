@@ -87,7 +87,7 @@ export const constantRouterMap = [
             }
         }, {
             name: '文章详情页',
-            path: '/article/:id',
+            path: '/article/detail/:path',
             component: _import('visitor/ArticleView'),
             meta: {
                 scrollToTop: true
@@ -348,7 +348,7 @@ export const constantRouterMap = [
                     path: 'preview/:id',
                     name: '文章预览',
                     icon: 'stats-bars',
-                    component: _import('blog/ArticlePreview'),
+                    component: _import('blog/ArticleView'),
                     hidden: true
                 }, {
                     path: 'edit/:id',

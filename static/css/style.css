@@ -10,7 +10,8 @@ body {
     color: #263238;
     background-color: #e4e5e6;
     -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
 }
 
 h1 {

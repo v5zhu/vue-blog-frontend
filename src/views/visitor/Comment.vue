@@ -95,7 +95,7 @@
                 })
             },
             loadArticle(articleId) {
-                this.$emit('articlePreview', articleId);
+                this.$emit('articleDetail', articleId);
             },
             loadArticleComments(articleId) {
                 this.$emit('getArticleComments', articleId);

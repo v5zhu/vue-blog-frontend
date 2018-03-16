@@ -17,8 +17,8 @@ import Validator from 'vue-validator';
 
 import {Message} from 'iview';
 import 'iview/dist/styles/iview.css';
-Vue.prototype.$Message = Message;
 
+// import marked from 'marked';
 
 
 
@@ -27,6 +27,7 @@ Vue.use(mavonEditor);
 Vue.use(quillEditor);
 Vue.use(h2m);
 Vue.use(hljs);
+// Vue.use(marked);
 
 Vue.config.productionTip = false;
 
