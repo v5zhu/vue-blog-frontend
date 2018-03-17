@@ -1,4 +1,4 @@
-import {loginByEmail, logout, getInfo, getAuthorInfo, register, login} from 'api/login';
+import {loginByEmail, logout, modifyUser, getInfo, getAuthorInfo, register, login} from 'api/login';
 import Cookies from 'js-cookie';
 
 const user = {
@@ -74,6 +74,15 @@ const user = {
         Register({commit, state}, data) {
             return new Promise((resolve, reject) => {
                 register(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        ModifyUser({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                modifyUser(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

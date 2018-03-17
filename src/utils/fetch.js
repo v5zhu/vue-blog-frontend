@@ -31,12 +31,12 @@ service.interceptors.response.use(response => {
             return Promise.resolve(response);
         } else {
             if (response.data.code == '403') {
-                console.error('禁止访问')
+                return Promise.reject(response);
+            } else {
                 return Promise.reject(response);
             }
         }
-    },
-    error => {
+    }, error => {
         console.log(error);// for debug
         return Promise.reject(error);
     }

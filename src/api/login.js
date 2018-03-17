@@ -16,6 +16,14 @@ export function login(loginData) {
     });
 }
 
+export function modifyUser(user) {
+    return fetch({
+        url: '/user/modify.token',
+        method: 'put',
+        data: user
+    });
+}
+
 export function loginByEmail(loginName, password) {
     const data = {
         loginName,
