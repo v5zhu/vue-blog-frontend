@@ -1,7 +1,7 @@
 <template>
-    <div class="animated fadeIn">
+    <div class="animated fadeIn" style="margin-left: 20px;">
         <Row>
-            <Col :md="24">
+            <Col :md="22">
             <div>
                 <div id="container" style="margin-bottom:10px;">
                     <Button type="primary" size="large" icon="edit"
@@ -136,7 +136,7 @@
                         }
                     },
                     {
-                        title: '文章标题',
+                        title: '标题',
                         key: 'title',
                         ellipsis: 'true',
                         render: (h, params) => {
@@ -170,14 +170,35 @@
 
                     },
                     {
-                        title: '浏览量',
+                        title: '浏览',
                         width: 90,
                         key: 'hits',
                         ellipsis: 'true',
                         sortable: 'custom'
                     },
                     {
-                        title: '所属分类',
+                        title: '评论',
+                        width: 90,
+                        key: 'commentsNum',
+                        ellipsis: 'true',
+                        sortable: 'custom'
+                    },
+                    {
+                        title: '支持',
+                        width: 90,
+                        key: 'likes',
+                        ellipsis: 'true',
+                        sortable: 'custom'
+                    },
+                    {
+                        title: '反对',
+                        width: 90,
+                        key: 'dislikes',
+                        ellipsis: 'true',
+                        sortable: 'custom'
+                    },
+                    {
+                        title: '分类',
                         width: 100,
                         key: 'categories',
                         ellipsis: 'true',
@@ -193,7 +214,7 @@
                         }
                     },
                     {
-                        title: '发布状态',
+                        title: '状态',
                         ellipsis: 'true',
                         width: 100,
                         filters: [
@@ -248,10 +269,9 @@
                             }
                         }
                     },
-
                     {
                         title: '操作',
-                        width: '400',
+                        width: '200',
                         key: 'action',
                         align: 'center',
                         ellipsis: 'true',
@@ -264,7 +284,7 @@
                                         type: 'warning',
                                         size: 'small',
                                         loading: false,
-                                        disabled: params.row.status != 'audit',
+                                        disabled: params.row.status != 'audit'
                                     },
                                     style: {
                                         marginRight: '5px'
@@ -316,7 +336,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            window.open('/article/' + params.row.id);
+                                            window.open('/admin/mgr/article/preview/' + params.row.id);
                                         }
                                     }
                                 }, '预览')

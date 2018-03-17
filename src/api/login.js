@@ -24,6 +24,14 @@ export function modifyUser(user) {
     });
 }
 
+export function modifyPassword(user) {
+    return fetch({
+        url: '/user/password/modify.token',
+        method: 'put',
+        data: user
+    });
+}
+
 export function loginByEmail(loginName, password) {
     const data = {
         loginName,
@@ -38,7 +46,7 @@ export function loginByEmail(loginName, password) {
 
 export function logout(token) {
     return fetch({
-        url: '/user/logout',
+        url: '/user/logout.token',
         method: 'put',
         params: token
     });

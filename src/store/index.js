@@ -8,6 +8,7 @@ import category from './modules/category';
 import tag from './modules/tag';
 import link from './modules/link';
 import feedback from './modules/feedback';
+import milestone from './modules/milestone';
 import comment from './modules/comment';
 import permission from './modules/permission';
 import getters from './getters';
@@ -24,6 +25,7 @@ const store = new Vuex.Store({
         tag,
         link,
         feedback,
+        milestone,
         comment,
         permission
     },

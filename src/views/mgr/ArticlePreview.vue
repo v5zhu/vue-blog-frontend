@@ -5,7 +5,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button :disabled="true" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-clock" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="ios-clock-outline" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.hits}}
@@ -14,7 +14,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button :disabled="true" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="chatbox-working" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="ios-chatboxes-outline" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.commentsNum}}
@@ -23,7 +23,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="thumbsup" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="ios-sunny-outline" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.likes}}
@@ -32,7 +32,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="thumbsdown" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="ios-rainy-outline" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.dislikes}}
@@ -42,7 +42,7 @@
         </div>
         <Row>
 
-            <Col style="margin-left: 50px;" :xs="17" :sm="17" :md="17" :lg="17">
+            <Col style="margin-left: 150px;" :xs="17" :sm="17" :md="17" :lg="17">
             <div class="post-header" style="">
                 <div class="post-title"
                      style="color: #0d5477;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;"
@@ -60,9 +60,9 @@
                 <div style="min-height:150px;height:auto;margin-top: 50px;position: relative;box-shadow: 0px 2px 20px 5px #ffa5002b;border:1px solid rgba(255,165,0,0.2);border-radius: 3px;">
                     <ul style="width:100%;">
                         <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
-                            <Button type="ghost" @click="awardModal=true"
-                                    style="height:60px;width:60px;border-radius:2px;font-size: 16px;">
-                                <p style="margin-top: 10px;">赞赏</p>
+                            <Button type="ghost" @click="awardModal=true">
+                                <Icon type="ios-flame-outline" size="24" color="#0d5477"></Icon>
+                                <p>赞赏</p>
                             </Button>
 
                             <Modal v-model="awardModal" width="600" :maskClosable="false"
@@ -134,14 +134,14 @@
                         <li style="float: left;position:relative;top:20px;margin-right: 20px;">
                             <Button type="ghost" @click="updateStatistics('likes')"
                                     style="height:60px;width:60px;font-size: 12px;">
-                                <Icon type="thumbsup" size="24" color="#0d5477"></Icon>
+                                <Icon type="ios-sunny-outline" size="24" color="#0d5477"></Icon>
                                 <p>{{article.likes}}喜欢</p>
                             </Button>
                         </li>
                         <li style="float: left;position:relative;top:20px">
                             <Button type="ghost" @click="updateStatistics('dislikes')"
                                     style="height:60px;width:60px;font-size: 12px;">
-                                <Icon type="thumbsdown" size="24" color="#0d5477"></Icon>
+                                <Icon type="ios-rainy-outline" size="24" color="#0d5477"></Icon>
                                 <p>{{article.dislikes}}反对</p>
                             </Button>
                         </li>
@@ -176,7 +176,7 @@
             </Col>
         </Row>
 
-        <Row style="position: relative;margin-bottom:50px;margin-left: 50px;">
+        <Row style="position: relative;margin-bottom:50px;margin-left: 150px;">
             <Col :xs="17" :sm="17" :md="17" :lg="17" style="padding: 10px;">
             <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
             <div v-for="(c,index) in comments.list">
@@ -186,7 +186,7 @@
                             <Tag color="yellow">{{index + 1}}楼</Tag>
                         </div>
 
-                        <comment style="margin-top: -45px;" :OneComment="c" @articlePreview="articlePreview"
+                        <comment style="margin-top: -45px;" :OneComment="c" @articleDetail="articleDetail"
                                  @getArticleComments="getArticleComments"></comment>
                     </div>
                 </div>
@@ -203,7 +203,7 @@
             </Col>
         </Row>
 
-        <Form ref="tagForm" :model="article" style="margin-left: 50px;">
+        <Form ref="tagForm" :model="article" style="margin-left: 150px;">
             <Row>
                 <Col :xs="17" :sm="17" :md="17" :lg="17">
                 <Form-item prop="content">
@@ -229,7 +229,7 @@
     import store from 'store/';
     import VueMarkdown from 'vue-markdown' //直接作为一个组件引入
     import DashChartVisitor from './../charts/DashChartVisitor';
-    import Comment from './Comment';
+    import Comment from './../visitor/Comment';
     import {quillEditor} from 'vue-quill-editor';
     import h2m from 'h2m';
     import hljs from 'highlight.js/lib/highlight';
@@ -330,8 +330,9 @@
                         return hljs.highlightAuto(code).value;
                     }
                 });
-
-                return marked(this.article.content);
+                if (this.article.content) {
+                    return marked(this.article.content);
+                }
             }
 
         }
@@ -348,13 +349,7 @@
             window.scrollTo(0, 0);
 
             var id = this.$route.params.id;
-            var path = this.$route.params.path;
-            if (id) {
-                this.articlePreview(id + '.token');
-                this.getArticleComments(id);
-            } else {
-
-            }
+            this.articlePreview(id);
         }
         ,
         methods: {
@@ -398,9 +393,10 @@
             }
             ,
             articlePreview(id) {
-                store.dispatch('ArticleDetail', {id: id}).then(res => { // 拉取user_info
+                store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info
                     var article = res.data.payload;
                     this.article = article;
+                    this.getArticleComments(article.id);
                 }).catch(() => {
                     console.log("获取文章详情失败");
                 })
@@ -427,6 +423,7 @@
             }
             ,
             commitComment() {
+                this.$Loading.start();
                 var marktext = h2m(this.content);
                 store.dispatch('CommitComment', {
                     articleId: this.article.id,
@@ -438,8 +435,10 @@
                         this.$Message.success('发表评论成功');
                         this.article.commentsNum++;
                         this.getArticleComments(this.article.id);
+                        this.$Loading.finish();
                     } else {
                         this.$Message.error(data.msg);
+                        this.$Loading.error();
                     }
                 }).catch(() => {
                     console.log("提交评论失败");

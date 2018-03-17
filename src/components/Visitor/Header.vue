@@ -54,6 +54,16 @@
                         </router-link>
 
                     </li>
+                    <li class="nav-item header-item">
+
+                        <router-link tag="div" to='/milestone' class="nav-link">
+                            <p>
+                                <Icon type="ios-clock-outline" size='28' class="color-0d5477"></Icon>
+                            </p>
+                            <p class="color-0d5477"> 系统历程 </p>
+                        </router-link>
+
+                    </li>
                     <li style="margin-left: 100px;">
                         <Input v-model="q" :class="qfocus?'q-long':'q-short'" icon="ios-search" placeholder="关键字搜索..."
                                @on-focus="searchFocus" @on-blur="searchBlur" size="large">
@@ -206,7 +216,7 @@
             },
             Logout(e) {
                 e.preventDefault();
-                store.dispatch('LogOut', {token: this.loginUser.token}).then(res => {
+                store.dispatch('LogOut', {token: null}).then(res => {
                     if (res.data.success == true) {
                         Cookies.remove('USER-INFO');
                         Cookies.remove('USER-TOKEN');

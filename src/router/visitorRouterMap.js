@@ -74,6 +74,13 @@ export const visitorRouterMap = [
             meta: {
                 scrollToTop: true
             }
+        }, {
+            name: '系统历程',
+            path: '/milestone',
+            component: _import('visitor/Milestones'),
+            meta: {
+                scrollToTop: true
+            }
         }]
     }
 ]
