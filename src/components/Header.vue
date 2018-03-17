@@ -16,7 +16,7 @@
 
             <li class="nav-item header-item">
 
-                <router-link tag="div" to='/admin/blog' class="nav-link">
+                <router-link tag="div" to='/admin/mgr' class="nav-link">
                     <p>
                         <Icon type="edit" size='25' color="#2d8cf0"></Icon>
                     </p>
@@ -28,29 +28,30 @@
 
                 <router-link tag="div" to='/admin' class="nav-link">
                     <p>
-                        <Icon type="compose" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 留言管理 </p>
-                </router-link>
-            </li>
-            <li class="nav-item header-item">
-
-
-                <router-link tag="div" to='/message' class="nav-link">
-                    <p>
                         <Icon type="chatbox-working" size='25' color="#2d8cf0"></Icon>
                     </p>
                     <p style="color:white"> 消息中心 </p>
                 </router-link>
             </li>
+
             <li class="nav-item header-item">
 
 
-                <router-link tag="div" to='/setting' class="nav-link">
+                <router-link tag="div" to='/admin/mgr/setting' class="nav-link">
                     <p>
                         <Icon type="settings" size='25' color="#2d8cf0"></Icon>
                     </p>
                     <p style="color:white"> 设置中心 </p>
+                </router-link>
+            </li>
+
+            <li class="nav-item header-item">
+
+                <router-link tag="div" to='/admin/mgr/subscribe' class="nav-link">
+                    <p>
+                        <Icon type="flag" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 订阅中心 </p>
                 </router-link>
             </li>
 

@@ -49,7 +49,7 @@
 </template>
 
 <script>
-    import expandRow from './blog/article-table-expand.vue';
+    import expandRow from './mgr/article-table-expand.vue';
 
     var vue;
     var uploader;
