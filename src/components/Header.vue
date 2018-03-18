@@ -66,13 +66,14 @@
             </li>
             <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
 
-                <router-link tag="div" to='/admin/log' class="nav-link">
+                <router-link tag="div" to='/admin/mgr/log' class="nav-link">
                     <p>
                         <Icon type="ios-paw" size='25' color="#2d8cf0"></Icon>
                     </p>
                     <p style="color:white"> 日志监控 </p>
                 </router-link>
             </li>
+
             <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
 
                 <router-link tag="div" to='/admin/link' class="nav-link">
@@ -84,7 +85,7 @@
             </li>
             <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
 
-                <router-link tag="div" to='/admin/usermgr' class="nav-link">
+                <router-link tag="div" to='/admin/mgr/setting' class="nav-link">
                     <p>
                         <Icon type="person" size='25' color="#2d8cf0"></Icon>
                     </p>
@@ -115,11 +116,14 @@
 
 
             <Dropdown class="nav-item">
-                <a href="javascript:void(0)">
-           <span slot="button">
-          <img src="/static/img/avatars/man-avatar.png" class="img-avatar" alt="o">
-          <span class="d-md-down-none">admin</span>
-          </span>
+                <a href="javascript:void(0)" style="position: relative;">
+                    <div slot="button">
+                        <img src="/static/img/avatars/man-avatar.png" class="img-avatar" alt="o">
+                        <div class="d-md-down-none"
+                             style="max-width: 60px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                            {{loginUser.nickname}}
+                        </div>
+                    </div>
                 </a>
                 <Dropdown-menu slot="list">
                     <Dropdown-item>

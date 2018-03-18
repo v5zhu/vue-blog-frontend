@@ -102,7 +102,7 @@
 
     export default {
         components: {},
-        name: 'dashboard',
+        name: 'milestone',
         data() {
             return {
                 milestone: {

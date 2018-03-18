@@ -15,6 +15,7 @@ import {articleMgrRouterMap} from './articleMgrRouterMap';
 import {settingCenterRouterMap} from './settingCenterRouterMap';
 import {subscribeCenterRouterMap} from './subscribeCenterRouterMap';
 import {milestoneRouterMap} from './milestoneRouterMap';
+import {logRouterMap} from './logRouterMap';
 
 /* login */
 const Login = _import('login/index');
@@ -212,6 +213,7 @@ export const constantRouterMap = [
     .concat(articleMgrRouterMap)
     .concat(settingCenterRouterMap)
     .concat(milestoneRouterMap)
+    .concat(logRouterMap)
     .concat(subscribeCenterRouterMap);
 
 const scrollBehavior = (to, from, savedPosition) => {

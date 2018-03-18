@@ -327,7 +327,7 @@
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success(msg + '成功!');
-                                    this.$router.push({path: '/admin/mgr/article/manage'});
+                                    this.$router.push({path: '/admin/mgr/article'});
                                 } else {
                                     this.$Message.error(msg + '失败!');
                                 }
@@ -339,7 +339,7 @@
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success(msg + '成功!');
-                                    this.$router.push({path: '/admin/mgr/article/manage'});
+                                    this.$router.push({path: '/admin/mgr/article'});
                                 } else {
                                     this.$Message.error(msg + '失败!');
                                 }
