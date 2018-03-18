@@ -1,4 +1,4 @@
-import {recordMilestone} from 'api/milestone';
+import {recordMilestone, modifyMilestone, deleteMilestone, milestoneList} from 'api/milestone';
 
 const milestone = {
     state: {
@@ -45,6 +45,34 @@ const milestone = {
                 });
             });
         },
+        ModifyMilestone({commit, state}, milestone) {
+            return new Promise((resolve, reject) => {
+                modifyMilestone(milestone).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
+        DeleteMilestone({commit, state}, param) {
+            return new Promise((resolve, reject) => {
+                deleteMilestone(param.id).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        MilestoneList({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                milestoneList(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        }
     }
 };
 

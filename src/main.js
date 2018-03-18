@@ -18,6 +18,10 @@ import Validator from 'vue-validator';
 import {Message} from 'iview';
 import 'iview/dist/styles/iview.css';
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import 'font-awesome/css/font-awesome.css';
+
 // import marked from 'marked';
 
 
@@ -28,6 +32,7 @@ Vue.use(quillEditor);
 Vue.use(h2m);
 Vue.use(hljs);
 // Vue.use(marked);
+Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
 

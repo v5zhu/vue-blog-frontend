@@ -33,21 +33,22 @@ export function parseTime(time, cFormat) {
     return time_str;
 }
 
-export function formatTime(time, option) {
+export function formatTime(time, option, isShort) {
     const d = new Date(time);
 
     const now = Date.now();
 
     const diff = (now - d) / 1000;
-
-    if (diff < 30) {
-        return '刚刚'
-    } else if (diff < 3600) { // less 1 hour
-        return Math.ceil(diff / 60) + '分钟前'
-    } else if (diff < 3600 * 24) {
-        return Math.ceil(diff / 3600) + '小时前'
-    } else if (diff < 3600 * 24 * 2) {
-        return '1天前'
+    if (isShort) {
+        if (diff < 30) {
+            return '刚刚'
+        } else if (diff < 3600) { // less 1 hour
+            return Math.ceil(diff / 60) + '分钟前'
+        } else if (diff < 3600 * 24) {
+            return Math.ceil(diff / 3600) + '小时前'
+        } else if (diff < 3600 * 24 * 2) {
+            return '1天前'
+        }
     }
     if (option) {
         return parseTime(time, option)

@@ -96,7 +96,7 @@
 
                 <router-link tag="div" to='/admin/mgr/milestone' class="nav-link">
                     <p>
-                        <Icon type="person" size='25' color="#2d8cf0"></Icon>
+                        <Icon type="ios-clock-outline" size='25' color="#2d8cf0"></Icon>
                     </p>
                     <p style="color:white"> 历程记录 </p>
                 </router-link>
