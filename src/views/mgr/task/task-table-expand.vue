@@ -11,7 +11,7 @@
             <div style="font-weight: 700">【时间表达式】:</div>
             </Col>
             <Col span="21" style="padding-left: 18px;">
-            {{row.cron}}
+            {{row.cronExpression}}
             </Col>
         </Row>
         <Row>
@@ -27,7 +27,7 @@
             <div style="font-weight: 700">【创建时间】:</div>
             </Col>
             <Col span="21" style="padding-left: 18px;">
-            {{row.gmtCreate}}
+            {{row.gmtCreate|formatDate}}
             </Col>
         </Row>
         <Row>
@@ -41,6 +41,8 @@
     </div>
 </template>
 <script>
+    import {formatTime} from 'utils/index';
+
     export default {
         props: {
             row: Object
@@ -48,6 +50,11 @@
         data() {
             return {
                 defaultExpand: 1
+            }
+        },
+        filters: {
+            formatDate(time) {
+                return formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}', false);
             }
         }
     };

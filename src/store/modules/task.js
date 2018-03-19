@@ -40,7 +40,7 @@ const log = {
         },
         SwitchTaskStatus({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                switchTaskStatus(params.id).then(response => {
+                switchTaskStatus(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -67,7 +67,7 @@ const log = {
         },
         ListClassMethodName({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                listClassMethods(params.beanName).then(response => {
+                listClassMethods(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -76,7 +76,7 @@ const log = {
         },
         GetClassFullName({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                getClassFullName(params.beanName).then(response => {
+                getClassFullName(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

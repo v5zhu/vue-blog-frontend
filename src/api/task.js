@@ -27,10 +27,11 @@ export function editTask(data) {
 }
 
 
-export function switchTaskStatus(taskId) {
+export function switchTaskStatus(params) {
     return fetch({
-        url: 'admin/task/' + taskId + '/status.token',
-        method: 'put'
+        url: 'admin/task/' + params.id + '/status.token',
+        method: 'put',
+        params: {cmd: params.cmd}
     });
 }
 
@@ -49,17 +50,19 @@ export function listComponentsName() {
     });
 }
 
-export function getClassFullName() {
+export function getClassFullName(params) {
     return fetch({
         url: 'admin/mfxcomponent/fullname.token',
-        method: 'get'
+        method: 'get',
+        params: params
     });
 }
 
-export function listClassMethods() {
+export function listClassMethods(params) {
     return fetch({
-        url: 'admin/mfxcomponent/{beanName}/methods.token',
-        method: 'get'
+        url: 'admin/mfxcomponent/methods.token',
+        method: 'get',
+        params: params
     });
 }
 

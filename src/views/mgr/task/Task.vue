@@ -1,6 +1,6 @@
 <template>
     <div class="animated fadeIn" style="margin-left: 20px;">
-        <Button type="primary" size="default" @click="openNewModal()">记录历程</Button>
+        <Button type="primary" size="default" @click="openNewModal()">添加新任务</Button>
         <Modal v-model="taskModal" width="600" :maskClosable="false"
                @on-visible-change="changeModalVisible">
             <p slot="header" style="color:#f60;text-align:left">
@@ -13,7 +13,7 @@
                     <ul>
                         <li style="margin: 10px;">
                             <Form-item prop="springId" label="Bean">
-                                <Select v-model="task.springId" filterable clearable>
+                                <Select v-model="task.springId" filterable clearable @on-change="changeSpringId">
                                     <Option v-for="item in beanList" :value="item" :key="item">{{
                                         item }}
                                     </Option>
@@ -22,7 +22,7 @@
                         </li>
                         <li style="margin: 10px;">
                             <Form-item prop="name" label="类全名">
-                                <Input v-model="task.beanClass" type="text">
+                                <Input v-model="task.beanClass" disabled type="text">
                                 </Input>
                             </Form-item>
                         </li>
@@ -82,7 +82,7 @@
         </Modal>
         <Row>
             <Col span="21">
-            <div style="position:relative;">
+            <div style="position:relative;margin-top: 10px;">
                 <Table :columns="tableDataList" :data="pageInfo.list" ref="table">
 
                 </Table>
@@ -170,7 +170,41 @@
                         title: '状态',
                         key: 'jobStatus',
                         ellipsis: 'true',
-                        width: 60,
+                        width: 100,
+                        render: (h, params) => {
+                            const jobStatus = params.row.jobStatus;
+                            if (jobStatus === '1') {
+                                return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'ghost',
+                                            loading: true,
+                                            size: 'large'
+                                        },
+                                        style: {
+                                            border: 'none',
+                                            marginLeft: '-10px',
+                                            color: 'blue'
+                                        }
+                                    }, ''),
+                                ]);
+                            }
+                            else if (jobStatus === '0') {
+                                return h('div', [
+
+                                    h('Icon', {
+                                        props: {
+                                            type: 'ios-pause',
+                                            color: 'red',
+                                            size: '20'
+                                        },
+                                        style: {
+                                            marginLeft: '6px'
+                                        }
+                                    }, ''),
+                                ]);
+                            }
+                        }
                     },
                     {
                         title: 'Bean',
@@ -196,7 +230,58 @@
                         align: 'center',
                         ellipsis: 'true',
                         render: (h, params) => {
+                            var jobStatus = params.row.jobStatus;
+                            var node;
+                            if (jobStatus === '0') {
+                                node = h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        disabled: false,
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.switchJobStatus(params.row.id, 'start')
+                                        }
+                                    },
+                                }, '启动');
+                            } else if (jobStatus === '1') {
+                                node = h('Button', {
+                                    props: {
+                                        type: 'warning',
+                                        size: 'small',
+                                        disabled: false,
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.switchJobStatus(params.row.id, 'stop')
+                                        }
+                                    },
+                                }, '停止')
+                            }
                             return h('div', [
+                                node,
+                                h('Button', {
+                                    props: {
+                                        type: 'success',
+                                        size: 'small',
+                                        disabled: params.row.jobStatus === '1' ? true : false,
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.editTask(params.row);
+                                        }
+                                    },
+                                }, '编辑'),
                                 h('Button', {
                                     props: {
                                         type: 'error',
@@ -244,6 +329,11 @@
                 this.$refs[refName].resetFields();
 
             },
+            changeSpringId() {
+                if (this.task.springId) {
+                    this.beanFullName(this.task.springId);
+                }
+            },
             listBeans() {
                 store.dispatch('ListComponentsName').then(res => {
                     var data = res.data;
@@ -266,6 +356,7 @@
                     var data = res.data;
                     if (data.success == true) {
                         this.task.beanClass = data.payload;
+                        this.beanMethodsList(beanName);
                     } else {
                         this.$Message.error('加载失败');
                     }
@@ -282,7 +373,32 @@
                 store.dispatch('ListClassMethodName', {beanName: beanName}).then(res => {
                     var data = res.data;
                     if (data.success == true) {
-                        this.task.methodName = data.payload;
+                        this.beanMethodList = data.payload;
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
+            editTask(row) {
+                this.task = row;
+                this.taskModal = true;
+            },
+            switchJobStatus(id, cmd) {
+                store.dispatch('SwitchTaskStatus', {
+                    id: id,
+                    cmd: cmd
+                }).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.$Message.success('切换状态成功');
+                        this.listTask();
                     } else {
                         this.$Message.error('加载失败');
                     }
@@ -317,21 +433,41 @@
                 });
             },
             saveTask() {
-                store.dispatch('AddTask', this.task).then(res => {
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.listTask();
-                    } else {
-                        this.$Message.error('加载失败');
-                    }
-                }).catch(err => {
-                    console.log(err)
-                    this.$Message.error({
-                        content: err.data.msg,
-                        duration: 5,
-                        closable: true
+                if (!this.task.id) {
+                    store.dispatch('AddTask', this.task).then(res => {
+                        var data = res.data;
+                        if (data.success == true) {
+                            this.$Message.success('添加成功');
+                            this.listTask();
+                        } else {
+                            this.$Message.error('加载失败');
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                        this.$Message.error({
+                            content: err.data.msg,
+                            duration: 5,
+                            closable: true
+                        });
                     });
-                });
+                } else {
+                    store.dispatch('EditTask', this.task).then(res => {
+                        var data = res.data;
+                        if (data.success == true) {
+                            this.$Message.success('编辑成功');
+                            this.listTask();
+                        } else {
+                            this.$Message.error('加载失败');
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                        this.$Message.error({
+                            content: err.data.msg,
+                            duration: 5,
+                            closable: true
+                        });
+                    });
+                }
             },
             remove(id) {
                 this.$Modal.confirm({
