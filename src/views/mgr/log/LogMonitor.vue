@@ -29,9 +29,10 @@
 <script>
     import store from 'store/';
     import {formatTime} from 'utils/index';
+    import expandRow from './../log/log-table-expand.vue';
 
     export default {
-        components: {},
+        components: {expandRow},
         name: 'logMonitor',
         data() {
             return {
@@ -45,6 +46,19 @@
                 list_loadding: false,
                 tableDataList: [
                     {
+                        type: 'expand',
+                        width: "30",
+                        ellipsis: 'true',
+
+                        render: (h, params) => {
+                            return h(expandRow, {
+                                props: {
+                                    row: params.row
+                                }
+                            })
+                        }
+                    },
+                    {
                         title: '动作',
                         key: 'action',
                         ellipsis: 'true',
@@ -53,19 +67,46 @@
                     {
                         title: '数据',
                         key: 'data',
-                        ellipsis: 'true'
+                        width: 150,
+                        ellipsis: true,
+                        render: (h, params) => {
+                            const data = params.row.data;
+                            return h('div', [
+                                h('Tooltip',
+                                    {
+                                        slot: 'content',
+                                        style: {
+                                            zIndex: 999,
+                                            'white-space': 'normal'
+                                        },
+                                        props: {
+                                            content: data
+                                        }
+                                    }, data),
+                            ]);
+                        }
                     },
                     {
                         title: '级别',
                         key: 'level',
                         ellipsis: 'true',
-                        width: 100,
+                        width: 60,
                     },
                     {
                         title: '对象',
                         key: 'author',
                         ellipsis: 'true',
-                        width: 100,
+                        width: 120,
+                        render: (h, params) => {
+                            const author = params.row.author;
+                            return h('div', [
+                                h('Tooltip', {
+                                    props: {
+                                        content: author
+                                    }
+                                }, author),
+                            ]);
+                        }
                     },
                     {
                         title: 'IP',
@@ -77,22 +118,31 @@
                         title: 'URL',
                         key: 'url',
                         ellipsis: 'true',
-                        width: 100,
+                        render: (h, params) => {
+                            const url = params.row.url;
+                            return h('div', [
+                                h('Tooltip', {
+                                    props: {
+                                        content: url
+                                    }
+                                }, url),
+                            ]);
+                        }
                     },
                     {
                         title: '浏览器',
                         key: 'browser',
                         ellipsis: 'true',
-                        width: 100,
+                        width: 100
                     },
                     {
                         title: '时间',
-                        width: 120,
+                        width: 140,
                         key: 'gmt_create',
                         ellipsis: 'true',
                         render: (h, params) => {
                             const time = params.row.gmtCreate;
-                            var datetime = formatTime(time, '{y}-{m}-{d} {i}:{m}:{s}');
+                            var datetime = formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');
                             return h('div', [
                                 h('Tooltip', {
                                     props: {
@@ -105,7 +155,7 @@
                     },
                     {
                         title: '操作',
-                        width: '100',
+                        width: '70',
                         key: 'action',
                         align: 'center',
                         ellipsis: 'true',

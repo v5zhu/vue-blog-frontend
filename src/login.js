@@ -65,7 +65,7 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-router.afterEach(() => {
+router.afterEach(to => {
+    document.title = to.name;
     NProgress.done() // 结束Progress
-    // window.scrollTo(0,0);// 每个路由都回到顶部
 })
