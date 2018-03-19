@@ -57,7 +57,7 @@
 
             <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
 
-                <router-link tag="div" to='/admin/timertask' class="nav-link">
+                <router-link tag="div" to='/admin/mgr/task' class="nav-link">
                     <p>
                         <Icon type="flash-off" size='25' color="#2d8cf0"></Icon>
                     </p>

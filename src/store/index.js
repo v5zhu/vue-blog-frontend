@@ -10,6 +10,7 @@ import link from './modules/link';
 import feedback from './modules/feedback';
 import milestone from './modules/milestone';
 import log from './modules/log';
+import task from './modules/task';
 import comment from './modules/comment';
 import permission from './modules/permission';
 import getters from './getters';
@@ -28,6 +29,7 @@ const store = new Vuex.Store({
         feedback,
         milestone,
         log,
+        task,
         comment,
         permission
     },
