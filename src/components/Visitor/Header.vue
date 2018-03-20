@@ -134,10 +134,12 @@
                                 </a>
                             </Dropdown-item>
                             <Dropdown-item>
-                                <p class="dropdown-itemp">
-                                    <Icon type="android-settings"></Icon>
-                                    设置中心
-                                </p>
+                                <a href="/admin/mgr/setting" target="_blank">
+                                    <p class="dropdown-itemp">
+                                        <Icon type="android-settings"></Icon>
+                                        设置中心
+                                    </p>
+                                </a>
                             </Dropdown-item>
 
                             <Dropdown-item>

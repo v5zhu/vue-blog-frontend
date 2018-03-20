@@ -13,7 +13,7 @@ export const taskRouterMap = [
             {
                 path: '/admin/mgr/task/list',
                 name: '任务管理',
-                icon: 'ios-paw-outline',
+                icon: 'flash-off',
                 component: _import('mgr/task/Task')
             }
         ]

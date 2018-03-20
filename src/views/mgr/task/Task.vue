@@ -21,13 +21,13 @@
                             </Form-item>
                         </li>
                         <li style="margin: 10px;">
-                            <Form-item prop="name" label="类全名">
+                            <Form-item prop="beanClass" label="类全名">
                                 <Input v-model="task.beanClass" disabled type="text">
                                 </Input>
                             </Form-item>
                         </li>
                         <li style="margin: 10px;">
-                            <Form-item prop="status" label="方法">
+                            <Form-item prop="methodName" label="方法">
                                 <Select v-model="task.methodName" style="width:200px">
                                     <Option v-for="item in beanMethodList" :value="item" :key="item">
                                         {{item}}
@@ -37,20 +37,20 @@
                         </li>
 
                         <li style="margin: 10px;">
-                            <Form-item prop="name" label="任务名称">
+                            <Form-item prop="jobName" label="任务名称">
                                 <Input v-model="task.jobName" type="text">
                                 </Input>
                             </Form-item>
                         </li>
 
                         <li style="margin: 10px;">
-                            <Form-item prop="name" label="任务分组">
+                            <Form-item prop="jobGroup" label="任务分组">
                                 <Input v-model="task.jobGroup" type="text">
                                 </Input>
                             </Form-item>
                         </li>
                         <li style="margin: 10px;">
-                            <Form-item prop="name" label="cron表达式">
+                            <Form-item prop="cronExpression" label="cron表达式">
                                 <Input v-model="task.cronExpression" type="text">
                                 </Input>
                             </Form-item>
@@ -319,15 +319,17 @@
                 this.clearAll('taskForm');
                 this.taskModal = true;
             },
-            changePage() {
-
+            changePage(pageNum) {
+                this.pageInfo.pageNum = pageNum;
+                this.listTask();
             },
-            changePageSize() {
-
+            changePageSize(pageSize) {
+                this.pageInfo.pageSize = pageSize;
+                this.listTask();
             },
             clearAll(refName) {
+                this.beanMethodList = [];
                 this.$refs[refName].resetFields();
-
             },
             changeSpringId() {
                 if (this.task.springId) {

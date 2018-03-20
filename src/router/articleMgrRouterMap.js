@@ -29,22 +29,15 @@ export const articleMgrRouterMap = [
                 icon: 'stats-bars',
                 component: _import('mgr/ArticleEdit'),
                 hidden: true
-            },
-            {
-                path: '/admin/mgr/comment',
-                name: '评论管理',
-                icon: 'chatbubble-working',
-                component: _import('mgr/Comment'),
-                hidden: false
             }, {
                 path: '/admin/mgr/tag',
-                name: '标签管理',
+                name: '我的标签',
                 icon: 'ios-pricetags',
                 component: _import('mgr/Tag'),
                 hidden: false,
             }, {
                 path: '/admin/mgr/category',
-                name: '分类管理',
+                name: '我的分类',
                 icon: 'network',
                 component: _import('mgr/Category'),
                 hidden: false,

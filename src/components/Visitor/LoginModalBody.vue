@@ -24,7 +24,7 @@
                                     prop="password" style="margin-top: 30px;">
                                 <Row>
                                     <Col span="15">
-                                    <Input type="text" v-model="user.password" placeholder="请输入密码"></Input>
+                                    <Input type="password" v-model="user.password" placeholder="请输入密码"></Input>
                                     </Col>
                                 </Row>
                             </FormItem>
@@ -79,14 +79,13 @@
                             if (resp.success == true) {
                                 this.$Message.success('登录成功!');
                                 var user = resp.payload;
-                                Cookies.set('USER-TOKEN', user.token);
                                 Cookies.set('USER-INFO', user);
                                 window.location.reload();
                             } else {
                                 this.$Message.error('登录失败:' + resp.msg);
                             }
-                        }).catch(() => {
-                            this.$Message.success('提交失败!');
+                        }).catch(res => {
+                            this.$Message.error(res.data.msg);
                         })
                     } else {
                         this.$Message.error('请检查后在登录');

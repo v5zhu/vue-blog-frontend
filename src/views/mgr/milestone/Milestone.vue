@@ -289,11 +289,13 @@
             this.milestoneList();
         },
         methods: {
-            changePage() {
-
+            changePage(pageNum) {
+                this.pageInfo.pageNum = pageNum;
+                this.milestoneList();
             },
-            changePageSize() {
-
+            changePageSize(pageSize) {
+                this.pageInfo.pageSize = pageSize;
+                this.milestoneList();
             },
             milestoneList() {
                 store.dispatch('MilestoneList', {

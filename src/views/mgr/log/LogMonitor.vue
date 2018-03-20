@@ -193,11 +193,13 @@
             this.logList();
         },
         methods: {
-            changePage() {
-
+            changePage(pageNum) {
+                this.pageInfo.pageNum = pageNum;
+                this.logList();
             },
-            changePageSize() {
-
+            changePageSize(pageSize) {
+                this.pageInfo.pageSize = pageSize;
+                this.logList();
             },
             logList() {
                 store.dispatch('LogList', {
