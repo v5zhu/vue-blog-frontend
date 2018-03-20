@@ -14,104 +14,15 @@
 
         <ul class="nav navbar-nav d-md-down-none">
 
-            <li class="nav-item header-item">
+            <li class="nav-item header-item" v-for="route in pageInfo.list">
 
-                <router-link tag="div" to='/admin/mgr' class="nav-link">
+                <router-link tag="div" :to='route.path' class="nav-link">
                     <p>
-                        <Icon type="edit" size='25' color="#2d8cf0"></Icon>
+                        <Icon :type="route.icon" size='25' color="#2d8cf0"></Icon>
                     </p>
-                    <p style="color:white"> 博客管理 </p>
+                    <p style="color:white"> {{route.name}} </p>
                 </router-link>
             </li>
-            <li class="nav-item header-item">
-
-
-                <router-link tag="div" to='/admin' class="nav-link">
-                    <p>
-                        <Icon type="chatbox-working" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 消息中心 </p>
-                </router-link>
-            </li>
-
-            <li class="nav-item header-item">
-
-
-                <router-link tag="div" to='/admin/mgr/setting' class="nav-link">
-                    <p>
-                        <Icon type="settings" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 设置中心 </p>
-                </router-link>
-            </li>
-
-            <li class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/mgr/subscribe' class="nav-link">
-                    <p>
-                        <Icon type="flag" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 订阅中心 </p>
-                </router-link>
-            </li>
-
-            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/mgr/route' class="nav-link">
-                    <p>
-                        <Icon type="ios-location" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 路由管理 </p>
-                </router-link>
-            </li>
-            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/mgr/task' class="nav-link">
-                    <p>
-                        <Icon type="flash-off" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 定时任务 </p>
-                </router-link>
-            </li>
-            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/mgr/log' class="nav-link">
-                    <p>
-                        <Icon type="ios-paw" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 日志监控 </p>
-                </router-link>
-            </li>
-
-            <!--<li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/link' class="nav-link">
-                    <p>
-                        <Icon type="network" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 友链管理 </p>
-                </router-link>
-            </li>-->
-            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/mgr/setting' class="nav-link">
-                    <p>
-                        <Icon type="person" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 用户中心 </p>
-                </router-link>
-            </li>
-
-            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
-
-                <router-link tag="div" to='/admin/mgr/milestone' class="nav-link">
-                    <p>
-                        <Icon type="ios-clock-outline" size='25' color="#2d8cf0"></Icon>
-                    </p>
-                    <p style="color:white"> 历程记录 </p>
-                </router-link>
-            </li>
-
         </ul>
 
 
@@ -188,18 +99,49 @@
 <script>
 
     import navbar from './Navbar'
+    import store from 'store/';
 
     export default {
         props: ['loginUser'],
         name: 'header',
         components: {
             navbar,
-
+        },
+        data() {
+            return {
+                pageInfo: {
+                    pageNum: 1,
+                    pageSize: 20,
+                    list: [],
+                    total: 0
+                }
+            }
         },
         created() {
-            console.log(this.loginUser);
+            this.listRoute();
         },
         methods: {
+            listRoute() {
+                store.dispatch('ListRoute', {
+                    type: 'backheader',
+                    pageNum: this.pageInfo.pageNum,
+                    pageSize: this.pageInfo.pageSize
+                }).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.pageInfo = data.payload;
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
             Logout(e) {
                 e.preventDefault();
                 this.$store.dispatch('LogOut').then(res => {

@@ -1,10 +1,11 @@
 import fetch from 'utils/fetch';
 
 
-export function listRoutesTree() {
+export function listRoutesTree(params) {
     return fetch({
         url: '/admin/route/tree.token',
-        method: 'get'
+        method: 'get',
+        params: params
     });
 }
 
@@ -13,6 +14,13 @@ export function listRoute(params) {
         url: '/admin/route/list.token',
         method: 'get',
         params: params
+    });
+}
+
+export function getRouteById(id) {
+    return fetch({
+        url: '/admin/route/' + id + '.token',
+        method: 'get'
     });
 }
 

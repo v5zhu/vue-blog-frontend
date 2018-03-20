@@ -4,7 +4,7 @@
         <Modal v-model="routeModal" width="600" :maskClosable="false"
                @on-visible-change="changeModalVisible">
             <p slot="header" style="color:#f60;text-align:left">
-                <Icon type="ios-clock-outline" size="20"></Icon>
+                <Icon type="ios-location-outline" size="20"></Icon>
                 <span style="font-size:14px;">添加路由</span>
             </p>
             <Form ref="routeForm" :model="route" :label-width="80">
@@ -12,8 +12,18 @@
                     <Col span="20" class="link-piece">
                     <ul>
                         <li style="margin: 10px;">
-                            <Form-item prop="parent" label="上级路由">
-                                <Cascader v-model=route.parent.id :data="routesTree" change-on-select></Cascader>
+                            <Form-item prop="type" label="类型">
+                                <Select v-model="route.type" style="width:200px" @on-change="changeType">
+                                    <Option v-for="item in typeEnums" :value="item.value" :key="item.value">
+                                        {{item.name}}
+                                    </Option>
+                                </Select>
+                            </Form-item>
+                        </li>
+                        <li style="margin: 10px;">
+                            <Form-item prop="upper" label="上级路由">
+                                <Cascader v-model="route.upper" :data="routesTree" change-on-select
+                                          @on-change="changeParent"></Cascader>
                             </Form-item>
                         </li>
                         <li style="margin: 10px;">
@@ -37,7 +47,7 @@
                         </li>
 
                         <li style="margin: 10px;">
-                            <Form-item prop="component" label="VUE组件路径">
+                            <Form-item prop="component" label="组件路径">
                                 <Input v-model="route.component" type="text">
                                 </Input>
                             </Form-item>
@@ -56,16 +66,6 @@
                             <Form-item prop="icon" label="图标">
                                 <Input v-model="route.icon" type="text">
                                 </Input>
-                            </Form-item>
-                        </li>
-
-                        <li style="margin: 10px;">
-                            <Form-item prop="type" label="类型">
-                                <Select v-model="route.type" style="width:200px">
-                                    <Option v-for="item in typeEnums" :value="item.value" :key="item.value">
-                                        {{item.name}}
-                                    </Option>
-                                </Select>
                             </Form-item>
                         </li>
                         <li>
@@ -136,7 +136,8 @@
                     icon: '',
                     type: '',
                     gmtCreate: '',
-                    gmtModified: ''
+                    gmtModified: '',
+                    upper: []
                 },
                 pageInfo: {
                     pageNum: 1,
@@ -153,7 +154,8 @@
                     {name: '隐藏', value: 1}
                 ],
                 typeEnums: [
-                    {name: '头部', value: 'header'},
+                    {name: '前台头部', value: 'frontheader'},
+                    {name: '后台头部', value: 'backheader'},
                     {name: '路由', value: 'route'}
                 ],
                 tableDataList: [
@@ -188,6 +190,20 @@
                         ellipsis: true
                     },
                     {
+                        title: '父组件',
+                        ellipsis: true,
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', {
+                                    style: {
+                                        border: 'none',
+                                        fontWeight: 700
+                                    }
+                                }, '【' + params.row.parent.component + '】'),
+                            ]);
+                        }
+                    },
+                    {
                         title: '状态',
                         key: 'hidden',
                         ellipsis: 'true',
@@ -196,33 +212,12 @@
                             const hidden = params.row.hidden;
                             if (hidden === true) {
                                 return h('div', [
-                                    h('Button', {
-                                        props: {
-                                            type: 'ghost',
-                                            loading: true,
-                                            size: 'large'
-                                        },
-                                        style: {
-                                            border: 'none',
-                                            marginLeft: '-10px',
-                                            color: 'blue'
-                                        }
-                                    }, '隐藏'),
+                                    h('div', {}, '隐藏'),
                                 ]);
                             }
                             else if (hidden === false) {
                                 return h('div', [
-
-                                    h('Icon', {
-                                        props: {
-                                            type: 'ios-pause',
-                                            color: 'red',
-                                            size: '20'
-                                        },
-                                        style: {
-                                            marginLeft: '6px'
-                                        }
-                                    }, '显示'),
+                                    h('div', {}, '显示'),
                                 ]);
                             }
                         }
@@ -236,33 +231,12 @@
                             const type = params.row.type;
                             if (type === 'header') {
                                 return h('div', [
-                                    h('Button', {
-                                        props: {
-                                            type: 'ghost',
-                                            loading: true,
-                                            size: 'large'
-                                        },
-                                        style: {
-                                            border: 'none',
-                                            marginLeft: '-10px',
-                                            color: 'blue'
-                                        }
-                                    }, '头部'),
+                                    h('div', {}, '头部'),
                                 ]);
                             }
                             else if (type === 'route') {
                                 return h('div', [
-
-                                    h('Icon', {
-                                        props: {
-                                            type: 'ios-pause',
-                                            color: 'red',
-                                            size: '20'
-                                        },
-                                        style: {
-                                            marginLeft: '6px'
-                                        }
-                                    }, '路由'),
+                                    h('div', {}, '路由'),
                                 ]);
                             }
                         }
@@ -320,7 +294,6 @@
 
             }, 2000);
             this.listRoute();
-            this.listRoutesTree();
         },
         methods: {
             openNewModal() {
@@ -335,6 +308,19 @@
                 this.pageInfo.pageSize = pageSize;
                 this.listRoute();
             },
+            changeType() {
+                if (this.route.type) {
+                    this.route.upper = [];
+                    this.listRoutesTree(this.route.type);
+                }
+            },
+            changeParent() {
+                var parent = this.route.upper;
+                if (parent && parent.length > 0) {
+                    var id = parent[parent.length - 1];
+                    this.getRouteById(id);
+                }
+            },
             clearAll(refName) {
                 this.$refs[refName].resetFields();
             },
@@ -342,11 +328,28 @@
                 this.route = row;
                 this.routeModal = true;
             },
-            listRoutesTree() {
-                store.dispatch('ListRoutesTree').then(res => {
+            listRoutesTree(type) {
+                store.dispatch('ListRoutesTree', {type: type}).then(res => {
                     var data = res.data;
                     if (data.success == true) {
                         this.routesTree = data.payload;
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
+            getRouteById(id) {
+                store.dispatch('GetRouteById', {id: id}).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.route.path = data.payload.path;
                     } else {
                         this.$Message.error('加载失败');
                     }
@@ -382,12 +385,15 @@
             },
             saveRoute() {
                 if (!this.route.id) {
-                    var parent = this.route.parent;
-                    this.route.parent.id = parent.id[parent.id.length - 1];
+                    var parent = this.route.upper;
+                    if (parent && parent.length > 0) {
+                        this.route.parent.id = parent[parent.length - 1];
+                    }
                     store.dispatch('AddRoute', this.route).then(res => {
                         var data = res.data;
                         if (data.success == true) {
                             this.$Message.success('添加成功');
+                            this.clearAll('routeForm');
                             this.listRoute();
                         } else {
                             this.$Message.error('加载失败');
@@ -432,10 +438,14 @@
                                     this.$Message.success('删除成功');
                                     this.listRoute();
                                 } else {
-                                    this.$Message.error('删除失败');
+                                    this.$Message.error(resp.msg);
                                 }
                             }).catch(err => {
-                                console.log("删除任务请求失败");
+                                this.$Message.error({
+                                    content: err.data.msg,
+                                    duration: 5,
+                                    closable: true
+                                });
                             })
                             this.$Modal.remove();
                         }, 1000);

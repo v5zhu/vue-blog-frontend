@@ -3,14 +3,15 @@ import {
     deleteRoute,
     editRoute,
     listRoutesTree,
-    listRoute
+    listRoute,
+    getRouteById
 } from 'api/route';
 
 const route = {
     actions: {
-        ListRoutesTree({commit, state}) {
+        ListRoutesTree({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                listRoutesTree().then(response => {
+                listRoutesTree(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -20,6 +21,15 @@ const route = {
         ListRoute({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 listRoute(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        GetRouteById({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                getRouteById(params.id).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
