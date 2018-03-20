@@ -11,6 +11,7 @@ import feedback from './modules/feedback';
 import milestone from './modules/milestone';
 import log from './modules/log';
 import task from './modules/task';
+import route from './modules/route';
 import comment from './modules/comment';
 import permission from './modules/permission';
 import getters from './getters';
@@ -30,6 +31,7 @@ const store = new Vuex.Store({
         milestone,
         log,
         task,
+        route,
         comment,
         permission
     },

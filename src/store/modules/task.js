@@ -9,7 +9,7 @@ import {
     switchTaskStatus,
 } from 'api/task';
 
-const log = {
+const task = {
     actions: {
         ListTask({commit, state},params) {
             return new Promise((resolve, reject) => {
@@ -86,4 +86,4 @@ const log = {
     }
 };
 
-export default log;
+export default task;

@@ -57,6 +57,15 @@
 
             <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
 
+                <router-link tag="div" to='/admin/mgr/route' class="nav-link">
+                    <p>
+                        <Icon type="ios-location" size='25' color="#2d8cf0"></Icon>
+                    </p>
+                    <p style="color:white"> 路由管理 </p>
+                </router-link>
+            </li>
+            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
+
                 <router-link tag="div" to='/admin/mgr/task' class="nav-link">
                     <p>
                         <Icon type="flash-off" size='25' color="#2d8cf0"></Icon>
@@ -74,7 +83,7 @@
                 </router-link>
             </li>
 
-            <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
+            <!--<li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
 
                 <router-link tag="div" to='/admin/link' class="nav-link">
                     <p>
@@ -82,7 +91,7 @@
                     </p>
                     <p style="color:white"> 友链管理 </p>
                 </router-link>
-            </li>
+            </li>-->
             <li v-if="loginUser.roles.indexOf('admin')!=-1" class="nav-item header-item">
 
                 <router-link tag="div" to='/admin/mgr/setting' class="nav-link">
