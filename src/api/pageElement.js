@@ -1,5 +1,13 @@
 import fetch from 'utils/fetch';
 
+export function listPageElementsByRoute(params) {
+    return fetch({
+        url: '/admin/pageElement/listByRoute.token',
+        method: 'get',
+        params: params
+    });
+}
+
 export function listPageElement(params) {
     return fetch({
         url: '/admin/pageElement/list.token',

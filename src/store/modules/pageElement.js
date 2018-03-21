@@ -2,11 +2,21 @@ import {
     addPageElement,
     deletePageElement,
     editPageElement,
-    listPageElement
+    listPageElement,
+    listPageElementsByRoute
 } from 'api/pageElement';
 
 const pageElement = {
     actions: {
+        ListPageElementsByRoute({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                listPageElementsByRoute(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
         ListPageElement({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 listPageElement(params).then(response => {

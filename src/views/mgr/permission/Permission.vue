@@ -12,8 +12,29 @@
                     <Col span="20" class="link-piece">
                     <ul>
                         <li style="margin: 10px;">
+                            <Form-item prop="upper" label="所属路由">
+                                <Cascader v-model="permission.upper" :data="routesTree" change-on-select
+                                          @on-change="changeParent"></Cascader>
+                            </Form-item>
+                        </li>
+                        <li style="margin: 10px;">
+                            <Form-item prop="element.id" label="页面元素">
+                                <Select v-model="permission.element.id" style="width:200px">
+                                    <Option v-for="item in pageElements" :value="item.id" :key="item.id">
+                                        {{item.name}}
+                                    </Option>
+                                </Select>
+                            </Form-item>
+                        </li>
+                        <li style="margin: 10px;">
                             <Form-item prop="name" label="名称">
                                 <Input v-model="permission.name" type="text">
+                                </Input>
+                            </Form-item>
+                        </li>
+                        <li style="margin: 10px;">
+                            <Form-item prop="code" label="权限标识">
+                                <Input v-model="permission.code" type="text">
                                 </Input>
                             </Form-item>
                         </li>
@@ -81,7 +102,12 @@
                 permission: {
                     id: '',
                     name: '',
+                    code: '',
                     description: '',
+                    element: {
+                        id: ''
+                    },
+                    upper: []
                 },
                 pageInfo: {
                     pageNum: 1,
@@ -92,6 +118,8 @@
                 pageSizeOpts: [5, 10, 20, 50, 100],
                 list_loadding: false,
                 permissionModal: false,
+                routesTree: [],
+                pageElements: [],
                 tableDataList: [
                     {
                         title: 'ID',
@@ -101,13 +129,35 @@
                     },
                     {
                         title: '名称',
-                        key: 'path',
+                        key: 'name',
+                        width: 150,
+                        ellipsis: true
+                    },
+                    {
+                        title: '对应元素',
+                        ellipsis: true,
+                        render: (h, params) => {
+                            var element = params.row.element == null ? '' : '【' + params.row.element.name + '】';
+                            return h('div', [
+                                h('div', {
+                                    style: {
+                                        border: 'none',
+                                        fontWeight: 700
+                                    }
+                                }, element),
+                            ]);
+                        }
+                    },
+                    {
+                        title: '权限标识',
+                        key: 'code',
                         width: 150,
                         ellipsis: true
                     },
                     {
                         title: '描述',
-                        key: 'path',
+                        key: 'description',
+                        width: 250,
                         ellipsis: true
                     },
                     {
@@ -162,9 +212,27 @@
                 vue.list_loadding = false;
 
             }, 2000);
+            this.listRoutesTree(null);
             this.listPermission();
         },
         methods: {
+            listRoutesTree(type) {
+                store.dispatch('ListRoutesTree', {type: type}).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.routesTree = data.payload;
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
             openNewModal() {
                 this.clearAll('permissionForm');
                 this.permissionModal = true;
@@ -177,12 +245,41 @@
                 this.pageInfo.pageSize = pageSize;
                 this.listPermission();
             },
+            changeParent(routeIds) {
+                if (routeIds && routeIds.length > 0) {
+                    var routeId = routeIds[routeIds.length - 1];
+                    //根据路由获取路由下的所有元素
+                    this.listPageElementsByRoute(routeId);
+                } else {
+                    this.pageElements = [];
+                    this.$Message.warning('未选择上级路由');
+                }
+            },
             clearAll(refName) {
                 this.$refs[refName].resetFields();
             },
             editPermission(row) {
                 this.permission = row;
                 this.permissionModal = true;
+            },
+            listPageElementsByRoute(routeId) {
+                store.dispatch('ListPageElementsByRoute', {
+                    routeId: routeId
+                }).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.pageElements = data.payload;
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
             },
             listPermission() {
                 store.dispatch('ListPermission', {
