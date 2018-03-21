@@ -1,12 +1,13 @@
 <template>
     <div>
-        <Tree :data="RolePermissions" show-checkbox></Tree>
+
+
     </div>
 </template>
 
 <script>
-    import store from 'store/';
     import {formatTime} from 'utils/index';
+    import store from 'store/';
 
     export default {
         props: {
@@ -17,12 +18,48 @@
         name: 'role-permission-true',
         data() {
             return {
+                defaultProps: {
+                    children: 'children',
+                    label: 'title'
+                },
+                checkedKeys: []
             }
         },
         mounted() {
-
+            this.setCheckedKeys();
         },
-        methods: {},
+        methods: {
+            setCheckedKeys() {
+                console.log(this.row)
+                this.$refs.permissionTree.setCheckedKeys(this.row.permissions);
+                this.checkedKeys = this.row.permissions;
+            },
+            checkChange(value1, nodes) {
+                this.checkedKeys = nodes.checkedKeys;
+            },
+            saveRolePermission() {
+                var roleId = this.row.id;
+                var idTypes = this.checkedKeys;
+                store.dispatch('SettingRolePermission', {
+                    roleId: roleId,
+                    idTypes: idTypes
+                }).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.$Message.success('权限配置成功');
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            }
+        },
         filters: {
             formatDate(time) {
                 return formatTime(time, '{y}-{m}-{d}', false);

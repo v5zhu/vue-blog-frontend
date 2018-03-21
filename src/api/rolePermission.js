@@ -1,5 +1,12 @@
 import fetch from 'utils/fetch';
 
+export function settingRolePermission(data) {
+    return fetch({
+        url: '/admin/role/permission.token',
+        method: 'post',
+        data: data
+    });
+}
 
 export function addRolePermission(data) {
     return fetch({

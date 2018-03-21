@@ -50,12 +50,25 @@
                 <Icon type="ios-location-outline" size="20"></Icon>
                 <span style="font-size:14px;">角色授权</span>
             </p>
-            <Form ref="roleForm" :model="role" :label-width="80">
+            <Form ref="roleForm" :label-width="80">
                 <Row>
                     <Col span="20" class="link-piece">
-                    <role-permission-tree :row="row" :RolePermissions="RolePermissions"></role-permission-tree>
+                    <el-tree ref="permissionTree"
+                             :data="RolePermissions"
+                             show-checkbox
+                             node-key="idType"
+                             :default-expand-all="true"
+                             :props="defaultProps"
+                             @check="checkChange">
+                    </el-tree>
                     </Col>
                 </Row>
+                <Row>
+                    <Col span="20" class="link-piece">
+                    <Button type="ghost" size="small" icon="save" @click="saveRolePermission">保存</Button>
+                    </Col>
+                </Row>
+
             </Form>
             <div slot="footer" style="text-align: center">
             </div>
@@ -115,6 +128,11 @@
                 accreditModal: false,
                 row: {},
                 RolePermissions: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'title'
+                },
+                checkedKeys: [],
                 tableDataList: [
                     {
                         title: 'ID',
@@ -154,6 +172,8 @@
                                         click: () => {
                                             this.accreditModal = true;
                                             this.row = params.row;
+                                            console.log(this.row)
+                                            this.setCheckedKeys();
                                         }
                                     },
                                 }, '授权'),
@@ -205,6 +225,36 @@
             this.listPermissionTree();
         },
         methods: {
+            setCheckedKeys() {
+                this.$refs.permissionTree.setCheckedKeys(this.row.permissions);
+                this.checkedKeys = this.row.permissions;
+            },
+            checkChange(value1, nodes) {
+                this.checkedKeys = nodes.checkedKeys;
+            },
+            saveRolePermission() {
+                var roleId = this.row.id;
+                var idTypes = this.checkedKeys;
+                store.dispatch('SettingRolePermission', {
+                    roleId: roleId,
+                    idTypes: idTypes
+                }).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.$Message.success('权限配置成功');
+                        this.listRole();
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
             listPermissionTree() {
                 store.dispatch('ListPermissionTree').then(res => {
                     var data = res.data;
@@ -333,8 +383,10 @@
             changeModalVisible() {
 
             },
-            changeAccreditModalVisible() {
+            changeAccreditModalVisible(modal) {
+                if (modal) {
 
+                }
             },
             formatDate(time) {
                 return formatTime(time, '{y}-{m}-{d}', false);
