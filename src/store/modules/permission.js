@@ -1,4 +1,11 @@
 import {constantRouterMap} from 'src/router';
+import {
+    addPermission,
+    deletePermission,
+    editPermission,
+    listPermission
+} from 'api/permission';
+
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -102,6 +109,42 @@ const permission = {
                 resolve();
             })
         },
+        ListPermission({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                listPermission(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        AddPermission({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                addPermission(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        EditPermission({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                editPermission(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        DeletePermission({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                deletePermission(params.id).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        }
     },
 };
 

@@ -1,80 +1,42 @@
 <template>
     <div class="animated fadeIn" style="margin-left: 20px;">
-        <Button type="primary" size="default" @click="openNewModal()">添加新路由</Button>
-        <Modal v-model="routeModal" width="600" :maskClosable="false"
+        <Button type="primary" size="default" @click="openNewModal()">新增页面元素</Button>
+        <Modal v-model="pageElementModal" width="600" :maskClosable="false"
                @on-visible-change="changeModalVisible">
             <p slot="header" style="color:#f60;text-align:left">
                 <Icon type="ios-location-outline" size="20"></Icon>
-                <span style="font-size:14px;">添加路由</span>
+                <span style="font-size:14px;">新增页面元素</span>
             </p>
-            <Form ref="routeForm" :model="route" :label-width="80">
+            <Form ref="pageElementForm" :model="pageElement" :label-width="80">
                 <Row>
                     <Col span="20" class="link-piece">
                     <ul>
                         <li style="margin: 10px;">
-                            <Form-item prop="type" label="类型">
-                                <Select v-model="route.type" style="width:200px" @on-change="changeType">
-                                    <Option v-for="item in typeEnums" :value="item.value" :key="item.value">
-                                        {{item.name}}
-                                    </Option>
-                                </Select>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="upper" label="上级路由">
-                                <Cascader v-model="route.upper" :data="routesTree" change-on-select
+                            <Form-item prop="upper" label="所属路由">
+                                <Cascader v-model="pageElement.upper" :data="routesTree" change-on-select
                                           @on-change="changeParent"></Cascader>
                             </Form-item>
                         </li>
                         <li style="margin: 10px;">
-                            <Form-item prop="name" label="显示名称">
-                                <Input v-model="route.name" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="path" label="访问路径">
-                                <Input v-model="route.path" type="text">
+                            <Form-item prop="name" label="名称">
+                                <Input v-model="pageElement.name" type="text">
                                 </Input>
                             </Form-item>
                         </li>
 
                         <li style="margin: 10px;">
-                            <Form-item prop="redirect" label="重定向路径">
-                                <Input v-model="route.redirect" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-
-                        <li style="margin: 10px;">
-                            <Form-item prop="component" label="组件路径">
-                                <Input v-model="route.component" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="hidden" label="是否显示">
-                                <Select v-model="route.hidden" style="width:200px">
-                                    <Option v-for="item in visibleEnums" :value="item.value" :key="item.value">
-                                        {{item.name}}
-                                    </Option>
-                                </Select>
-                            </Form-item>
-                        </li>
-
-                        <li style="margin: 10px;">
-                            <Form-item prop="icon" label="图标">
-                                <Input v-model="route.icon" type="text">
+                            <Form-item prop="description" label="描述">
+                                <Input v-model="pageElement.description" type="text">
                                 </Input>
                             </Form-item>
                         </li>
                         <li>
                             <div style="text-align: right;margin: 10px;">
-                                <Button type="ghost" @click="clearAll('routeForm')">
+                                <Button type="ghost" @click="clearAll('pageElementForm')">
                                     <Icon type="ios-checkmark" size="14"></Icon>
                                     清除
                                 </Button>
-                                <Button type="ghost" @click="saveRoute">
+                                <Button type="ghost" @click="savePageElement">
                                     <Icon type="ios-checkmark" size="14"></Icon>
                                     保存
                                 </Button>
@@ -116,28 +78,19 @@
 <script>
     import store from 'store/';
     import {formatTime} from 'utils/index';
-    import expandRow from './../route/route-table-expand.vue';
 
     export default {
-        components: {expandRow},
-        name: 'route',
+        components: {},
+        name: 'pageElement',
         data() {
             return {
-                route: {
+                pageElement: {
                     id: '',
                     name: '',
-                    path: '',
-                    redirect: '',
-                    component: '',
-                    parent: {
-                        id: '',
-                        component: ''
+                    description: '',
+                    route: {
+                        id: ''
                     },
-                    hidden: '',
-                    icon: '',
-                    type: '',
-                    gmtCreate: '',
-                    gmtModified: '',
                     upper: []
                 },
                 pageInfo: {
@@ -148,100 +101,41 @@
                 },
                 pageSizeOpts: [5, 10, 20, 50, 100],
                 list_loadding: false,
-                routeModal: false,
+                pageElementModal: false,
                 routesTree: [],// 上级路由级联下拉框
-                visibleEnums: [
-                    {name: '显示', value: 0},
-                    {name: '隐藏', value: 1}
-                ],
-                typeEnums: [
-                    {name: '前台头部', value: 'frontheader'},
-                    {name: '后台头部', value: 'backheader'},
-                    {name: '路由', value: 'route'}
-                ],
                 tableDataList: [
                     {
-                        type: 'expand',
-                        width: "30",
-                        ellipsis: 'true',
-
-                        render: (h, params) => {
-                            return h(expandRow, {
-                                props: {
-                                    row: params.row
-                                }
-                            })
-                        }
-                    },
-                    {
-                        title: '名称',
-                        key: 'name',
+                        title: 'ID',
+                        key: 'id',
                         ellipsis: 'true',
                         width: 100
                     },
                     {
-                        title: '路径',
-                        key: 'path',
+                        title: '元素名称',
+                        key: 'name',
                         width: 150,
                         ellipsis: true
                     },
                     {
-                        title: '组件',
-                        key: 'component',
-                        ellipsis: true
-                    },
-                    {
-                        title: '父组件',
+                        title: '所属路由',
+                        width: 150,
                         ellipsis: true,
                         render: (h, params) => {
-                            var parent = params.row.parent == null ? '' : '【' + params.row.parent.component + '】';
+                            var route = params.row.route == null ? '' : '【' + params.row.route.name + '】';
                             return h('div', [
                                 h('div', {
                                     style: {
                                         border: 'none',
                                         fontWeight: 700
                                     }
-                                }, parent),
+                                }, route),
                             ]);
                         }
                     },
                     {
-                        title: '状态',
-                        key: 'hidden',
-                        ellipsis: 'true',
-                        width: 100,
-                        render: (h, params) => {
-                            const hidden = params.row.hidden;
-                            if (hidden === true) {
-                                return h('div', [
-                                    h('div', {}, '隐藏'),
-                                ]);
-                            }
-                            else if (hidden === false) {
-                                return h('div', [
-                                    h('div', {}, '显示'),
-                                ]);
-                            }
-                        }
-                    },
-                    {
-                        title: '类型',
-                        key: 'type',
-                        ellipsis: 'true',
-                        width: 100,
-                        render: (h, params) => {
-                            const type = params.row.type;
-                            if (type === 'header') {
-                                return h('div', [
-                                    h('div', {}, '头部'),
-                                ]);
-                            }
-                            else if (type === 'route') {
-                                return h('div', [
-                                    h('div', {}, '路由'),
-                                ]);
-                            }
-                        }
+                        title: '描述',
+                        key: 'description',
+                        ellipsis: true
                     },
                     {
                         title: '操作',
@@ -262,7 +156,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.editRoute(params.row);
+                                            this.editPageElement(params.row);
                                         }
                                     },
                                 }, '编辑'),
@@ -295,42 +189,10 @@
                 vue.list_loadding = false;
 
             }, 2000);
-            this.listRoute();
+            this.listRoutesTree(null);
+            this.listPageElement();
         },
         methods: {
-            openNewModal() {
-                this.clearAll('routeForm');
-                this.routeModal = true;
-            },
-            changePage(pageNum) {
-                this.pageInfo.pageNum = pageNum;
-                this.listRoute();
-            },
-            changePageSize(pageSize) {
-                this.pageInfo.pageSize = pageSize;
-                this.listRoute();
-            },
-            changeType() {
-                if (this.route.type) {
-                    this.route.upper = [];
-                    this.listRoutesTree(this.route.type);
-                }
-            },
-            changeParent(value) {
-                if (value && value.length > 0) {
-                    var id = value[value.length - 1];
-                    this.getRouteById(id);
-                } else {
-                    this.$Message.warning('未选择上级路由');
-                }
-            },
-            clearAll(refName) {
-                this.$refs[refName].resetFields();
-            },
-            editRoute(row) {
-                this.route = row;
-                this.routeModal = true;
-            },
             listRoutesTree(type) {
                 store.dispatch('ListRoutesTree', {type: type}).then(res => {
                     var data = res.data;
@@ -348,25 +210,34 @@
                     });
                 });
             },
-            getRouteById(id) {
-                store.dispatch('GetRouteById', {id: id}).then(res => {
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.route.path = data.payload.path;
-                    } else {
-                        this.$Message.error('加载失败');
-                    }
-                }).catch(err => {
-                    console.log(err)
-                    this.$Message.error({
-                        content: err.data.msg,
-                        duration: 5,
-                        closable: true
-                    });
-                });
+            openNewModal() {
+                this.clearAll('pageElementForm');
+                this.pageElementModal = true;
             },
-            listRoute() {
-                store.dispatch('ListRoute', {
+            changePage(pageNum) {
+                this.pageInfo.pageNum = pageNum;
+                this.listPageElement();
+            },
+            changePageSize(pageSize) {
+                this.pageInfo.pageSize = pageSize;
+                this.listPageElement();
+            },
+            changeParent(routeId) {
+                if (routeId && routeId.length > 0) {
+                    this.pageElement.route.id = routeId[routeId.length - 1];
+                } else {
+                    this.$Message.warning('未选择上级路由');
+                }
+            },
+            clearAll(refName) {
+                this.$refs[refName].resetFields();
+            },
+            editPageElement(row) {
+                this.pageElement = row;
+                this.pageElementModal = true;
+            },
+            listPageElement() {
+                store.dispatch('ListPageElement', {
                     type: '',
                     pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize
@@ -386,18 +257,21 @@
                     });
                 });
             },
-            saveRoute() {
-                if (!this.route.id) {
-                    var parent = this.route.upper;
-                    if (parent && parent.length > 0) {
-                        this.route.parent.id = parent[parent.length - 1];
+            savePageElement() {
+                if (!this.pageElement.id) {
+                    if (!this.pageElement.route.id) {
+                        this.$Message.error({
+                            content: '请选择所属组件',
+                            duration: 5,
+                            closable: true
+                        });
                     }
-                    store.dispatch('AddRoute', this.route).then(res => {
+                    store.dispatch('AddPageElement', this.pageElement).then(res => {
                         var data = res.data;
                         if (data.success == true) {
                             this.$Message.success('添加成功');
-                            this.clearAll('routeForm');
-                            this.listRoute();
+                            this.clearAll('pageElementForm');
+                            this.listPageElement();
                         } else {
                             this.$Message.error('加载失败');
                         }
@@ -410,11 +284,11 @@
                         });
                     });
                 } else {
-                    store.dispatch('EditRoute', this.route).then(res => {
+                    store.dispatch('EditPageElement', this.pageElement).then(res => {
                         var data = res.data;
                         if (data.success == true) {
                             this.$Message.success('编辑成功');
-                            this.listRoute();
+                            this.listPageElement();
                         } else {
                             this.$Message.error('加载失败');
                         }
@@ -430,16 +304,16 @@
             },
             remove(id) {
                 this.$Modal.confirm({
-                    title: '删除路由',
-                    content: '<p>点击确定1秒后将删除此路由</p>',
+                    title: '删除页面元素',
+                    content: '<p>点击确定1秒后将删除此页面元素</p>',
                     loading: true,
                     onOk: () => {
                         setTimeout(() => {
-                            store.dispatch('DeleteRoute', {id: id}).then(res => { // 拉取user_info
+                            store.dispatch('DeletePageElement', {id: id}).then(res => { // 拉取user_info
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success('删除成功');
-                                    this.listRoute();
+                                    this.listPageElement();
                                 } else {
                                     this.$Message.error(resp.msg);
                                 }

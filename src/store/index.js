@@ -13,6 +13,8 @@ import log from './modules/log';
 import task from './modules/task';
 import route from './modules/route';
 import comment from './modules/comment';
+import role from './modules/role';
+import pageElement from './modules/pageElement';
 import permission from './modules/permission';
 import getters from './getters';
 
@@ -33,6 +35,8 @@ const store = new Vuex.Store({
         task,
         route,
         comment,
+        role,
+        pageElement,
         permission
     },
     getters
