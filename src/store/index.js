@@ -16,6 +16,7 @@ import comment from './modules/comment';
 import role from './modules/role';
 import pageElement from './modules/pageElement';
 import permission from './modules/permission';
+import rolePermission from './modules/rolePermission';
 import getters from './getters';
 
 Vue.use(Vuex);
@@ -37,7 +38,8 @@ const store = new Vuex.Store({
         comment,
         role,
         pageElement,
-        permission
+        permission,
+        rolePermission
     },
     getters
 });

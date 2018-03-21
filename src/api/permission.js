@@ -8,6 +8,13 @@ export function listPermission(params) {
     });
 }
 
+export function listPermissionTree() {
+    return fetch({
+        url: '/admin/permission/tree.token',
+        method: 'get'
+    });
+}
+
 
 export function addPermission(data) {
     return fetch({

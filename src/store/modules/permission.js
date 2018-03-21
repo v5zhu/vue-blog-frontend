@@ -3,7 +3,8 @@ import {
     addPermission,
     deletePermission,
     editPermission,
-    listPermission
+    listPermission,
+    listPermissionTree
 } from 'api/permission';
 
 
@@ -108,6 +109,15 @@ const permission = {
                 commit('SET_NOW_ROUTERS', data);
                 resolve();
             })
+        },
+        ListPermissionTree({commit, state}) {
+            return new Promise((resolve, reject) => {
+                listPermissionTree().then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
         },
         ListPermission({commit, state}, params) {
             return new Promise((resolve, reject) => {

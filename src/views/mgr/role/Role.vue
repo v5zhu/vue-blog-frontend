@@ -43,6 +43,24 @@
             <div slot="footer" style="text-align: center">
             </div>
         </Modal>
+
+        <Modal v-model="accreditModal" width="600" :maskClosable="false"
+               @on-visible-change="changeAccreditModalVisible">
+            <p slot="header" style="color:#f60;text-align:left">
+                <Icon type="ios-location-outline" size="20"></Icon>
+                <span style="font-size:14px;">角色授权</span>
+            </p>
+            <Form ref="roleForm" :model="role" :label-width="80">
+                <Row>
+                    <Col span="20" class="link-piece">
+                    <role-permission-tree :row="row" :RolePermissions="RolePermissions"></role-permission-tree>
+                    </Col>
+                </Row>
+            </Form>
+            <div slot="footer" style="text-align: center">
+            </div>
+        </Modal>
+
         <Row>
             <Col span="21">
             <div style="position:relative;margin-top: 10px;">
@@ -73,8 +91,10 @@
     import store from 'store/';
     import {formatTime} from 'utils/index';
 
+    import RolePermissionTree from './RolePermissionTree.vue';
+
     export default {
-        components: {},
+        components: {RolePermissionTree},
         name: 'role',
         data() {
             return {
@@ -92,6 +112,9 @@
                 pageSizeOpts: [5, 10, 20, 50, 100],
                 list_loadding: false,
                 roleModal: false,
+                accreditModal: false,
+                row: {},
+                RolePermissions: [],
                 tableDataList: [
                     {
                         title: 'ID',
@@ -118,6 +141,22 @@
                         ellipsis: 'true',
                         render: (h, params) => {
                             return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        disabled: false,
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.accreditModal = true;
+                                            this.row = params.row;
+                                        }
+                                    },
+                                }, '授权'),
                                 h('Button', {
                                     props: {
                                         type: 'success',
@@ -163,8 +202,26 @@
 
             }, 2000);
             this.listRole();
+            this.listPermissionTree();
         },
         methods: {
+            listPermissionTree() {
+                store.dispatch('ListPermissionTree').then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.RolePermissions = data.payload;
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
             openNewModal() {
                 this.clearAll('roleForm');
                 this.roleModal = true;
@@ -274,6 +331,9 @@
                 });
             },
             changeModalVisible() {
+
+            },
+            changeAccreditModalVisible() {
 
             },
             formatDate(time) {
