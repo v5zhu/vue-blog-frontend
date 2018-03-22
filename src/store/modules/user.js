@@ -1,4 +1,16 @@
-import {loginByEmail, logout, modifyUser, modifyPassword, getInfo, getAuthorInfo, register, login} from 'api/login';
+import {
+    loginByEmail,
+    logout,
+    listUser,
+    deleteUser,
+    modifyUser,
+    modifyPassword,
+    getInfo,
+    getAuthorInfo,
+    register,
+    login,
+    setUserRole
+} from 'api/login';
 import Cookies from 'js-cookie';
 
 const user = {
@@ -74,6 +86,33 @@ const user = {
         Register({commit, state}, data) {
             return new Promise((resolve, reject) => {
                 register(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        SetUserRole({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                setUserRole(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        ListUser({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                listUser(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        DeleteUser({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                deleteUser(params.id).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

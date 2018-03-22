@@ -1,79 +1,5 @@
 <template>
     <div class="animated fadeIn" style="margin-left: 20px;">
-        <Button type="primary" size="default" @click="openNewModal()">新增角色</Button>
-        <Modal v-model="roleModal" width="600" :maskClosable="false"
-               @on-visible-change="changeModalVisible">
-            <p slot="header" style="color:#f60;text-align:left">
-                <Icon type="ios-location-outline" size="20"></Icon>
-                <span style="font-size:14px;">新增角色</span>
-            </p>
-            <Form ref="roleForm" :model="role" :label-width="80">
-                <Row>
-                    <Col span="20" class="link-piece">
-                    <ul>
-                        <li style="margin: 10px;">
-                            <Form-item prop="name" label="名称">
-                                <Input v-model="role.name" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-
-                        <li style="margin: 10px;">
-                            <Form-item prop="description" label="描述">
-                                <Input v-model="role.description" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-                        <li>
-                            <div style="text-align: right;margin: 10px;">
-                                <Button type="ghost" @click="clearAll('roleForm')">
-                                    <Icon type="ios-checkmark" size="14"></Icon>
-                                    清除
-                                </Button>
-                                <Button type="ghost" @click="saveRole">
-                                    <Icon type="ios-checkmark" size="14"></Icon>
-                                    保存
-                                </Button>
-                            </div>
-                        </li>
-                    </ul>
-                    </Col>
-                </Row>
-            </Form>
-            <div slot="footer" style="text-align: center">
-            </div>
-        </Modal>
-
-        <Modal v-model="accreditModal" width="600" :maskClosable="false"
-               @on-visible-change="changeAccreditModalVisible">
-            <p slot="header" style="color:#f60;text-align:left">
-                <Icon type="ios-location-outline" size="20"></Icon>
-                <span style="font-size:14px;">角色授权</span>
-            </p>
-            <Form ref="roleForm" :label-width="80">
-                <Row>
-                    <Col span="20" class="link-piece">
-                    <el-tree ref="permissionTree"
-                             :data="RolePermissions"
-                             show-checkbox
-                             node-key="idType"
-                             :default-expand-all="true"
-                             :props="defaultProps"
-                             @check="checkChange">
-                    </el-tree>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="20" class="link-piece">
-                    <Button type="ghost" size="small" icon="save" @click="saveRolePermission">保存</Button>
-                    </Col>
-                </Row>
-
-            </Form>
-            <div slot="footer" style="text-align: center">
-            </div>
-        </Modal>
-
         <Row>
             <Col span="21">
             <div style="position:relative;margin-top: 10px;">
@@ -97,23 +23,62 @@
             </Col>
         </Row>
 
+        <Modal v-model="roleTreeModal" width="600" :maskClosable="false"
+               @on-visible-change="changeRoleTreeModalVisible">
+            <p slot="header" style="color:#f60;text-align:left">
+                <Icon type="ios-location-outline" size="20"></Icon>
+                <span style="font-size:14px;">分配角色</span>
+            </p>
+            <Form ref="userRoleForm" :label-width="80">
+                <Row>
+                    <Col span="20" class="link-piece">
+                    <el-tree ref="roleTree"
+                             :data="roleTrees"
+                             show-checkbox
+                             node-key="roleId"
+                             :default-expand-all="true"
+                             :props="defaultProps"
+                             @check="checkChange">
+                    </el-tree>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="20" class="link-piece">
+                    <Button type="ghost" size="small" icon="save" @click="saveUserRole">保存</Button>
+                    </Col>
+                </Row>
+
+            </Form>
+            <div slot="footer" style="text-align: center">
+            </div>
+        </Modal>
+
     </div>
 </template>
 
 <script>
     import store from 'store/';
     import {formatTime} from 'utils/index';
+    import expandRow from './../user/user-table-expand.vue';
 
     export default {
-        components: {},
-        name: 'role',
+        components: {expandRow},
+        name: 'user',
         data() {
             return {
-                role: {
+                user: {
                     id: '',
-                    name: '',
-                    description: '',
+                    loginName: '',
+                    token: '',
+                    nickname: '',
+                    email: '',
+                    homeUrl: '',
+                    loginStatus: '',
+                    lastLoginTime: '',
+                    gmtCreate: '',
+                    gmtModified: ''
                 },
+                row: {},
                 pageInfo: {
                     pageNum: 1,
                     pageSize: 10,
@@ -122,32 +87,90 @@
                 },
                 pageSizeOpts: [5, 10, 20, 50, 100],
                 list_loadding: false,
-                roleModal: false,
-                accreditModal: false,
-                row: {},
-                RolePermissions: [],
+                roleTreeModal: false,
+                roleTrees: [],
                 defaultProps: {
                     children: 'children',
-                    label: 'title'
+                    label: 'roleName'
                 },
                 checkedKeys: [],
                 tableDataList: [
                     {
-                        title: 'ID',
-                        key: 'id',
+                        type: 'expand',
+                        width: "30",
+                        ellipsis: 'true',
+
+                        render: (h, params) => {
+                            return h(expandRow, {
+                                props: {
+                                    row: params.row
+                                }
+                            })
+                        }
+                    },
+                    {
+                        title: '昵称',
+                        key: 'nickname',
                         ellipsis: 'true',
                         width: 100
                     },
                     {
-                        title: '名称',
-                        key: 'name',
+                        title: '账号',
+                        key: 'loginName',
                         width: 150,
                         ellipsis: true
                     },
                     {
-                        title: '描述',
-                        key: 'description',
+                        title: '邮箱',
+                        key: 'email',
+                        width: 150,
                         ellipsis: true
+                    },
+                    {
+                        title: '网址',
+                        key: 'homeUrl',
+                        ellipsis: true
+                    },
+                    {
+                        title: '登录状态',
+                        ellipsis: 'true',
+                        width: 150,
+                        render: (h, params) => {
+                            const loginStatus = params.row.loginStatus;
+                            if (loginStatus === 1) {
+                                return h('div', [
+                                    h('div', {}, '在线'),
+                                ]);
+                            } else {
+                                return h('div', [
+                                    h('div', {}, '离线'),
+                                ]);
+                            }
+                        }
+                    },
+                    {
+                        title: '最后在线',
+                        key: 'lastLoginTime',
+                        ellipsis: 'true',
+                        width: 150,
+                        render: (h, params) => {
+                            const lastLoginTime = params.row.lastLoginTime;
+                            return h('div', [
+                                h('div', {}, this.formatDate(lastLoginTime)),
+                            ]);
+                        }
+                    },
+                    {
+                        title: '注册',
+                        key: 'gmtCreate',
+                        ellipsis: 'true',
+                        width: 150,
+                        render: (h, params) => {
+                            const gmtCreate = params.row.gmtCreate;
+                            return h('div', [
+                                h('div', {}, this.formatDate(gmtCreate)),
+                            ]);
+                        }
                     },
                     {
                         title: '操作',
@@ -168,28 +191,11 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.accreditModal = true;
+                                            this.roleTreeModal = true;
                                             this.row = params.row;
-                                            console.log(this.row)
-                                            this.setCheckedKeys();
                                         }
                                     },
-                                }, '授权'),
-                                h('Button', {
-                                    props: {
-                                        type: 'success',
-                                        size: 'small',
-                                        disabled: false,
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.editRole(params.row);
-                                        }
-                                    },
-                                }, '编辑'),
+                                }, '分配角色'),
                                 h('Button', {
                                     props: {
                                         type: 'error',
@@ -219,79 +225,44 @@
                 vue.list_loadding = false;
 
             }, 2000);
-            this.listRole();
-            this.listPermissionTree();
+            this.listUser();
+            this.roleTree();
         },
         methods: {
             setCheckedKeys() {
-                this.$refs.permissionTree.setCheckedKeys(this.row.permissions);
-                this.checkedKeys = this.row.permissions;
+                this.$refs.roleTree.setCheckedKeys(this.row.roleIds);
+                this.checkedKeys = this.row.roleIds;
             },
             checkChange(value1, nodes) {
                 this.checkedKeys = nodes.checkedKeys;
             },
-            saveRolePermission() {
-                var roleId = this.row.id;
-                var idTypes = this.checkedKeys;
-                store.dispatch('SettingRolePermission', {
-                    roleId: roleId,
-                    idTypes: idTypes
-                }).then(res => {
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.$Message.success('权限配置成功');
-                        this.listRole();
-                    } else {
-                        this.$Message.error('加载失败');
-                    }
-                }).catch(err => {
-                    console.log(err)
-                    this.$Message.error({
-                        content: err.data.msg,
-                        duration: 5,
-                        closable: true
-                    });
-                });
-            },
-            listPermissionTree() {
-                store.dispatch('ListPermissionTree').then(res => {
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.RolePermissions = data.payload;
-                    } else {
-                        this.$Message.error('加载失败');
-                    }
-                }).catch(err => {
-                    console.log(err)
-                    this.$Message.error({
-                        content: err.data.msg,
-                        duration: 5,
-                        closable: true
-                    });
-                });
-            },
-            openNewModal() {
-                this.clearAll('roleForm');
-                this.roleModal = true;
-            },
             changePage(pageNum) {
                 this.pageInfo.pageNum = pageNum;
-                this.listRole();
+                this.listUser();
             },
             changePageSize(pageSize) {
                 this.pageInfo.pageSize = pageSize;
-                this.listRole();
+                this.listUser();
             },
-            clearAll(refName) {
-                this.$refs[refName].resetFields();
+            roleTree() {
+                store.dispatch('RoleTree').then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.roleTrees = data.payload;
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
             },
-            editRole(row) {
-                this.role = row;
-                this.roleModal = true;
-            },
-            listRole() {
-                store.dispatch('ListRole', {
-                    type: '',
+            listUser() {
+                store.dispatch('ListUser', {
                     pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize
                 }).then(res => {
@@ -302,6 +273,28 @@
                         this.$Message.error('加载失败');
                     }
                 }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
+            saveUserRole() {
+                var userId = this.row.id;
+                var roleIds = this.checkedKeys;
+                store.dispatch('SetUserRole', {
+                    userId: userId,
+                    roleIds: roleIds
+                }).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.$Message.success('角色分配成功');
+                        this.listUser();
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
                     console.log(err)
                     this.$Message.error({
                         content: err.data.msg,
@@ -310,56 +303,18 @@
                     });
                 });
             },
-            saveRole() {
-                if (!this.role.id) {
-                    store.dispatch('AddRole', this.role).then(res => {
-                        var data = res.data;
-                        if (data.success == true) {
-                            this.$Message.success('添加成功');
-                            this.clearAll('roleForm');
-                            this.listRole();
-                        } else {
-                            this.$Message.error('加载失败');
-                        }
-                    }).catch(err => {
-                        console.log(err)
-                        this.$Message.error({
-                            content: err.data.msg,
-                            duration: 5,
-                            closable: true
-                        });
-                    });
-                } else {
-                    store.dispatch('EditRole', this.role).then(res => {
-                        var data = res.data;
-                        if (data.success == true) {
-                            this.$Message.success('编辑成功');
-                            this.listRole();
-                        } else {
-                            this.$Message.error('加载失败');
-                        }
-                    }).catch(err => {
-                        console.log(err)
-                        this.$Message.error({
-                            content: err.data.msg,
-                            duration: 5,
-                            closable: true
-                        });
-                    });
-                }
-            },
             remove(id) {
                 this.$Modal.confirm({
-                    title: '删除角色',
-                    content: '<p>点击确定1秒后将删除此角色</p>',
+                    title: '删除用户',
+                    content: '<p>点击确定1秒后将删除此用户</p>',
                     loading: true,
                     onOk: () => {
                         setTimeout(() => {
-                            store.dispatch('DeleteRole', {id: id}).then(res => { // 拉取user_info
+                            store.dispatch('DeleteUser', {id: id}).then(res => { // 拉取user_info
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success('删除成功');
-                                    this.listRole();
+                                    this.listUser();
                                 } else {
                                     this.$Message.error(resp.msg);
                                 }
@@ -378,12 +333,9 @@
                     }
                 });
             },
-            changeModalVisible() {
-
-            },
-            changeAccreditModalVisible(modal) {
-                if (modal) {
-
+            changeRoleTreeModalVisible(visible) {
+                if (visible) {
+                    this.setCheckedKeys();
                 }
             },
             formatDate(time) {

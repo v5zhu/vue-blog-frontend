@@ -1,5 +1,12 @@
 import fetch from 'utils/fetch';
 
+export function roleTree() {
+    return fetch({
+        url: '/admin/role/tree.token',
+        method: 'get'
+    });
+}
+
 export function listRole(params) {
     return fetch({
         url: '/admin/role/list.token',

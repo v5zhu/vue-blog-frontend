@@ -104,10 +104,8 @@
     import store from 'store/';
     import {formatTime} from 'utils/index';
 
-    import RolePermissionTree from './RolePermissionTree.vue';
-
     export default {
-        components: {RolePermissionTree},
+        components: {},
         name: 'role',
         data() {
             return {
@@ -172,7 +170,6 @@
                                         click: () => {
                                             this.accreditModal = true;
                                             this.row = params.row;
-                                            console.log(this.row)
                                             this.setCheckedKeys();
                                         }
                                     },

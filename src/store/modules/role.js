@@ -2,11 +2,21 @@ import {
     addRole,
     deleteRole,
     editRole,
-    listRole
+    listRole,
+    roleTree
 } from 'api/role';
 
 const role = {
     actions: {
+        RoleTree({commit, state}) {
+            return new Promise((resolve, reject) => {
+                roleTree().then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
         ListRole({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 listRole(params).then(response => {

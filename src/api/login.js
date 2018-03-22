@@ -16,11 +16,34 @@ export function login(loginData) {
     });
 }
 
+export function setUserRole(data) {
+    return fetch({
+        url: '/admin/user/role.token',
+        method: 'put',
+        data: data
+    });
+}
+
+export function listUser(params) {
+    return fetch({
+        url: '/admin/user/list.token',
+        method: 'get',
+        params: params
+    });
+}
+
 export function modifyUser(user) {
     return fetch({
         url: '/user/modify.token',
         method: 'put',
         data: user
+    });
+}
+
+export function deleteUser(id) {
+    return fetch({
+        url: '/admin/delete/user/' + id + '.token',
+        method: 'delete'
     });
 }
 
