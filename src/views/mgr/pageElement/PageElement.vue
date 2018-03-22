@@ -147,6 +147,21 @@
                             return h('div', [
                                 h('Button', {
                                     props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        disabled: false,
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.copyElement(params.row);
+                                        }
+                                    },
+                                }, '复制'),
+                                h('Button', {
+                                    props: {
                                         type: 'success',
                                         size: 'small',
                                         disabled: false,
@@ -256,6 +271,11 @@
                         closable: true
                     });
                 });
+            },
+            copyElement(row) {
+                this.pageElement = row;
+                this.pageElement.id = '';
+                this.savePageElement();
             },
             savePageElement() {
                 if (!this.pageElement.id) {

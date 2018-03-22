@@ -13,8 +13,7 @@
         </ul>
 
         <ul class="nav navbar-nav d-md-down-none">
-
-            <li class="nav-item header-item" v-for="route in pageInfo.list">
+            <li class="nav-item header-item" v-for="route in pageInfo.list" v-if="route.hidden==false">
 
                 <router-link tag="div" :to='route.path' class="nav-link">
                     <p>

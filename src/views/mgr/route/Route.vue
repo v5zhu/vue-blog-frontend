@@ -130,8 +130,7 @@
                     redirect: '',
                     component: '',
                     parent: {
-                        id: '',
-                        component: ''
+                        id: ''
                     },
                     hidden: '',
                     icon: '',
@@ -194,7 +193,7 @@
                         title: '父组件',
                         ellipsis: true,
                         render: (h, params) => {
-                            var parent = params.row.parent == null ? '' : '【' + params.row.parent.component + '】';
+                            var parent = params.row.parent == null ? '' : '【' + params.row.parent.name + '】';
                             return h('div', [
                                 h('div', {
                                     style: {
@@ -397,6 +396,7 @@
                         if (data.success == true) {
                             this.$Message.success('添加成功');
                             this.clearAll('routeForm');
+                            this.route.parent.id = '';
                             this.listRoute();
                         } else {
                             this.$Message.error('加载失败');
@@ -414,7 +414,7 @@
                         var data = res.data;
                         if (data.success == true) {
                             this.$Message.success('编辑成功');
-                            this.listRoute();
+                            window.location.reload();
                         } else {
                             this.$Message.error('加载失败');
                         }

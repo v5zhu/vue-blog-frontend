@@ -14,10 +14,7 @@ import {globalRouterMap} from './globalRouterMap';
 import {articleMgrRouterMap} from './articleMgrRouterMap';
 import {settingCenterRouterMap} from './settingCenterRouterMap';
 import {subscribeCenterRouterMap} from './subscribeCenterRouterMap';
-import {milestoneRouterMap} from './milestoneRouterMap';
 import {logRouterMap} from './logRouterMap';
-import {taskRouterMap} from './taskRouterMap';
-import {routeRouterMap} from './routeRouterMap';
 import {systemMgrRouterMap} from './systemMgrRouterMap';
 
 /* login */
@@ -215,10 +212,7 @@ export const constantRouterMap = [
     .concat(visitorRouterMap)
     .concat(articleMgrRouterMap)
     .concat(settingCenterRouterMap)
-    .concat(milestoneRouterMap)
     .concat(logRouterMap)
-    .concat(taskRouterMap)
-    .concat(routeRouterMap)
     .concat(systemMgrRouterMap)
     .concat(subscribeCenterRouterMap);
 

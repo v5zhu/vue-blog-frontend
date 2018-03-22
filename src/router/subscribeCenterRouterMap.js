@@ -11,13 +11,13 @@ export const subscribeCenterRouterMap = [
         hidden: true,
         children: [
             {
-                path: 'service',
+                path: '/admin/mgr/subscribe/service',
                 name: '订阅服务',
                 icon: 'flag',
                 component: _import('mgr/subscribe/SubscribeService')
             },
             {
-                path: 'mysubscribe',
+                path: '/admin/mgr/subscribe/mysubscribe',
                 name: '我的订阅',
                 icon: 'ios-star-outline',
                 component: _import('mgr/subscribe/MySubscribe')

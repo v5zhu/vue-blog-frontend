@@ -11,13 +11,13 @@ export const settingCenterRouterMap = [
         hidden: false,
         children: [
             {
-                path: 'userinfo',
+                path: '/admin/mgr/setting/userinfo',
                 name: '个人信息',
                 icon: 'person',
                 component: _import('mgr/setting/Userinfo')
             },
             {
-                path: 'password',
+                path: '/admin/mgr/setting/password',
                 name: '修改密码',
                 icon: 'ios-locked',
                 component: _import('mgr/setting/Password')

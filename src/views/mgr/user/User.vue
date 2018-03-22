@@ -1,57 +1,36 @@
 <template>
     <div class="animated fadeIn" style="margin-left: 20px;">
-        <Button type="primary" size="default" @click="openNewModal()">新增权限</Button>
-        <Modal v-model="permissionModal" width="600" :maskClosable="false"
+        <Button type="primary" size="default" @click="openNewModal()">新增角色</Button>
+        <Modal v-model="roleModal" width="600" :maskClosable="false"
                @on-visible-change="changeModalVisible">
             <p slot="header" style="color:#f60;text-align:left">
                 <Icon type="ios-location-outline" size="20"></Icon>
-                <span style="font-size:14px;">新增权限</span>
+                <span style="font-size:14px;">新增角色</span>
             </p>
-            <Form ref="permissionForm" :model="permission" :label-width="80">
+            <Form ref="roleForm" :model="role" :label-width="80">
                 <Row>
                     <Col span="20" class="link-piece">
                     <ul>
                         <li style="margin: 10px;">
-                            <Form-item prop="upper" label="所属路由">
-                                <Cascader v-model="permission.upper" :data="routesTree" change-on-select
-                                          @on-change="changeParent"></Cascader>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="element.id" label="页面元素">
-                                <Select v-model="permission.element.id" style="width:200px">
-                                    <Option v-for="item in pageElements" :value="item.id" :key="item.id">
-                                        {{item.name}}
-                                    </Option>
-                                </Select>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
                             <Form-item prop="name" label="名称">
-                                <Input v-model="permission.name" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="code" label="权限标识">
-                                <Input v-model="permission.code" type="text">
+                                <Input v-model="role.name" type="text">
                                 </Input>
                             </Form-item>
                         </li>
 
                         <li style="margin: 10px;">
                             <Form-item prop="description" label="描述">
-                                <Input v-model="permission.description" type="text">
+                                <Input v-model="role.description" type="text">
                                 </Input>
                             </Form-item>
                         </li>
                         <li>
                             <div style="text-align: right;margin: 10px;">
-                                <Button type="ghost" @click="clearAll('permissionForm')">
+                                <Button type="ghost" @click="clearAll('roleForm')">
                                     <Icon type="ios-checkmark" size="14"></Icon>
                                     清除
                                 </Button>
-                                <Button type="ghost" @click="savePermission">
+                                <Button type="ghost" @click="saveRole">
                                     <Icon type="ios-checkmark" size="14"></Icon>
                                     保存
                                 </Button>
@@ -64,6 +43,37 @@
             <div slot="footer" style="text-align: center">
             </div>
         </Modal>
+
+        <Modal v-model="accreditModal" width="600" :maskClosable="false"
+               @on-visible-change="changeAccreditModalVisible">
+            <p slot="header" style="color:#f60;text-align:left">
+                <Icon type="ios-location-outline" size="20"></Icon>
+                <span style="font-size:14px;">角色授权</span>
+            </p>
+            <Form ref="roleForm" :label-width="80">
+                <Row>
+                    <Col span="20" class="link-piece">
+                    <el-tree ref="permissionTree"
+                             :data="RolePermissions"
+                             show-checkbox
+                             node-key="idType"
+                             :default-expand-all="true"
+                             :props="defaultProps"
+                             @check="checkChange">
+                    </el-tree>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="20" class="link-piece">
+                    <Button type="ghost" size="small" icon="save" @click="saveRolePermission">保存</Button>
+                    </Col>
+                </Row>
+
+            </Form>
+            <div slot="footer" style="text-align: center">
+            </div>
+        </Modal>
+
         <Row>
             <Col span="21">
             <div style="position:relative;margin-top: 10px;">
@@ -96,18 +106,13 @@
 
     export default {
         components: {},
-        name: 'permission',
+        name: 'role',
         data() {
             return {
-                permission: {
+                role: {
                     id: '',
                     name: '',
-                    code: '',
                     description: '',
-                    element: {
-                        id: ''
-                    },
-                    upper: []
                 },
                 pageInfo: {
                     pageNum: 1,
@@ -117,9 +122,15 @@
                 },
                 pageSizeOpts: [5, 10, 20, 50, 100],
                 list_loadding: false,
-                permissionModal: false,
-                routesTree: [],
-                pageElements: [],
+                roleModal: false,
+                accreditModal: false,
+                row: {},
+                RolePermissions: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'title'
+                },
+                checkedKeys: [],
                 tableDataList: [
                     {
                         title: 'ID',
@@ -134,30 +145,8 @@
                         ellipsis: true
                     },
                     {
-                        title: '对应元素',
-                        ellipsis: true,
-                        render: (h, params) => {
-                            var element = params.row.element == null ? '' : '【' + params.row.element.name + '】';
-                            return h('div', [
-                                h('div', {
-                                    style: {
-                                        border: 'none',
-                                        fontWeight: 700
-                                    }
-                                }, element),
-                            ]);
-                        }
-                    },
-                    {
-                        title: '权限标识',
-                        key: 'code',
-                        width: 150,
-                        ellipsis: true
-                    },
-                    {
                         title: '描述',
                         key: 'description',
-                        width: 250,
                         ellipsis: true
                     },
                     {
@@ -179,10 +168,13 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.copyPermission(params.row);
+                                            this.accreditModal = true;
+                                            this.row = params.row;
+                                            console.log(this.row)
+                                            this.setCheckedKeys();
                                         }
                                     },
-                                }, '复制'),
+                                }, '授权'),
                                 h('Button', {
                                     props: {
                                         type: 'success',
@@ -194,7 +186,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.editPermission(params.row);
+                                            this.editRole(params.row);
                                         }
                                     },
                                 }, '编辑'),
@@ -227,15 +219,45 @@
                 vue.list_loadding = false;
 
             }, 2000);
-            this.listRoutesTree(null);
-            this.listPermission();
+            this.listRole();
+            this.listPermissionTree();
         },
         methods: {
-            listRoutesTree(type) {
-                store.dispatch('ListRoutesTree', {type: type}).then(res => {
+            setCheckedKeys() {
+                this.$refs.permissionTree.setCheckedKeys(this.row.permissions);
+                this.checkedKeys = this.row.permissions;
+            },
+            checkChange(value1, nodes) {
+                this.checkedKeys = nodes.checkedKeys;
+            },
+            saveRolePermission() {
+                var roleId = this.row.id;
+                var idTypes = this.checkedKeys;
+                store.dispatch('SettingRolePermission', {
+                    roleId: roleId,
+                    idTypes: idTypes
+                }).then(res => {
                     var data = res.data;
                     if (data.success == true) {
-                        this.routesTree = data.payload;
+                        this.$Message.success('权限配置成功');
+                        this.listRole();
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
+            listPermissionTree() {
+                store.dispatch('ListPermissionTree').then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.RolePermissions = data.payload;
                     } else {
                         this.$Message.error('加载失败');
                     }
@@ -249,68 +271,26 @@
                 });
             },
             openNewModal() {
-                this.clearAll('permissionForm');
-                this.permissionModal = true;
+                this.clearAll('roleForm');
+                this.roleModal = true;
             },
             changePage(pageNum) {
                 this.pageInfo.pageNum = pageNum;
-                this.listPermission();
+                this.listRole();
             },
             changePageSize(pageSize) {
                 this.pageInfo.pageSize = pageSize;
-                this.listPermission();
-            },
-            changeParent(routeIds) {
-                if (routeIds && routeIds.length > 0) {
-                    var routeId = routeIds[routeIds.length - 1];
-                    //根据路由获取路由下的所有元素
-                    this.listPageElementsByRoute(routeId);
-                } else {
-                    this.pageElements = [];
-                    this.$Message.warning('未选择上级路由');
-                }
+                this.listRole();
             },
             clearAll(refName) {
                 this.$refs[refName].resetFields();
             },
-            editPermission(row) {
-                var routeTree=row.routeTree;
-                this.permission = row;
-                this.permission.upper = routeTree;//设置上级路由的默认值
-                if (routeTree && routeTree.length > 0) {
-                    var routeId = routeTree[routeTree.length - 1];
-                    //根据路由获取路由下的所有元素
-                    this.listPageElementsByRoute(routeId);
-                }
-
-                this.permissionModal = true;
+            editRole(row) {
+                this.role = row;
+                this.roleModal = true;
             },
-            copyPermission(row) {
-                this.permission = row;
-                this.permission.id = '';
-                this.savePermission();
-            },
-            listPageElementsByRoute(routeId) {
-                store.dispatch('ListPageElementsByRoute', {
-                    routeId: routeId
-                }).then(res => {
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.pageElements = data.payload;
-                    } else {
-                        this.$Message.error('加载失败');
-                    }
-                }).catch(err => {
-                    console.log(err)
-                    this.$Message.error({
-                        content: err.data.msg,
-                        duration: 5,
-                        closable: true
-                    });
-                });
-            },
-            listPermission() {
-                store.dispatch('ListPermission', {
+            listRole() {
+                store.dispatch('ListRole', {
                     type: '',
                     pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize
@@ -330,14 +310,14 @@
                     });
                 });
             },
-            savePermission() {
-                if (!this.permission.id) {
-                    store.dispatch('AddPermission', this.permission).then(res => {
+            saveRole() {
+                if (!this.role.id) {
+                    store.dispatch('AddRole', this.role).then(res => {
                         var data = res.data;
                         if (data.success == true) {
                             this.$Message.success('添加成功');
-                            this.clearAll('permissionForm');
-                            this.listPermission();
+                            this.clearAll('roleForm');
+                            this.listRole();
                         } else {
                             this.$Message.error('加载失败');
                         }
@@ -350,11 +330,11 @@
                         });
                     });
                 } else {
-                    store.dispatch('EditPermission', this.permission).then(res => {
+                    store.dispatch('EditRole', this.role).then(res => {
                         var data = res.data;
                         if (data.success == true) {
                             this.$Message.success('编辑成功');
-                            this.listPermission();
+                            this.listRole();
                         } else {
                             this.$Message.error('加载失败');
                         }
@@ -370,16 +350,16 @@
             },
             remove(id) {
                 this.$Modal.confirm({
-                    title: '删除权限',
-                    content: '<p>点击确定1秒后将删除此权限</p>',
+                    title: '删除角色',
+                    content: '<p>点击确定1秒后将删除此角色</p>',
                     loading: true,
                     onOk: () => {
                         setTimeout(() => {
-                            store.dispatch('DeletePermission', {id: id}).then(res => { // 拉取user_info
+                            store.dispatch('DeleteRole', {id: id}).then(res => { // 拉取user_info
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success('删除成功');
-                                    this.listPermission();
+                                    this.listRole();
                                 } else {
                                     this.$Message.error(resp.msg);
                                 }
@@ -400,6 +380,11 @@
             },
             changeModalVisible() {
 
+            },
+            changeAccreditModalVisible(modal) {
+                if (modal) {
+
+                }
             },
             formatDate(time) {
                 return formatTime(time, '{y}-{m}-{d}', false);
