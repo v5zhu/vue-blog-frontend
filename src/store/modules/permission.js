@@ -4,8 +4,14 @@ import {
     deletePermission,
     editPermission,
     listPermission,
-    listPermissionTree
+    listPermissionTree,
+    userRouteTree
 } from 'api/permission';
+
+
+import Full from '@/containers/Full';
+
+const _import = require('../../router/_import_' + process.env.NODE_ENV);
 
 
 /**
@@ -54,6 +60,26 @@ function getNowRouter(constantRouterMap, to) {
 
 }
 
+function getRoutes(routes) {
+    try {
+        routes.forEach(function (route) {
+            var component;
+            if (route.parent == null) {
+                component = Full;
+            } else {
+                component = _import(route.component);
+            }
+            route.component = component;
+            if (route.children != null && route.children.length != 0) {
+                getRoutes(route.children)
+            }
+        })
+        return routes;
+    } catch (err) {
+        console.error(err)
+    }
+}
+
 
 const permission = {
     state: {
@@ -87,6 +113,22 @@ const permission = {
 
     },
     actions: {
+
+        UserRouteTree({commit, state}) {
+            return new Promise((resolve, reject) => {
+                userRouteTree().then(response => {
+                    var routes = response.data.payload;
+                    var trees = getRoutes(routes);
+                    //设置可访问路由表
+                    commit('SET_ROUTERS', trees);
+
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
         GenerateRoutes({commit}, data) {
             return new Promise(resolve => {
                 const {roles} = data
@@ -104,7 +146,7 @@ const permission = {
             })
         },
 
-        getNowRoutes({commit}, data) {
+        generateMenus({commit}, data) {
             return new Promise(resolve => {
                 //data => to
                 commit('SET_NOW_ROUTERS', data);

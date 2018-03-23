@@ -3,6 +3,7 @@ import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
 import Cookies from 'js-cookie';
+
 import Full from '@/containers/Full';
 
 const _import = require('./router/_import_' + process.env.NODE_ENV);
@@ -34,6 +35,7 @@ function getRoutes(routes) {
     }
 }
 
+
 // register global progress.
 const whiteList = ['/admin/login', '/authredirect']// 不重定向白名单
 router.beforeEach((to, from, next) => {
@@ -49,10 +51,10 @@ router.beforeEach((to, from, next) => {
     if (user && user.token) { // 判断是否有token
 
         var roles = user.roles;
-        store.dispatch('UserRouteTree').then(res => { // 拉取user_info
-            var routes = res.data.payload;
-            var trees = getRoutes(routes)
-            console.log(trees);
+        store.dispatch('UserRouteTree').then(response => { // 拉取user_info
+            var routes = response.data.payload;
+            var trees = getRoutes(routes);
+            // var routes=store.getters.addRouters;
             router.addRoutes(trees) // 动态添加可访问路由表
             next({...to}) // hack方法 确保addRoutes已完成
 
@@ -67,7 +69,7 @@ router.beforeEach((to, from, next) => {
             next({...to}) // hack方法 确保addRoutes已完成
         })*/
 
-        // store.dispatch('getNowRoutes', to);
+        // store.dispatch('generateMenus', to);
 
 
         // if (hasPermission({roles}, to.meta.role)) {
@@ -86,7 +88,7 @@ router.beforeEach((to, from, next) => {
                     next({...to}) // hack方法 确保addRoutes已完成
                 })
 
-                store.dispatch('getNowRoutes', to);
+                store.dispatch('generateMenus', to);
 
                 if (hasPermission({roles: []}, to.meta.role)) {
                     next()

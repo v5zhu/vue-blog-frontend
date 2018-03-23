@@ -15,6 +15,13 @@ export function listPermissionTree() {
     });
 }
 
+export function userRouteTree() {
+    return fetch({
+        url: 'user/route/tree.token',
+        method: 'get'
+    });
+}
+
 
 export function addPermission(data) {
     return fetch({
