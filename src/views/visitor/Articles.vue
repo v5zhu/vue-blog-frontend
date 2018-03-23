@@ -45,7 +45,7 @@
                                 </li>
                             </ul>
 
-                            <div style="color: rgba(128,128,128,0.4);text-align: left;padding-left: 10px;">&nbsp;{{article.outline}}</div>
+                            <div style="max-width: 600px;max-height:30px;color: rgba(128,128,128,0.4);text-align: left;padding-left: 10px;text-overflow: ellipsis;">&nbsp;{{article.outline}}</div>
                             <div style="color: #0d5477;text-align: left;">&nbsp;
                                 <img src="/static/img/avatars/man-avatar.png"
                                      style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>

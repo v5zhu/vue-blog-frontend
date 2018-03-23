@@ -30,6 +30,14 @@
             {{row.homeUrl}}
             </Col>
         </Row>
+        <Row>
+            <Col span="3">
+            <div style="font-weight: 700">【注册时间】:</div>
+            </Col>
+            <Col span="20" style="padding-left: 18px;">
+            {{row.gmtCreate | formatDate}}
+            </Col>
+        </Row>
     </div>
 </template>
 <script>

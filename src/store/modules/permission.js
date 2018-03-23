@@ -90,7 +90,8 @@ const permission = {
         GenerateRoutes({commit}, data) {
             return new Promise(resolve => {
                 const {roles} = data
-                let accessedRouters
+                let accessedRouters;
+
                 if (roles.indexOf('admin') >= 0) {
                     accessedRouters = constantRouterMap
                 } else {

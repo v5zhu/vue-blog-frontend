@@ -32,6 +32,13 @@ export function listUser(params) {
     });
 }
 
+export function userRouteTree() {
+    return fetch({
+        url: 'user/route/tree.token',
+        method: 'get'
+    });
+}
+
 export function modifyUser(user) {
     return fetch({
         url: '/user/modify.token',

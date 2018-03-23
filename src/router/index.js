@@ -209,11 +209,11 @@ export const constantRouterMap = [
     }
 ]
     .concat(globalRouterMap)
-    .concat(visitorRouterMap)
-    .concat(articleMgrRouterMap)
-    .concat(settingCenterRouterMap)
-    .concat(logRouterMap)
-    .concat(systemMgrRouterMap)
+    // .concat(visitorRouterMap)
+    // .concat(articleMgrRouterMap)
+    // .concat(settingCenterRouterMap)
+    // .concat(logRouterMap)
+    // .concat(systemMgrRouterMap)
     .concat(subscribeCenterRouterMap);
 
 const scrollBehavior = (to, from, savedPosition) => {

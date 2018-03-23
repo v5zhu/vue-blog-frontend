@@ -20,12 +20,12 @@ export const globalRouterMap = [
             path: '500',
             component: _import('errorPages/Page404')
         }]
-    }, {
+    }/*, {
         path: '*',
         redirect: '/pages/404',
         hidden: true,
         meta: {
             role: ['admin', 'visitor']
         }
-    }
+    }*/
 ]

@@ -414,10 +414,10 @@
             editArticle(id, pageNum, pageSize) {
                 if (id == null) {
                     //发表新文章
-                    window.open('/admin/mgr/article/publish')
+                    window.open('/admin/mgr/blog/article/publish')
                 } else {
                     //编辑文章
-                    window.open('/admin/mgr/article/edit/' + id)
+                    window.open('/admin/mgr/blog/article/edit/' + id)
                 }
             },
             qiniu_upload() {

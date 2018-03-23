@@ -1,15 +1,37 @@
 import router from './router'
 import store from './store'
-import vue from 'vue'
 import NProgress from 'nprogress' // Progress 进度条
-import 'nprogress/nprogress.css'// Progress 进度条样式
+import 'nprogress/nprogress.css' // Progress 进度条样式
 import Cookies from 'js-cookie';
+import Full from '@/containers/Full';
+
+const _import = require('./router/_import_' + process.env.NODE_ENV);
 
 // permissiom judge
 function hasPermission(roles, permissionRoles) {
     if (roles.roles.indexOf('admin') >= 0) return true // admin权限 直接通过
     if (!permissionRoles) return true;
     return roles.roles.some(role => permissionRoles.indexOf(role) >= 0)
+}
+
+function getRoutes(routes) {
+    try {
+        routes.forEach(function (route) {
+            var component;
+            if (route.parent == null) {
+                component = Full;
+            } else {
+                component = _import(route.component);
+            }
+            route.component = component;
+            if (route.children != null && route.children.length != 0) {
+                getRoutes(route.children)
+            }
+        })
+        return routes;
+    } catch (err) {
+        console.error(err)
+    }
 }
 
 // register global progress.
@@ -27,18 +49,32 @@ router.beforeEach((to, from, next) => {
     if (user && user.token) { // 判断是否有token
 
         var roles = user.roles;
-        store.dispatch('GenerateRoutes', {roles}).then(() => { // 生成可访问的路由表
-            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+        store.dispatch('UserRouteTree').then(res => { // 拉取user_info
+            var routes = res.data.payload;
+            var trees = getRoutes(routes)
+            console.log(trees);
+            router.addRoutes(trees) // 动态添加可访问路由表
             next({...to}) // hack方法 确保addRoutes已完成
+
+        }).catch(err => {
+            console.error(err);
         })
 
-        store.dispatch('getNowRoutes', to);
 
-        if (hasPermission({roles}, to.meta.role)) {
-            next()//
-        } else {
-            next({path: '/admin', query: {noGoBack: true}})
-        }
+        /*store.dispatch('GenerateRoutes', {roles}).then(() => { // 生成可访问的路由表
+            console.log(store.getters.addRouters)
+            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+            next({...to}) // hack方法 确保addRoutes已完成
+        })*/
+
+        // store.dispatch('getNowRoutes', to);
+
+
+        // if (hasPermission({roles}, to.meta.role)) {
+        next()//
+        // } else {
+        //     next({path: '/admin', query: {noGoBack: true}})
+        // }
 
     } else {
         if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入

@@ -123,7 +123,7 @@
                     {
                         title: '邮箱',
                         key: 'email',
-                        width: 150,
+                        width: 200,
                         ellipsis: true
                     },
                     {
@@ -134,7 +134,7 @@
                     {
                         title: '登录状态',
                         ellipsis: 'true',
-                        width: 150,
+                        width: 110,
                         render: (h, params) => {
                             const loginStatus = params.row.loginStatus;
                             if (loginStatus === 1) {
@@ -152,23 +152,11 @@
                         title: '最后在线',
                         key: 'lastLoginTime',
                         ellipsis: 'true',
-                        width: 150,
+                        width: 140,
                         render: (h, params) => {
                             const lastLoginTime = params.row.lastLoginTime;
                             return h('div', [
                                 h('div', {}, this.formatDate(lastLoginTime)),
-                            ]);
-                        }
-                    },
-                    {
-                        title: '注册',
-                        key: 'gmtCreate',
-                        ellipsis: 'true',
-                        width: 150,
-                        render: (h, params) => {
-                            const gmtCreate = params.row.gmtCreate;
-                            return h('div', [
-                                h('div', {}, this.formatDate(gmtCreate)),
                             ]);
                         }
                     },
@@ -339,7 +327,7 @@
                 }
             },
             formatDate(time) {
-                return formatTime(time, '{y}-{m}-{d}', false);
+                return formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}', false);
             }
         },
         filters: {

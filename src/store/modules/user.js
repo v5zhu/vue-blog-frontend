@@ -2,6 +2,7 @@ import {
     loginByEmail,
     logout,
     listUser,
+    userRouteTree,
     deleteUser,
     modifyUser,
     modifyPassword,
@@ -104,6 +105,15 @@ const user = {
         ListUser({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 listUser(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        UserRouteTree({commit, state}) {
+            return new Promise((resolve, reject) => {
+                userRouteTree().then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
