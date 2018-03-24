@@ -310,7 +310,7 @@
             setTimeout(function () {
                 vue.list_loadding = false;
 
-            }, 2000);
+            }, 1000);
             this.listTask();
             this.listBeans();
         },

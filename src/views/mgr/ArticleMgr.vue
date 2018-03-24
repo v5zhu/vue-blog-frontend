@@ -540,7 +540,7 @@
             setTimeout(function () {
                 vue.list_loadding = false;
 
-            }, 2000)
+            }, 1000)
             // qiniuInit(vue);//初始化七牛数据
 
 

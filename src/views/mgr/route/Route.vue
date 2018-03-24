@@ -176,7 +176,7 @@
                         title: '名称',
                         key: 'name',
                         ellipsis: 'true',
-                        width: 100
+                        width: 150
                     },
                     {
                         title: '路径',
@@ -293,7 +293,7 @@
             setTimeout(function () {
                 vue.list_loadding = false;
 
-            }, 2000);
+            }, 1000);
             this.listRoute();
         },
         methods: {
@@ -386,11 +386,11 @@
                 });
             },
             saveRoute() {
+                var parent = this.route.upper;
+                if (parent && parent.length > 0) {
+                    this.route.parent.id = parent[parent.length - 1];
+                }
                 if (!this.route.id) {
-                    var parent = this.route.upper;
-                    if (parent && parent.length > 0) {
-                        this.route.parent.id = parent[parent.length - 1];
-                    }
                     store.dispatch('AddRoute', this.route).then(res => {
                         var data = res.data;
                         if (data.success == true) {

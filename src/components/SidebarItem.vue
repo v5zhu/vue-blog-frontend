@@ -8,14 +8,19 @@
                                  :to="item.path" disabled>
 
 
-                        <div class="nav-link nav-dropdown-toggle" @click="handleClick">
+                        <div class="nav-link nav-dropdown-toggle" v-if="item.children&&item.children.length>0"
+                             @click="handleClick">
+                            <Icon :type="item.icon" color="white"/>
+                            {{ item.name}}a
+                        </div>
+                        <div class="nav-link " v-else="item.children==null||item.children.length==0">
                             <Icon :type="item.icon" color="white"/>
                             {{ item.name}}
                         </div>
                         <ul class="nav-dropdown-items">
                             <li class="nav-item" v-for="child in item.children" v-if='!child.hidden' @click="addActive">
                                 <router-link :to="item.path+'/'+child.path+'/'+child.children[0].path" class="nav-link"
-                                             v-if="!child.hidden&&child.children">
+                                             v-if="!child.hidden&&child.children&&child.children.length!=0">
                                     <Icon :type="child.icon" color="white"/>
                                     {{ child.name}}
                                 </router-link>
@@ -51,8 +56,8 @@
         },
         methods: {
             handleClick(e) {
-//                e.preventDefault()
-//                e.target.parentElement.classList.toggle('open')
+                e.preventDefault()
+                e.target.parentElement.classList.toggle('open')
             },
             addActive(e) {
                 e.preventDefault()
@@ -60,11 +65,7 @@
             }
         },
         created() {
-            console.error("sidebar-item")
-            console.error(this.routes[0]);
-            alert(this.routes[0].hidden);
-            console.error(!this.routes[0].hidden && this.routes[0].children && this.routes[0].children.length > 0);
-
+            console.error(JSON.stringify(this.routes))
         },
         mounted() {
         }

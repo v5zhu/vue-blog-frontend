@@ -110,8 +110,8 @@ const permission = {
 
             })
 
-            console.error("permission.js");
-            console.error(state.siderbar_routers);
+            // console.error("permission.js");
+            // console.error(state.siderbar_routers);
         }
 
     },
@@ -122,6 +122,7 @@ const permission = {
                 userRouteTree().then(response => {
                     var routes = response.data.payload;
                     var trees = getRoutes(routes);
+                    console.error(trees)
                     //设置可访问路由表
                     commit('SET_ROUTERS', trees);
 

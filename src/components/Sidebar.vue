@@ -25,8 +25,8 @@
             }
         },
         created() {
-            console.error("sidebar.js");
-            console.error(this.siderbar_routers.children.length);
+//            console.error("sidebar.js");
+//            console.error(this.siderbar_routers.children.length);
         }
     }
 </script>
