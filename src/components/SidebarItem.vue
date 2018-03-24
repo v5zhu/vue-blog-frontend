@@ -4,8 +4,8 @@
             <ul class="nav">
                 <template v-for="item in routes">
                     <router-link tag="li" class="nav-item nav-dropdown"
-                                 v-if="!item.hidden&&item.children&&item.children.length>0"
-                                 :to="item.path+''+item.children[0].path" disabled>
+                                 v-if="!item.hidden>0"
+                                 :to="item.path" disabled>
 
 
                         <div class="nav-link nav-dropdown-toggle" @click="handleClick">
@@ -14,20 +14,15 @@
                         </div>
                         <ul class="nav-dropdown-items">
                             <li class="nav-item" v-for="child in item.children" v-if='!child.hidden' @click="addActive">
-                                <!-- <router-link :to="child.path+'/'+item.children[0].path" class="nav-link" ><i class="icon-puzzle"></i> {{ child.name}} </router-link> -->
                                 <router-link :to="item.path+'/'+child.path+'/'+child.children[0].path" class="nav-link"
                                              v-if="!child.hidden&&child.children">
                                     <Icon :type="child.icon" color="white"/>
                                     {{ child.name}}
                                 </router-link>
-
-
                                 <router-link :to="item.path+'/'+child.path" class="nav-link" v-else="!child.children">
                                     <Icon :type="child.icon" color="white"/>
                                     {{ child.name}}
                                 </router-link>
-
-
                             </li>
                         </ul>
                     </router-link>
@@ -56,13 +51,20 @@
         },
         methods: {
             handleClick(e) {
-                e.preventDefault()
-                e.target.parentElement.classList.toggle('open')
+//                e.preventDefault()
+//                e.target.parentElement.classList.toggle('open')
             },
             addActive(e) {
                 e.preventDefault()
                 e.target.parentElement.parentElement.parentElement.classList.add('open')
             }
+        },
+        created() {
+            console.error("sidebar-item")
+            console.error(this.routes[0]);
+            alert(this.routes[0].hidden);
+            console.error(!this.routes[0].hidden && this.routes[0].children && this.routes[0].children.length > 0);
+
         },
         mounted() {
         }

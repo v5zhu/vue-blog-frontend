@@ -109,6 +109,9 @@ const permission = {
                 }
 
             })
+
+            console.error("permission.js");
+            console.error(state.siderbar_routers);
         }
 
     },

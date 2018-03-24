@@ -22,7 +22,8 @@ function getRoutes(routes) {
             if (route.parent == null) {
                 component = Full;
             } else {
-                component = _import(route.component);
+                component = route.component;
+                // component = _import(route.component);
             }
             route.component = component;
             if (route.children != null && route.children.length != 0) {
@@ -57,6 +58,7 @@ router.beforeEach((to, from, next) => {
             // var routes=store.getters.addRouters;
             router.addRoutes(trees) // 动态添加可访问路由表
             next({...to}) // hack方法 确保addRoutes已完成
+            store.dispatch('generateMenus', to);
 
         }).catch(err => {
             console.error(err);

@@ -23,6 +23,10 @@
                 e.preventDefault()
                 e.target.parentElement.classList.toggle('open')
             }
+        },
+        created() {
+            console.error("sidebar.js");
+            console.error(this.siderbar_routers.children.length);
         }
     }
 </script>
