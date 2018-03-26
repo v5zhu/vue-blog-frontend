@@ -7,17 +7,20 @@
                              :to="top.path" disabled>
 
 
-                    <div  style="padding-left: 15px;" class="nav-link nav-dropdown-toggle" v-if="top.children&&top.children.length>0"
+                    <div style="padding-left: 15px;" class="nav-link nav-dropdown-toggle"
+                         v-if="top.children&&top.children.length>0"
                          @click="handleClick">
-                        <Icon :type="top.icon" color="white"/>
+                        <!--<Icon :type="top.icon" color="white"/>-->
+                        <i :class="top.icon" style="color:white;"></i>
                         {{ top.name}}
                     </div>
                     <div class="nav-link " v-else="top.children==null||top.children.length==0">
-                        <Icon :type="top.icon" color="white"/>
+                        <!--<Icon :type="top.icon" color="white"/>-->
+                        <i :class="top.icon" style="color:white;"></i>
                         {{ top.name}}
                     </div>
                     <ul class="nav-dropdown-items">
-                        <template v-for="item in top.children" v-if="top.children&&top.children.length>0"  >
+                        <template v-for="item in top.children" v-if="top.children&&top.children.length>0">
                             <router-link tag="li" class="nav-item nav-dropdown"
                                          v-if="!item.hidden>0"
                                          :to="item.path" disabled>
@@ -25,11 +28,15 @@
 
                                 <div class="nav-link nav-dropdown-toggle" v-if="item.children&&item.children.length>0"
                                      @click="handleClick">
-                                    <Icon :type="item.icon" color="white"/>
-                                    {{ item.name}}a
+                                    <!--<Icon :type="item.icon" color="white"/>-->
+                                    <i :class="item.icon" style="color:white;"></i>
+
+                                    {{ item.name}}
                                 </div>
                                 <div class="nav-link " v-else="item.children==null||item.children.length==0">
-                                    <Icon :type="item.icon" color="white"/>
+                                    <!--<Icon :type="item.icon" color="white"/>-->
+                                    <i :class="item.icon" style="color:white;"></i>
+
                                     {{ item.name}}
                                 </div>
                                 <ul class="nav-dropdown-items">
@@ -39,12 +46,16 @@
                                         <router-link :to="item.path+'/'+child.path+'/'+child.children[0].path"
                                                      class="nav-link"
                                                      v-if="!child.hidden&&child.children&&child.children.length!=0">
-                                            <Icon :type="child.icon" color="white"/>
+                                            <!--<Icon :type="child.icon" color="white"/>-->
+                                            <i :class="child.icon" style="color:white;"></i>
+
                                             {{ child.name}}
                                         </router-link>
                                         <router-link :to="item.path+'/'+child.path" class="nav-link"
                                                      v-else="!child.children">
-                                            <Icon :type="child.icon" color="white"/>
+                                            <!--<Icon :type="child.icon" color="white"/>-->
+                                            <i :class="child.icon" style="color:white;"></i>
+
                                             {{ child.name}}
                                         </router-link>
 
@@ -54,7 +65,9 @@
 
                             <li class="nav-item" v-if="!item.hidden&&!item.children">
                                 <router-link :to="item.path" class="nav-link" exact>
-                                    <Icon :type="item.icon" color="white"/>
+                                    <!--<Icon :type="item.icon" color="white"/>-->
+                                    <i :class="item.icon" style="color:white;"></i>
+
                                     {{ item.name}}
                                 </router-link>
                             </li>

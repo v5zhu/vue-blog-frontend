@@ -7,3 +7,6 @@
         name: 'APP'
     }
 </script>
+<style type="text/css">
+    @import "./common/mui-fonts-dist/iconfont.css";
+</style>
