@@ -86,6 +86,7 @@ const permission = {
         routers: constantRouterMap,
         addRouters: [],
         siderbar_routers: [],
+        isNeedRequest: true
     },
     mutations: {
         SET_ROUTERS: (state, routers) => {
@@ -105,7 +106,7 @@ const permission = {
             state.addRouters.forEach(e => {
                 if (e.children && e.children.length) {
                     if (getNowRouter(e.children, to) === true)
-                        state.siderbar_routers = e;
+                        state.siderbar_routers = [].concat(e);
                 }
 
             })

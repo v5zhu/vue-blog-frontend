@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <nav class="sidebar-nav">
-            <sidebar-item :routes='siderbar_routers.children'></sidebar-item>
+            <sidebar-item :routes='siderbar_routers'></sidebar-item>
 
         </nav>
     </div>
@@ -27,6 +27,7 @@
         created() {
 //            console.error("sidebar.js");
 //            console.error(this.siderbar_routers.children.length);
+            console.error(JSON.stringify(this.siderbar_routers))
         }
     }
 </script>
