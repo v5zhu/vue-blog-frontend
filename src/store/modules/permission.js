@@ -123,7 +123,7 @@ const permission = {
                 userRouteTree().then(response => {
                     var routes = response.data.payload;
                     var trees = getRoutes(routes);
-                    console.error(trees)
+                    // console.error(trees)
                     //设置可访问路由表
                     commit('SET_ROUTERS', trees);
 

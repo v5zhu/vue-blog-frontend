@@ -244,7 +244,7 @@ const scrollBehavior = (to, from, savedPosition) => {
 export default new Router({
     mode: 'history',
     // mode: 'hash',
-    linkActiveClass: 'open active',
+    linkActiveClass: 'linkActiveClass',
     scrollBehavior: scrollBehavior,
     routes: constantRouterMap
 });

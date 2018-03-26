@@ -13,14 +13,17 @@
         </ul>
 
         <ul class="nav navbar-nav d-md-down-none">
-            <li class="nav-item header-item" v-for="route in pageInfo.list" v-if="route.hidden==false">
+            <li class="nav-item header-item" v-for="(route,index) in pageInfo.list"
+                :class="{headerItemActiveClass:index==isActive}"
+                @click="changeHeaderStyle(index)"
+                v-if="route.hidden==false">
 
                 <router-link tag="div" :to='route.path' class="nav-link">
                     <p>
                         <!--<Icon :type="route.icon" size='25' color="#2d8cf0"></Icon>-->
-                        <i :class="route.icon" style="color:#0d5477;"></i>
+                        <i :class="route.icon" style="color:#0d5477;font-weight: 700;"></i>
                     </p>
-                    <p> {{route.name}} </p>
+                    <p style="color:#0d5477;font-weight: 700;"> {{route.name}} </p>
                 </router-link>
             </li>
         </ul>
@@ -114,7 +117,8 @@
                     pageSize: 20,
                     list: [],
                     total: 0
-                }
+                },
+                isActive: -1,
             }
         },
         created() {
@@ -174,6 +178,10 @@
             asideToggle(e) {
                 e.preventDefault()
                 document.body.classList.toggle('aside-menu-hidden')
+            },
+            changeHeaderStyle(index) {
+                this.isActive = index;
+
             }
         }
     }
@@ -190,8 +198,21 @@
         padding: 15px;
     }
 
+    .header-item:hover {
+        border-radius: 2px;
+        border-bottom: 5px solid orange;
+        box-shadow: 0px 0px 20px 0px #ff00002e;
+    }
+
     .header-item {
         width: 100px;
+    }
+
+
+    .headerItemActiveClass {
+        border-radius: 2px;
+        border-bottom: 5px solid orange;
+        box-shadow: 0px 0px 20px 0px #ff00002e;
     }
 
     .header-item a {

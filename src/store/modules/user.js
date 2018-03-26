@@ -146,7 +146,7 @@ const user = {
                     Cookies.set('Admin-Token', data.token);
                     Cookies.set('USER-ID', data.id);
                     commit('SET_ID', data.id);
-                    console.error(data);
+                    // console.error(data);
 
                     commit('SET_TOKEN', data.token);
                     commit('SET_EMAIL', email);
