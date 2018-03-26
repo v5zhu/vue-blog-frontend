@@ -10,13 +10,13 @@
                     <div style="padding-left: 15px;" class="nav-link nav-dropdown-toggle"
                          v-if="top.children&&top.children.length>0"
                          @click="handleClick">
-                        <!--<Icon :type="top.icon" color="white"/>-->
-                        <i :class="top.icon" style="color:white;"></i>
+                        <!--<Icon :type="top.icon" color="#0d5477"/>-->
+                        <i :class="top.icon" style="color:#0d5477;"></i>
                         {{ top.name}}
                     </div>
                     <div class="nav-link " v-else="top.children==null||top.children.length==0">
-                        <!--<Icon :type="top.icon" color="white"/>-->
-                        <i :class="top.icon" style="color:white;"></i>
+                        <!--<Icon :type="top.icon" color="#0d5477"/>-->
+                        <i :class="top.icon" style="color:#0d5477;"></i>
                         {{ top.name}}
                     </div>
                     <ul class="nav-dropdown-items">
@@ -28,14 +28,14 @@
 
                                 <div class="nav-link nav-dropdown-toggle" v-if="item.children&&item.children.length>0"
                                      @click="handleClick">
-                                    <!--<Icon :type="item.icon" color="white"/>-->
-                                    <i :class="item.icon" style="color:white;"></i>
+                                    <!--<Icon :type="item.icon" color="#0d5477"/>-->
+                                    <i :class="item.icon" style="color:#0d5477;"></i>
 
                                     {{ item.name}}
                                 </div>
                                 <div class="nav-link " v-else="item.children==null||item.children.length==0">
-                                    <!--<Icon :type="item.icon" color="white"/>-->
-                                    <i :class="item.icon" style="color:white;"></i>
+                                    <!--<Icon :type="item.icon" color="#0d5477"/>-->
+                                    <i :class="item.icon" style="color:#0d5477;"></i>
 
                                     {{ item.name}}
                                 </div>
@@ -46,15 +46,15 @@
                                         <router-link :to="item.path+'/'+child.path+'/'+child.children[0].path"
                                                      class="nav-link"
                                                      v-if="!child.hidden&&child.children&&child.children.length!=0">
-                                            <!--<Icon :type="child.icon" color="white"/>-->
-                                            <i :class="child.icon" style="color:white;"></i>
+                                            <!--<Icon :type="child.icon" color="#0d5477"/>-->
+                                            <i :class="child.icon" style="color:#0d5477;"></i>
 
                                             {{ child.name}}
                                         </router-link>
                                         <router-link :to="item.path+'/'+child.path" class="nav-link"
                                                      v-else="!child.children">
-                                            <!--<Icon :type="child.icon" color="white"/>-->
-                                            <i :class="child.icon" style="color:white;"></i>
+                                            <!--<Icon :type="child.icon" color="#0d5477"/>-->
+                                            <i :class="child.icon" style="color:#0d5477;"></i>
 
                                             {{ child.name}}
                                         </router-link>
@@ -65,8 +65,8 @@
 
                             <li class="nav-item" v-if="!item.hidden&&!item.children">
                                 <router-link :to="item.path" class="nav-link" exact>
-                                    <!--<Icon :type="item.icon" color="white"/>-->
-                                    <i :class="item.icon" style="color:white;"></i>
+                                    <!--<Icon :type="item.icon" color="#0d5477"/>-->
+                                    <i :class="item.icon" style="color:#0d5477;"></i>
 
                                     {{ item.name}}
                                 </router-link>
@@ -78,7 +78,7 @@
 
                 <li class="nav-item" v-if="!top.hidden&&!top.children">
                     <router-link :to="top.path" class="nav-link" exact>
-                        <Icon :type="top.icon" color="white"/>
+                        <Icon :type="top.icon" color="#0d5477"/>
                         {{ top.name}}
                     </router-link>
                 </li>

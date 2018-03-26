@@ -2281,7 +2281,7 @@ base-chart.chart {
     height: 55px;
     margin: 0;
     padding: 0;
-    background-color: #143f6d;
+    background-color: white;
     border-bottom: 1px solid #cfd8dc
 }
 
@@ -2291,7 +2291,7 @@ base-chart.chart {
     height: 55px;
     padding: .5rem 1rem;
     margin-right: 0;
-    background-image: url(../img/logo.png);
+    /*background-image: url(../img/logo.png);*/
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 150px auto;
@@ -2374,8 +2374,11 @@ base-chart.chart {
 .sidebar {
     padding: 0;
     overflow: hidden;
-    color: #fff;
-    background: #0d5477
+    /*color: #fff;*/
+    /*background: #0d5477*/
+
+    margin-right: 1.5rem;
+    border-right: 1px solid #cfd8dc;
 }
 
 .sidebar .sidebar-close {
@@ -2443,10 +2446,10 @@ base-chart.chart {
 .navbar .sidebar .nav .nav-item .dropdown-toggle, .sidebar .nav .nav-item .nav-link, .sidebar .nav .nav-item .navbar .dropdown-toggle {
     display: block;
     padding: 1rem 2rem;
-    color: #fff;
+    /*color: #fff;*/
     font-weight: 900;
     text-decoration: none;
-    background: 0 0
+    /*background: 0 0*/
 }
 
 .navbar .sidebar .nav .nav-item .dropdown-toggle:hover, .sidebar .nav .nav-item .nav-link:hover, .sidebar .nav .nav-item .navbar .dropdown-toggle:hover {
@@ -2455,12 +2458,12 @@ base-chart.chart {
 }
 
 .navbar .sidebar .nav .nav-item .dropdown-toggle:hover i, .sidebar .nav .nav-item .nav-link:hover i, .sidebar .nav .nav-item .navbar .dropdown-toggle:hover i {
-    color: #fff !important
+    /*color: #fff !important*/
 }
 
 .navbar .sidebar .nav .nav-item .active.dropdown-toggle, .sidebar .nav .nav-item .nav-link.active, .sidebar .nav .nav-item .navbar .active.dropdown-toggle {
-    color: #fff;
-    background: #20a8d8
+    /*color: #fff;*/
+    /*background: #20a8d8*/
 }
 
 .navbar .sidebar .nav .nav-item .active.dropdown-toggle i, .sidebar .nav .nav-item .nav-link.active i, .sidebar .nav .nav-item .navbar .active.dropdown-toggle i {
@@ -2502,7 +2505,7 @@ base-chart.chart {
 }
 
 .sidebar .nav .nav-item.nav-dropdown.open > ul li {
-    background: rgba(0, 0, 0, .2)
+    /*background: rgba(0, 0, 0, .2)*/
 }
 
 .sidebar .nav .nav-item.nav-dropdown.open > ol, .sidebar .nav .nav-item.nav-dropdown.open > ul {
@@ -2510,7 +2513,7 @@ base-chart.chart {
 }
 
 .navbar .sidebar .nav .nav-item.nav-dropdown.open .dropdown-toggle, .sidebar .nav .nav-item.nav-dropdown.open .nav-link, .sidebar .nav .nav-item.nav-dropdown.open .navbar .dropdown-toggle {
-    color: #fff;
+    color: #0d5477;
     border-left: 0 !important
 }
 
@@ -3307,7 +3310,7 @@ hr.transparent {
 }
 
 .main {
-    background-color: #eff0f4
+    /*background-color: #eff0f4*/
 }
 
 .doc-header {

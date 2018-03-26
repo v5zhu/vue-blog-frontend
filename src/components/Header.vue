@@ -18,9 +18,9 @@
                 <router-link tag="div" :to='route.path' class="nav-link">
                     <p>
                         <!--<Icon :type="route.icon" size='25' color="#2d8cf0"></Icon>-->
-                        <i :class="route.icon" style="color:white;"></i>
+                        <i :class="route.icon" style="color:#0d5477;"></i>
                     </p>
-                    <p style="color:white"> {{route.name}} </p>
+                    <p> {{route.name}} </p>
                 </router-link>
             </li>
         </ul>
