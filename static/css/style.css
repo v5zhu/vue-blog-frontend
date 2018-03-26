@@ -2513,8 +2513,8 @@ base-chart.chart {
 }
 
 .navbar .sidebar .nav .nav-item.nav-dropdown.open .dropdown-toggle, .sidebar .nav .nav-item.nav-dropdown.open .nav-link, .sidebar .nav .nav-item.nav-dropdown.open .navbar .dropdown-toggle {
-    color: #0d5477;
-    border-left: 0 !important
+    /*color: #0d5477;*/
+    /*border-left: 0 !important*/
 }
 
 .navbar .sidebar .nav .nav-item.nav-dropdown.open > .nav-dropdown-toggle.dropdown-toggle::before, .sidebar .nav .nav-item.nav-dropdown.open > .nav-link.nav-dropdown-toggle::before, .sidebar .nav .navbar .nav-item.nav-dropdown.open > .nav-dropdown-toggle.dropdown-toggle::before {
@@ -2632,12 +2632,12 @@ base-chart.chart {
     }
 
     .sidebar-minimized .sidebar .nav .nav-item ul {
-        background: #0d5477
+        background: white;
     }
 
     .navbar .sidebar-minimized .sidebar .nav .nav-item .dropdown-toggle, .sidebar-minimized .sidebar .nav .nav-item .nav-link, .sidebar-minimized .sidebar .nav .nav-item .navbar .dropdown-toggle {
         position: relative;
-        padding-left: 0;
+        padding-left: 10px;
         margin: 0;
         white-space: nowrap;
         border-left: 0 !important
@@ -2691,7 +2691,7 @@ base-chart.chart {
     }
 
     .sidebar-minimized .sidebar .nav .nav-item.nav-dropdown.open {
-        background: #20a8d8
+        /*background: #20a8d8*/
     }
 
     .navbar .sidebar-minimized .sidebar .nav .nav-item.nav-dropdown.open > .dropdown-toggle i, .sidebar-minimized .sidebar .nav .nav-item.nav-dropdown.open > .nav-link i, .sidebar-minimized .sidebar .nav .navbar .nav-item.nav-dropdown.open > .dropdown-toggle i {
