@@ -193,7 +193,7 @@
                         title: '父组件',
                         ellipsis: true,
                         render: (h, params) => {
-                            var parent = params.row.parent == null ? '' : '【' + params.row.parent.name + '】';
+                            var parent = !params.row.parent.id ? '' : '【' + params.row.parent.name + '】';
                             return h('div', [
                                 h('div', {
                                     style: {
@@ -205,18 +205,35 @@
                         }
                     },
                     {
+                        title: '图标',
+                        ellipsis: true,
+                        render: (h, params) => {
+                            var icon = params.row.icon;
+                            return h('div', [
+                                h('i', {
+                                    style: {
+                                        border: 'none',
+                                        fontWeight: 700,
+                                        fontSize: 16
+                                    },
+                                    class: [icon]
+                                }),
+                            ]);
+                        }
+                    },
+                    {
                         title: '状态',
                         key: 'hidden',
                         ellipsis: 'true',
                         width: 100,
                         render: (h, params) => {
                             const hidden = params.row.hidden;
-                            if (hidden === true) {
+                            if (hidden === 1) {
                                 return h('div', [
                                     h('div', {}, '隐藏'),
                                 ]);
                             }
-                            else if (hidden === false) {
+                            else if (hidden === 0) {
                                 return h('div', [
                                     h('div', {}, '显示'),
                                 ]);
@@ -327,7 +344,17 @@
                 this.$refs[refName].resetFields();
             },
             editRoute(row) {
+                this.listRoutesTree(this.route.type);
+
+                var routeTree = row.routeTree;
                 this.route = row;
+                this.route.upper = routeTree;//设置上级路由的默认值
+                if (row.parent == null) {
+                    this.route.parent = {
+                        id: '',
+                        name: ''
+                    }
+                }
                 this.routeModal = true;
             },
             listRoutesTree(type) {

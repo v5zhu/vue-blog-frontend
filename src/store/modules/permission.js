@@ -106,7 +106,7 @@ const permission = {
             state.addRouters.forEach(e => {
                 if (e.children && e.children.length) {
                     if (getNowRouter(e.children, to) === true)
-                        state.siderbar_routers = [].concat(e);
+                        state.siderbar_routers = e;
                 }
 
             })

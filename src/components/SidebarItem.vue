@@ -97,10 +97,6 @@
             routes: {
                 type: Array
             },
-            isActive1: -1,
-            isActive2: -1,
-            isActive3: -1,
-            isActive4: -1
         },
         methods: {
             handleClick(e) {
@@ -110,18 +106,6 @@
             addActive(e) {
                 e.preventDefault()
                 e.target.parentElement.parentElement.parentElement.classList.add('open')
-            },
-            changeHeaderStyle(index, layer) {
-                if (layer === 1) {
-                    this.isActive1 = index;
-                } else if (layer === 2) {
-                    this.isActive2 = index;
-                } else if (layer === 3) {
-                    this.isActive3 = index;
-                } else if (layer === 4) {
-                    this.isActive4 = index;
-                }
-
             }
         },
         created() {

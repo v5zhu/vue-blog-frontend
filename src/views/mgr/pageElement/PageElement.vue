@@ -248,7 +248,15 @@
                 this.$refs[refName].resetFields();
             },
             editPageElement(row) {
+                var routeTree=row.routeTree;
                 this.pageElement = row;
+                this.pageElement.upper = routeTree;//设置上级路由的默认值
+
+                if (row.route == null) {
+                    this.pageElement.route = {
+                        id: ''
+                    }
+                }
                 this.pageElementModal = true;
             },
             listPageElement() {
@@ -278,14 +286,14 @@
                 this.savePageElement();
             },
             savePageElement() {
+                if (!this.pageElement.route.id) {
+                    this.$Message.error({
+                        content: '请选择所属组件',
+                        duration: 5,
+                        closable: true
+                    });
+                }
                 if (!this.pageElement.id) {
-                    if (!this.pageElement.route.id) {
-                        this.$Message.error({
-                            content: '请选择所属组件',
-                            duration: 5,
-                            closable: true
-                        });
-                    }
                     store.dispatch('AddPageElement', this.pageElement).then(res => {
                         var data = res.data;
                         if (data.success == true) {
