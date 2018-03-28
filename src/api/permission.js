@@ -22,6 +22,13 @@ export function userRouteTree() {
     });
 }
 
+export function userRouteTreeByOpen() {
+    return fetch({
+        url: 'user/route/tree.open',
+        method: 'get'
+    });
+}
+
 
 export function addPermission(data) {
     return fetch({

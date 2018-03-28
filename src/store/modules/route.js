@@ -4,6 +4,7 @@ import {
     editRoute,
     listRoutesTree,
     listRoute,
+    listFrontRoute,
     getRouteById
 } from 'api/route';
 
@@ -21,6 +22,15 @@ const route = {
         ListRoute({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 listRoute(params).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        ListFrontRoute({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                listFrontRoute(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

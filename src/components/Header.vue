@@ -3,7 +3,7 @@
         <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
             &#9776;
         </button>
-        <a class="navbar-brand" href="/articles" target="_blank"></a>
+        <a class="navbar-brand" href="/" ></a>
 
         <ul class="nav navbar-nav d-md-down-none">
             <li class="nav-item" id="sidebar_minimize">
@@ -122,12 +122,12 @@
             }
         },
         created() {
-            this.listRoute();
+            this.listRoute('backheader');
         },
         methods: {
-            listRoute() {
+            listRoute(type) {
                 store.dispatch('ListRoute', {
-                    type: 'backheader',
+                    type: type,
                     pageNum: this.pageInfo.pageNum,
                     pageSize: this.pageInfo.pageSize
                 }).then(res => {
@@ -207,7 +207,6 @@
     .header-item {
         width: 100px;
     }
-
 
     .headerItemActiveClass {
         border-radius: 2px;

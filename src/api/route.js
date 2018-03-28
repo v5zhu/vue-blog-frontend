@@ -17,6 +17,16 @@ export function listRoute(params) {
     });
 }
 
+
+export function listFrontRoute(params) {
+
+    return fetch({
+        url: '/route/list.open',
+        method: 'get',
+        params: params
+    });
+}
+
 export function getRouteById(id) {
     return fetch({
         url: '/admin/route/' + id + '.token',

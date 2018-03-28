@@ -114,26 +114,8 @@
         color: black;
     }
 
-    .time {
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .content {
-        padding-left: 5px;
-    }
-
-    .dashboard_feature {
-        text-align: center;
-    }
-
-    .demo-carousel {
-        height: 600px;
-        line-height: 200px;
-        text-align: center;
-        color: #fff;
-        font-size: 20px;
-        background: #506b9e;
+    li {
+        list-style-type: none;
     }
 
     .demo-carousel img {

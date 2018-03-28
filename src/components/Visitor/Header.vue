@@ -4,36 +4,20 @@
             <navbar v-show="scrollShow || moveShow" transiton="fade">
 
                 <ul class="nav navbar-nav d-md-down-none">
+                    <li class="nav-item header-item" v-for="(route,index) in pageInfo.list"
+                        :class="{headerItemActiveClass:index==isActive}"
+                        @click="changeHeaderStyle(index)"
+                        v-if="route.hidden===0">
 
-                    <li class="nav-item header-item">
-
-                        <router-link tag="div" to='/articles' class="nav-link">
+                        <router-link tag="div" :to='route.path' class="nav-link">
                             <p>
-                                <Icon type="ios-barcode-outline" size='28' class="color-0d5477"></Icon>
+                                <i :class="route.icon" style="color:#0d5477;font-weight: 700;"></i>
                             </p>
-                            <p class="color-0d5477"> 首页 </p>
+                            <p style="color:#0d5477;font-weight: 700;"> {{route.name}} </p>
                         </router-link>
                     </li>
 
-                    <li v-if="loginUser.token!=undefined" class="nav-item header-item">
 
-                        <router-link tag="div" to='/archives' class="nav-link">
-                            <p>
-                                <Icon type="map" size='28' class="color-0d5477"></Icon>
-                            </p>
-                            <p class="color-0d5477"> 归档 </p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item header-item">
-
-                        <router-link tag="div" to='/links' class="nav-link">
-                            <p>
-                                <Icon type="social-github-outline" size='28' class="color-0d5477"></Icon>
-                            </p>
-                            <p class="color-0d5477"> 合作 </p>
-                        </router-link>
-
-                    </li>
                     <!--<li class="nav-item header-item">
 
                         <router-link tag="div" to='#' class="nav-link">
@@ -44,26 +28,7 @@
                         </router-link>
 
                     </li>-->
-                    <li class="nav-item header-item">
 
-                        <router-link tag="div" to='/feedback' class="nav-link">
-                            <p>
-                                <Icon type="ios-chatboxes-outline" size='28' class="color-0d5477"></Icon>
-                            </p>
-                            <p class="color-0d5477"> 意见反馈 </p>
-                        </router-link>
-
-                    </li>
-                    <li class="nav-item header-item">
-
-                        <router-link tag="div" to='/milestone' class="nav-link">
-                            <p>
-                                <Icon type="ios-clock-outline" size='28' class="color-0d5477"></Icon>
-                            </p>
-                            <p class="color-0d5477"> 系统历程 </p>
-                        </router-link>
-
-                    </li>
                     <li style="margin-left: 100px;">
                         <Input v-model="q" :class="qfocus?'q-long':'q-short'" icon="ios-search" placeholder="关键字搜索..."
                                @on-focus="searchFocus" @on-blur="searchBlur" size="large">
@@ -195,14 +160,47 @@
                 showLoginModal: false,
                 q: '',
                 qfocus: false,
+                pageInfo: {
+                    pageNum: 1,
+                    pageSize: 20,
+                    list: [],
+                    total: 0
+                },
+                isActive: -1,
             }
         },
         components: {
             navbar, RegModalBody, LoginModalBody
         },
         created() {
+            this.listFrontRoute('frontheader');
         },
         methods: {
+            changeHeaderStyle(index) {
+                this.isActive = index;
+
+            },
+            listFrontRoute(type) {
+                store.dispatch('ListFrontRoute', {
+                    type: type,
+                    pageNum: this.pageInfo.pageNum,
+                    pageSize: this.pageInfo.pageSize
+                }).then(res => {
+                    var data = res.data;
+                    if (data.success == true) {
+                        this.pageInfo = data.payload;
+                    } else {
+                        this.$Message.error('加载失败');
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.msg,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
             searchFocus(e) {
                 this.qfocus = true;
             },
@@ -261,7 +259,11 @@
 </script>
 
 <style type="text/css" scoped>
-
+    .headerItemActiveClass {
+        border-radius: 2px;
+        border-bottom: 5px solid orange;
+        box-shadow: 0px 0px 20px 0px #ff00002e;
+    }
     .q-short {
         width: 200px;
         animation: longToShort 1s 1;

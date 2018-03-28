@@ -5,14 +5,62 @@ import {
     editPermission,
     listPermission,
     listPermissionTree,
-    userRouteTree
+    userRouteTree,
+    userRouteTreeByOpen
 } from 'api/permission';
 
 
-import Full from '@/containers/Full';
+// import BackFull from '@/containers/Full';
+
+
+import BackFull from '@/containers/Full';
+import VisitorFull from '@/containers/VisitorFull';
 
 const _import = require('../../router/_import_' + process.env.NODE_ENV);
 
+
+function getRoutes(routes) {
+    try {
+        routes.forEach(function (route) {
+            var component;
+            // alert(JSON.stringify(BackFull))
+            // alert(JSON.stringify(VisitorFull))
+
+            // console.error("permission=>" + JSON.stringify(route))
+            if (route.parent == null) {
+                if (route.component == '@/containers/Full') {
+                    component = BackFull;
+                } else if (route.component == '@/containers/VisitorFull') {
+                    component = VisitorFull;
+                } else if (route.component == 'router-view') {
+                    component = {
+                        render(c) {
+                            return c('router-view')
+                        }
+                    }
+                }
+            } else {
+                if (route.component == 'router-view') {
+                    component = {
+                        render(c) {
+                            return c('router-view')
+                        }
+                    }
+                }
+                else {
+                    component = _import(route.component);
+                }
+            }
+            route.component = component;
+            if (route.children != null && route.children.length != 0) {
+                getRoutes(route.children)
+            }
+        })
+        return routes;
+    } catch (err) {
+        console.error(err)
+    }
+}
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -60,26 +108,6 @@ function getNowRouter(constantRouterMap, to) {
 
 }
 
-function getRoutes(routes) {
-    try {
-        routes.forEach(function (route) {
-            var component;
-            if (route.parent == null) {
-                component = Full;
-            } else {
-                component = _import(route.component);
-            }
-            route.component = component;
-            if (route.children != null && route.children.length != 0) {
-                getRoutes(route.children)
-            }
-        })
-        return routes;
-    } catch (err) {
-        console.error(err)
-    }
-}
-
 
 const permission = {
     state: {
@@ -121,6 +149,21 @@ const permission = {
         UserRouteTree({commit, state}) {
             return new Promise((resolve, reject) => {
                 userRouteTree().then(response => {
+                    var routes = response.data.payload;
+                    var trees = getRoutes(routes);
+                    // console.error(trees)
+                    //设置可访问路由表
+                    commit('SET_ROUTERS', trees);
+
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        UserRouteTreeByOpen({commit, state}) {
+            return new Promise((resolve, reject) => {
+                userRouteTreeByOpen().then(response => {
                     var routes = response.data.payload;
                     var trees = getRoutes(routes);
                     // console.error(trees)

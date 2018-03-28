@@ -5,7 +5,7 @@
         <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
         <Row>
             <div v-for="link in links">
-                <Col span="6"  class="link-piece">
+                <Col span="6" class="link-piece">
                 <div class="echarts">
                     <ul>
                         <li style="margin: 10px;">友链名称：<a :href="link.value" target="_blank">{{link.name}}</a></li>
@@ -71,26 +71,8 @@
         color: black;
     }
 
-    .time {
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .content {
-        padding-left: 5px;
-    }
-
-    .dashboard_feature {
-        text-align: center;
-    }
-
-    .demo-carousel {
-        height: 600px;
-        line-height: 200px;
-        text-align: center;
-        color: #fff;
-        font-size: 20px;
-        background: #506b9e;
+    li {
+        list-style-type: none;
     }
 
     .demo-carousel img {

@@ -214,7 +214,7 @@ export const constantRouterMap = [
     // .concat(settingCenterRouterMap)
     // .concat(logRouterMap)
     // .concat(systemMgrRouterMap)
-    .concat(subscribeCenterRouterMap);
+    // .concat(subscribeCenterRouterMap);
 
 const scrollBehavior = (to, from, savedPosition) => {
     if (savedPosition) {

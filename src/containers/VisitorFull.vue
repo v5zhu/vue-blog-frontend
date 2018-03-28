@@ -28,7 +28,7 @@
     import Cookies from 'js-cookie';
 
     export default {
-        name: 'full',
+        name: 'visitor-full',
         data() {
             return {
                 scrollShow: true,

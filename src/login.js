@@ -18,14 +18,15 @@ function hasPermission(roles, permissionRoles) {
 function getRoutes(routes) {
     try {
         routes.forEach(function (route) {
-            var component;
-            if (route.parent == null) {
-                component = Full;
-            } else {
-                component = route.component;
-                // component = _import(route.component);
-            }
-            route.component = component;
+            // console.error("login=>" + JSON.stringify(route))
+            // var component;
+            // if (route.parent == null) {
+            //     component = Full;
+            // } else {
+            //     component = route.component;
+            //     component = _import(route.component);
+            // }
+            // route.component = component;
             if (route.children != null && route.children.length != 0) {
                 getRoutes(route.children)
             }
@@ -47,7 +48,7 @@ router.beforeEach((to, from, next) => {
     if (jsonString) {
         user = JSON.parse(jsonString);
     }
-    console.log("用户：" + user);
+    // console.log("用户：" + user);
 
     if (user && user.token) { // 判断是否有token
 
@@ -55,7 +56,6 @@ router.beforeEach((to, from, next) => {
         store.dispatch('UserRouteTree').then(response => { // 拉取user_info
             var routes = response.data.payload;
             var trees = getRoutes(routes);
-            // var routes=store.getters.addRouters;
             router.addRoutes(trees) // 动态添加可访问路由表
             next({...to}) // hack方法 确保addRoutes已完成
             store.dispatch('generateMenus', to);
@@ -64,39 +64,24 @@ router.beforeEach((to, from, next) => {
             console.error(err);
         })
 
-
-        /*store.dispatch('GenerateRoutes', {roles}).then(() => { // 生成可访问的路由表
-            console.log(store.getters.addRouters)
-            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-            next({...to}) // hack方法 确保addRoutes已完成
-        })*/
-
-        // store.dispatch('generateMenus', to);
-
-
-        // if (hasPermission({roles}, to.meta.role)) {
         next()//
-        // } else {
-        //     next({path: '/admin', query: {noGoBack: true}})
-        // }
 
     } else {
         if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
             next();
         } else {
             if (to.path.indexOf('admin') == -1) {
-                store.dispatch('GenerateRoutes', {roles: []}).then(() => { // 生成可访问的路由表
-                    router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+                store.dispatch('UserRouteTreeByOpen').then(response => { // 拉取user_info
+                    var routes = response.data.payload;
+                    var trees = getRoutes(routes);
+                    router.addRoutes(trees) // 动态添加可访问路由表
                     next({...to}) // hack方法 确保addRoutes已完成
+                    store.dispatch('generateMenus', to);
+
+                }).catch(err => {
+                    console.error(err);
                 })
-
-                store.dispatch('generateMenus', to);
-
-                if (hasPermission({roles: []}, to.meta.role)) {
-                    next()
-                } else {
-                    next({path: '/', query: {noGoBack: true}})
-                }
+                next();
             } else {
                 next('/admin/login') // 否则全部重定向到登录页
                 NProgress.done() // 在hash模式下 改变手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！

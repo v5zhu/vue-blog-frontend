@@ -202,6 +202,7 @@
     }
 
     li {
+        list-style-type:none;
         margin-bottom: 11px;
         margin-left: 10px;
         margin-right: 10px

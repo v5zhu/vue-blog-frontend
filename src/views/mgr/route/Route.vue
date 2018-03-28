@@ -247,9 +247,14 @@
                         width: 100,
                         render: (h, params) => {
                             const type = params.row.type;
-                            if (type === 'header') {
+                            if (type === 'backheader') {
                                 return h('div', [
-                                    h('div', {}, '头部'),
+                                    h('div', {}, '后台头部'),
+                                ]);
+                            }
+                            else if (type === 'frontheader') {
+                                return h('div', [
+                                    h('div', {}, '前台头部'),
                                 ]);
                             }
                             else if (type === 'route') {
@@ -267,6 +272,21 @@
                         ellipsis: 'true',
                         render: (h, params) => {
                             return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        disabled: false,
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.copyRoute(params.row);
+                                        }
+                                    },
+                                }, '复制'),
                                 h('Button', {
                                     props: {
                                         type: 'success',
@@ -343,6 +363,12 @@
             },
             clearAll(refName) {
                 this.$refs[refName].resetFields();
+            },
+            copyRoute(row) {
+                this.route = row;
+                this.route.path = this.route.path + '/copy';
+                this.route.id = '';
+                this.saveRoute();
             },
             editRoute(row) {
                 var routeTree = row.routeTree;
@@ -440,7 +466,7 @@
                         var data = res.data;
                         if (data.success == true) {
                             this.$Message.success('编辑成功');
-                            window.location.reload();
+//                            window.location.reload();
                         } else {
                             this.$Message.error('加载失败');
                         }
