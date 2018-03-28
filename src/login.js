@@ -106,6 +106,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(to => {
-    document.title = to.name;
+    var prefix = 'MFX - ';
+    document.title = prefix + to.name;
     NProgress.done() // 结束Progress
 })

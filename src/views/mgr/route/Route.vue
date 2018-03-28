@@ -311,6 +311,7 @@
                 vue.list_loadding = false;
 
             }, 1000);
+            this.listRoutesTree(null);
             this.listRoute();
         },
         methods: {
@@ -344,8 +345,6 @@
                 this.$refs[refName].resetFields();
             },
             editRoute(row) {
-                this.listRoutesTree(this.route.type);
-
                 var routeTree = row.routeTree;
                 this.route = row;
                 this.route.upper = routeTree;//设置上级路由的默认值
