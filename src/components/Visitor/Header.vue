@@ -271,8 +271,8 @@
 
     .q-long {
         width: 400px;
-        border: orange;
-        box-shadow: 2px 2px 10px 2px orange;
+        /*border: orange;*/
+        /*box-shadow: 2px 2px 10px 2px orange;*/
         animation: shortToLong 1s 1;
     }
 
@@ -282,8 +282,8 @@
         }
         to {
             width: 400px;
-            border: orange;
-            box-shadow: 2px 2px 10px 2px orange;
+            /*border: orange;*/
+            /*box-shadow: 2px 2px 10px 2px orange;*/
         }
     }
 
