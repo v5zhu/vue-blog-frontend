@@ -13,8 +13,8 @@ import {
 // import BackFull from '@/containers/Full';
 
 
-import BackFull from '@/containers/Full';
 import VisitorFull from '@/containers/VisitorFull';
+import BackFull from '@/containers/BackFull';
 
 const _import = require('../../router/_import_' + process.env.NODE_ENV);
 
@@ -23,10 +23,7 @@ function getRoutes(routes) {
     try {
         routes.forEach(function (route) {
             var component;
-            // alert(JSON.stringify(BackFull))
-            // alert(JSON.stringify(VisitorFull))
 
-            // console.error("permission=>" + JSON.stringify(route))
             if (route.parent == null) {
                 if (route.component == '@/containers/Full') {
                     component = BackFull;

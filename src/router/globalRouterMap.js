@@ -1,5 +1,7 @@
 const _import = require('./_import_' + process.env.NODE_ENV);
 
+// import BackFull from '@/containers/BackFull';
+// import VisitorFull from '@/containers/VisitorFull';
 
 export const globalRouterMap = [
     {

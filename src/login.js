@@ -4,7 +4,7 @@ import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
 import Cookies from 'js-cookie';
 
-import Full from '@/containers/Full';
+import BackFull from '@/containers/BackFull';
 
 const _import = require('./router/_import_' + process.env.NODE_ENV);
 
