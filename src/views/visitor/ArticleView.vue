@@ -233,7 +233,7 @@
     import {quillEditor} from 'vue-quill-editor';
     import h2m from 'h2m';
     import hljs from 'highlight.js/lib/highlight';
-
+    import Cookies from 'js-cookie';
 
     export default {
         data() {
@@ -309,7 +309,8 @@
                 content: '在此输入评论内容...',
                 editorOption: {
                     // something config
-                }
+                },
+                loginUser: {}
             }
         },
         computed: {
@@ -338,7 +339,10 @@
         }
         ,
         created() {
-
+            var jsonString = Cookies.get('USER-INFO');
+            if (jsonString) {
+                this.loginUser = JSON.parse(jsonString);
+            }
         }
         ,
         components: {
@@ -446,6 +450,10 @@
             }
             ,
             updateStatistics(type) {
+                if (!this.loginUser.token) {
+                    this.$emit('showLoginModalFunction');
+                    return;
+                }
                 this.statistics.articleId = this.article.id;
                 if (type == 'hits') {
                     this.article.hits++;

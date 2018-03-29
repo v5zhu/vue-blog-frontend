@@ -119,25 +119,7 @@
                         </Dropdown-menu>
                     </Dropdown>
 
-                    <Modal v-model="showLoginModal" width="600" :maskClosable="false"
-                           @on-visible-change="changeModalVisible">
-                        <login-modal-body style="min-height: 300px;"></login-modal-body>
-                        <div slot="footer" style="text-align: center">
-                        </div>
-                    </Modal>
 
-                    <Modal v-model="showRegModal" width="600" :maskClosable="false"
-                           @on-visible-change="changeModalVisible">
-                        <!-- <p slot="header" style="color:#f60;text-align:left">
-                             <Icon type="ios-pulse-strong" size="20"></Icon>
-                             <span style="font-size:14px;">注册</span>
-                         </p>-->
-
-                        <reg-modal-body style="min-height: 300px;"></reg-modal-body>
-
-                        <div slot="footer" style="text-align: center">
-                        </div>
-                    </Modal>
                 </ul>
             </navbar>
         </transition>
@@ -156,8 +138,6 @@
         props: ['scrollShow', 'moveShow', 'loginUser'],
         data() {
             return {
-                showRegModal: false,
-                showLoginModal: false,
                 q: '',
                 qfocus: false,
                 pageInfo: {
@@ -219,7 +199,6 @@
                 store.dispatch('LogOut', {token: null}).then(res => {
                     if (res.data.success == true) {
                         Cookies.remove('USER-INFO');
-                        Cookies.remove('USER-TOKEN');
                         window.location.reload();
                     } else {
                         this.$Message.error('退出失败,请联系管理员');
@@ -229,12 +208,10 @@
                 });
             },
             showRegModalFunction() {
-                this.showLoginModal = false;
-                this.showRegModal = true;
+                this.$emit('showRegModalFunction');
             },
             showLoginModalFunction() {
-                this.showRegModal = false;
-                this.showLoginModal = true;
+                this.$emit('showLoginModalFunction');
             },
             sidebarToggle(e) {
                 e.preventDefault()
@@ -264,6 +241,7 @@
         border-bottom: 5px solid orange;
         box-shadow: 0px 0px 20px 0px #ff00002e;
     }
+
     .q-short {
         width: 200px;
         animation: longToShort 1s 1;

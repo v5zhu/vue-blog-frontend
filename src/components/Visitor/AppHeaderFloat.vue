@@ -10,11 +10,11 @@
                 <ul class="nav navbar-nav d-md-down-none">
 
                     <li class="nav-item header-item reg-login-btn">
-                        <Button class="reg-login-btn" type="default" icon="ios-pulse" size="large">免费注册</Button>
+                        <Button class="reg-login-btn" type="default" icon="ios-pulse" size="large" @click="showRegModalFunction">免费注册</Button>
                     </li>
 
                     <li class="nav-item header-item reg-login">
-                        <Button class="reg-login-btn" type="info" icon="log-in" size="large">立即登录</Button>
+                        <Button class="reg-login-btn" type="info" icon="log-in" size="large" @click="showLoginModalFunction">立即登录</Button>
                     </li>
                 </ul>
                 <ul>
@@ -43,17 +43,11 @@
         },
         components: {HeaderFloatNavbar},
         methods: {
-            Logout(e) {
-                e.preventDefault();
-                this.$store.dispatch('LogOut').then(res => {
-                    if (res.data.success == true) {
-                        this.$router.push({path: '/admin/login'});
-                    } else {
-                        this.$Message.error('退出失败,请联系管理员');
-                    }
-                }).catch(err => {
-                    this.$message.error(err);
-                });
+            showRegModalFunction() {
+                this.$emit('showRegModalFunction');
+            },
+            showLoginModalFunction() {
+                this.$emit('showLoginModalFunction');
             },
             click() {
                 // do nothing

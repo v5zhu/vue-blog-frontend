@@ -1,7 +1,9 @@
 <template>
     <div class="app" @mousemove="toggleHeader">
-        <AppHeader :loginUser="loginUser" :scrollShow="scrollShow" :moveShow="moveShow"/>
-        <AppHeaderFloat :scrollShow="scrollShow" :moveShow="moveShow" v-show="headerFloatShow"
+        <AppHeader @showLoginModalFunction="showLoginModalFunction" @showRegModalFunction="showRegModalFunction"
+                   :loginUser="loginUser" :scrollShow="scrollShow" :moveShow="moveShow"/>
+        <AppHeaderFloat @showLoginModalFunction="showLoginModalFunction" @showRegModalFunction="showRegModalFunction"
+                        :scrollShow="scrollShow" :moveShow="moveShow" v-show="headerFloatShow"
                         @closeHeaderFloat="closeHeaderFloat"/>
 
         <Sidebar/>
@@ -9,12 +11,24 @@
 
             <main class="main">
                 <div class="container-fluid">
-                    <router-view></router-view>
+                    <router-view @showLoginModalFunction="showLoginModalFunction" @showRegModalFunction="showRegModalFunction"></router-view>
                 </div>
             </main>
             <AppAside v-if="loginUser.token!=undefined"/>
         </div>
         <AppFooter/>
+
+
+        <Modal v-model="showLoginRegModal" width="600" :maskClosable="false"
+               @on-visible-change="changeModalVisible">
+            <login-modal-body v-show="showLoginBody" style="min-height: 300px;"></login-modal-body>
+            <reg-modal-body v-show="showRegBody" style="min-height: 300px;"></reg-modal-body>
+
+            <div slot="footer" style="text-align: center">
+            </div>
+        </Modal>
+
+
     </div>
 </template>
 
@@ -25,6 +39,10 @@
     import AppFooter from '../components/Visitor/Footer';
     import Sidebar from '../components/Visitor/Sidebar';
 
+    import RegModalBody from '../components/Visitor/RegModalBody';
+    import LoginModalBody from '../components/Visitor/LoginModalBody';
+
+
     import Cookies from 'js-cookie';
 
     export default {
@@ -34,7 +52,10 @@
                 scrollShow: true,
                 moveShow: true,
                 headerFloatShow: true,
-                loginUser: {}
+                loginUser: {},
+                showLoginRegModal: false,
+                showLoginBody: false,
+                showRegBody: false
             }
         },
         components: {
@@ -42,7 +63,9 @@
             AppHeaderFloat,
             AppAside,
             AppFooter,
-            Sidebar
+            Sidebar,
+            RegModalBody,
+            LoginModalBody
         },
         created() {
             var user = Cookies.get('USER-INFO');
@@ -55,6 +78,19 @@
             // window.addEventListener('scroll', this.handleScroll)
         },
         methods: {
+            showRegModalFunction() {
+                this.showLoginRegModal = true;
+                this.showRegBody = true;
+                this.showLoginBody = false;
+            },
+            showLoginModalFunction() {
+                this.showLoginRegModal = true;
+                this.showRegBody = false;
+                this.showLoginBody = true;
+            },
+            changeModalVisible() {
+
+            },
             handleScroll() {
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
                 if (scrollTop < 100) {
