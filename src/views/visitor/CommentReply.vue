@@ -17,8 +17,7 @@
             <Row>
                 <Col>
                 <Form-item prop="comment">
-                    <quill-editor ref="myTextEditor"
-                                  :content="content"
+                    <quill-editor ref="myTextEditor" v-model="comment.content"
                                   :options="editorOption"
                                   @change="onEditorChange($event)">
                     </quill-editor>
@@ -59,7 +58,6 @@
                     type: ''
                 },
                 isShowReply: false,
-                content: '',
                 editorOption: {
                     placeholder: "输入回复内容..."
                 }
@@ -79,13 +77,11 @@
                 this.comment = {};
             },
             reply(refName) {
-                var marktext = h2m(this.content);
-                this.comment.content = marktext;
                 this.comment.parent = this.CommentChild.id;
                 this.comment.type = 'reply';
                 store.dispatch('CommitComment', {
                     articleId: this.CommentChild.articleId,
-                    content: this.comment.content,
+                    content: h2m(this.comment.content),
                     parent: this.comment.parent,
                     type: this.comment.type
                 }).then(res => { // 拉取user_info

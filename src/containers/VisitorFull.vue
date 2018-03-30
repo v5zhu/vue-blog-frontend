@@ -9,7 +9,7 @@
 
             <main class="main">
                 <div class="container-fluid">
-                    <router-view></router-view>
+                    <router-view :loginUser="loginUser"></router-view>
                 </div>
             </main>
             <AppAside v-if="loginUser.token!=undefined"/>

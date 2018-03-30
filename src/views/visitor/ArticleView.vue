@@ -203,17 +203,35 @@
             </Col>
         </Row>
 
-        <Form ref="tagForm" :model="article" style="margin-left: 50px;">
+        <Form ref="tagForm" :model="comment" style="margin-left: 50px;">
+            <Row v-if="loginUser.token==undefined">
+                <Col span="5" style="padding-right: 10px;">
+                <Form-item prop="name">
+                    <Input v-model="comment.name" placeholder="请输入阁下大名"></Input>
+                </Form-item>
+                </Col>
+                <Col span="6" style="padding-right: 10px;">
+                <Form-item prop="email">
+                    <Input v-model="comment.email" placeholder="请输入阁下联系邮箱"></Input>
+                </Form-item>
+                </Col>
+                <Col span="6">
+                <Form-item prop="siteUrl">
+                    <Input v-model="comment.siteUrl" placeholder="请输入主页网址http(s)://开头"></Input>
+                </Form-item>
+                </Col>
+                <Col :xs="4" :sm="4" :md="4" :lg="4">
+                </Col>
+            </Row>
             <Row>
                 <Col :xs="17" :sm="17" :md="17" :lg="17">
                 <Form-item prop="content">
-                    <quill-editor ref="myTextEditor"
-                                  :content="content"
+                    <quill-editor ref="myTextEditor" v-model="comment.content"
                                   :options="editorOption"
                                   @change="onEditorChange($event)">
                     </quill-editor>
                 </Form-item>
-                <Button type="warning" icon="ios-chatbubble-outline" size="large" @click="commitComment">提交评论
+                <Button type="warning" icon="ios-chatbubble-outline" size="large" @click="commitComment('comment')">提交评论
                 </Button>
                 </Col>
                 <Col :xs="4" :sm="4" :md="4" :lg="4">
@@ -236,6 +254,9 @@
 
 
     export default {
+        props: {
+            loginUser: Object
+        },
         data() {
             return {
                 awardModal: false,
@@ -306,7 +327,13 @@
                 },
                 loadingComments: false,
                 isAward: false,
-                content: '',
+                comment: {
+                    articleId: '',
+                    email: '',
+                    name: '',
+                    siteUrl: '',
+                    content: ''
+                },
                 editorOption: {
                     placeholder: "输入回复内容..."
                 }
@@ -422,14 +449,14 @@
                 this.getArticleComments(this.article.id);
             }
             ,
-            commitComment() {
+            commitComment(type) {
                 this.$Loading.start();
-                var marktext = h2m(this.content);
-                store.dispatch('CommitComment', {
-                    articleId: this.article.id,
-                    content: marktext,
-                    type: 'comment'
-                }).then(res => { // 拉取user_info
+                var marktext = h2m(this.comment.content);
+                this.comment.articleId = this.article.id;
+                this.comment.content = marktext;
+                this.comment.type=type
+
+                store.dispatch('CommitComment', this.comment).then(res => { // 拉取user_info
                     var data = res.data;
                     if (data.success == true) {
                         this.$Message.success('发表评论成功');

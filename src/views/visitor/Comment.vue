@@ -1,11 +1,16 @@
 <template>
     <div>
         <div style="color: #808080;min-height:20px;position: relative;top:-8px;">
-            <div class="staff_avatar" style="position: relative;top:30px;left:-50px;">
+            <div class="staff_avatar" style="position: relative;top:30px;left:-50px;width:50px;">
                 <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
                         size="large" style="line-height: 0px"/>
             </div>
-            <div>{{OneComment.author.nickname}}</div>
+            <div>
+                {{OneComment.name}}
+                <a v-if="OneComment.siteUrl&&OneComment.siteUrl.length>0" :href="OneComment.siteUrl" target="_blank">
+                    传送门&nbsp;<Icon type="social-chrome-outline" size="14"></Icon>
+                </a>
+            </div>
         </div>
         <div style="min-height:50px;" v-html="compiledComment">
         </div>
@@ -13,25 +18,11 @@
             <a @click="showReply">回复</a>
         </div>
 
-        <!--
-                <Form ref="replyForm" :model="comment" v-show="isShowReply">
-                    <Row>
-                        <Col>
-                        <Form-item prop="comment">
-                            <Input v-model="comment.content" type="textarea" :autosize="true" size="default"
-                                   placeholder="请输入回复内容..."/>
-                        </Form-item>
-                        </Col>
-
-                    </Row>
-                </Form>-->
-
         <Form ref="replyForm" :model="comment" v-show="isShowReply">
             <Row>
                 <Col>
                 <Form-item prop="comment">
-                    <quill-editor ref="myTextEditor"
-                                  :content="content"
+                    <quill-editor ref="myTextEditor" v-model="comment.content"
                                   :options="editorOption"
                                   @change="onEditorChange($event)">
                     </quill-editor>
@@ -73,7 +64,6 @@
                     type: ''
                 },
                 isShowReply: false,
-                content: '',
                 editorOption: {
                     placeholder: "输入回复内容..."
                 }
@@ -93,13 +83,11 @@
                 this.comment = {};
             },
             reply(refName) {
-                var marktext = h2m(this.content);
-                this.comment.content = marktext;
                 this.comment.parent = this.OneComment.id;
                 this.comment.type = 'reply';
                 store.dispatch('CommitComment', {
                     articleId: this.OneComment.articleId,
-                    content: this.comment.content,
+                    content: h2m(this.comment.content),
                     parent: this.comment.parent,
                     type: this.comment.type
                 }).then(res => { // 拉取user_info
