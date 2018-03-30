@@ -5,12 +5,14 @@
                 <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
                         size="large" style="line-height: 0px"/>
             </div>
-            <div>{{CommentChild.author.nickname}}@{{CommentChild.parent}}</div>
+            <div>{{CommentChild.name}} <i
+                    style="color:#bbbbbb">{{CommentChild.gmtCreate | formatDate}}&nbsp; 回复 {{CommentChild.parent.name}}</i>
+            </div>
         </div>
         <div style="min-height:20px;" v-html="compiledComment">
         </div>
-        <div style="color: #bbbbbb;min-height:20px;">{{CommentChild.gmtCreate | formatDate}}&nbsp;&nbsp;&nbsp;&nbsp;
-            <a @click="showReply">回复</a>
+        <div style="color: #bbbbbb;min-height:20px;">
+            <a @click="showReply">回复他</a>
         </div>
 
         <comment-component :type="type" :loginUser="loginUser" :articleId="articleId" :parentComment="CommentChild"
