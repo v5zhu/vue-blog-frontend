@@ -22,19 +22,31 @@
         <AppFooter/>
 
 
-        <Modal v-model="showLoginRegModal" width="600" :maskClosable="false"
-               @on-visible-change="changeModalVisible">
-            <login-modal-body v-show="showLoginBody" style="min-height: 300px;"
-                              @showLoginModalFunction="showLoginModalFunction"
-                              @showRegModalFunction="showRegModalFunction">
-            </login-modal-body>
-            <reg-modal-body v-show="showRegBody" style="min-height: 300px;"
-                            @showLoginModalFunction="showLoginModalFunction"
-                            @showRegModalFunction="showRegModalFunction">
-            </reg-modal-body>
+        <Modal v-model="showLoginModal" width="600" :maskClosable="false"
+               @on-visible-change="changeModalVisible" style="position: relative">
+            <transition name="bounce" style="position: relative">
+                <login-modal-body v-show="showLoginBody" style="min-height: 300px;"
+                                  @showLoginModalFunction="showLoginModalFunction"
+                                  @showRegModalFunction="showRegModalFunction">
+                </login-modal-body>
+            </transition>
 
             <div slot="footer" style="text-align: center">
             </div>
+
+        </Modal>
+        <Modal v-model="showRegModal" width="600" :maskClosable="false"
+               @on-visible-change="changeModalVisible" style="position: relative">
+            <transition name="bounce" style="position: relative">
+                <reg-modal-body v-show="showRegBody" style="min-height: 300px;"
+                                @showLoginModalFunction="showLoginModalFunction"
+                                @showRegModalFunction="showRegModalFunction">
+                </reg-modal-body>
+            </transition>
+
+            <div slot="footer" style="text-align: center">
+            </div>
+
         </Modal>
 
 
@@ -62,7 +74,8 @@
                 moveShow: true,
                 headerFloatShow: true,
                 loginUser: {},
-                showLoginRegModal: false,
+                showLoginModal: false,
+                showRegModal: false,
                 showLoginBody: false,
                 showRegBody: false
             }
@@ -88,12 +101,14 @@
         },
         methods: {
             showRegModalFunction() {
-                this.showLoginRegModal = true;
+                this.showLoginModal = false;
+                this.showRegModal = true;
                 this.showRegBody = true;
                 this.showLoginBody = false;
             },
             showLoginModalFunction() {
-                this.showLoginRegModal = true;
+                this.showRegModal = false;
+                this.showLoginModal = true;
                 this.showRegBody = false;
                 this.showLoginBody = true;
             },
@@ -133,6 +148,38 @@
     }
 </script>
 <style scoped>
+    .bounce-enter-active {
+        animation: bounce-in 1.2s;
+    }
+
+    .bounce-leave-active {
+        animation: bounce-out 1.2s;
+    }
+
+    @keyframes bounce-in {
+        0% {
+            transform: scale(0);
+        }
+        70% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes bounce-out {
+        0% {
+            transform: scale(1);
+        }
+        70% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(0);
+        }
+    }
+
     .app-body {
         display: flex;
         flex-direction: row;
