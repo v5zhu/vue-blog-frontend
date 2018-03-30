@@ -7,7 +7,7 @@
         <div slot="main" style="text-align:center;margin-top: 50px;">
             <Form ref="loginForm" :model="user" :rules="userLoginRule" :label-width="70" label-position="right">
                 <Row style="padding-left: 20px;">
-                    <Col span="20">
+                    <Col span="21">
                     <Tabs>
                         <TabPane label="身份验证》" icon="person">
                             <FormItem
