@@ -442,6 +442,7 @@
                     }
                 }).catch(() => {
                     console.log("提交评论失败");
+                    this.$Loading.error();
                 })
             }
             ,

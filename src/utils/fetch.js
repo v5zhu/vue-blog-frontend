@@ -1,8 +1,7 @@
 import axios from 'axios';
-import store from '../store';
-import vue from 'vue';
 // import router from '../router';
 import Cookies from 'js-cookie';
+import router from '../router';
 
 // 创建axios实例
 const service = axios.create({
@@ -27,15 +26,22 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(response => {
-        if (response.data.success == true) {
-            return Promise.resolve(response);
+        if (response.data.code == '403') {
+            router.replace({
+                path: '/pages/403'
+            })
+        } else if (response.data.code == '404') {
+            router.replace({
+                path: '/pages/403'
+            })
+        } else if (response.data.code == '500') {
+            router.replace({
+                path: '/pages/500'
+            })
         } else {
-            if (response.data.code == '403') {
-                return Promise.reject(response);
-            } else {
-                return Promise.reject(response);
-            }
+            return Promise.resolve(response);
         }
+
     }, error => {
         console.log(error);// for debug
         return Promise.reject(error);
