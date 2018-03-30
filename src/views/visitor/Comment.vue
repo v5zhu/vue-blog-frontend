@@ -8,7 +8,8 @@
             <div>
                 {{OneComment.name}}
                 <a v-if="OneComment.siteUrl&&OneComment.siteUrl.length>0" :href="OneComment.siteUrl" target="_blank">
-                    传送门&nbsp;<Icon type="social-chrome-outline" size="14"></Icon>
+                    传送门&nbsp;
+                    <Icon type="social-chrome-outline" size="14"></Icon>
                 </a>
             </div>
         </div>
@@ -18,26 +19,17 @@
             <a @click="showReply">回复</a>
         </div>
 
-        <Form ref="replyForm" :model="comment" v-show="isShowReply">
-            <Row>
-                <Col>
-                <Form-item prop="comment">
-                    <quill-editor ref="myTextEditor" v-model="comment.content"
-                                  :options="editorOption"
-                                  @change="onEditorChange($event)">
-                    </quill-editor>
-                </Form-item>
-                <Button type="ghost" size="small" @click="cancelReply('replyForm')">取消
-                </Button>
-                <Button type="warning" icon="ios-chatbubble-outline" size="small" @click="reply('replyForm')">回复
-                </Button>
-                </Col>
-            </Row>
-        </Form>
+        <comment-component :type="type" :loginUser="loginUser" :articleId="articleId" :parentComment="OneComment"
+                           v-show="isShowReply"
+                           @cancelReply="cancelReply"
+                           @getArticleComments="loadArticleComments"></comment-component>
+
 
         <div style="min-height:20px;margin-left: 50px;" v-for="child in OneComment.children">
             <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
-            <comment-reply style="margin-top: -25px;" :CommentChild="child" @loadArticleInfo="loadArticle"
+            <comment-reply style="margin-top: -25px;" :CommentChild="child" :loginUser="loginUser"
+                           :articleId="articleId"
+                           @loadArticleInfo="loadArticle"
                            @loadArticleCommentList="loadArticleComments"></comment-reply>
         </div>
     </div>
@@ -48,14 +40,19 @@
     import {formatTime} from 'utils/index';
     import store from 'store/';
     import CommentReply from './CommentReply';
+    import CommentComponent from '../../components/Visitor/CommentComponent';
     import {quillEditor} from 'vue-quill-editor';
     import h2m from 'h2m';
     import hljs from 'highlight.js/lib/highlight';
 
     export default {
         name: 'comment',
-        props: ['OneComment'],
-        components: {CommentReply, quillEditor},
+        props: {
+            OneComment: Object,
+            loginUser: Object,
+            articleId: Number
+        },
+        components: {CommentReply, quillEditor, CommentComponent},
         data() {
             return {
                 comment: {
@@ -66,7 +63,8 @@
                 isShowReply: false,
                 editorOption: {
                     placeholder: "输入回复内容..."
-                }
+                },
+                type: 'reply'
             }
         },
         computed: {
@@ -80,30 +78,6 @@
             },
             cancelReply(refName) {
                 this.isShowReply = false;
-                this.comment = {};
-            },
-            reply(refName) {
-                this.comment.parent = this.OneComment.id;
-                this.comment.type = 'reply';
-                store.dispatch('CommitComment', {
-                    articleId: this.OneComment.articleId,
-                    content: h2m(this.comment.content),
-                    parent: this.comment.parent,
-                    type: this.comment.type
-                }).then(res => { // 拉取user_info
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.$Message.success('回复成功');
-                        this.loadArticle(this.OneComment.articleId);
-                        this.loadArticleComments(this.OneComment.articleId);
-                        this.comment = {};
-                        this.isShowReply = false;
-                    } else {
-                        this.$Message.error(data.msg);
-                    }
-                }).catch(() => {
-                    console.log("回复失败");
-                })
             },
             loadArticle(articleId) {
                 this.$emit('articleDetail', articleId);
@@ -111,21 +85,7 @@
             loadArticleComments(articleId) {
                 this.$emit('getArticleComments', articleId);
             },
-            onEditorBlur(editor) {
-                console.log('editor blur!', editor)
-            }
-            ,
-            onEditorFocus(editor) {
-                console.log('editor focus!', editor)
-            }
-            ,
-            onEditorReady(editor) {
-                console.log('editor ready!', editor)
-            }
-            ,
-            onEditorChange({editor, html, text}) {
-                this.content = html
-            }
+
         },
         filters: {
             formatDate(time) {

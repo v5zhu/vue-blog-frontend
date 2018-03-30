@@ -13,26 +13,15 @@
             <a @click="showReply">回复</a>
         </div>
 
-        <Form ref="replyForm" :model="comment" v-show="isShowReply">
-            <Row>
-                <Col>
-                <Form-item prop="comment">
-                    <quill-editor ref="myTextEditor" v-model="comment.content"
-                                  :options="editorOption"
-                                  @change="onEditorChange($event)">
-                    </quill-editor>
-                </Form-item>
-                <Button type="ghost" size="small" @click="cancelReply('replyForm')">取消
-                </Button>
-                <Button type="warning" icon="ios-chatbubble-outline" size="small" @click="reply('replyForm')">回复
-                </Button>
-                </Col>
-            </Row>
-        </Form>
+        <comment-component :type="type" :loginUser="loginUser" :articleId="articleId" :parentComment="CommentChild"
+                           v-show="isShowReply"
+                           @cancelReply="cancelReply"
+                           @getArticleComments="loadArticleCommentList"></comment-component>
 
         <div style="min-height:20px;margin-left: 30px;" v-for="ch in CommentChild.children">
             <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
-            <comment-reply style="margin-top: -10px;" :CommentChild="ch" @loadArticleInfo="loadArticleInfo"
+            <comment-reply style="margin-top: -10px;" :CommentChild="ch" :loginUser="loginUser" :articleId="articleId"
+                           @loadArticleInfo="loadArticleInfo"
                            @loadArticleCommentList="loadArticleCommentList"></comment-reply>
         </div>
     </div>
@@ -42,14 +31,19 @@
     import {formatTime} from 'utils/index';
     import store from 'store/';
     import CommentReply from './CommentReply';
+    import CommentComponent from '../../components/Visitor/CommentComponent';
     import {quillEditor} from 'vue-quill-editor';
     import h2m from 'h2m';
     import hljs from 'highlight.js/lib/highlight';
 
     export default {
         name: 'comment-reply',
-        props: ['CommentChild'],
-        components: {CommentReply, quillEditor},
+        props: {
+            CommentChild: Object,
+            loginUser: Object,
+            articleId: Number
+        },
+        components: {CommentReply, quillEditor, CommentComponent},
         data() {
             return {
                 comment: {
@@ -60,7 +54,8 @@
                 isShowReply: false,
                 editorOption: {
                     placeholder: "输入回复内容..."
-                }
+                },
+                type: 'reply'
             }
         },
         computed: {
@@ -76,49 +71,11 @@
                 this.isShowReply = false;
                 this.comment = {};
             },
-            reply(refName) {
-                this.comment.parent = this.CommentChild.id;
-                this.comment.type = 'reply';
-                store.dispatch('CommitComment', {
-                    articleId: this.CommentChild.articleId,
-                    content: h2m(this.comment.content),
-                    parent: this.comment.parent,
-                    type: this.comment.type
-                }).then(res => { // 拉取user_info
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.$Message.success('回复成功');
-                        this.loadArticleInfo(this.CommentChild.articleId);
-                        this.loadArticleCommentList(this.CommentChild.articleId);
-                        this.comment = {};
-                        this.isShowReply = false;
-                    } else {
-                        this.$Message.error(data.msg);
-                    }
-                }).catch(() => {
-                    console.log("回复失败");
-                })
-            },
             loadArticleInfo(articleId) {
                 this.$emit('loadArticleInfo', articleId);
             },
             loadArticleCommentList(articleId) {
                 this.$emit('loadArticleCommentList', articleId);
-            },
-            onEditorBlur(editor) {
-                console.log('editor blur!', editor)
-            }
-            ,
-            onEditorFocus(editor) {
-                console.log('editor focus!', editor)
-            }
-            ,
-            onEditorReady(editor) {
-                console.log('editor ready!', editor)
-            }
-            ,
-            onEditorChange({editor, html, text}) {
-                this.content = html
             }
         },
         filters: {
