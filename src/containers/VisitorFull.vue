@@ -11,7 +11,10 @@
 
             <main class="main">
                 <div class="container-fluid">
-                    <router-view @showLoginModalFunction="showLoginModalFunction" @showRegModalFunction="showRegModalFunction"></router-view>
+                    <router-view :loginUser="loginUser"
+                                 @showLoginModalFunction="showLoginModalFunction"
+                                 @showRegModalFunction="showRegModalFunction">
+                    </router-view>
                 </div>
             </main>
             <AppAside v-if="loginUser.token!=undefined"/>
