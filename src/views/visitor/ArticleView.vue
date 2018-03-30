@@ -306,9 +306,9 @@
                 },
                 loadingComments: false,
                 isAward: false,
-                content: '在此输入评论内容...',
+                content: '',
                 editorOption: {
-                    // something config
+                    placeholder: "输入回复内容..."
                 }
             }
         },

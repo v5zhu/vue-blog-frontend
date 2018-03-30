@@ -13,19 +13,34 @@
             <a @click="showReply">回复</a>
         </div>
 
+        <!--
+                <Form ref="replyForm" :model="comment" v-show="isShowReply">
+                    <Row>
+                        <Col>
+                        <Form-item prop="comment">
+                            <Input v-model="comment.content" type="textarea" :autosize="true" size="default"
+                                   placeholder="请输入回复内容..."/>
+                        </Form-item>
+                        </Col>
+
+                    </Row>
+                </Form>-->
 
         <Form ref="replyForm" :model="comment" v-show="isShowReply">
             <Row>
                 <Col>
                 <Form-item prop="comment">
-                    <Input v-model="comment.content" type="textarea" :autosize="true" size="default"
-                           placeholder="请输入回复内容..."/>
+                    <quill-editor ref="myTextEditor"
+                                  :content="content"
+                                  :options="editorOption"
+                                  @change="onEditorChange($event)">
+                    </quill-editor>
                 </Form-item>
-                </Col>
                 <Button type="ghost" size="small" @click="cancelReply('replyForm')">取消
                 </Button>
-                <Button type="warning" icon="ios-chatbubble-outline" size="small" @click="reply('replyForm')">评论
+                <Button type="warning" icon="ios-chatbubble-outline" size="small" @click="reply('replyForm')">回复
                 </Button>
+                </Col>
             </Row>
         </Form>
 
@@ -42,12 +57,14 @@
     import {formatTime} from 'utils/index';
     import store from 'store/';
     import CommentReply from './CommentReply';
-
+    import {quillEditor} from 'vue-quill-editor';
+    import h2m from 'h2m';
+    import hljs from 'highlight.js/lib/highlight';
 
     export default {
         name: 'comment',
         props: ['OneComment'],
-        components: {CommentReply},
+        components: {CommentReply, quillEditor},
         data() {
             return {
                 comment: {
@@ -55,7 +72,11 @@
                     parent: '',
                     type: ''
                 },
-                isShowReply: false
+                isShowReply: false,
+                content: '',
+                editorOption: {
+                    placeholder: "输入回复内容..."
+                }
             }
         },
         computed: {
@@ -72,6 +93,8 @@
                 this.comment = {};
             },
             reply(refName) {
+                var marktext = h2m(this.content);
+                this.comment.content = marktext;
                 this.comment.parent = this.OneComment.id;
                 this.comment.type = 'reply';
                 store.dispatch('CommitComment', {
@@ -99,6 +122,21 @@
             },
             loadArticleComments(articleId) {
                 this.$emit('getArticleComments', articleId);
+            },
+            onEditorBlur(editor) {
+                console.log('editor blur!', editor)
+            }
+            ,
+            onEditorFocus(editor) {
+                console.log('editor focus!', editor)
+            }
+            ,
+            onEditorReady(editor) {
+                console.log('editor ready!', editor)
+            }
+            ,
+            onEditorChange({editor, html, text}) {
+                this.content = html
             }
         },
         filters: {
