@@ -34,7 +34,8 @@
                                             style="min-width: 100px;">登录
                                     </Button>
 
-                                    <p title="点击注册账号" style="width:60px;margin-top: 15px;color: blue;cursor: pointer;">没有账号？</p>
+                                    <p title="点击注册账号" style="width:60px;margin-top: 15px;color: blue;cursor: pointer;"
+                                       @click="showRegModalFunction">没有账号？</p>
                                 </div>
                             </FormItem>
                         </TabPane>
@@ -72,6 +73,9 @@
         methods: {
             sendVerifyCode() {
 
+            },
+            showRegModalFunction() {
+                this.$emit('showRegModalFunction')
             },
             login(refName) {
                 this.$refs[refName].validate((valid) => {

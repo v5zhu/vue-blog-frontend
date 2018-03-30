@@ -24,8 +24,14 @@
 
         <Modal v-model="showLoginRegModal" width="600" :maskClosable="false"
                @on-visible-change="changeModalVisible">
-            <login-modal-body v-show="showLoginBody" style="min-height: 300px;"></login-modal-body>
-            <reg-modal-body v-show="showRegBody" style="min-height: 300px;"></reg-modal-body>
+            <login-modal-body v-show="showLoginBody" style="min-height: 300px;"
+                              @showLoginModalFunction="showLoginModalFunction"
+                              @showRegModalFunction="showRegModalFunction">
+            </login-modal-body>
+            <reg-modal-body v-show="showRegBody" style="min-height: 300px;"
+                            @showLoginModalFunction="showLoginModalFunction"
+                            @showRegModalFunction="showRegModalFunction">
+            </reg-modal-body>
 
             <div slot="footer" style="text-align: center">
             </div>

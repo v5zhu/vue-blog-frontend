@@ -71,7 +71,8 @@
                             </FormItem>
                         </TabPane>
                     </Tabs>
-                    <p title="立即登录" style="width:120px;margin:15px 20px;color: blue;cursor: pointer;">已有账号，前往登录》</p>
+                    <p title="立即登录" style="width:120px;margin:15px 20px;color: blue;cursor: pointer;"
+                       @click="showLoginModalFunction">已有账号，前往登录》</p>
                     </Col>
                 </Row>
             </Form>
@@ -124,6 +125,9 @@
         methods: {
             sendVerifyCode() {
 
+            },
+            showLoginModalFunction() {
+                this.$emit('showLoginModalFunction')
             },
             register(refName) {
                 this.$refs[refName].validate((valid) => {
