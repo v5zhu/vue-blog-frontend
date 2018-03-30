@@ -18,7 +18,7 @@
                                         class="staff_name"> {{archive.date}} </span><span> - (共{{archive.count}}篇)</span>
                                     <ul>
                                         <li v-for="article in archive.articles">
-                                            <p>【{{article.gmtCreate | formatDate}}】<a @click="articleView(article.id)">{{article.title}}</a>
+                                            <p>【{{article.gmtCreate | formatDate}}】<a @click="articleView(article.path)">{{article.title}}</a>
                                             </p>
                                         </li>
                                     </ul>
@@ -86,8 +86,8 @@
                     console.log("获取文章历史归档信息失败");
                 })
             },
-            articleView(articleId) {
-                window.open('/article/' + articleId);
+            articleView(path) {
+                window.open('/article/detail/' + path);
             }
         },
         filters: {

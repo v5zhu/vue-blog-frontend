@@ -186,7 +186,9 @@
                             <Tag color="yellow">{{index + 1}}楼</Tag>
                         </div>
 
-                        <comment style="margin-top: -45px;" :OneComment="c" @articleDetail="articleDetail"
+                        <comment :loginUser="loginUser" style="margin-top: -45px;" :OneComment="c"
+                                 :articleId="article.id"
+                                 @articleDetail="articleDetail"
                                  @getArticleComments="getArticleComments"></comment>
                     </div>
                 </div>
@@ -201,25 +203,17 @@
             </Col>
             <Col :xs="4" :sm="4" :md="4" :lg="4">
             </Col>
-        </Row>
 
-        <Form ref="tagForm" :model="article" style="margin-left: 50px;">
-            <Row>
-                <Col :xs="17" :sm="17" :md="17" :lg="17">
-                <Form-item prop="content">
-                    <quill-editor ref="myTextEditor"
-                                  :content="content"
-                                  :options="editorOption"
-                                  @change="onEditorChange($event)">
-                    </quill-editor>
-                </Form-item>
-                <Button type="warning" icon="ios-chatbubble-outline" size="large" @click="commitComment">提交评论
-                </Button>
-                </Col>
-                <Col :xs="4" :sm="4" :md="4" :lg="4">
-                </Col>
-            </Row>
-        </Form>
+        </Row>
+        <Row style="position: relative;margin-bottom:50px;margin-left: 50px;">
+            <Col span="17">
+            <comment-component :loginUser="loginUser" :type="type" :articleId="article.id" :parentComment="new Object()"
+                               @getArticleComments="getArticleComments">
+            </comment-component>
+            </Col>
+            <Col :xs="4" :sm="4" :md="4" :lg="4">
+            </Col>
+        </Row>
     </div>
 
 </template>
@@ -230,12 +224,16 @@
     import VueMarkdown from 'vue-markdown' //直接作为一个组件引入
     import DashChartVisitor from './../charts/DashChartVisitor';
     import Comment from './Comment';
+    import CommentComponent from '../../components/Visitor/CommentComponent';
     import {quillEditor} from 'vue-quill-editor';
     import h2m from 'h2m';
     import hljs from 'highlight.js/lib/highlight';
     import Cookies from 'js-cookie';
 
     export default {
+        props: {
+            loginUser: Object
+        },
         data() {
             return {
                 awardModal: false,
@@ -265,7 +263,7 @@
                     }
                 },
                 article: {
-                    id: '',
+                    id: undefined,
                     title: '',
                     cover: '',
                     path: '',
@@ -306,10 +304,17 @@
                 },
                 loadingComments: false,
                 isAward: false,
-                content: '在此输入评论内容...',
-                editorOption: {
-                    // something config
+                comment: {
+                    articleId: '',
+                    email: '',
+                    name: '',
+                    siteUrl: '',
+                    content: ''
                 },
+                editorOption: {
+                    placeholder: "输入回复内容..."
+                },
+                type: 'comment',
                 loginUser: {}
             }
         },
@@ -346,7 +351,7 @@
         }
         ,
         components: {
-            VueMarkdown, DashChartVisitor, quillEditor, Comment // 声明组件
+            VueMarkdown, DashChartVisitor, quillEditor, Comment, CommentComponent // 声明组件
         }
         ,
         mounted() {
@@ -424,31 +429,7 @@
                 this.loadingComments = true;
                 this.commentParams.pageSize += 6;
                 this.getArticleComments(this.article.id);
-            }
-            ,
-            commitComment() {
-                this.$Loading.start();
-                var marktext = h2m(this.content);
-                store.dispatch('CommitComment', {
-                    articleId: this.article.id,
-                    content: marktext,
-                    type: 'comment'
-                }).then(res => { // 拉取user_info
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.$Message.success('发表评论成功');
-                        this.article.commentsNum++;
-                        this.getArticleComments(this.article.id);
-                        this.$Loading.finish();
-                    } else {
-                        this.$Message.error(data.msg);
-                        this.$Loading.error();
-                    }
-                }).catch(() => {
-                    console.log("提交评论失败");
-                })
-            }
-            ,
+            },
             updateStatistics(type) {
                 if (!this.loginUser.token) {
                     this.$emit('showLoginModalFunction');
@@ -488,22 +469,6 @@
                 }).catch(error => {
                     console.log(error);
                 })
-            }
-            ,
-            onEditorBlur(editor) {
-                console.log('editor blur!', editor)
-            }
-            ,
-            onEditorFocus(editor) {
-                console.log('editor focus!', editor)
-            }
-            ,
-            onEditorReady(editor) {
-                console.log('editor ready!', editor)
-            }
-            ,
-            onEditorChange({editor, html, text}) {
-                this.content = html
             }
         }
         ,

@@ -5,32 +5,26 @@
                 <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
                         size="large" style="line-height: 0px"/>
             </div>
-            <div>{{CommentChild.author.nickname}}@{{CommentChild.parent}}</div>
+            <div><span style="font-weight: 500;color:black;font-family: -apple-system, ‘Helvetica Neue’, Helvetica, Arial, 'Microsoft Yahei', sans-serif">{{CommentChild.name}}</span>
+                <span style="color:#bbbbbb">{{CommentChild.gmtCreate | formatDate}}&nbsp; 回复 {{CommentChild.parent.name}}</span>
+            </div>
+
         </div>
         <div style="min-height:20px;" v-html="compiledComment">
         </div>
-        <div style="color: #bbbbbb;min-height:20px;">{{CommentChild.gmtCreate | formatDate}}&nbsp;&nbsp;&nbsp;&nbsp;
-            <a @click="showReply">回复</a>
+        <div style="color: #bbbbbb;min-height:20px;">
+            <a @click="showReply">回复他</a>
         </div>
 
-        <Form ref="replyForm" :model="comment" v-show="isShowReply">
-            <Row>
-                <Col>
-                <Form-item prop="comment">
-                    <Input v-model="comment.content" type="textarea" :autosize="true" size="default"
-                           placeholder="请输入回复内容..."/>
-                </Form-item>
-                </Col>
-                <Button type="ghost" size="small" @click="cancelReply('replyForm')">取消
-                </Button>
-                <Button type="warning" icon="ios-chatbubble-outline" size="small" @click="reply('replyForm')">评论
-                </Button>
-            </Row>
-        </Form>
+        <comment-component :type="type" :loginUser="loginUser" :articleId="articleId" :parentComment="CommentChild"
+                           v-show="isShowReply"
+                           @cancelReply="cancelReply"
+                           @getArticleComments="loadArticleCommentList"></comment-component>
 
         <div style="min-height:20px;margin-left: 30px;" v-for="ch in CommentChild.children">
             <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
-            <comment-reply style="margin-top: -10px;" :CommentChild="ch" @loadArticleInfo="loadArticleInfo"
+            <comment-reply style="margin-top: -10px;" :CommentChild="ch" :loginUser="loginUser" :articleId="articleId"
+                           @loadArticleInfo="loadArticleInfo"
                            @loadArticleCommentList="loadArticleCommentList"></comment-reply>
         </div>
     </div>
@@ -40,11 +34,19 @@
     import {formatTime} from 'utils/index';
     import store from 'store/';
     import CommentReply from './CommentReply';
+    import CommentComponent from '../../components/Visitor/CommentComponent';
+    import {quillEditor} from 'vue-quill-editor';
+    import h2m from 'h2m';
+    import hljs from 'highlight.js/lib/highlight';
 
     export default {
         name: 'comment-reply',
-        props: ['CommentChild'],
-        components: {CommentReply},
+        props: {
+            CommentChild: Object,
+            loginUser: Object,
+            articleId: Number
+        },
+        components: {CommentReply, quillEditor, CommentComponent},
         data() {
             return {
                 comment: {
@@ -52,7 +54,11 @@
                     parent: '',
                     type: ''
                 },
-                isShowReply: false
+                isShowReply: false,
+                editorOption: {
+                    placeholder: "输入回复内容..."
+                },
+                type: 'reply'
             }
         },
         computed: {
@@ -67,29 +73,6 @@
             cancelReply(refName) {
                 this.isShowReply = false;
                 this.comment = {};
-            },
-            reply(refName) {
-                this.comment.parent = this.CommentChild.id;
-                this.comment.type = 'reply';
-                store.dispatch('CommitComment', {
-                    articleId: this.CommentChild.articleId,
-                    content: this.comment.content,
-                    parent: this.comment.parent,
-                    type: this.comment.type
-                }).then(res => { // 拉取user_info
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.$Message.success('回复成功');
-                        this.loadArticleInfo(this.CommentChild.articleId);
-                        this.loadArticleCommentList(this.CommentChild.articleId);
-                        this.comment = {};
-                        this.isShowReply = false;
-                    } else {
-                        this.$Message.error(data.msg);
-                    }
-                }).catch(() => {
-                    console.log("回复失败");
-                })
             },
             loadArticleInfo(articleId) {
                 this.$emit('loadArticleInfo', articleId);
