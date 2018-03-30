@@ -6,7 +6,7 @@
                         size="large" style="line-height: 0px"/>
             </div>
             <div>
-                {{OneComment.name}}
+                <span style="font-weight: 500;color:black;font-family: -apple-system, ‘Helvetica Neue’, Helvetica, Arial, ‘Microsoft Yahei’, sans-serif">{{OneComment.name}}</span>
                 <a v-if="OneComment.siteUrl&&OneComment.siteUrl.length>0" :href="OneComment.siteUrl" target="_blank">
                     传送门&nbsp;
                     <Icon type="social-chrome-outline" size="14"></Icon>

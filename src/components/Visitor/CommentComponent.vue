@@ -62,7 +62,10 @@
                     email: '',
                     name: '',
                     siteUrl: '',
-                    content: ''
+                    content: '',
+                    parent: {
+                        id: ''
+                    }
                 },
                 editorOption: {
                     placeholder: "输入回复内容..."
@@ -83,7 +86,7 @@
                 this.comment.articleId = this.articleId;
                 this.comment.content = marktext;
                 this.comment.type = type;
-                this.comment.parent = this.parentComment.id;
+                this.comment.parent.id = this.parentComment.id;
 
 
                 store.dispatch('CommitComment', this.comment).then(res => { // 拉取user_info

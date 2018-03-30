@@ -5,9 +5,10 @@
                 <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
                         size="large" style="line-height: 0px"/>
             </div>
-            <div>{{CommentChild.name}} <i
-                    style="color:#bbbbbb">{{CommentChild.gmtCreate | formatDate}}&nbsp; 回复 {{CommentChild.parent.name}}</i>
+            <div><span style="font-weight: 500;color:black;font-family: -apple-system, ‘Helvetica Neue’, Helvetica, Arial, 'Microsoft Yahei', sans-serif">{{CommentChild.name}}</span>
+                <span style="color:#bbbbbb">{{CommentChild.gmtCreate | formatDate}}&nbsp; 回复 {{CommentChild.parent.name}}</span>
             </div>
+
         </div>
         <div style="min-height:20px;" v-html="compiledComment">
         </div>
