@@ -2230,9 +2230,7 @@ base-chart.chart {
 .app-footer {
     min-height: 50px;
     padding: 0 1rem;
-    line-height: 50px;
     color: #263238;
-    background: #eceff1;
     border-top: 1px solid #cfd8dc
 }
 
@@ -2749,9 +2747,6 @@ base-chart.chart {
     flex: 0 0 55px
 }
 
-.app-footer {
-    flex: 0 0 50px
-}
 
 .app-body {
     display: flex;
