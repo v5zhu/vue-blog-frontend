@@ -1,14 +1,20 @@
 <template>
     <footer class="app-footer" id="app-footer" style="padding-top: 50px;position: relative">
-        <div class="my-qrcode">
-        </div>
         <div class="links">
             <Row>
                 <Col span="4" class="foot-separator">
-                <Avatar shape="square" style="height:150px;width:150px;"
-                        src="/static/img/qrcode/alipay_qrcode_2.png"></Avatar>
+                <Avatar shape="square" style="height:auto;width:80%;"
+                        src="/static/img/qq_group.jpg"></Avatar>
                 <p style="margin-left: 5px;margin-top: 10px;font-size: 12px;">打开<span
-                        style="color:yellow;font-size: 12px;">【微信】</span>扫码加为好友</p>
+                        style="color:yellow;font-size: 12px;">【QQ】</span>扫码加入群聊</p>
+                <div style="padding-top: 5px; ">
+                    <i class="iconfont icon-wechat"></i>
+                    <span>deeplover_baby</span>
+                </div>
+                <div style="padding-top: 5px;">
+                    <i class="iconfont icon-qq1"></i>
+                    <span>2810010108</span>
+                </div>
                 <div style="padding-top: 5px;">
                     <img style="width:20px;"
                          src="/static/img/beian.png"/>
@@ -117,7 +123,34 @@
             </Row>
         </div>
         <div>
-
+            <Row>
+                <Col span="22" class="foot-separator-across">
+                </Col>
+                <Col span="22" class="foot-separator-across-middle">
+                <ul>
+                    <li>
+                        <ul class="foot-separator-across-middle-line">
+                            <li><p>热门推荐</p></li>
+                            <li>xxx</li>
+                            <li>xxx</li>
+                            <li>xxx</li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <ul class="foot-separator-across-middle-line">
+                            <li><p>用户榜单</p></li>
+                            <li>xxx</li>
+                            <li>xxx</li>
+                            <li>xxx</li>
+                        </ul>
+                    </li>
+                </ul>
+                </Col>
+                <Col span="22" class="foot-separator-across">
+                </Col>
+            </Row>
         </div>
     </footer>
 </template>
@@ -127,15 +160,36 @@
     }
 </script>
 <style type="text/css" scoped>
+    .foot-separator-across-middle-line {
+        flex-direction: row;
+        display: flex;
+    }
+
+    .foot-separator-across-middle-line li {
+        margin-right: 50px;
+    }
+
+    .foot-separator-across-middle {
+        margin-left: 100px;
+        min-height: 60px;
+        padding-bottom: 20px;
+    }
+
+    .foot-separator-across {
+        margin-left: 100px;
+        min-height: 20px;
+        border-top: #4b5054 1px solid;
+    }
+
     .foot-separator {
         min-height: 300px;
-        border-right: #889195 1px solid;
+        border-right: #4b5054 1px solid;
     }
 
     .links {
         padding-left: 100px;
-        margin-top: 100px;
-        margin-bottom: 50px;
+        margin-top: 50px;
+        margin-bottom: 20px;
     }
 
     .app-footer {
@@ -154,7 +208,7 @@
     .app-footer a {
         color: #adaeb3;
         min-height: 40px;
-        font-size: 14px;
+        font-size: 0.9em;
     }
 
     .app-footer li {
