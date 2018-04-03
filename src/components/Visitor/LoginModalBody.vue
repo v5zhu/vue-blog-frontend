@@ -61,10 +61,12 @@
                 },
                 userLoginRule: {
                     loginName: [
-                        {required: true, message: '登录账号不能为空', trigger: 'blur'}
+                        {required: true, message: '登录账号不能为空', trigger: 'blur'},
+                        {type: 'string', min: 6, max: 18, message: '请输入6~18位账号', trigger: 'blur'}
                     ],
                     password: [
-                        {required: true, message: '密码不能为空', trigger: 'blur'}
+                        {required: true, message: '密码不能为空', trigger: 'blur'},
+                        {type: 'string', min: 6, max: 32, message: '密码长度6~32位', trigger: 'blur'}
                     ]
                 }
             }

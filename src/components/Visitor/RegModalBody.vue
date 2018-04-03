@@ -137,7 +137,6 @@
                             if (resp.success == true) {
                                 this.$Message.success('注册成功!');
                                 var user = resp.payload;
-                                Cookies.set('USER-TOKEN', user.token);
                                 Cookies.set('USER-INFO', user);
                                 window.location.reload();
                             } else {
