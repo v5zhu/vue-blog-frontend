@@ -31,7 +31,7 @@ module.exports = {
         assetsPublicPath: '/',
         staticPath: '/static/',
         proxyTable: {
-            '/sonnxblog': {
+            '/mfx': {
                 // target: 'http://47.96.28.236:8080',
                 target: 'http://localhost:8888',
                 changeOrigin: true,
