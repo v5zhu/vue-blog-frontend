@@ -31,9 +31,9 @@ module.exports = {
         assetsPublicPath: '/',
         staticPath: '/static/',
         proxyTable: {
-            '/mfx': {
+            '/blogmgr': {
                 // target: 'http://47.96.28.236:8080',
-                target: 'http://localhost:8888',
+                target: 'http://localhost:8088',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/': ''
@@ -47,11 +47,6 @@ module.exports = {
             //   }
             // }
         },
-        // CSS Sourcemaps off by default because relative paths are "buggy"
-        // with this option, according to the CSS-Loader README
-        // (https://github.com/webpack/css-loader#sourcemaps)
-        // In our experience, they generally work as expected,
-        // just be aware of this issue when enabling this option.
         cssSourceMap: false
     }
 }
