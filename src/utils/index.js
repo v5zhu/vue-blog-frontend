@@ -34,6 +34,9 @@ export function parseTime(time, cFormat) {
 }
 
 export function formatTime(time, option, isShort) {
+    if (!time) {
+        return '';
+    }
     const d = new Date(time);
 
     const now = Date.now();

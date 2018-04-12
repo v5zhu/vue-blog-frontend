@@ -314,8 +314,7 @@
                 editorOption: {
                     placeholder: "输入回复内容..."
                 },
-                type: 'comment',
-                loginUser: {}
+                type: 'comment'
             }
         },
         computed: {
@@ -344,10 +343,6 @@
         }
         ,
         created() {
-            var jsonString = Cookies.get('USER-INFO');
-            if (jsonString) {
-                this.loginUser = JSON.parse(jsonString);
-            }
         }
         ,
         components: {

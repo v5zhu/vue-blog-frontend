@@ -23,7 +23,7 @@ export function articles(params) {
 
 export function articlePreview(id) {
     return fetch({
-        url: '/admin/article/preview/' + id + ".token",
+        url: '/article/preview/' + id + ".token",
         method: 'get',
         params: {}
     });
@@ -31,7 +31,7 @@ export function articlePreview(id) {
 
 export function articleDetail(path) {
     return fetch({
-        url: '/admin/article/detail/' + path + ".open",
+        url: '/article/detail/' + path + ".open",
         method: 'get',
         params: {}
     });
@@ -39,7 +39,7 @@ export function articleDetail(path) {
 
 export function articlePublish(article) {
     return fetch({
-        url: '/admin/article/publish.token',
+        url: '/article/publish.token',
         method: 'post',
         data: article,
         headers: {
@@ -50,7 +50,7 @@ export function articlePublish(article) {
 
 export function articleEdit(article) {
     return fetch({
-        url: '/admin/article/modify.token',
+        url: '/article/modify.token',
         method: 'put',
         data: article,
         headers: {
@@ -61,7 +61,7 @@ export function articleEdit(article) {
 
 export function articleAudit(auditInfo) {
     return fetch({
-        url: '/admin/article/audit.token',
+        url: '/article/audit.token',
         method: 'put',
         params: {
             articleId: auditInfo.articleId,
@@ -72,7 +72,7 @@ export function articleAudit(auditInfo) {
 
 export function articleDelete(id) {
     return fetch({
-        url: '/admin/article/delete.token',
+        url: '/article/delete.token',
         method: 'delete',
         params: id,
     });
