@@ -57,7 +57,7 @@
             </div>
             <div class="post-content" id="editor">
                 <div highlight v-html="compiledMarkdown"></div>
-                <div style="min-height:150px;height:auto;margin-top: 50px;position: relative;box-shadow: 0px 2px 20px 5px #ffa5002b;border:1px solid rgba(255,165,0,0.2);border-radius: 3px;">
+                <div style="min-height:150px;height:auto;margin-top: 50px;position: relative;">
                     <ul style="width:100%;">
                         <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
                             <Button type="ghost" @click="awardModal=true">
@@ -156,7 +156,7 @@
             <div style="background: url('https://static.segmentfault.com/v-5a9fa408/global/img/ad_bg.svg');max-height:90px; height:90px;margin-top: 50px;">
 
             </div>
-            <div style="position: relative;margin-top:50px;margin-bottom:50px;">
+            <div style="position: relative;margin-top:50px;margin-bottom:100px;">
                 <Row>
                     <Col span="9">
                     <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
@@ -508,6 +508,9 @@
 </script>
 
 <style scoped>
+    li{
+        list-style-type: none;
+    }
     .left-icon-class {
         margin-left: -3px;
         margin-top: 3px;
@@ -540,7 +543,6 @@
     }
 
     .post-header, .post-content {
-        border: 1px solid rgba(255, 165, 0, 0.1);
         /*box-shadow: 0px 2px 18px 2px #ffa5002b;*/
         padding: 10px;
     }
@@ -596,8 +598,7 @@
         vertical-align: middle;
         min-height: 40px;
         max-height: 550px;
-        background-color: #f6faff;
-        box-shadow: inset 0px 2px 18px 1px #ffa5002b;
+        background-color: #fbf9ec;
     }
 
     h1, h2, h3, h4, h5, h6 {

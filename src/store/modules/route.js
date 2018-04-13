@@ -1,11 +1,7 @@
 import {
-    addRoute,
-    deleteRoute,
-    editRoute,
     listRoutesTree,
-    listRoute,
-    listFrontRoute,
-    getRouteById
+    listBackHeaderRoute,
+    listFrontRoute
 } from 'api/route';
 
 const route = {
@@ -19,9 +15,9 @@ const route = {
                 });
             });
         },
-        ListRoute({commit, state}, params) {
+        ListBackHeaderRoute({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                listRoute(params).then(response => {
+                listBackHeaderRoute(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -36,43 +32,8 @@ const route = {
                     reject(error);
                 });
             });
-        },
-        GetRouteById({commit, state}, params) {
-            return new Promise((resolve, reject) => {
-                getRouteById(params.id).then(response => {
-                    resolve(response);
-                }).catch(error => {
-                    reject(error);
-                });
-            });
-        },
-        AddRoute({commit, state}, data) {
-            return new Promise((resolve, reject) => {
-                addRoute(data).then(response => {
-                    resolve(response);
-                }).catch(error => {
-                    reject(error);
-                });
-            });
-        },
-        EditRoute({commit, state}, data) {
-            return new Promise((resolve, reject) => {
-                editRoute(data).then(response => {
-                    resolve(response);
-                }).catch(error => {
-                    reject(error);
-                });
-            });
-        },
-        DeleteRoute({commit, state}, params) {
-            return new Promise((resolve, reject) => {
-                deleteRoute(params.id).then(response => {
-                    resolve(response);
-                }).catch(error => {
-                    reject(error);
-                });
-            });
         }
+
     }
 };
 

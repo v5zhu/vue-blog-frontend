@@ -89,7 +89,7 @@
                 }).catch(err => {
                     console.log(err)
                     this.$Message.error({
-                        content: err.data.msg,
+                        content: err.data.error,
                         duration: 5,
                         closable: true
                     });

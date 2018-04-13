@@ -42,7 +42,7 @@
         </div>
         <Row>
 
-            <Col style="margin-left: 50px;" :xs="17" :sm="17" :md="17" :lg="17">
+            <Col style="margin-left: 100px;" :xs="17" :sm="17" :md="17" :lg="17">
             <div class="post-header" style="">
                 <div class="post-title"
                      style="color: #0d5477;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;"
@@ -176,7 +176,7 @@
             </Col>
         </Row>
 
-        <Row style="position: relative;margin-bottom:50px;margin-left: 50px;">
+        <Row style="position: relative;margin-bottom:50px;margin-left: 100px;">
             <Col :xs="17" :sm="17" :md="17" :lg="17" style="padding: 10px;">
             <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
             <div v-for="(c,index) in comments.list">
@@ -205,7 +205,7 @@
             </Col>
 
         </Row>
-        <Row style="position: relative;margin-bottom:50px;margin-left: 50px;">
+        <Row style="position: relative;margin-bottom:50px;margin-left: 100px;">
             <Col span="17">
             <comment-component :loginUser="loginUser" :type="type" :articleId="article.id" :parentComment="new Object()"
                                @getArticleComments="getArticleComments">

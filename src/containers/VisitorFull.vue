@@ -149,11 +149,11 @@
 </script>
 <style scoped>
     .bounce-enter-active {
-        animation: bounce-in 1.2s;
+        animation: bounce-in 0.8s;
     }
 
     .bounce-leave-active {
-        animation: bounce-out 1.2s;
+        animation: bounce-out 0.8s;
     }
 
     @keyframes bounce-in {
@@ -161,7 +161,7 @@
             transform: scale(0);
         }
         70% {
-            transform: scale(1.1);
+            transform: scale(1.01);
         }
         100% {
             transform: scale(1);

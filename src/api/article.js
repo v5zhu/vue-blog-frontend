@@ -2,7 +2,7 @@ import fetch from 'utils/fetch';
 
 export function articleList(pageInfo) {
     return fetch({
-        url: '/admin/article/list.token',
+        url: '/back/article/page/list.token',
         method: 'post',
         data: {
             pageNum: pageInfo.pageNum,
