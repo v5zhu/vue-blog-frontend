@@ -162,7 +162,7 @@
                     tags: [],
                     categories: [],
                     hits: '',
-                    commentsNum: '',
+                    comments: '',
                     allowComment: true,
                     allowPing: true,
                     allowFeed: true,

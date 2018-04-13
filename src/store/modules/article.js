@@ -22,7 +22,7 @@ const article = {
         tags: '',
         categories: '',
         hits: '',
-        commentsNum: '',
+        comments: '',
         likes: '',
         dislikes: '',
         allowComment: true,
@@ -65,8 +65,8 @@ const article = {
         SET_HITS: (state, hits) => {
             state.hits = hits;
         },
-        SET_COMMENTS_NUM: (state, commentsNum) => {
-            state.commentsNum = commentsNum;
+        SET_COMMENTS_NUM: (state, comments) => {
+            state.comments = comments;
         },
         SET_LIKES: (state, likes) => {
             state.likes = likes;
@@ -90,9 +90,9 @@ const article = {
 
     actions: {
         // 获取文章列表
-        ArticleList({commit, state}, params) {
+        ArticleList({commit, state}, data) {
             return new Promise((resolve, reject) => {
-                articleList(params).then(response => {
+                articleList(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

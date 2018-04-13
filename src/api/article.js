@@ -1,15 +1,10 @@
 import fetch from 'utils/fetch';
 
-export function articleList(pageInfo) {
+export function articleList(data) {
     return fetch({
         url: '/back/article/page/list.token',
         method: 'post',
-        data: {
-            pageNum: pageInfo.pageNum,
-            pageSize: pageInfo.pageSize,
-            sort: pageInfo.sort,
-            queryParam: pageInfo.queryParam
-        }
+        data: data
     });
 }
 

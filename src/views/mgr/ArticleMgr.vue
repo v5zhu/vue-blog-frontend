@@ -10,16 +10,16 @@
                         </Button>
                     </div>
 
-                    <Form ref="articleQueryForm" :model="queryParam" :label-width="60" label-position="right">
+                    <Form ref="articleQueryForm" :model="pageQuery" :label-width="60" label-position="right">
                         <Row>
                             <Col span="6" style="margin-right: 20px">
                                 <Form-item prop="title" label="文章标题">
-                                    <Input v-model="queryParam.title" size="large" placeholder="请输入文章标题"/>
+                                    <Input v-model="pageQuery.filterMap.title" size="large" placeholder="请输入文章标题"/>
                                 </Form-item>
                             </Col>
                             <Col span="6" style="margin-right: 20px">
                                 <Form-item prop="categories" label="分类">
-                                    <Select v-model="queryParam.categories" filterable clearable>
+                                    <Select v-model="pageQuery.filterMap.category" filterable clearable>
                                         <Option v-for="item in categories" :value="item.id" :key="item.id">{{ item.name
                                             }}
                                         </Option>
@@ -28,7 +28,7 @@
                             </Col>
                             <Col span="6">
                                 <Form-item prop="tags" label="标签">
-                                    <Select v-model="queryParam.tags" filterable clearable>
+                                    <Select v-model="pageQuery.filterMap.tag" filterable clearable>
                                         <Option v-for="item in tags" :value="item.id" :key="item.id">{{ item.name }}
                                         </Option>
                                     </Select>
@@ -104,15 +104,19 @@
                     prePage: undefined,
                     nextPage: undefined
                 },
-                queryParam: {
-                    status: '',
-                    title: '',
-                    tags: '',
-                    categories: ''
+                pageQuery: {
+                    pageNum: 1,
+                    pageSize: 10,
+                    filterMap: {
+                        status: null,
+                        title: null,
+                        tag: null,
+                        category: null
+                    },
+                    sortMap: {}
                 },
                 tags: [],
                 categories: [],
-                sortParam: [],
                 article_list: [],
                 pageSizeOpts: [10, 20, 50, 100],
                 progresshow: false,
@@ -180,7 +184,7 @@
                     {
                         title: '评论',
                         width: 90,
-                        key: 'commentsNum',
+                        key: 'comments',
                         ellipsis: 'true',
                         sortable: 'custom'
                     },
@@ -204,7 +208,7 @@
                         key: 'categories',
                         ellipsis: 'true',
                         render: (h, params) => {
-                            var categories=[];
+                            var categories = [];
                             const categoryList = params.row.categoryList;
                             categoryList.forEach(function (e) {
                                 categories.push(e.name)
@@ -400,7 +404,7 @@
             },
             filterChange(col) {
                 var status = col._filterChecked[0];
-                this.queryParam.status = status;
+                this.pageQuery.filterMap.status = status;
                 this.loadArticles();
 
             },
@@ -408,43 +412,15 @@
                 var key = params.key;
                 var order = params.order;
 
-                var asc = key + ' asc';
-                var desc = key + ' desc';
-
-                var ascIndex = this.sortParam.indexOf(asc);
-                var descIndex = this.sortParam.indexOf(desc);
-
-                if (order == 'normal') {
-                    if (ascIndex != -1) {
-                        this.sortParam.splice(ascIndex, 1);
-                    }
-                    if (descIndex != -1) {
-                        this.sortParam.splice(descIndex, 1);
-                    }
-                } else if (order == 'asc') {
-                    if (ascIndex == -1) {
-                        this.sortParam.push(asc);
-                    }
-                    if (descIndex != -1) {
-                        this.sortParam.splice(descIndex, 1);
-                    }
-                } else if (order == 'desc') {
-                    if (descIndex == -1) {
-                        this.sortParam.push(desc);
-                    }
-                    if (ascIndex != -1) {
-                        this.sortParam.splice(ascIndex, 1);
-                    }
+                if (order != 'normal') {
+                    this.pageQuery.sortMap[key] = order;
+                }else{
+                    delete this.pageQuery.sortMap[key];
                 }
                 this.loadArticles();
             },
             loadArticles() {
-                store.dispatch('ArticleList', {
-                    pageNum: this.pageInfo.pageNum,
-                    pageSize: this.pageInfo.pageSize,
-                    queryParam: this.queryParam,
-                    sort: this.sortParam.join(',')
-                }).then(res => { // 拉取user_info
+                store.dispatch('ArticleList', this.pageQuery).then(res => { // 拉取user_info
                     this.article_list = res.data.payload.list;
                     this.pageInfo = res.data.payload;
                 }).catch(err => {
@@ -475,13 +451,6 @@
                 })
             },
             clearAll(refName) {
-
-                this.queryParam = {
-                    status: '',
-                    title: '',
-                    tagsList: '',
-                    categoriesList: ''
-                };
                 this.$refs[refName].resetFields();
 
             },

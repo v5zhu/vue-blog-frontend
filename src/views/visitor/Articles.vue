@@ -64,7 +64,7 @@
 
                             <Icon type="chatbox-working" size="18"
                                   color="rgba(128,128,128,0.28)"></Icon>
-                            <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.commentsNum}}</label>
+                            <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.comments}}</label>
 
                         </li>
                         <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:20px;">

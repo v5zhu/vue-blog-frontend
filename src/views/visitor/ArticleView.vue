@@ -17,7 +17,7 @@
                         <Icon class="left-icon-class" type="ios-chatboxes-outline" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
-                        {{article.commentsNum}}
+                        {{article.comments}}
                     </div>
                 </li>
                 <li style="margin-bottom: 10px;position: relative">
@@ -163,7 +163,7 @@
                     </Col>
                     <Col span="6">
                     <div style="position: relative;text-align: center;top:-15px;font-size: 20px;font-weight: 500">
-                        【共{{article.commentsNum}}条评论】
+                        【共{{article.comments}}条评论】
                     </div>
                     </Col>
                     <Col span="9">
@@ -272,7 +272,7 @@
                     tags: [],
                     categories: [],
                     hits: null,
-                    commentsNum: null,
+                    comments: null,
                     likes: null,
                     dislikes: null,
                     allowComment: true,
@@ -283,7 +283,7 @@
                 statistics: {
                     articleId: null,
                     hits: null,
-                    commentsNum: null,
+                    comments: null,
                     likes: null,
                     dislikes: null,
                 },
@@ -433,15 +433,15 @@
                 this.statistics.articleId = this.article.id;
                 if (type == 'hits') {
                     this.article.hits++;
-                } else if (type == 'commentsNum') {
-                    this.article.commentsNum++;
+                } else if (type == 'comments') {
+                    this.article.comments++;
                 } else if (type == 'likes') {
                     this.article.likes++;
                 } else if (type == 'dislikes') {
                     this.article.dislikes++;
                 }
                 this.statistics.hits = this.article.hits;
-                this.statistics.commentsNum = this.article.commentsNum;
+                this.statistics.comments = this.article.comments;
                 this.statistics.likes = this.article.likes;
                 this.statistics.dislikes = this.article.dislikes;
 
@@ -453,8 +453,8 @@
                         this.$Message.error('操作失败');
                         if (type == 'hits') {
                             this.article.hits--;
-                        } else if (type == 'commentsNum') {
-                            this.article.commentsNum--;
+                        } else if (type == 'comments') {
+                            this.article.comments--;
                         } else if (type == 'likes') {
                             this.article.likes--;
                         } else if (type == 'dislikes') {
