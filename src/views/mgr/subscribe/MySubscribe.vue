@@ -167,6 +167,9 @@
 
 
 <style type="text/css" scoped>
+    li{
+        list-style-type: none;
+    }
     .time {
         font-size: 14px;
         font-weight: bold;

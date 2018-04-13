@@ -128,7 +128,8 @@
 
     .linkActiveClass {
         border-radius: 2px;
-        box-shadow: 0px 0px 20px 3px #ff00002e;
+        background-color: #20a8d8;
+        color: #fff;
     }
 </style>
 

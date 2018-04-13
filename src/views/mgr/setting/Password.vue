@@ -100,6 +100,9 @@
 
 
 <style type="text/css" scoped>
+    li{
+        list-style-type: none;
+    }
     .link-piece {
         margin: 10px 25px;
     }
