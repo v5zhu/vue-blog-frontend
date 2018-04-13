@@ -3,92 +3,93 @@
         <Form ref="articleForm" :rules="articleRule" :model="article" :label-width="70" label-position="right">
             <Row>
                 <Col span="22">
-                <Form-item prop="title" label="文章标题">
-                    <Input v-model="article.title" size="large" placeholder="请输入文章标题"/>
-                </Form-item>
+                    <Form-item prop="title" label="文章标题">
+                        <Input v-model="article.title" size="large" placeholder="请输入文章标题"/>
+                    </Form-item>
                 </Col>
             </Row>
             <Row>
                 <Col span="12" style="margin-right: 10px;">
-                <Form-item prop="categoriesList" label="分类">
-                    <Select v-model="article.categoriesList" multiple filterable>
-                        <Option v-for="item in categories" :value="item.name" :key="item.name">{{ item.name }}
-                        </Option>
-                    </Select>
-                </Form-item>
+                    <Form-item prop="categories" label="分类">
+                        <Select v-model="article.categories" multiple filterable>
+                            <Option v-for="item in categories" :value="item.id" :key="item.id">{{ item.name }}
+                            </Option>
+                        </Select>
+                    </Form-item>
                 </Col>
                 <Col span="2">
-                <Button type="ghost" shape="circle" icon="plus-circled" @click="categoryModel=true">添加分类</Button>
+                    <Button type="ghost" shape="circle" icon="plus-circled" @click="categoryModel=true">添加分类</Button>
                 </Col>
-
             </Row>
             <Row>
                 <Col span="12" style="margin-right: 10px;">
-                <Form-item prop="tagsList" label="标签">
-                    <Select v-model="article.tagsList" multiple filterable>
-                        <Option v-for="item in tags" :value="item.name" :key="item.name">{{ item.name }}
-                        </Option>
-                    </Select>
-                </Form-item>
+                    <Form-item prop="tags" label="标签">
+                        <Select v-model="article.tags" multiple filterable>
+                            <Option v-for="item in tags" :value="item.id" :key="item.id">{{ item.name }}
+                            </Option>
+                        </Select>
+                    </Form-item>
                 </Col>
                 <Col span="2">
-                <Button type="ghost" shape="circle" icon="plus-circled" @click="tagModel=true">添加标签</Button>
+                    <Button type="ghost" shape="circle" icon="plus-circled" @click="tagModel=true">添加标签</Button>
                 </Col>
             </Row>
             <Row>
                 <Col span="12">
-                <Form-item prop="path" label="访问路径">
-                    <Input v-model="article.path" size="default" placeholder="请输入文章访问路径"/>
-                </Form-item>
+                    <Form-item prop="path" label="访问路径">
+                        <Input v-model="article.path" size="default" placeholder="请输入文章访问路径"/>
+                    </Form-item>
                 </Col>
             </Row>
             <Row>
                 <Col span="22">
-                <Form-item prop="content">
-                    <mavon-editor style="margin-top: 20px;position: static;" v-model="article.content"/>
-                </Form-item>
+                    <Form-item prop="content">
+                        <mavon-editor style="margin-top: 20px;position: static;" v-model="article.content"/>
+                    </Form-item>
                 </Col>
             </Row>
             <Row>
                 <Col span="5" style="margin-left: 80px;">
-                <Form-item prop="allowComment" label="开启评论">
-                    <iSwitch v-model="article.allowComment" size="large">
-                        <span slot="open">允许</span>
-                        <span slot="close">禁止</span>
-                    </iSwitch>
-                </Form-item>
+                    <Form-item prop="allowComment" label="开启评论">
+                        <iSwitch v-model="article.allowComment" size="large">
+                            <span slot="open">允许</span>
+                            <span slot="close">禁止</span>
+                        </iSwitch>
+                    </Form-item>
                 </Col>
                 <Col span="5">
-                <Form-item prop="allowPing" label="允许Ping">
-                    <iSwitch v-model="article.allowPing" size="large">
-                        <span slot="open">允许</span>
-                        <span slot="close">禁止</span>
-                    </iSwitch>
-                </Form-item>
+                    <Form-item prop="allowPing" label="允许Ping">
+                        <iSwitch v-model="article.allowPing" size="large">
+                            <span slot="open">允许</span>
+                            <span slot="close">禁止</span>
+                        </iSwitch>
+                    </Form-item>
                 </Col>
                 <Col span="5">
-                <Form-item prop="allowFeed" label="允许订阅">
-                    <iSwitch v-model="article.allowFeed" size="large">
-                        <span slot="open">允许</span>
-                        <span slot="close">禁止</span>
-                    </iSwitch>
-                </Form-item>
+                    <Form-item prop="allowFeed" label="允许订阅">
+                        <iSwitch v-model="article.allowFeed" size="large">
+                            <span slot="open">允许</span>
+                            <span slot="close">禁止</span>
+                        </iSwitch>
+                    </Form-item>
                 </Col>
             </Row>
             <Row>
                 <Col span="24">
-                <Form-item>
-                    <Button type="ghost" @click="goBack()">《 返回</Button>
-                    <Button type="default" @click="clearAll('articleForm')">全部清空</Button>
-                    <Button type="warning" v-if="article.status!='audit'" @click="handleSubmit('draft','articleForm')"
-                            style="margin-left: 15px">
-                        保存为草稿
-                    </Button>
-                    <Button type="primary" v-if="article.status!='audit'" @click="handleSubmit('audit','articleForm')"
-                            style="margin-left: 15px">
-                        提交审核
-                    </Button>
-                </Form-item>
+                    <Form-item>
+                        <Button type="ghost" @click="goBack()">《 返回</Button>
+                        <Button type="default" @click="clearAll('articleForm')">全部清空</Button>
+                        <Button type="warning" v-if="article.status!='audit'"
+                                @click="handleSubmit('draft','articleForm')"
+                                style="margin-left: 15px">
+                            保存为草稿
+                        </Button>
+                        <Button type="primary" v-if="article.status!='audit'"
+                                @click="handleSubmit('audit','articleForm')"
+                                style="margin-left: 15px">
+                            提交审核
+                        </Button>
+                    </Form-item>
                 </Col>
             </Row>
         </Form>
@@ -100,17 +101,17 @@
             <Form ref="categoryForm" :model="category" :label-width="60" label-position="right">
                 <Row style="padding-left: 50px;">
                     <Col span="16">
-                    <Form-item prop="name" label="名称">
-                        <Input v-model="category.name" size="default" placeholder="请输入分类名称(必填)"/>
-                    </Form-item>
+                        <Form-item prop="name" label="名称">
+                            <Input v-model="category.name" size="default" placeholder="请输入分类名称(必填)"/>
+                        </Form-item>
                     </Col>
                 </Row>
                 <Row style="padding-left: 50px;">
                     <Col span="16">
-                    <Form-item prop="description" label="描述">
-                        <Input v-model="category.description" type="textarea" :autosize="true"
-                               placeholder="请输入分类描述(可不填)"/>
-                    </Form-item>
+                        <Form-item prop="description" label="描述">
+                            <Input v-model="category.description" type="textarea" :autosize="true"
+                                   placeholder="请输入分类描述(可不填)"/>
+                        </Form-item>
                     </Col>
                 </Row>
             </Form>
@@ -122,17 +123,17 @@
             <Form ref="tagForm" :model="tag" :label-width="60" label-position="right">
                 <Row style="padding-left: 50px;">
                     <Col span="16">
-                    <Form-item prop="name" label="名称">
-                        <Input v-model="tag.name" size="default" placeholder="请输入标签名称(必填)"/>
-                    </Form-item>
+                        <Form-item prop="name" label="名称">
+                            <Input v-model="tag.name" size="default" placeholder="请输入标签名称(必填)"/>
+                        </Form-item>
                     </Col>
                 </Row>
                 <Row style="padding-left: 50px;">
                     <Col span="16">
-                    <Form-item prop="description" label="描述">
-                        <Input v-model="tag.description" type="textarea" :autosize="true"
-                               placeholder="请输入标签描述(可不填)"/>
-                    </Form-item>
+                        <Form-item prop="description" label="描述">
+                            <Input v-model="tag.description" type="textarea" :autosize="true"
+                                   placeholder="请输入标签描述(可不填)"/>
+                        </Form-item>
                     </Col>
                 </Row>
             </Form>
@@ -158,10 +159,8 @@
                     type: '',
                     status: '',
                     authorId: '',
-                    tags: '',
-                    tagsList: [],
-                    categories: '',
-                    categoriesList: [],
+                    tags: [],
+                    categories: [],
                     hits: '',
                     commentsNum: '',
                     allowComment: true,
@@ -171,6 +170,7 @@
                 },
                 category: {
                     id: '',
+                    authorId:'',
                     name: '',
                     value: '',
                     type: '',
@@ -180,6 +180,7 @@
                 },
                 tag: {
                     id: '',
+                    authorId:'',
                     name: '',
                     value: '',
                     type: '',
@@ -193,11 +194,11 @@
                     title: [
                         {required: true, message: '文章标题不能为空', trigger: 'blur'}
                     ],
-                    categoriesList: [
+                    categories: [
                         {required: true, type: 'array', min: 1, message: '至少选择一个分类', trigger: 'change'},
                         {type: 'array', max: 3, message: '最多选择三个分类', trigger: 'change'}
                     ],
-                    tagsList: [
+                    tags: [
                         {required: true, type: 'array', min: 1, message: '至少选择一个标签', trigger: 'change'},
                         {type: 'array', max: 3, message: '最多选择三个标签', trigger: 'change'}
                     ],
@@ -207,13 +208,19 @@
                     ]
                 },
                 categoryModel: false,
-                tagModel: false
+                tagModel: false,
+                loginUser: {}
             }
         },//data
         components: {
             mavonEditor
         },
         mounted() {
+            var jsonString = Cookies.get('USER-INFO');
+            if (jsonString) {
+                this.loginUser=JSON.parse(jsonString);
+            }
+
             const vue = this;
             var id = this.$route.params.id;
             if (id) {
@@ -226,6 +233,7 @@
             addCategory() {
                 setTimeout(() => {
                     this.category.type = 'category';
+                    this.category.authorId=this.loginUser.id;
                     store.dispatch('CategoryAdd', this.category).then(res => { // 拉取user_info
                         var resp = res.data;
                         if (resp.success == true) {
@@ -252,6 +260,7 @@
             addTag() {
                 setTimeout(() => {
                     this.tag.type = 'tag';
+                    this.tag.authorId=this.loginUser.id;
                     store.dispatch('TagAdd', this.tag).then(res => { // 拉取user_info
                         var resp = res.data;
                         if (resp.success == true) {
@@ -279,10 +288,6 @@
             articlePreview(id) {
                 store.dispatch('ArticlePreview', {id: id}).then(res => { // 拉取user_info
                     var article = res.data.payload;
-                    var tags = article.tags.split(",");
-                    var categories = article.categories.split(",");
-                    article.tagsList = tags;
-                    article.categoriesList = categories;
                     this.article = article;
 
                 }).catch(() => {
@@ -316,13 +321,10 @@
                 this.$refs[refName].validate((valid) => {
                     if (valid) {
                         this.article.status = status;
-                        this.article.categories = this.article.categoriesList.join(",");
-                        this.article.tags = this.article.tagsList.join(",");
-
+                        this.article.authorId=this.loginUser.id;
                         var msg = status == 'audit' ? '提交审核' : '保存草稿';
                         if (!this.article.id) {
                             this.article.id = null;
-
                             store.dispatch('ArticlePublish', {article: this.article}).then(res => { // 拉取user_info
                                 var resp = res.data;
                                 if (resp.success == true) {
@@ -332,7 +334,7 @@
                                     this.$Message.error(msg + '失败!');
                                 }
                             }).catch(() => {
-                                this.$Message.success('提交失败!');
+                                this.$Message.error('提交失败!');
                             })
                         } else {
                             store.dispatch('ArticleEdit', {article: this.article}).then(res => { // 拉取user_info
@@ -344,7 +346,7 @@
                                     this.$Message.error(msg + '失败!');
                                 }
                             }).catch(() => {
-                                this.$Message.success('提交失败!');
+                                this.$Message.error('提交失败!');
                             })
                         }
                     } else {

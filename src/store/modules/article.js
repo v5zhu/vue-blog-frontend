@@ -5,7 +5,6 @@ import {
     articlePublish,
     articleEdit,
     articleDelete,
-    articleAudit,
     articles,
     updateStatistics
 } from 'api/article';
@@ -135,17 +134,6 @@ const article = {
         ArticlePublish({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 articlePublish(params.article).then(response => {
-                    resolve(response);
-                }).catch(error => {
-                    reject(error);
-                });
-            });
-        },
-
-        // 文章审核
-        ArticleAudit({commit, state}, params) {
-            return new Promise((resolve, reject) => {
-                articleAudit(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

@@ -2,74 +2,75 @@
     <div class="animated fadeIn" style="margin-left: 20px;">
         <Row>
             <Col :md="22">
-            <div>
-                <div id="container" style="margin-bottom:10px;">
-                    <Button type="primary" size="large" icon="edit"
-                            @click="editArticle(null,pageInfo.pageNum, pageInfo.pageSize)"
-                            style="padding-bottom:5px;">发表文章
-                    </Button>
-                </div>
+                <div>
+                    <div id="container" style="margin-bottom:10px;">
+                        <Button type="primary" size="large" icon="edit"
+                                @click="editArticle(null,pageInfo.pageNum, pageInfo.pageSize)"
+                                style="padding-bottom:5px;">发表文章
+                        </Button>
+                    </div>
 
-                <Form ref="articleQueryForm" :model="queryParam" :label-width="60" label-position="right">
-                    <Row>
-                        <Col span="6" style="margin-right: 20px">
-                        <Form-item prop="title" label="文章标题">
-                            <Input v-model="queryParam.title" size="large" placeholder="请输入文章标题"/>
-                        </Form-item>
-                        </Col>
-                        <Col span="6" style="margin-right: 20px">
-                        <Form-item prop="categories" label="分类">
-                            <Select v-model="queryParam.categories" filterable clearable>
-                                <Option v-for="item in categories" :value="item.name" :key="item.name">{{ item.name }}
-                                </Option>
-                            </Select>
-                        </Form-item>
-                        </Col>
-                        <Col span="6">
-                        <Form-item prop="tags" label="标签">
-                            <Select v-model="queryParam.tags" filterable clearable>
-                                <Option v-for="item in tags" :value="item.name" :key="item.name">{{ item.name }}
-                                </Option>
-                            </Select>
-                        </Form-item>
-                        </Col>
-                        <Col span="4" style="margin-right: 20px">
-                        <Form-item>
-                            <Button type="primary" @click="loadArticles">查询</Button>
-                            <Button type="warning" @click="clearAll('articleQueryForm')">重置</Button>
-                        </Form-item>
-                        </Col>
-                    </Row>
+                    <Form ref="articleQueryForm" :model="queryParam" :label-width="60" label-position="right">
+                        <Row>
+                            <Col span="6" style="margin-right: 20px">
+                                <Form-item prop="title" label="文章标题">
+                                    <Input v-model="queryParam.title" size="large" placeholder="请输入文章标题"/>
+                                </Form-item>
+                            </Col>
+                            <Col span="6" style="margin-right: 20px">
+                                <Form-item prop="categories" label="分类">
+                                    <Select v-model="queryParam.categories" filterable clearable>
+                                        <Option v-for="item in categories" :value="item.id" :key="item.id">{{ item.name
+                                            }}
+                                        </Option>
+                                    </Select>
+                                </Form-item>
+                            </Col>
+                            <Col span="6">
+                                <Form-item prop="tags" label="标签">
+                                    <Select v-model="queryParam.tags" filterable clearable>
+                                        <Option v-for="item in tags" :value="item.id" :key="item.id">{{ item.name }}
+                                        </Option>
+                                    </Select>
+                                </Form-item>
+                            </Col>
+                            <Col span="4" style="margin-right: 20px">
+                                <Form-item>
+                                    <Button type="primary" @click="loadArticles">查询</Button>
+                                    <Button type="warning" @click="clearAll('articleQueryForm')">重置</Button>
+                                </Form-item>
+                            </Col>
+                        </Row>
 
-                </Form>
+                    </Form>
 
-                <div style="position:relative;">
-                    <Table :columns="tableDataList" :data="article_list" ref="table" @on-sort-change="sortChange"
-                           @on-filter-change="filterChange">
+                    <div style="position:relative;">
+                        <Table :columns="tableDataList" :data="article_list" ref="table" @on-sort-change="sortChange"
+                               @on-filter-change="filterChange">
 
-                    </Table>
-                    <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
+                        </Table>
+                        <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
                             align-items: center;
                             justify-content: center;background: rgba(210, 216, 222, 0.5);" v-if="list_loadding">
-                        <Spin size="large"></Spin>
-                        <h6 style="color:#2d8cf0;margin-top:10px;">正在获取数据...</h6>
+                            <Spin size="large"></Spin>
+                            <h6 style="color:#2d8cf0;margin-top:10px;">正在获取数据...</h6>
+                        </div>
                     </div>
+                    <Page :total="this.pageInfo.total" placement="top"
+                          :page-size-opts="pageSizeOpts"
+                          show-elevator show-sizer show-total
+                          @on-change="changePage"
+                          @on-page-size-change="changePageSize"
+                          style="text-align:left;margin:50px 0"></Page>
+                    <Button type="primary" size="large" @click="exportData(1)">
+                        <Icon type="ios-download-outline"></Icon>
+                        导出文章数据
+                    </Button>
                 </div>
-                <Page :total="this.pageInfo.total" placement="top"
-                      :page-size-opts="pageSizeOpts"
-                      show-elevator show-sizer show-total
-                      @on-change="changePage"
-                      @on-page-size-change="changePageSize"
-                      style="text-align:left;margin:50px 0"></Page>
-                <Button type="primary" size="large" @click="exportData(1)">
-                    <Icon type="ios-download-outline"></Icon>
-                    导出文章数据
-                </Button>
-            </div>
-            <div style="" class="doc-content">
-                <h5>表格综合实例</h5>
-                <p>轻松完成业务需求，再也不用被产品催了</p>
-            </div>
+                <div style="" class="doc-content">
+                    <h5>表格综合实例</h5>
+                    <p>轻松完成业务需求，再也不用被产品催了</p>
+                </div>
             </Col>
             <Col :md="12">
             </Col>
@@ -203,7 +204,11 @@
                         key: 'categories',
                         ellipsis: 'true',
                         render: (h, params) => {
-                            const categories = params.row.categories;
+                            var categories=[];
+                            const categoryList = params.row.categoryList;
+                            categoryList.forEach(function (e) {
+                                categories.push(e.name)
+                            })
                             return h('div', [
                                 h('Tooltip', {
                                     props: {
@@ -279,22 +284,6 @@
                         render: (h, params) => {
                             const task_status = params.row.status;
                             return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'warning',
-                                        size: 'small',
-                                        loading: false,
-                                        disabled: params.row.status != 'audit'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.auditArticle(params.row.id);
-                                        }
-                                    }
-                                }, '审核'),
                                 h('Button', {
                                     props: {
                                         type: 'primary',
@@ -374,42 +363,6 @@
                         this.$Message.info('点击了取消');
                     }
                 });
-            },
-            auditArticle(articleId) {
-                this.$Modal.confirm({
-                    title: '审核文章',
-                    content: '<p>该文章是否符合发布条件</p>',
-                    loading: true,
-                    closable: true,
-                    okText: '通过',
-                    cancelText: '驳回',
-                    onOk: () => {
-                        this.doAudit(articleId, 'publish');
-                    },
-                    onCancel: () => {
-                        this.doAudit(articleId, 'draft');
-                    }
-                });
-            },
-            doAudit(articleId, status) {
-                setTimeout(() => {
-                    store.dispatch('ArticleAudit', {
-                        articleId: articleId,
-                        status: status
-                    }).then(res => { // 拉取user_info
-                        var resp = res.data;
-                        if (resp.success == true) {
-                            this.$Message.success('审批成功!');
-
-                            this.loadArticles();
-                        } else {
-                            this.$Message.error('审批失败!');
-                        }
-                    }).catch(() => {
-                        this.$Message.success('提交失败!');
-                    })
-                    this.$Modal.remove();
-                }, 1000);
             },
             editArticle(id, pageNum, pageSize) {
                 if (id == null) {
