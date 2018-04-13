@@ -5,7 +5,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button :disabled="true" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-clock-outline" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="ios-clock" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.hits}}
@@ -14,7 +14,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button :disabled="true" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-chatboxes-outline" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="chatbox-working" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.comments}}
@@ -23,7 +23,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-sunny-outline" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="heart" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.likes}}
@@ -32,7 +32,7 @@
                 <li style="margin-bottom: 10px;position: relative">
                     <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
                             style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-rainy-outline" color="#0d5477" size="24"></Icon>
+                        <Icon class="left-icon-class" type="thumbsdown" color="#0d5477" size="24"></Icon>
                     </Button>
                     <div style="position:relative;left:55px;top: -30px;">
                         {{article.dislikes}}
@@ -61,7 +61,7 @@
                     <ul style="width:100%;">
                         <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
                             <Button type="ghost" @click="awardModal=true">
-                                <Icon type="ios-flame-outline" size="24" color="#0d5477"></Icon>
+                                <Icon type="ios-flame" size="24" color="red"></Icon>
                                 <p>赞赏</p>
                             </Button>
 
@@ -134,14 +134,14 @@
                         <li style="float: left;position:relative;top:20px;margin-right: 20px;">
                             <Button type="ghost" @click="updateStatistics('likes')"
                                     style="height:60px;width:60px;font-size: 12px;">
-                                <Icon type="ios-sunny-outline" size="24" color="#0d5477"></Icon>
+                                <Icon type="heart" size="20" color="red"></Icon>
                                 <p>{{article.likes}}喜欢</p>
                             </Button>
                         </li>
                         <li style="float: left;position:relative;top:20px">
                             <Button type="ghost" @click="updateStatistics('dislikes')"
                                     style="height:60px;width:60px;font-size: 12px;">
-                                <Icon type="ios-rainy-outline" size="24" color="#0d5477"></Icon>
+                                <Icon type="thumbsdown" size="24" color="red"></Icon>
                                 <p>{{article.dislikes}}反对</p>
                             </Button>
                         </li>

@@ -216,9 +216,9 @@
                             return h('div', [
                                 h('Tooltip', {
                                     props: {
-                                        content: categories
+                                        content: categories.join(',')
                                     }
-                                }, categories),
+                                }, categories.join(',')),
                             ]);
                         }
                     },
@@ -357,8 +357,12 @@
                                 } else {
                                     this.$Message.error('删除失败');
                                 }
-                            }).catch(() => {
-                                console.log("删除文章请求失败");
+                            }).catch(err => {
+                                this.$Message.error({
+                                    content: err.data.error,
+                                    duration: 5,
+                                    closable: true
+                                })
                             })
                             this.$Modal.remove();
                         }, 1000);
@@ -395,11 +399,11 @@
                 }
             },
             changePage(page) {
-                this.pageInfo.pageNum = page;
+                this.pageQuery.pageNum = page;
                 this.loadArticles();
             },
             changePageSize(pageSize) {
-                this.pageInfo.pageSize = pageSize;
+                this.pageQuery.pageSize = pageSize;
                 this.loadArticles();
             },
             filterChange(col) {
@@ -414,7 +418,7 @@
 
                 if (order != 'normal') {
                     this.pageQuery.sortMap[key] = order;
-                }else{
+                } else {
                     delete this.pageQuery.sortMap[key];
                 }
                 this.loadArticles();

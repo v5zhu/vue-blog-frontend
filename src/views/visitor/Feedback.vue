@@ -6,45 +6,45 @@
         <Form ref="feedbackForm" :model="feedback" :label-width="80">
             <Row>
                 <Col span="6" class="link-piece">
-                <div class="echarts">
-                    <ul>
-                        <li style="margin: 10px;">
-                            <Form-item prop="feedbackTypes" label="反馈类型">
-                                <Select v-model="feedback.type" filterable clearable>
-                                    <Option v-for="item in feedbackTypes" :value="item.name" :key="item.name">{{
-                                        item.value }}
-                                    </Option>
-                                </Select>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <FormItem label="反馈内容">
-                                <Input v-model="feedback.content" type="textarea"
-                                       placeholder="请输入您要反馈的内容" :rows="6">
-                                </Input>
-                            </FormItem>
-                        </li>
-                        <li style="margin: 10px;">
-                            <FormItem label="您的称呼">
-                                <Input v-model="feedback.name" icon="at"
-                                       placeholder="请阁下留下大名">
-                                </Input>
-                            </FormItem>
-                        </li>
-                        <li style="margin: 10px;">
-                            <FormItem label="您的邮箱">
-                                <Input v-model="feedback.email" icon="ios-email"
-                                       placeholder="请阁下留下邮箱有助于接收反馈回复">
-                                </Input>
-                            </FormItem>
-                        </li>
-                        <li>
-                            <div style="text-align: right;margin: 10px;">
-                                <Button type="ghost" @click="commitFeedback">提交反馈</Button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                    <div class="echarts">
+                        <ul>
+                            <li style="margin: 10px;">
+                                <Form-item prop="feedbackTypes" label="反馈类型">
+                                    <Select v-model="feedback.type" filterable clearable>
+                                        <Option v-for="item in feedbackTypes" :value="item.name" :key="item.name">{{
+                                            item.value }}
+                                        </Option>
+                                    </Select>
+                                </Form-item>
+                            </li>
+                            <li style="margin: 10px;">
+                                <FormItem label="反馈内容">
+                                    <Input v-model="feedback.content" type="textarea"
+                                           placeholder="请输入您要反馈的内容" :rows="6">
+                                    </Input>
+                                </FormItem>
+                            </li>
+                            <li style="margin: 10px;">
+                                <FormItem label="您的称呼">
+                                    <Input v-model="feedback.name" icon="at"
+                                           placeholder="请阁下留下大名">
+                                    </Input>
+                                </FormItem>
+                            </li>
+                            <li style="margin: 10px;">
+                                <FormItem label="您的邮箱">
+                                    <Input v-model="feedback.email" icon="ios-email"
+                                           placeholder="请阁下留下邮箱有助于接收反馈回复">
+                                    </Input>
+                                </FormItem>
+                            </li>
+                            <li>
+                                <div style="text-align: right;margin: 10px;">
+                                    <Button type="ghost" @click="commitFeedback">提交反馈</Button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </Col>
             </Row>
         </Form>
@@ -87,7 +87,11 @@
                         this.$Message.error('反馈提交失败');
                     }
                 }).catch(err => {
-                    this.$Message.error(err);
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    });
                 });
             }
         },

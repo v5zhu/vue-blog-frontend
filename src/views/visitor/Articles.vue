@@ -6,7 +6,7 @@
                     <div style="">
                         <ul>
                             <li class="li-nav-tag" style="background: #0d5477;color: white">
-                                <p>今日推荐</p>
+                                <div style="font-size:14px;vertical-align: middle"><p>今日推荐</p></div>
                             </li>
                             <li v-for="tag in tags" class="li-nav-tag" @click="filterTags(tag.name)">
                                 <p>{{tag.name}}</p>
@@ -22,9 +22,9 @@
                             <li class="nav-item header-item" style="margin-left: 0px;">
 
                                 <Button type="ghost" size="default"
-                                        style="height:80px;width:60px;margin-bottom: 5px;">
-                                    <Icon type="ios-flame" color="red" size="28"></Icon>
-                                    <p>{{article.likes}}</p>
+                                        style="height:80px;width:60px;">
+                                    <Icon type="ios-flame" color="red" size="36"></Icon>
+                                    <div>{{article.likes}}</div>
                                 </Button>
                             </li>
 
@@ -44,8 +44,7 @@
                                     </span>
                                     </li>
                                 </ul>
-
-                                <div style="max-width: 600px;min-height:30px;color: rgba(128,128,128,0.4);text-align: left;padding-left: 10px;overflow:hidden;text-overflow: ellipsis;">
+                                <div style="max-width: 600px;height:35px;color: rgba(76,76,76,0.62);text-align: left;padding-left: 10px;word-wrap:break-word;overflow:hidden;text-overflow: ellipsis;">
                                     &nbsp;{{article.outline}}
                                 </div>
                                 <div style="color: #0d5477;text-align: left;">&nbsp;
@@ -55,30 +54,30 @@
                                 </div>
                             </li>
 
-                            <li class="nav-item header-item" style="position: absolute;right:100px;bottom:20px;">
+                            <li class="nav-item header-item" style="position: absolute;right:100px;bottom:12px;">
 
                                 <Icon type="ios-clock" size="18"
-                                      color="rgba(128,128,128,0.28)"></Icon>
-                                <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.hits}}</label>
+                                      color="rgba(128,128,128,0.88)"></Icon>
+                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.hits}}</label>
 
                             </li>
-                            <li class="nav-item header-item" style="position: absolute;right:40px;bottom:20px;">
+                            <li class="nav-item header-item" style="position: absolute;right:40px;bottom:12px;">
 
                                 <Icon type="chatbox-working" size="18"
-                                      color="rgba(128,128,128,0.28)"></Icon>
-                                <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.comments}}</label>
+                                      color="rgba(128,128,128,0.88)"></Icon>
+                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.comments}}</label>
 
                             </li>
-                            <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:20px;">
+                            <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:12px;">
 
                                 <Icon type="thumbsdown" size="18"
-                                      color="rgba(128,128,128,0.28)"></Icon>
-                                <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.dislikes}}</label>
+                                      color="rgba(128,128,128,0.88)"></Icon>
+                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.dislikes}}</label>
 
                             </li>
                         </ul>
                     </navbar>
-                    <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px solid rgba(255,165,0,0.4);"/>
+                    <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px solid rgba(161,54,255,0.22);"/>
                 </div>
 
                 <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
