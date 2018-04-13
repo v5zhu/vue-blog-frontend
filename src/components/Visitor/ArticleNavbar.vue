@@ -16,15 +16,5 @@
         position: relative;
     }
 
-    .app-header.navbar {
-        background: inherit;
-        flex-direction: row;
-        height: 60px;
-        margin: 0;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        border: none;
-    }
+
 </style>

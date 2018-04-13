@@ -2,94 +2,97 @@
     <div class="animated fadeIn">
         <Row :gutter="16" style="margin-top: 45px;">
             <Col span="4">
-            <nav class="sidebar-nav-visitor">
-                <div style="">
-                    <ul>
-                        <li class="li-nav-tag" style="background: #0d5477;color: white">
-                            <p>今日推荐</p>
-                        </li>
-                        <li v-for="tag in tags" class="li-nav-tag" @click="filterTags(tag.name)">
-                            <p>{{tag.name}}</p>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+                <nav class="sidebar-nav-visitor">
+                    <div style="">
+                        <ul>
+                            <li class="li-nav-tag" style="background: #0d5477;color: white">
+                                <p>今日推荐</p>
+                            </li>
+                            <li v-for="tag in tags" class="li-nav-tag" @click="filterTags(tag.name)">
+                                <p>{{tag.name}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
             </Col>
             <Col span="14">
-            <div class="state-overview" v-for="article in pageInfo.list">
-                <navbar>
-                    <ul class="nav navbar-nav d-md-down-none">
-                        <li class="nav-item header-item">
+                <div class="state-overview" v-for="article in pageInfo.list" style="padding-bottom: 8px;">
+                    <navbar>
+                        <ul class="nav navbar-nav d-md-down-none">
+                            <li class="nav-item header-item" style="margin-left: 0px;">
 
-                            <Button type="default" size="small"
-                                    style="height:70px;width:45px;margin-bottom: 15px;margin-left: -35px;">
-                                <Icon type="ios-flame-outline" color="red" size="24"></Icon>
-                                <p>{{article.likes}}</p>
-                            </Button>
-                        </li>
+                                <Button type="ghost" size="default"
+                                        style="height:80px;width:60px;margin-bottom: 5px;">
+                                    <Icon type="ios-flame" color="red" size="28"></Icon>
+                                    <p>{{article.likes}}</p>
+                                </Button>
+                            </li>
 
-                        <li class="nav-item header-item" style="margin-left: -25px;margin-top: -15px;">
-                            <ul style="height:30px;">
-                                <li>
-                                    <a class="article-title"
-                                       style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
-                                       @click="viewArticle(article.path)">{{article.title}}
-                                    </a>
-                                    <span v-if="article.tags!=null && article.tags.length!=0">
+                            <li class="nav-item header-item" style="margin-left: 0px;">
+                                <ul style="height:35px;">
+                                    <li>
+                                        <a class="article-title"
+                                           style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
+                                           @click="viewArticle(article.path)">{{article.title}}
+                                        </a>
+                                        <span v-if="article.tagList!=null && article.tagList.length!=0">
                                         <a class="article-tags"
                                            @click="filterTags(tag)"
-                                           v-for="tag in article.tags.split(',')">
-                                            {{tag}}
+                                           v-for="tag in article.tagList">
+                                            {{tag.name}}
                                         </a>
                                     </span>
-                                </li>
-                            </ul>
+                                    </li>
+                                </ul>
 
-                            <div style="max-width: 600px;max-height:30px;color: rgba(128,128,128,0.4);text-align: left;padding-left: 10px;text-overflow: ellipsis;">&nbsp;{{article.outline}}</div>
-                            <div style="color: #0d5477;text-align: left;">&nbsp;
-                                <img src="/static/img/avatars/man-avatar.png"
-                                     style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
-                                <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
-                            </div>
-                        </li>
+                                <div style="max-width: 600px;min-height:30px;color: rgba(128,128,128,0.4);text-align: left;padding-left: 10px;overflow:hidden;text-overflow: ellipsis;">
+                                    &nbsp;{{article.outline}}
+                                </div>
+                                <div style="color: #0d5477;text-align: left;">&nbsp;
+                                    <img src="/static/img/avatars/man-avatar.png"
+                                         style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                    <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
+                                </div>
+                            </li>
 
-                        <li class="nav-item header-item" style="position: absolute;right:100px;bottom:20px;">
+                            <li class="nav-item header-item" style="position: absolute;right:100px;bottom:20px;">
 
-                            <Icon type="ios-clock" size="18"
-                                  color="rgba(128,128,128,0.28)"></Icon>
-                            <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.hits}}</label>
+                                <Icon type="ios-clock" size="18"
+                                      color="rgba(128,128,128,0.28)"></Icon>
+                                <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.hits}}</label>
 
-                        </li>
-                        <li class="nav-item header-item" style="position: absolute;right:40px;bottom:20px;">
+                            </li>
+                            <li class="nav-item header-item" style="position: absolute;right:40px;bottom:20px;">
 
-                            <Icon type="chatbox-working" size="18"
-                                  color="rgba(128,128,128,0.28)"></Icon>
-                            <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.comments}}</label>
+                                <Icon type="chatbox-working" size="18"
+                                      color="rgba(128,128,128,0.28)"></Icon>
+                                <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.comments}}</label>
 
-                        </li>
-                        <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:20px;">
+                            </li>
+                            <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:20px;">
 
-                            <Icon type="thumbsdown" size="18"
-                                  color="rgba(128,128,128,0.28)"></Icon>
-                            <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.dislikes}}</label>
+                                <Icon type="thumbsdown" size="18"
+                                      color="rgba(128,128,128,0.28)"></Icon>
+                                <label style="color:rgba(128,128,128,0.28);position: relative;">{{article.dislikes}}</label>
 
-                        </li>
-                    </ul>
-                </navbar>
-                <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.4);"/>
-            </div>
+                            </li>
+                        </ul>
+                    </navbar>
+                    <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px solid rgba(255,165,0,0.4);"/>
+                </div>
 
-            <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
-                <p @click="loadMoreArticles" style="border: none;cursor: pointer;">
-                    <Icon type="ios-more-outline" size="32"></Icon>
-                    <Icon type="ios-more-outline" size="32"></Icon>
-                </p>
-            </div>
-            <div style="text-align: center;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">全部加载完成</div>
+                <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
+                    <p @click="loadMoreArticles" style="border: none;cursor: pointer;">
+                        <Icon type="ios-more-outline" size="32"></Icon>
+                        <Icon type="ios-more-outline" size="32"></Icon>
+                    </p>
+                </div>
+                <div style="text-align: center;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">全部加载完成
+                </div>
 
             </Col>
             <Col span="4">
-            &nbsp;
+                &nbsp;
             </Col>
 
         </Row>
@@ -179,8 +182,8 @@
                     console.log("请求标签列表失败");
                 })
             },
-            filterTags(categoryName) {
-                window.open('/tag/' + categoryName, '_blank');
+            filterTags(tag) {
+                window.open('/tag/' + tag, '_blank');
             }
         }
     }
@@ -188,6 +191,23 @@
 
 
 <style type="text/css" scoped>
+    .app-header.navbar .nav-item {
+        text-align: left;
+        min-width: 60px;
+    }
+
+    .app-header.navbar {
+        background: inherit;
+        flex-direction: row;
+        height: 85px;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        border: none;
+    }
+
     .demo-spin-icon-load {
         animation: ani-demo-spin 1s linear infinite;
     }
@@ -356,7 +376,7 @@
     }
 
     li {
-        list-style-type:none;
+        list-style-type: none;
         margin-bottom: 11px;
         margin-left: 10px;
         margin-right: 10px
