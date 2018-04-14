@@ -204,7 +204,11 @@
                         this.$Message.error('退出失败,请联系管理员');
                     }
                 }).catch(err => {
-                    this.$Message.error(err);
+                    this.$Message.error({
+                        content:err.data.error,
+                        duration:5,
+                        closable:true
+                    });
                 });
             },
             showRegModalFunction() {

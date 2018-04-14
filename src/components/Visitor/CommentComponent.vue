@@ -3,39 +3,39 @@
         <Form ref="commentForm" :model="comment">
             <Row v-if="loginUser.token==undefined">
                 <Col span="8" style="padding-right: 10px;">
-                <Form-item prop="name">
-                    <Input v-model="comment.name" placeholder="请输入阁下大名"></Input>
-                </Form-item>
+                    <Form-item prop="name">
+                        <Input v-model="comment.authorName" placeholder="请输入阁下大名"></Input>
+                    </Form-item>
                 </Col>
                 <Col span="8" style="padding-right: 10px;">
-                <Form-item prop="email">
-                    <Input v-model="comment.email" placeholder="请输入阁下联系邮箱"></Input>
-                </Form-item>
+                    <Form-item prop="email">
+                        <Input v-model="comment.email" placeholder="请输入阁下联系邮箱"></Input>
+                    </Form-item>
                 </Col>
                 <Col span="8">
-                <Form-item prop="siteUrl">
-                    <Input v-model="comment.siteUrl" placeholder="请输入主页网址http(s)://开头"></Input>
-                </Form-item>
+                    <Form-item prop="siteUrl">
+                        <Input v-model="comment.siteUrl" placeholder="请输入主页网址http(s)://开头"></Input>
+                    </Form-item>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                <Form-item prop="content">
-                    <quill-editor ref="myTextEditor" v-model="comment.content"
-                                  :options="editorOption"
-                                  @change="onEditorChange($event)">
-                    </quill-editor>
-                </Form-item>
-                <Button type="default" size="small" v-show="type==='reply'" @click="cancelReply('replyForm')">取消
-                </Button>
-                <Button type="error" size="small" @click="clearAll('commentForm')">清除
-                </Button>
-                <Button type="primary" icon="ios-chatbubble-outline" v-show="type==='reply'" size="small"
-                        @click="commitComment('reply')">回复
-                </Button>
-                <Button type="primary" icon="ios-chatbubble-outline" v-show="type==='comment'" size="small"
-                        @click="commitComment('comment')">提交评论
-                </Button>
+                    <Form-item prop="content">
+                        <quill-editor ref="myTextEditor" v-model="comment.content"
+                                      :options="editorOption"
+                                      @change="onEditorChange($event)">
+                        </quill-editor>
+                    </Form-item>
+                    <Button type="default" size="small" v-show="type==='reply'" @click="cancelReply('replyForm')">取消
+                    </Button>
+                    <Button type="error" size="small" @click="clearAll('commentForm')">清除
+                    </Button>
+                    <Button type="primary" icon="ios-chatbubble-outline" v-show="type==='reply'" size="small"
+                            @click="commitComment('reply')">回复
+                    </Button>
+                    <Button type="primary" icon="ios-chatbubble-outline" v-show="type==='comment'" size="small"
+                            @click="commitComment('comment')">提交评论
+                    </Button>
                 </Col>
             </Row>
         </Form>
@@ -43,7 +43,6 @@
 </template>
 <script>
     import store from 'store/';
-    import Cookies from 'js-cookie';
     import {quillEditor} from 'vue-quill-editor';
     import h2m from 'h2m';
 
@@ -59,10 +58,13 @@
             return {
                 comment: {
                     articleId: '',
+                    authorId: null,
+                    authorName: null,
                     email: '',
                     name: '',
                     siteUrl: '',
                     content: '',
+                    parentId: null,
                     parent: {
                         id: ''
                     }
@@ -83,10 +85,11 @@
             commitComment(type) {
                 this.$Loading.start();
                 var marktext = h2m(this.comment.content);
+                this.comment.authorId = this.loginUser.id ? this.loginUser.id : null;
                 this.comment.articleId = this.articleId;
                 this.comment.content = marktext;
                 this.comment.type = type;
-                this.comment.parent.id = this.parentComment.id;
+                this.comment.parentId = this.parentComment.id;
 
 
                 store.dispatch('CommitComment', this.comment).then(res => { // 拉取user_info
@@ -100,8 +103,12 @@
                         this.$Message.error(data.msg);
                         this.$Loading.error();
                     }
-                }).catch(() => {
-                    console.log("提交评论失败");
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
                     this.$Loading.error();
                 })
             },
