@@ -23,7 +23,7 @@
 
                                 <Button type="ghost" size="default"
                                         style="height:80px;width:60px;">
-                                    <Icon type="ios-flame" color="red" size="36"></Icon>
+                                    <Icon type="thumbsup" color="#0d5477" size="28"></Icon>
                                     <div>{{article.likes}}</div>
                                 </Button>
                             </li>

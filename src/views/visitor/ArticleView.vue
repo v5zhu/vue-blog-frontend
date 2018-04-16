@@ -205,7 +205,7 @@
             </Col>
 
         </Row>
-        <Row style="position: relative;margin-bottom:50px;margin-left: 100px;">
+        <Row style="position: relative;margin-bottom:50px;margin-left: 100px;" v-if="article.allowComment===true">
             <Col span="17">
             <comment-component :loginUser="loginUser" :type="type" :articleId="article.id" :parentComment="new Object()"
                                @getArticleComments="getArticleComments">
