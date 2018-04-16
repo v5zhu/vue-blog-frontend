@@ -9,7 +9,7 @@
                                 <div style="font-size:14px;vertical-align: middle"><p>今日推荐</p></div>
                             </li>
                             <li v-for="tag in tags" class="li-nav-tag" @click="filterTags(tag.name)">
-                                <p>{{tag.name}}</p>
+                                <p>{{tag.name}}({{tag.articleNumbers}})</p>
                             </li>
                         </ul>
                     </div>

@@ -23,9 +23,9 @@ function getRoutes(routes) {
     try {
         routes.forEach(function (route) {
             var component;
-
+            
             if (route.parent == null) {
-                if (route.component == '@/containers/Full') {
+                if (route.component == '@/containers/BackFull') {
                     component = BackFull;
                 } else if (route.component == '@/containers/VisitorFull') {
                     component = VisitorFull;

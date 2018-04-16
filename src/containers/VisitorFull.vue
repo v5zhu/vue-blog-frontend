@@ -181,6 +181,7 @@
     }
 
     .app-body {
+        min-height: 600px;
         display: flex;
         flex-direction: row;
         flex-grow: 1;

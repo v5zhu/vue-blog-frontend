@@ -186,7 +186,8 @@
                     type: '',
                     description: '',
                     sort: '',
-                    parent: ''
+                    parent: '',
+                    articleNumbers:0
                 },
                 categories: [],
                 tags: [],

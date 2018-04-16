@@ -30,4 +30,5 @@ export const globalRouterMap = [
             role: ['admin', 'visitor']
         }
     }*/
+
 ]
