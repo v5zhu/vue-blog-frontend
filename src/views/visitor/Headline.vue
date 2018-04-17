@@ -1,87 +1,81 @@
 <template>
     <div>
 
-        <Row :gutter="16" style="margin-top: 45px;margin-left: 100px;">
-            <Col span="18">
-                <div class="state-overview" v-for="headline in pageInfo.list" style="border: rgba(161,54,255,0.22) 1px solid;">
-                    <navbar>
-                        <div v-if="headline.thumbnail_pic_s02">
-                            <Row>
-                                <Col>
-                                    <div>
-                                        <a style='color: black;font-weight: 800;font-size: 16px;'
-                                           :href="headline.url" target="_blank">{{headline.title}}
-                                        </a>
-                                    </div>
-
-                                    <div style="color: #0d5477;text-align: left;">&nbsp;
-                                        <img src="/static/img/avatars/man-avatar.png"
-                                             style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
-                                        <a href="#" style="margin-left: -4px;">{{headline.author_name}}</a>
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span="3">
-                                    <img :src="headline.thumbnail_pic_s"
-                                         style="height:150%;width: 150%;margin-right: 10px;"/>
-                                </Col>
-                                <Col span="3">
-                                    <img :src="headline.thumbnail_pic_s02" v-if="headline.thumbnail_pic_s02"
-                                         style="height:150%;width: 150%;margin-right: 10px;"/>
-                                </Col>
-                                <Col span="3">
-                                    <img :src="headline.thumbnail_pic_s03" v-if="headline.thumbnail_pic_s03"
-                                         style="height:150%;width: 150%;margin-right: 10px;"/>
-                                </Col>
-                            </Row>
+        <Row :gutter="16" style="margin-top: 100px;margin-left: 100px;">
+            <Col span="14">
+            <div class="state-overview" v-for="headline in pageInfo.list"
+                 style="border-bottom: rgba(161,54,255,0.22) 1px solid;">
+                <div v-if="headline.thumbnail_pic_s02">
+                    <Row>
+                        <Col>
+                        <div>
+                            <a style='color: black;font-weight: 800;font-size: 16px;'
+                               :href="headline.url" target="_blank">{{headline.title}}
+                            </a>
                         </div>
-                        <div v-else>
-                            <Row>
-                                <Col span="3">
-                                    <img :src="headline.thumbnail_pic_s"
-                                         style="height:150%;width: 150%;margin-right: 10px;"/>
-                                </Col>
-                                <Col span="3">
-                                    <img :src="headline.thumbnail_pic_s02" v-if="headline.thumbnail_pic_s02"
-                                         style="height:150%;width: 150%;margin-right: 10px;"/>
-                                </Col>
-                                <Col span="3">
-                                    <img :src="headline.thumbnail_pic_s03" v-if="headline.thumbnail_pic_s03"
-                                         style="height:150%;width: 150%;margin-right: 10px;"/>
-                                </Col>
-
-                                <Col span="12">
-                                    <div>
-                                        <a style='color: black;font-weight: 800;font-size: 16px;'
-                                           :href="headline.url" target="_blank">{{headline.title}}
-                                        </a>
-                                    </div>
-
-                                    <div style="color: #0d5477;text-align: left;">&nbsp;
-                                        <img src="/static/img/avatars/man-avatar.png"
-                                             style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
-                                        <a href="#" style="margin-left: -4px;">{{headline.author_name}}</a>
-                                    </div>
-                                </Col>
-                            </Row>
+                        <div style="color: #0d5477;text-align: left;">&nbsp;
+                            <img src="/static/img/avatars/man-avatar.png"
+                                 style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                            <a href="#" style="margin-left: -4px;margin-right: 20px;">{{headline.author_name}}</a>
+                            <Icon type="ios-clock" color="#808080"></Icon>
+                            <a href="#" style="margin-left: -4px;">{{headline.date}}</a>
                         </div>
-                    </navbar>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="6">
+                        <img :src="headline.thumbnail_pic_s"
+                             style="height:80%;width: 80%;"/>
+                        </Col>
+                        <Col span="6">
+                        <img :src="headline.thumbnail_pic_s02" v-if="headline.thumbnail_pic_s02"
+                             style="height:80%;width: 80%;"/>
+                        </Col>
+                        <Col span="6">
+                        <img :src="headline.thumbnail_pic_s03" v-if="headline.thumbnail_pic_s03"
+                             style="height:80%;width: 80%;"/>
+                        </Col>
+                    </Row>
                 </div>
+                <div v-else>
+                    <Row>
+                        <Col span="3">
+                        <img :src="headline.thumbnail_pic_s"
+                             style="height:150%;width: 150%;margin-right: 10px;"/>
+                        </Col>
+
+                        <Col span="12" offset="3">
+                        <div>
+                            <a style='color: black;font-weight: 800;font-size: 16px;'
+                               :href="headline.url" target="_blank">{{headline.title}}
+                            </a>
+                        </div>
+
+                        <div style="color: #0d5477;text-align: left;">&nbsp;
+                            <img src="/static/img/avatars/man-avatar.png"
+                                 style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                            <a href="#" style="margin-left: -4px;margin-right: 20px;">{{headline.author_name}}</a>
+                            <Icon type="ios-clock" color="#808080"></Icon>
+                            <a href="#" style="margin-left: -4px;">{{headline.date}}</a>
+                        </div>
+                        </Col>
+                    </Row>
+                </div>
+            </div>
 
 
-                <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
-                    <p @click="pullForUpdate" style="border: none;cursor: pointer;">
-                        <Icon type="ios-more-outline" size="32"></Icon>
-                        <Icon type="ios-more-outline" size="32"></Icon>
-                    </p>
-                </div>
-                <div style="text-align: center;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">全部加载完成
-                </div>
+            <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
+                <p @click="pullForUpdate" style="border: none;cursor: pointer;">
+                    <Icon type="ios-more-outline" size="32"></Icon>
+                    <Icon type="ios-more-outline" size="32"></Icon>
+                </p>
+            </div>
+            <div style="text-align: center;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">全部加载完成
+            </div>
 
             </Col>
             <Col span="4">
-                &nbsp;
+            &nbsp;
             </Col>
 
         </Row>
@@ -89,11 +83,8 @@
 </template>
 
 <script>
-    import navbar from '@/components/Visitor/ArticleNavbar';
-
-
     export default {
-        components: {navbar},
+        components: {},
         name: 'headline',
         data() {
             return {
@@ -131,17 +122,17 @@
         },
         methods: {
             pullForUpdate() {
-                this.pageInfo.pageSize += 6;
+                this.pageQuery.pageSize += 6;
                 this.listHeadlines();
                 this.$Notice.success({
                     title: '温馨提醒',
-                    desc: '更新6条新文章,请浏览!'
+                    desc: '更新6条新闻,请浏览!'
                 });
             },
             listHeadlines() {
                 this.$Loading.start()
 
-                this.$store.dispatch('ListHeadlines', {}).then(res => {
+                this.$store.dispatch('ListHeadlines', this.pageQuery).then(res => {
                     this.pageInfo = res.data.payload;
                     this.$Loading.finish();
                 }).catch(err => {
@@ -255,7 +246,8 @@
     .state-overview {
         color: #f9d4ff;
         position: relative;
-        min-height:200px;
+        min-height: 150px;
+        padding: 20px;
     }
 
     .state-overview .ivu-col {
@@ -406,7 +398,6 @@
         margin-bottom: 30px
     }
 
-
     .panel {
         border: 1px solid transparent;
         border-radius: 4px;
@@ -417,7 +408,6 @@
     .panel-body {
         padding: 15px
     }
-
 
     .state-info .panel .summary span {
         color: #49586e;
