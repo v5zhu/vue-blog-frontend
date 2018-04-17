@@ -7,7 +7,7 @@ import {
     articleDelete,
     articles,
     updateStatistics
-} from 'api/article';
+} from 'api/blog/article';
 
 const article = {
     state: {

@@ -1,8 +1,10 @@
 import fetch from 'utils/fetch';
 
+const prefix = '/blog';
+
 export function articleComments(params) {
     return fetch({
-        url: '/article/' + params.articleId + '/comments',
+        url: prefix+'/article/' + params.articleId + '/comments',
         method: 'get',
         params: {
             pageNum: params.pageNum,
@@ -13,7 +15,7 @@ export function articleComments(params) {
 
 export function commitComment(data) {
     return fetch({
-        url: '/article/' + data.articleId + '/comment',
+        url: prefix+'/article/' + data.articleId + '/comment',
         method: 'post',
         data: data
     });

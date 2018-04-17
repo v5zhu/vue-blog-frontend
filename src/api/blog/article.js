@@ -1,8 +1,10 @@
 import fetch from 'utils/fetch';
 
+const prefix = '/blog';
+
 export function articleList(data) {
     return fetch({
-        url: '/back/article/page/list.token',
+        url: prefix + '/back/article/page/list.token',
         method: 'post',
         data: data
     });
@@ -10,7 +12,7 @@ export function articleList(data) {
 
 export function articles(params) {
     return fetch({
-        url: '/articles',
+        url: prefix + '/articles',
         method: 'get',
         params: params
     });
@@ -18,7 +20,7 @@ export function articles(params) {
 
 export function articlePreview(id) {
     return fetch({
-        url: '/back/article/preview/' + id + ".token",
+        url: prefix + '/back/article/preview/' + id + ".token",
         method: 'get',
         params: {}
     });
@@ -26,7 +28,7 @@ export function articlePreview(id) {
 
 export function articleDetail(path) {
     return fetch({
-        url: '/article/detail/' + path + ".open",
+        url: prefix + '/article/detail/' + path + ".open",
         method: 'get',
         params: {}
     });
@@ -34,7 +36,7 @@ export function articleDetail(path) {
 
 export function articlePublish(article) {
     return fetch({
-        url: '/back/article/publish.token',
+        url: prefix + '/back/article/publish.token',
         method: 'post',
         data: article,
         headers: {
@@ -45,7 +47,7 @@ export function articlePublish(article) {
 
 export function articleEdit(article) {
     return fetch({
-        url: '/back/article/modify.token',
+        url: prefix + '/back/article/modify.token',
         method: 'put',
         data: article,
         headers: {
@@ -54,9 +56,10 @@ export function articleEdit(article) {
     });
 }
 
+
 export function articleDelete(id) {
     return fetch({
-        url: '/back/article/delete.token',
+        url: prefix + '/back/article/delete.token',
         method: 'delete',
         params: id,
     });
@@ -65,7 +68,7 @@ export function articleDelete(id) {
 
 export function updateStatistics(statistics) {
     return fetch({
-        url: '/article/statistics',
+        url: prefix + '/article/statistics',
         method: 'put',
         data: statistics
     });

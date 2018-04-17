@@ -1,9 +1,10 @@
 import fetch from 'utils/fetch';
 
+const prefix = '/blog';
 
 export function listRoutesTree(params) {
     return fetch({
-        url: '/back/route/tree.token',
+        url: prefix + '/back/route/tree.token',
         method: 'get',
         params: params
     });
@@ -11,7 +12,7 @@ export function listRoutesTree(params) {
 
 export function listBackHeaderRoute(params) {
     return fetch({
-        url: '/back/route/list.token',
+        url: prefix + '/back/route/list.token',
         method: 'get',
         params: params
     });
@@ -21,7 +22,7 @@ export function listBackHeaderRoute(params) {
 export function listFrontRoute(params) {
 
     return fetch({
-        url: '/front/route/list.open',
+        url: prefix + '/front/route/list.open',
         method: 'get',
         params: params
     });

@@ -1,4 +1,4 @@
-import {articleComments, commitComment} from 'api/comment';
+import {articleComments, commitComment} from 'api/blog/comment';
 
 
 const comment = {

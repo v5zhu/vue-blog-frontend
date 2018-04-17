@@ -1,6 +1,6 @@
 import {
     archives
-} from 'api/archives';
+} from 'api/blog/archives';
 
 const archive = {
     state: {},

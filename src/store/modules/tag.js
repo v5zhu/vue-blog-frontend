@@ -1,4 +1,4 @@
-import {tagList, filterTagList, tagAdd} from 'api/tag';
+import {tagList, filterTagList, tagAdd} from 'api/blog/tag';
 
 const tag = {
     state: {

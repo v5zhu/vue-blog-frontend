@@ -7,7 +7,7 @@ import {
     listPermissionTree,
     userRouteTree,
     userRouteTreeByOpen
-} from 'api/permission';
+} from 'api/blog/permission';
 
 
 // import BackFull from '@/containers/Full';

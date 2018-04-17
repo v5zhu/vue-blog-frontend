@@ -1,4 +1,4 @@
-import {addFeedback} from 'api/feedback';
+import {addFeedback} from 'api/blog/feedback';
 
 const tag = {
     state: {

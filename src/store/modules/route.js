@@ -2,7 +2,7 @@ import {
     listRoutesTree,
     listBackHeaderRoute,
     listFrontRoute
-} from 'api/route';
+} from 'api/blog/route';
 
 const route = {
     actions: {

@@ -1,8 +1,10 @@
 import fetch from 'utils/fetch';
 
+const prefix = '/blog';
+
 export function filterTagList(params) {
     return fetch({
-        url: '/admin/tag/list.token',
+        url: prefix + '/admin/tag/list.token',
         method: 'get',
         params: params
     });
@@ -11,7 +13,7 @@ export function filterTagList(params) {
 
 export function tagList(params) {
     return fetch({
-        url: '/admin/tag/list.open',
+        url: prefix + '/admin/tag/list.open',
         method: 'get',
         params: params
     });
@@ -19,7 +21,7 @@ export function tagList(params) {
 
 export function tagAdd(tag) {
     return fetch({
-        url: '/admin/tag/save',
+        url: prefix + '/admin/tag/save',
         method: 'post',
         data: tag
     });

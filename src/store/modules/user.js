@@ -10,7 +10,7 @@ import {
     register,
     login,
     setUserRole
-} from 'api/login';
+} from 'api/blog/login';
 import Cookies from 'js-cookie';
 
 const user = {

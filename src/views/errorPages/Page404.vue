@@ -171,7 +171,6 @@
 
     .main-text-a a {
         font-size: 16px;
-        text-decoration: none;
         color: #0066CC;
     }
 
@@ -183,7 +182,6 @@
         font-size: 0.6em;
         font-weight: 400;
         color: inherit;
-        text-decoration: none;
         opacity: 0.6;
         border-bottom: 1px dashed rgba(93, 115, 153, 0.5);
     }

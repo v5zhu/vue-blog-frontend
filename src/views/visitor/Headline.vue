@@ -1,87 +1,77 @@
 <template>
-    <div class="animated fadeIn">
-        <Row :gutter="16" style="margin-top: 45px;">
-            <Col span="4">
-                <nav class="sidebar-nav-visitor">
-                    <div style="">
-                        <ul>
-                            <li class="li-nav-tag" style="background: #0d5477;color: white">
-                                <div style="font-size:14px;vertical-align: middle"><p>今日推荐</p></div>
-                            </li>
-                            <li v-for="tag in tags" class="li-nav-tag" @click="filterTags(tag.name)">
-                                <p>{{tag.name}}({{tag.articleNumbers}})</p>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </Col>
-            <Col span="14">
-                <div class="state-overview" v-for="article in pageInfo.list" style="padding-bottom: 8px;">
+    <div>
+
+        <Row :gutter="16" style="margin-top: 45px;margin-left: 100px;">
+            <Col span="18">
+                <div class="state-overview" v-for="headline in pageInfo.list" style="border: rgba(161,54,255,0.22) 1px solid;">
                     <navbar>
-                        <ul class="nav navbar-nav d-md-down-none">
-                            <li class="nav-item header-item" style="margin-left: 0px;">
-
-                                <Button type="ghost" size="default"
-                                        style="height:80px;width:60px;">
-                                    <Icon type="thumbsup" color="#0d5477" size="28"></Icon>
-                                    <div>{{article.likes}}</div>
-                                </Button>
-                            </li>
-
-                            <li class="nav-item header-item" style="margin-left: 0px;">
-                                <ul style="height:35px;">
-                                    <li>
-                                        <a class="article-title"
-                                           style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
-                                           @click="viewArticle(article.path)">{{article.title}}
+                        <div v-if="headline.thumbnail_pic_s02">
+                            <Row>
+                                <Col>
+                                    <div>
+                                        <a style='color: black;font-weight: 800;font-size: 16px;'
+                                           :href="headline.url" target="_blank">{{headline.title}}
                                         </a>
-                                        <span v-if="article.tagList!=null && article.tagList.length!=0">
-                                        <a class="article-tags"
-                                           @click="filterTags(tag)"
-                                           v-for="tag in article.tagList">
-                                            {{tag.name}}
+                                    </div>
+
+                                    <div style="color: #0d5477;text-align: left;">&nbsp;
+                                        <img src="/static/img/avatars/man-avatar.png"
+                                             style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                        <a href="#" style="margin-left: -4px;">{{headline.author_name}}</a>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span="3">
+                                    <img :src="headline.thumbnail_pic_s"
+                                         style="height:150%;width: 150%;margin-right: 10px;"/>
+                                </Col>
+                                <Col span="3">
+                                    <img :src="headline.thumbnail_pic_s02" v-if="headline.thumbnail_pic_s02"
+                                         style="height:150%;width: 150%;margin-right: 10px;"/>
+                                </Col>
+                                <Col span="3">
+                                    <img :src="headline.thumbnail_pic_s03" v-if="headline.thumbnail_pic_s03"
+                                         style="height:150%;width: 150%;margin-right: 10px;"/>
+                                </Col>
+                            </Row>
+                        </div>
+                        <div v-else>
+                            <Row>
+                                <Col span="3">
+                                    <img :src="headline.thumbnail_pic_s"
+                                         style="height:150%;width: 150%;margin-right: 10px;"/>
+                                </Col>
+                                <Col span="3">
+                                    <img :src="headline.thumbnail_pic_s02" v-if="headline.thumbnail_pic_s02"
+                                         style="height:150%;width: 150%;margin-right: 10px;"/>
+                                </Col>
+                                <Col span="3">
+                                    <img :src="headline.thumbnail_pic_s03" v-if="headline.thumbnail_pic_s03"
+                                         style="height:150%;width: 150%;margin-right: 10px;"/>
+                                </Col>
+
+                                <Col span="12">
+                                    <div>
+                                        <a style='color: black;font-weight: 800;font-size: 16px;'
+                                           :href="headline.url" target="_blank">{{headline.title}}
                                         </a>
-                                    </span>
-                                    </li>
-                                </ul>
-                                <div style="max-width: 600px;height:35px;color: rgba(76,76,76,0.62);text-align: left;padding-left: 10px;word-wrap:break-word;overflow:hidden;text-overflow: ellipsis;">
-                                    &nbsp;{{article.outline}}
-                                </div>
-                                <div style="color: #0d5477;text-align: left;">&nbsp;
-                                    <img src="/static/img/avatars/man-avatar.png"
-                                         style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
-                                    <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
-                                </div>
-                            </li>
+                                    </div>
 
-                            <li class="nav-item header-item" style="position: absolute;right:100px;bottom:12px;">
-
-                                <Icon type="ios-clock" size="18"
-                                      color="rgba(128,128,128,0.88)"></Icon>
-                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.hits}}</label>
-
-                            </li>
-                            <li class="nav-item header-item" style="position: absolute;right:40px;bottom:12px;">
-
-                                <Icon type="chatbox-working" size="18"
-                                      color="rgba(128,128,128,0.88)"></Icon>
-                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.comments}}</label>
-
-                            </li>
-                            <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:12px;">
-
-                                <Icon type="thumbsdown" size="18"
-                                      color="rgba(128,128,128,0.88)"></Icon>
-                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.dislikes}}</label>
-
-                            </li>
-                        </ul>
+                                    <div style="color: #0d5477;text-align: left;">&nbsp;
+                                        <img src="/static/img/avatars/man-avatar.png"
+                                             style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                        <a href="#" style="margin-left: -4px;">{{headline.author_name}}</a>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
                     </navbar>
-                    <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px solid rgba(161,54,255,0.22);"/>
                 </div>
 
+
                 <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
-                    <p @click="loadMoreArticles" style="border: none;cursor: pointer;">
+                    <p @click="pullForUpdate" style="border: none;cursor: pointer;">
                         <Icon type="ios-more-outline" size="32"></Icon>
                         <Icon type="ios-more-outline" size="32"></Icon>
                     </p>
@@ -99,19 +89,12 @@
 </template>
 
 <script>
-    import DashChartCount from './../charts/DashChartCount';
-    import DashChartVisitor from './../charts/DashChartVisitor';
-    import DashChartLarge from './../charts/DashChartLarge';
-    import VueCalendar from './../components/VueCalendar';
-    import TodoList from '@/components/TodoList';
     import navbar from '@/components/Visitor/ArticleNavbar';
-
-    import store from 'store/';
 
 
     export default {
-        components: {DashChartCount, DashChartVisitor, DashChartLarge, VueCalendar, TodoList, navbar},
-        name: 'dashboard',
+        components: {navbar},
+        name: 'headline',
         data() {
             return {
                 pageInfo: {
@@ -132,28 +115,33 @@
                 value3: 0,
 
                 speed: 10000,
+                pageQuery: {
+                    pageNum: 1,
+                    pageSize: 10,
+                    filterMap: {
+                        title: null,
+                        authorName: null
+                    },
+                    sortMap: {}
+                },
             }
         },
-        mounted() {
-            this.articles();
-            this.tagList();
+        created() {
+            this.listHeadlines();
         },
         methods: {
-            loadMoreArticles() {
+            pullForUpdate() {
                 this.pageInfo.pageSize += 6;
-                this.articles();
+                this.listHeadlines();
                 this.$Notice.success({
                     title: '温馨提醒',
                     desc: '更新6条新文章,请浏览!'
                 });
             },
-            articles() {
+            listHeadlines() {
                 this.$Loading.start()
 
-                this.$store.dispatch('Articles', {
-                    pageNum: this.pageInfo.pageNum,
-                    pageSize: this.pageInfo.pageSize
-                }).then(res => {
+                this.$store.dispatch('ListHeadlines', {}).then(res => {
                     this.pageInfo = res.data.payload;
                     this.$Loading.finish();
                 }).catch(err => {
@@ -161,27 +149,13 @@
                     this.$Loading.error()
                 });
             },
-            viewArticle(path) {
-                window.open('/article/detail/' + path);
-            },
             changePage(page) {
                 this.pageInfo.pageNum = page;
-                this.articles();
+                this.listHeadlines();
             },
             changePageSize(pageSize) {
                 this.pageInfo.pageSize = pageSize;
-                this.articles();
-            },
-            tagList() {
-                store.dispatch('TagList', {token: null}).then(res => { // 拉取user_info
-                    var tags = res.data.payload;
-                    this.tags = tags;
-                }).catch(() => {
-                    console.log("请求标签列表失败");
-                })
-            },
-            filterTags(tag) {
-                window.open('/tag/' + tag, '_blank');
+                this.listHeadlines();
             }
         }
     }
@@ -279,7 +253,9 @@
     }
 
     .state-overview {
-        color: #f9d4ff
+        color: #f9d4ff;
+        position: relative;
+        min-height:200px;
     }
 
     .state-overview .ivu-col {
@@ -334,10 +310,6 @@
     .panel.like-header {
         /*background: #f6faff;*/
         /*box-shadow: 0px 2px 18px 4px #ffa5002b;*/
-    }
-
-    .dash_income_chart {
-        float: left
     }
 
     .ivu-row {
@@ -434,11 +406,6 @@
         margin-bottom: 30px
     }
 
-    .state-info .panel {
-        margin-bottom: 20px;
-        float: right;
-        margin-left: 15px
-    }
 
     .panel {
         border: 1px solid transparent;
@@ -451,10 +418,6 @@
         padding: 15px
     }
 
-    .state-info .panel .summary {
-        float: left;
-        margin-right: 20px
-    }
 
     .state-info .panel .summary span {
         color: #49586e;
@@ -485,11 +448,6 @@
         font-size: 11%;
         font-weight: 400;
         margin: 10px 0
-    }
-
-    .chart-bar {
-        float: right;
-        margin-top: 5px
     }
 
     .chart-bar img {
@@ -534,7 +492,7 @@
     }
 
     .twt-info p a {
-        color: #98fdf4
+        color: #98fdf4;
     }
 
     .media:first-child {
@@ -548,14 +506,6 @@
 
     .media > .pull-left {
         margin-right: 10px
-    }
-
-    .pull-left {
-        float: left
-    }
-
-    .pull-left {
-        float: left !important
     }
 
     .custom-trq-footer {
@@ -607,13 +557,5 @@
     ul.user-states {
         list-style-type: none;
         padding: 20px 0
-    }
-
-    ul.user-states li {
-        text-align: center;
-        float: left;
-        width: 33%;
-        font-size: 18px;
-        margin: 0
     }
 </style>

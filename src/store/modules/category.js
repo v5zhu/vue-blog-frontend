@@ -1,4 +1,4 @@
-import {categoryList, categoryAdd} from 'api/category';
+import {categoryList, categoryAdd} from 'api/blog/category';
 
 const category = {
     state: {
