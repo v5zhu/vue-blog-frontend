@@ -248,10 +248,13 @@
         position: relative;
         min-height: 150px;
         padding: 20px;
+
     }
 
-    .state-overview .ivu-col {
-        margin-bottom: 20px
+    .state-overview:hover {
+        transition: all .3s ease-in-out;
+        box-shadow:0 2px 15px 0 rgba(0,0,0,.15)!important;
+        background: white;
     }
 
     .state-overview .state-value .value {

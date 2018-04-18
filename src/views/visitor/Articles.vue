@@ -15,69 +15,73 @@
                     </div>
                 </nav>
             </Col>
+
             <Col span="14">
-                <div class="state-overview" v-for="article in pageInfo.list" style="padding-bottom: 8px;">
-                    <navbar>
-                        <ul class="nav navbar-nav d-md-down-none">
-                            <li class="nav-item header-item" style="margin-left: 0px;">
+                <div class="state-overview" v-for="article in pageInfo.list">
+                    <Row  style="padding-bottom: 8px;">
+                        <Col span="15">
+                            <a class="article-title"
+                               style='font-weight: 900;color: #333;font-size: 16px;'
+                               @click="viewArticle(article.path)">{{article.title}}
+                            </a>
+                        </Col>
+                        <Col span="8">
+                            <div v-if="article.tagList!=null && article.tagList.length!=0">
+                                <a class="article-tags"
+                                   @click="filterTags(tag)"
+                                   v-for="tag in article.tagList">
+                                    {{tag.name}}
+                                </a>
+                            </div>
+                        </Col>
+                    </Row>
 
-                                <Button type="ghost" size="default"
-                                        style="height:80px;width:60px;">
-                                    <Icon type="thumbsup" color="#0d5477" size="28"></Icon>
-                                    <div>{{article.likes}}</div>
-                                </Button>
-                            </li>
+                    <Row style="padding-bottom: 8px;">
+                        <Col>
+                            <div style="max-width: 600px;height:35px;color: rgba(76,76,76,0.62);text-align: left;padding-left: 10px;word-wrap:break-word;overflow:hidden;text-overflow: ellipsis;">
+                                &nbsp;{{article.outline}}
+                            </div>
+                        </Col>
+                    </Row>
 
-                            <li class="nav-item header-item" style="margin-left: 0px;">
-                                <ul style="height:35px;">
-                                    <li>
-                                        <a class="article-title"
-                                           style='color: #0d5477;text-align: left;font: 16px/2 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;'
-                                           @click="viewArticle(article.path)">{{article.title}}
-                                        </a>
-                                        <span v-if="article.tagList!=null && article.tagList.length!=0">
-                                        <a class="article-tags"
-                                           @click="filterTags(tag)"
-                                           v-for="tag in article.tagList">
-                                            {{tag.name}}
-                                        </a>
-                                    </span>
-                                    </li>
-                                </ul>
-                                <div style="max-width: 600px;height:35px;color: rgba(76,76,76,0.62);text-align: left;padding-left: 10px;word-wrap:break-word;overflow:hidden;text-overflow: ellipsis;">
-                                    &nbsp;{{article.outline}}
-                                </div>
-                                <div style="color: #0d5477;text-align: left;">&nbsp;
-                                    <img src="/static/img/avatars/man-avatar.png"
-                                         style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
-                                    <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
-                                </div>
-                            </li>
+                    <Row style="margin-bottom: -15px;">
+                        <Col span="16">
+                            <div style="color: #0d5477;text-align: left;">&nbsp;
+                                <img src="/static/img/avatars/man-avatar.png"
+                                     style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
+                            </div>
+                        </Col>
+                        <Col span="8">
+                            <ul style="display: flex;">
+                                <li>
+                                    <Icon type="ios-clock" size="18"
+                                          color="rgba(128,128,128,0.88)"></Icon>
+                                    <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.hits}}</label>
 
-                            <li class="nav-item header-item" style="position: absolute;right:100px;bottom:12px;">
+                                </li>
+                                <li >
 
-                                <Icon type="ios-clock" size="18"
-                                      color="rgba(128,128,128,0.88)"></Icon>
-                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.hits}}</label>
+                                    <Icon type="chatbox-working" size="18"
+                                          color="rgba(128,128,128,0.88)"></Icon>
+                                    <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.comments}}</label>
 
-                            </li>
-                            <li class="nav-item header-item" style="position: absolute;right:40px;bottom:12px;">
+                                </li>
+                                <li >
 
-                                <Icon type="chatbox-working" size="18"
-                                      color="rgba(128,128,128,0.88)"></Icon>
-                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.comments}}</label>
+                                    <Icon type="thumbsup" size="18"
+                                          color="rgba(128,128,128,0.88)"></Icon>
+                                    <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.likes}}</label>
+                                </li>
+                                <li >
 
-                            </li>
-                            <li class="nav-item header-item" style="position: absolute;right:-20px;bottom:12px;">
-
-                                <Icon type="thumbsdown" size="18"
-                                      color="rgba(128,128,128,0.88)"></Icon>
-                                <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.dislikes}}</label>
-
-                            </li>
-                        </ul>
-                    </navbar>
-                    <hr style="margin-top:20px;margin-bottom:20px;height:1px;border:none;border-top:1px solid rgba(161,54,255,0.22);"/>
+                                    <Icon type="thumbsdown" size="18"
+                                          color="rgba(128,128,128,0.88)"></Icon>
+                                    <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.dislikes}}</label>
+                                </li>
+                            </ul>
+                        </Col>
+                    </Row>
                 </div>
 
                 <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
@@ -104,13 +108,12 @@
     import DashChartLarge from './../charts/DashChartLarge';
     import VueCalendar from './../components/VueCalendar';
     import TodoList from '@/components/TodoList';
-    import navbar from '@/components/Visitor/ArticleNavbar';
 
     import store from 'store/';
 
 
     export default {
-        components: {DashChartCount, DashChartVisitor, DashChartLarge, VueCalendar, TodoList, navbar},
+        components: {DashChartCount, DashChartVisitor, DashChartLarge, VueCalendar, TodoList},
         name: 'dashboard',
         data() {
             return {
@@ -279,86 +282,15 @@
     }
 
     .state-overview {
-        color: #f9d4ff
+        color: #f9d4ff;
+        border-bottom: 1px dashed rgba(161, 54, 255, 0.22);
+        padding: 30px 0 10px 5px;
     }
 
-    .state-overview .ivu-col {
-        margin-bottom: 20px
-    }
-
-    .state-overview .state-value .value {
-        font-size: 20px;
-        font-weight: 500;
-        margin-bottom: 5px;
-    }
-
-    .state-overview .state-value .title {
-        font-size: 14px
-    }
-
-    .state-value {
-        width: 68%;
-    }
-
-    .symbol {
-        width: 50px;
-        display: inline-block;
-        position: relative;
-    }
-
-    .state-overview .panel {
-        border-radius: 4px;
-        padding: 10px 10px
-    }
-
-    .panel.purple {
-        background: #6a8abe;
-        box-shadow: 0 5px 0 #5f7cab
-    }
-
-    .panel.red {
-        background-color: #fc8675;
-        box-shadow: 0 5px 0 #e27869
-    }
-
-    .panel.blue {
-        background: #5ab6df;
-        box-shadow: 0 5px 0 #51a3c8
-    }
-
-    .panel.green {
-        background: #4acacb;
-        box-shadow: 0 2px 0 #42b5b6
-    }
-
-    .panel.like-header {
-        /*background: #f6faff;*/
-        /*box-shadow: 0px 2px 18px 4px #ffa5002b;*/
-    }
-
-    .dash_income_chart {
-        float: left
-    }
-
-    .ivu-row {
-        margin-bottom: 20px !important
-    }
-
-    .dash_income {
-        border-radius: 4px;
-        background-color: #fff;
-        height: 80px;
-        padding: 15px
-    }
-
-    .staff_name {
-        font-weight: 900;
-        font-size: 16px
-    }
-
-    .staff_progress {
-        margin-left: 10px;
-        width: 90%
+    .state-overview:hover {
+        transition: all .3s ease-in-out;
+        box-shadow: 0 2px 15px 0 rgba(0, 0, 0, .15) !important;
+        background: white;
     }
 
     .staff_progress p {
