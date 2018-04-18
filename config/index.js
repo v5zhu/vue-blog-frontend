@@ -24,7 +24,7 @@ module.exports = {
         staticPath: '/static/',
         proxyTable: {
             '/blog': {
-                target: 'http://47.96.28.236:8777',
+                target: 'http://blog.mofaxue.com',
                 // target: 'http://localhost:8777',
                 changeOrigin: true,
                 pathRewrite: {
@@ -32,8 +32,8 @@ module.exports = {
                 }
             },
             '/thirdapi': {
-                // target: 'http://47.96.28.236:8800',
-                target: 'http://localhost:8800',
+                target: 'http://blog.mofaxue.com',
+                // target: 'http://localhost:8800',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/': ''

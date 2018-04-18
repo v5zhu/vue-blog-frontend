@@ -217,7 +217,7 @@
             mavonEditor
         },
         mounted() {
-            var jsonString = Cookies.get('USER-INFO');
+            var jsonString = Cookies.get('LOGIN-USER');
             if (jsonString) {
                 this.loginUser=JSON.parse(jsonString);
             }

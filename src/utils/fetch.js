@@ -12,7 +12,7 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(config => {
     // Do something before request is sent
-    var jsonString = Cookies.get('USER-INFO');
+    var jsonString = Cookies.get('LOGIN-USER');
     if (jsonString) {
         var user = JSON.parse(jsonString);
         config.headers['token'] = user.token;

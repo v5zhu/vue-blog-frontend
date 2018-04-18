@@ -39,7 +39,7 @@
             Breadcrumb
         },
         created() {
-            var user = Cookies.get('USER-INFO');
+            var user = Cookies.get('LOGIN-USER');
             if (user) {
                 this.loginUser = JSON.parse(user);
             }

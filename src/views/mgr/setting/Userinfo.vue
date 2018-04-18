@@ -70,7 +70,7 @@
             }
         },
         mounted() {
-            var jsonString = Cookies.get('USER-INFO');
+            var jsonString = Cookies.get('LOGIN-USER');
             if (jsonString) {
                 this.loginUser = JSON.parse(jsonString);
             }
@@ -81,7 +81,7 @@
                     var data = res.data;
                     if (data.success == true) {
                         var user = data.payload;
-                        Cookies.set('USER-INFO', user);
+                        Cookies.set('LOGIN-USER', user);
                         this.$Message.success('保存成功');
                     } else {
                         this.$Message.error('保存失败');

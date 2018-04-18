@@ -42,7 +42,7 @@ function getRoutes(routes) {
 const whiteList = ['/admin/login', '/authredirect']// 不重定向白名单
 router.beforeEach((to, from, next) => {
     NProgress.start() // 开启Progress
-    var jsonString = Cookies.get('USER-INFO');
+    var jsonString = Cookies.get('LOGIN-USER');
     var user = undefined;
 
     if (jsonString) {

@@ -198,7 +198,7 @@
                 e.preventDefault();
                 store.dispatch('LogOut', {token: null}).then(res => {
                     if (res.data.success == true) {
-                        Cookies.remove('USER-INFO');
+                        Cookies.remove('LOGIN-USER');
                         window.location.reload();
                     } else {
                         this.$Message.error('退出失败,请联系管理员');

@@ -18,7 +18,7 @@
                     <div style="padding-top: 5px;">
                         <img style="width:20px;"
                              src="/static/img/beian.png"/>
-                        <span style="padding-top: 5px;">川公网安备</span>
+                        <span style="padding-top: 5px;">蜀ICP备18010365号</span>
                     </div>
                     <div>&copy; 2018
                         <span class="float-right"> <a href="http://www.mofaxue.com">zhuxiaolong</a>&nbsp;版权所有</span>
