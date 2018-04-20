@@ -1,7 +1,6 @@
 import axios from 'axios';
 // import router from '../router';
 import Cookies from 'js-cookie';
-import router from '../router';
 
 // 创建axios实例
 const service = axios.create({
@@ -27,17 +26,14 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(response => {
         if (response.data.code == '403') {
-            router.replace({
-                path: '/pages/403'
-            })
+            window.location.href = '/pages/403';
+            return Promise.reject(response);
         } else if (response.data.code == '404') {
-            router.replace({
-                path: '/pages/403'
-            })
+            window.location.href = '/pages/404';
+            return Promise.reject(response);
         } else if (response.data.code == '500') {
-            router.replace({
-                path: '/pages/500'
-            })
+            window.location.href = '/pages/500';
+            return Promise.reject(response);
         } else if (response.data.success === false) {
             return Promise.reject(response);
         } else {

@@ -8,38 +8,39 @@
             <Form ref="loginForm" :model="user" :rules="userLoginRule" :label-width="70" label-position="right">
                 <Row style="padding-left: 20px;">
                     <Col span="21">
-                    <Tabs>
-                        <TabPane label="身份验证》" icon="person">
-                            <FormItem
-                                    label="手机号"
-                                    prop="loginName" style="margin-top: 30px;">
-                                <Row>
-                                    <Col span="15">
-                                    <Input type="text" v-model="user.loginName" placeholder="请输入手机号"></Input>
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                            <FormItem
-                                    label="密码"
-                                    prop="password" style="margin-top: 30px;">
-                                <Row>
-                                    <Col span="15">
-                                    <Input type="password" v-model="user.password" placeholder="请输入密码"></Input>
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                            <FormItem>
-                                <div style="text-align: left;">
-                                    <Button @click="login('loginForm')" type="ghost" size="large" :loading="false"
-                                            style="min-width: 100px;">登录
-                                    </Button>
+                        <Tabs>
+                            <TabPane label="身份验证》" icon="person">
+                                <FormItem
+                                        label="手机号"
+                                        prop="loginName" style="margin-top: 30px;">
+                                    <Row>
+                                        <Col span="15">
+                                            <Input type="text" v-model="user.loginName" placeholder="请输入手机号"></Input>
+                                        </Col>
+                                    </Row>
+                                </FormItem>
+                                <FormItem
+                                        label="密码"
+                                        prop="password" style="margin-top: 30px;">
+                                    <Row>
+                                        <Col span="15">
+                                            <Input type="password" v-model="user.password" placeholder="请输入密码"></Input>
+                                        </Col>
+                                    </Row>
+                                </FormItem>
+                                <FormItem>
+                                    <div style="text-align: left;">
+                                        <Button @click="login('loginForm')" type="ghost" size="large" :loading="false"
+                                                style="min-width: 100px;">登录
+                                        </Button>
 
-                                    <p title="点击注册账号" style="width:60px;margin-top: 15px;color: blue;cursor: pointer;"
-                                       @click="showRegModalFunction">没有账号？</p>
-                                </div>
-                            </FormItem>
-                        </TabPane>
-                    </Tabs>
+                                        <p title="点击注册账号"
+                                           style="width:60px;margin-top: 15px;color: blue;cursor: pointer;"
+                                           @click="showRegModalFunction">没有账号？</p>
+                                    </div>
+                                </FormItem>
+                            </TabPane>
+                        </Tabs>
                     </Col>
                 </Row>
             </Form>
@@ -93,7 +94,11 @@
                                 this.$Message.error('登录失败:' + resp.msg);
                             }
                         }).catch(res => {
-                            this.$Message.error(res.data.msg);
+                            this.$Message.error({
+                                content: res.data.error,
+                                duration: 5,
+                                closable: true
+                            });
                         })
                     } else {
                         this.$Message.error('请检查后在登录');
