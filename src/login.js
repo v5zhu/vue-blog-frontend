@@ -4,8 +4,6 @@ import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
 import Cookies from 'js-cookie';
 
-import BackFull from '@/containers/BackFull';
-
 const _import = require('./router/_import_' + process.env.NODE_ENV);
 
 // permissiom judge
@@ -53,17 +51,18 @@ router.beforeEach((to, from, next) => {
     if (user && user.token) { // 判断是否有token
 
         var roles = user.roles;
-        store.dispatch('UserRouteTree').then(response => { // 拉取user_info
-            var routes = response.data.payload;
-            var trees = getRoutes(routes);
-            router.addRoutes(trees) // 动态添加可访问路由表
-            next({...to}) // hack方法 确保addRoutes已完成
-            store.dispatch('generateMenus', to);
+        if (store.getters.addRouters.length == 0) {
+            store.dispatch('UserRouteTree').then(response => { // 拉取user_info
+                var routes = response.data.payload;
+                var trees = getRoutes(routes);
+                router.addRoutes(trees) // 动态添加可访问路由表
+                next({...to}) // hack方法 确保addRoutes已完成
 
-        }).catch(err => {
-            console.error(err);
-        })
-
+            }).catch(err => {
+                console.error(err);
+            })
+        }
+        store.dispatch('generateMenus', to);
         next()//
 
     } else {
@@ -71,16 +70,19 @@ router.beforeEach((to, from, next) => {
             next();
         } else {
             if (to.path.indexOf('admin') == -1) {
-                store.dispatch('UserRouteTreeByOpen').then(response => { // 拉取user_info
-                    var routes = response.data.payload;
-                    var trees = getRoutes(routes);
-                    router.addRoutes(trees) // 动态添加可访问路由表
-                    next({...to}) // hack方法 确保addRoutes已完成
-                    store.dispatch('generateMenus', to);
+                if (store.getters.addRouters.length == 0) {
+                    store.dispatch('UserRouteTreeByOpen').then(response => { // 拉取user_info
+                        var routes = response.data.payload;
+                        var trees = getRoutes(routes);
+                        router.addRoutes(trees) // 动态添加可访问路由表
+                        next({...to}) // hack方法 确保addRoutes已完成
 
-                }).catch(err => {
-                    console.error(err);
-                })
+                    }).catch(err => {
+                        console.error(err);
+                    })
+                }
+                store.dispatch('generateMenus', to);
+
                 next();
             } else {
                 next('/admin/login') // 否则全部重定向到登录页

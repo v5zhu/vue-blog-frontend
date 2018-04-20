@@ -3,7 +3,7 @@
         <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
             &#9776;
         </button>
-        <a class="navbar-brand" href="/" ></a>
+        <a class="navbar-brand" href="/"></a>
 
         <ul class="nav navbar-nav d-md-down-none">
             <li class="nav-item" id="sidebar_minimize">
@@ -13,7 +13,7 @@
         </ul>
 
         <ul class="nav navbar-nav d-md-down-none">
-            <li class="nav-item header-item" v-for="(route,index) in pageInfo.list"
+            <li class="nav-item header-item" v-for="(route,index) in headers"
                 :class="{headerItemActiveClass:index==isActive}"
                 @click="changeHeaderStyle(index)"
                 v-if="route.hidden==false">
@@ -112,12 +112,7 @@
         },
         data() {
             return {
-                pageInfo: {
-                    pageNum: 1,
-                    pageSize: 20,
-                    list: [],
-                    total: 0
-                },
+                headers: [],
                 isActive: -1,
             }
         },
@@ -127,18 +122,10 @@
         methods: {
             listRoute(type) {
                 store.dispatch('ListBackHeaderRoute', {
-                    type: type,
-                    pageNum: this.pageInfo.pageNum,
-                    pageSize: this.pageInfo.pageSize
+                    type: type
                 }).then(res => {
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.pageInfo = data.payload;
-                    } else {
-                        this.$Message.error('加载失败');
-                    }
+                    this.headers = res.data.payload;
                 }).catch(err => {
-                    console.log(err)
                     this.$Message.error({
                         content: err.data.error,
                         duration: 5,
@@ -149,13 +136,13 @@
             Logout(e) {
                 e.preventDefault();
                 this.$store.dispatch('LogOut').then(res => {
-                    if (res.data.success == true) {
-                        this.$router.push({path: '/admin/login'});
-                    } else {
-                        this.$Message.error('退出失败,请联系管理员');
-                    }
+                    this.$router.push({path: '/admin/login'});
                 }).catch(err => {
-                    this.$message.error(err);
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    });
                 });
             },
             click() {

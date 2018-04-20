@@ -159,7 +159,6 @@ const permission = {
         UserRouteTreeByOpen({commit, state}) {
             return new Promise((resolve, reject) => {
                 userRouteTreeByOpen().then(response => {
-                    console.log(response)
                     var routes = response.data.payload;
                     var trees = getRoutes(routes);
                     // console.error(trees)

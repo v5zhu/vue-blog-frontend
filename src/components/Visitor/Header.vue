@@ -4,7 +4,7 @@
             <navbar v-show="scrollShow || moveShow" transiton="fade">
 
                 <ul class="nav navbar-nav d-md-down-none">
-                    <li class="nav-item header-item" v-for="(route,index) in pageInfo.list"
+                    <li class="nav-item header-item" v-for="(route,index) in headers"
                         :class="{headerItemActiveClass:index==isActive}"
                         @click="changeHeaderStyle(index)"
                         v-if="route.hidden===0">
@@ -140,12 +140,7 @@
             return {
                 q: '',
                 qfocus: false,
-                pageInfo: {
-                    pageNum: 1,
-                    pageSize: 20,
-                    list: [],
-                    total: 0
-                },
+                headers: [],
                 isActive: -1,
             }
         },
@@ -162,16 +157,9 @@
             },
             listFrontRoute(type) {
                 store.dispatch('ListFrontRoute', {
-                    type: type,
-                    pageNum: this.pageInfo.pageNum,
-                    pageSize: this.pageInfo.pageSize
+                    type: type
                 }).then(res => {
-                    var data = res.data;
-                    if (data.success == true) {
-                        this.pageInfo = data.payload;
-                    } else {
-                        this.$Message.error('加载失败');
-                    }
+                    this.headers = res.data.payload;
                 }).catch(err => {
                     console.log(err)
                     this.$Message.error({
@@ -197,17 +185,13 @@
             Logout(e) {
                 e.preventDefault();
                 store.dispatch('LogOut', {token: null}).then(res => {
-                    if (res.data.success == true) {
-                        Cookies.remove('LOGIN-USER');
-                        window.location.reload();
-                    } else {
-                        this.$Message.error('退出失败,请联系管理员');
-                    }
+                    Cookies.remove('LOGIN-USER');
+                    window.location.reload();
                 }).catch(err => {
                     this.$Message.error({
-                        content:err.data.error,
-                        duration:5,
-                        closable:true
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
                     });
                 });
             },
