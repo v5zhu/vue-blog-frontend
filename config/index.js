@@ -24,8 +24,8 @@ module.exports = {
         staticPath: '/static/',
         proxyTable: {
             '/blog': {
-                target: 'http://blog.mofaxue.com',
-                // target: 'http://localhost:8777',
+                // target: 'http://blog.mofaxue.com',
+                target: 'http://localhost:8866',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/': ''
@@ -39,13 +39,6 @@ module.exports = {
                     '^/': ''
                 }
             }
-            // '/slsAdminQiniu': {
-            //   target: '//up-z2.qiniu.com',
-            //   changeOrigin: true,
-            //   pathRewrite: {
-            //     '^/slsAdminQiniu': ''
-            //   }
-            // }
         },
         cssSourceMap: false
     }

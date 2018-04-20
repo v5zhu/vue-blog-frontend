@@ -8,13 +8,11 @@ import {
     userRouteTree,
     userRouteTreeByOpen
 } from 'api/blog/permission';
+import VisitorFull from '@/containers/VisitorFull';
+import BackFull from '@/containers/BackFull';
 
 
 // import BackFull from '@/containers/Full';
-
-
-import VisitorFull from '@/containers/VisitorFull';
-import BackFull from '@/containers/BackFull';
 
 const _import = require('../../router/_import_' + process.env.NODE_ENV);
 
@@ -23,7 +21,7 @@ function getRoutes(routes) {
     try {
         routes.forEach(function (route) {
             var component;
-            
+
             if (route.parent == null) {
                 if (route.component == '@/containers/BackFull') {
                     component = BackFull;
@@ -161,6 +159,7 @@ const permission = {
         UserRouteTreeByOpen({commit, state}) {
             return new Promise((resolve, reject) => {
                 userRouteTreeByOpen().then(response => {
+                    console.log(response)
                     var routes = response.data.payload;
                     var trees = getRoutes(routes);
                     // console.error(trees)

@@ -10,11 +10,11 @@ export function articleList(data) {
     });
 }
 
-export function articles(params) {
+export function articles(data) {
     return fetch({
         url: prefix + '/articles',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     });
 }
 

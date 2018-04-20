@@ -100,9 +100,9 @@ const article = {
             });
         },
         // 获取文章列表
-        Articles({commit, state}, params) {
+        Articles({commit, state}, data) {
             return new Promise((resolve, reject) => {
-                articles(params).then(response => {
+                articles(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

@@ -130,6 +130,17 @@
                 },
                 pageSizeOpts: [10, 20, 50, 100],
                 tags: [],
+                pageQuery: {
+                    pageNum: 1,
+                    pageSize: 10,
+                    filterMap: {
+                        status: null,
+                        title: null,
+                        tag: null,
+                        category: null
+                    },
+                    sortMap: {}
+                },
                 value1: 0,
                 value2: 0,
                 value3: 0,
@@ -143,7 +154,7 @@
         },
         methods: {
             loadMoreArticles() {
-                this.pageInfo.pageSize += 6;
+                this.pageQuery.pageSize += 6;
                 this.articles();
                 this.$Notice.success({
                     title: '温馨提醒',
@@ -153,10 +164,7 @@
             articles() {
                 this.$Loading.start()
 
-                this.$store.dispatch('Articles', {
-                    pageNum: this.pageInfo.pageNum,
-                    pageSize: this.pageInfo.pageSize
-                }).then(res => {
+                this.$store.dispatch('Articles', this.pageQuery).then(res => {
                     this.pageInfo = res.data.payload;
                     this.$Loading.finish();
                 }).catch(err => {
@@ -168,11 +176,11 @@
                 window.open('/article/detail/' + path);
             },
             changePage(page) {
-                this.pageInfo.pageNum = page;
+                this.pageQuery.pageNum = page;
                 this.articles();
             },
             changePageSize(pageSize) {
-                this.pageInfo.pageSize = pageSize;
+                this.pageQuery.pageSize = pageSize;
                 this.articles();
             },
             tagList() {
