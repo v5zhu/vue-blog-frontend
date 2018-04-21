@@ -93,9 +93,9 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(to => {
-    var prefix = 'Mfx';
+    var prefix = '羽轩';
     if (to.name) {
-        document.title = prefix + '  ' + to.name;
+        document.title = prefix + '丨' + to.name;
     }
     NProgress.done() // 结束Progress
 })

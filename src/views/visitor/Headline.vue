@@ -1,81 +1,88 @@
 <template>
     <div>
+        <Row style="width:51.5%;margin-left: 100px;position: fixed;z-index: 1001;">
+            <Col>
+                <Button type="error" long v-if="pushMessageShow" @click="clickForUpdate">{{pushMessage}}</Button>
+            </Col>
+        </Row>
 
-        <Row :gutter="16" style="margin-top: 100px;margin-left: 100px;">
-            <Col span="14">
-            <div class="state-overview" v-for="headline in pageInfo.list"
-                 style="border-bottom: rgba(161,54,255,0.22) 1px solid;">
-                <div v-if="headline.thumbnail_pic_s02">
-                    <Row>
-                        <Col>
-                        <div>
-                            <a style='color: black;font-weight: 800;font-size: 16px;'
-                               :href="headline.url" target="_blank">{{headline.title}}
-                            </a>
-                        </div>
-                        <div style="color: #0d5477;text-align: left;">&nbsp;
-                            <img src="/static/img/avatars/man-avatar.png"
-                                 style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
-                            <a href="#" style="margin-left: -4px;margin-right: 20px;">{{headline.author_name}}</a>
-                            <Icon type="ios-clock" color="#808080"></Icon>
-                            <a href="#" style="margin-left: -4px;">{{headline.date}}</a>
-                        </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span="6">
-                        <img :src="headline.thumbnail_pic_s"
-                             style="height:80%;width: 80%;"/>
-                        </Col>
-                        <Col span="6">
-                        <img :src="headline.thumbnail_pic_s02" v-if="headline.thumbnail_pic_s02"
-                             style="height:80%;width: 80%;"/>
-                        </Col>
-                        <Col span="6">
-                        <img :src="headline.thumbnail_pic_s03" v-if="headline.thumbnail_pic_s03"
-                             style="height:80%;width: 80%;"/>
-                        </Col>
-                    </Row>
+        <Row :gutter="16" style="margin-top: 30px;margin-left: 100px;">
+            <Col span="14" style="margin-top: 40px;">
+                <div class="state-overview" v-for="headline in pageInfo.list"
+                     style="border-bottom: rgba(161,54,255,0.22) 1px solid;">
+                    <div v-if="headline.thumbnail_pic_s02">
+                        <Row>
+                            <Col>
+                                <div>
+                                    <a style='color: black;font-weight: 800;font-size: 16px;'
+                                       :href="headline.url" target="_blank">{{headline.title}}
+                                    </a>
+                                </div>
+                                <div style="color: #0d5477;text-align: left;">&nbsp;
+                                    <img src="/static/img/avatars/man-avatar.png"
+                                         style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                    <a href="#"
+                                       style="margin-left: -4px;margin-right: 20px;">{{headline.author_name}}</a>
+                                    <Icon type="ios-clock" color="#808080"></Icon>
+                                    <a href="#" style="margin-left: -4px;">{{headline.date}}</a>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span="6">
+                                <img :src="headline.thumbnail_pic_s"
+                                     style="height:80%;width: 80%;"/>
+                            </Col>
+                            <Col span="6">
+                                <img :src="headline.thumbnail_pic_s02" v-if="headline.thumbnail_pic_s02"
+                                     style="height:80%;width: 80%;"/>
+                            </Col>
+                            <Col span="6">
+                                <img :src="headline.thumbnail_pic_s03" v-if="headline.thumbnail_pic_s03"
+                                     style="height:80%;width: 80%;"/>
+                            </Col>
+                        </Row>
+                    </div>
+                    <div v-else>
+                        <Row>
+                            <Col span="3">
+                                <img :src="headline.thumbnail_pic_s"
+                                     style="height:150%;width: 150%;margin-right: 10px;"/>
+                            </Col>
+
+                            <Col span="12" offset="3">
+                                <div>
+                                    <a style='color: black;font-weight: 800;font-size: 16px;'
+                                       :href="headline.url" target="_blank">{{headline.title}}
+                                    </a>
+                                </div>
+
+                                <div style="color: #0d5477;text-align: left;">&nbsp;
+                                    <img src="/static/img/avatars/man-avatar.png"
+                                         style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                    <a href="#"
+                                       style="margin-left: -4px;margin-right: 20px;">{{headline.author_name}}</a>
+                                    <Icon type="ios-clock" color="#808080"></Icon>
+                                    <a href="#" style="margin-left: -4px;">{{headline.date}}</a>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
                 </div>
-                <div v-else>
-                    <Row>
-                        <Col span="3">
-                        <img :src="headline.thumbnail_pic_s"
-                             style="height:150%;width: 150%;margin-right: 10px;"/>
-                        </Col>
 
-                        <Col span="12" offset="3">
-                        <div>
-                            <a style='color: black;font-weight: 800;font-size: 16px;'
-                               :href="headline.url" target="_blank">{{headline.title}}
-                            </a>
-                        </div>
 
-                        <div style="color: #0d5477;text-align: left;">&nbsp;
-                            <img src="/static/img/avatars/man-avatar.png"
-                                 style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
-                            <a href="#" style="margin-left: -4px;margin-right: 20px;">{{headline.author_name}}</a>
-                            <Icon type="ios-clock" color="#808080"></Icon>
-                            <a href="#" style="margin-left: -4px;">{{headline.date}}</a>
-                        </div>
-                        </Col>
-                    </Row>
+                <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
+                    <p @click="pullForUpdate" style="border: none;cursor: pointer;">
+                        <Icon type="ios-more-outline" size="32"></Icon>
+                        <Icon type="ios-more-outline" size="32"></Icon>
+                    </p>
                 </div>
-            </div>
-
-
-            <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
-                <p @click="pullForUpdate" style="border: none;cursor: pointer;">
-                    <Icon type="ios-more-outline" size="32"></Icon>
-                    <Icon type="ios-more-outline" size="32"></Icon>
-                </p>
-            </div>
-            <div style="text-align: center;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">全部加载完成
-            </div>
+                <div style="text-align: center;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">全部加载完成
+                </div>
 
             </Col>
             <Col span="4">
-            &nbsp;
+                &nbsp;
             </Col>
 
         </Row>
@@ -115,10 +122,13 @@
                     },
                     sortMap: {}
                 },
+                pushMessage: '',
+                pushMessageShow: false,
             }
         },
         created() {
             this.listHeadlines();
+            this.openConnection();
         },
         methods: {
             pullForUpdate() {
@@ -141,12 +151,49 @@
                 });
             },
             changePage(page) {
-                this.pageInfo.pageNum = page;
+                this.pageQuery.pageNum = page;
                 this.listHeadlines();
             },
             changePageSize(pageSize) {
-                this.pageInfo.pageSize = pageSize;
+                this.pageQuery.pageSize = pageSize;
                 this.listHeadlines();
+            },
+            clickForUpdate() {
+                this.pushMessageShow = false;
+                this.listHeadlines();
+            },
+            openConnection() {
+                // var socket = new SockJS("http://localhost:8800/thirdapi/webSocketServer");
+                var socket = new SockJS("http://blog.mofaxue.com/thirdapi/webSocketServer");
+
+                // 获取 STOMP 子协议的客户端对象
+                this.stompClient = Stomp.over(socket);
+                // 向服务器发起websocket连接并发送CONNECT帧
+                var that = this;
+                this.stompClient.connect({},
+                    function connectCallback(frame) {
+                        // 连接成功时（服务器响应 CONNECTED 帧）的回调方法
+                        that.stompClient.subscribe('/app/subscribeTest', function (response) {
+                            that.subscribe();
+                        });
+                    },
+                    function errorCallBack(error) {
+                        // 连接失败时（服务器响应 ERROR 帧）的回调方法
+                        console.error("连接失败");
+                    }
+                );
+            },
+            subscribe() {
+                var that = this;
+                this.stompClient.subscribe('/topic/subscribeTest', function (response) {
+                    var returnData = JSON.parse(response.body);
+                    that.pushMessage = returnData.responseText;
+                    that.pushMessageShow = true;
+                });
+            },
+            closeConnection() {
+                this.stompClient.disconnect(function () {
+                })
             }
         }
     }
@@ -253,7 +300,7 @@
 
     .state-overview:hover {
         transition: all .3s ease-in-out;
-        box-shadow:0 2px 15px 0 rgba(0,0,0,.15)!important;
+        box-shadow: 0 2px 15px 0 rgba(0, 0, 0, .15) !important;
         background: white;
     }
 

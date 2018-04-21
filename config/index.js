@@ -24,8 +24,8 @@ module.exports = {
         staticPath: '/static/',
         proxyTable: {
             '/blog': {
-                // target: 'http://blog.mofaxue.com',
-                target: 'http://localhost:8866',
+                target: 'http://blog.mofaxue.com',
+                // target: 'http://localhost:8866',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/': ''

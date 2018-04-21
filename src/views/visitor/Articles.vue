@@ -17,72 +17,81 @@
             </Col>
 
             <Col span="14">
-                <div class="state-overview" v-for="article in pageInfo.list">
-                    <Row  style="padding-bottom: 8px;">
-                        <Col span="15">
-                            <a class="article-title"
-                               style='font-weight: 900;color: #333;font-size: 16px;'
-                               @click="viewArticle(article.path)">{{article.title}}
-                            </a>
-                        </Col>
-                        <Col span="8">
-                            <div v-if="article.tagList!=null && article.tagList.length!=0">
-                                <a class="article-tags"
-                                   @click="filterTags(tag)"
-                                   v-for="tag in article.tagList">
-                                    {{tag.name}}
-                                </a>
-                            </div>
-                        </Col>
-                    </Row>
+                <Row style="width:56.3%;position: fixed;z-index: 1001;margin-left: -8px;">
+                    <Col>
+                        <Button type="error" long v-if="pushMessageShow" @click="clickForUpdate">{{pushMessage}}</Button>
+                    </Col>
+                </Row>
+                <Row style="margin-top: 50px;">
+                    <Col>
+                        <div class="state-overview" v-for="article in pageInfo.list">
+                            <Row style="padding-bottom: 8px;">
+                                <Col span="15">
+                                    <a class="article-title"
+                                       style='font-weight: 900;color: #333;font-size: 16px;'
+                                       @click="viewArticle(article.path)">{{article.title}}
+                                    </a>
+                                </Col>
+                                <Col span="8">
+                                    <div v-if="article.tagList!=null && article.tagList.length!=0">
+                                        <a class="article-tags"
+                                           @click="filterTags(tag)"
+                                           v-for="tag in article.tagList">
+                                            {{tag.name}}
+                                        </a>
+                                    </div>
+                                </Col>
+                            </Row>
 
-                    <Row style="padding-bottom: 8px;">
-                        <Col>
-                            <div style="max-width: 600px;height:35px;color: rgba(76,76,76,0.62);text-align: left;padding-left: 10px;word-wrap:break-word;overflow:hidden;text-overflow: ellipsis;">
-                                &nbsp;{{article.outline}}
-                            </div>
-                        </Col>
-                    </Row>
+                            <Row style="padding-bottom: 8px;">
+                                <Col>
+                                    <div style="max-width: 600px;height:35px;color: rgba(76,76,76,0.62);text-align: left;padding-left: 10px;word-wrap:break-word;overflow:hidden;text-overflow: ellipsis;">
+                                        &nbsp;{{article.outline}}
+                                    </div>
+                                </Col>
+                            </Row>
 
-                    <Row style="margin-bottom: -15px;">
-                        <Col span="16">
-                            <div style="color: #0d5477;text-align: left;">&nbsp;
-                                <img src="/static/img/avatars/man-avatar.png"
-                                     style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
-                                <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
-                            </div>
-                        </Col>
-                        <Col span="8">
-                            <ul style="display: flex;">
-                                <li>
-                                    <Icon type="ios-clock" size="18"
-                                          color="rgba(128,128,128,0.88)"></Icon>
-                                    <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.hits}}</label>
+                            <Row style="margin-bottom: -15px;">
+                                <Col span="16">
+                                    <div style="color: #0d5477;text-align: left;">&nbsp;
+                                        <img src="/static/img/avatars/man-avatar.png"
+                                             style="height:20px;width:20px;border-radius: 50%;margin-bottom: 5px;"/>
+                                        <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
+                                    </div>
+                                </Col>
+                                <Col span="8">
+                                    <ul style="display: flex;">
+                                        <li>
+                                            <Icon type="ios-clock" size="18"
+                                                  color="rgba(128,128,128,0.88)"></Icon>
+                                            <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.hits}}</label>
 
-                                </li>
-                                <li >
+                                        </li>
+                                        <li>
 
-                                    <Icon type="chatbox-working" size="18"
-                                          color="rgba(128,128,128,0.88)"></Icon>
-                                    <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.comments}}</label>
+                                            <Icon type="chatbox-working" size="18"
+                                                  color="rgba(128,128,128,0.88)"></Icon>
+                                            <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.comments}}</label>
 
-                                </li>
-                                <li >
+                                        </li>
+                                        <li>
 
-                                    <Icon type="thumbsup" size="18"
-                                          color="rgba(128,128,128,0.88)"></Icon>
-                                    <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.likes}}</label>
-                                </li>
-                                <li >
+                                            <Icon type="thumbsup" size="18"
+                                                  color="rgba(128,128,128,0.88)"></Icon>
+                                            <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.likes}}</label>
+                                        </li>
+                                        <li>
 
-                                    <Icon type="thumbsdown" size="18"
-                                          color="rgba(128,128,128,0.88)"></Icon>
-                                    <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.dislikes}}</label>
-                                </li>
-                            </ul>
-                        </Col>
-                    </Row>
-                </div>
+                                            <Icon type="thumbsdown" size="18"
+                                                  color="rgba(128,128,128,0.88)"></Icon>
+                                            <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.dislikes}}</label>
+                                        </li>
+                                    </ul>
+                                </Col>
+                            </Row>
+                        </div>
+                    </Col>
+                </Row>
 
                 <div v-if="pageInfo.total > pageInfo.pageSize" style="text-align: center;position: relative">
                     <p @click="loadMoreArticles" style="border: none;cursor: pointer;">
@@ -146,11 +155,15 @@
                 value3: 0,
 
                 speed: 10000,
+                stompClient: null,
+                pushMessage: '',
+                pushMessageShow: false,
             }
         },
         mounted() {
             this.articles();
             this.tagList();
+            this.openConnection();
         },
         methods: {
             loadMoreArticles() {
@@ -193,6 +206,43 @@
             },
             filterTags(tag) {
                 window.open('/tag/' + tag, '_blank');
+            },
+            clickForUpdate() {
+                this.pushMessageShow = false;
+                this.articles();
+            },
+            openConnection() {
+                var socket = new SockJS("http://blog.mofaxue.com/blog/webSocketServer");
+                // var socket = new SockJS("http://localhost:8866/blog/webSocketServer");
+
+                // 获取 STOMP 子协议的客户端对象
+                this.stompClient = Stomp.over(socket);
+                // 向服务器发起websocket连接并发送CONNECT帧
+                var that = this;
+                this.stompClient.connect({},
+                    function connectCallback(frame) {
+                        // 连接成功时（服务器响应 CONNECTED 帧）的回调方法
+                        that.stompClient.subscribe('/app/subscribeTest', function (response) {
+                            that.subscribe();
+                        });
+                    },
+                    function errorCallBack(error) {
+                        // 连接失败时（服务器响应 ERROR 帧）的回调方法
+                        console.error("连接失败");
+                    }
+                );
+            },
+            subscribe() {
+                var that=this;
+                this.stompClient.subscribe('/topic/subscribeTest', function (response) {
+                    var returnData = JSON.parse(response.body);
+                    that.pushMessage = returnData.responseText;
+                    that.pushMessageShow = true;
+                });
+            },
+            closeConnection() {
+                this.stompClient.disconnect(function () {
+                })
             }
         }
     }
