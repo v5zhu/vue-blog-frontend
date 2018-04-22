@@ -341,7 +341,7 @@
 
     .state-overview {
         color: #f9d4ff;
-        border-bottom: 1px dashed rgba(161, 54, 255, 0.22);
+        border-bottom: 1px solid rgba(161, 54, 255, 0.13);
         padding: 30px 0 10px 5px;
     }
 

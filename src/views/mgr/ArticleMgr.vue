@@ -349,7 +349,7 @@
                     onOk: () => {
                         setTimeout(() => {
                             var articleId = param.row.id;
-                            store.dispatch('ArticleDelete', {id: articleId}).then(res => { // 拉取user_info
+                            store.dispatch('ArticleDelete', {articleId: articleId}).then(res => { // 拉取user_info
                                 var resp = res.data;
                                 if (resp.success == true) {
                                     this.$Message.success('删除成功');

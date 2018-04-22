@@ -1,14 +1,15 @@
 import {
+    deleteUser,
+    getAuthorInfo,
+    getInfo,
+    listUser,
+    login,
     loginByEmail,
     logout,
-    listUser,
-    deleteUser,
-    modifyUser,
     modifyPassword,
-    getInfo,
-    getAuthorInfo,
+    modifyUser,
     register,
-    login,
+    sendPhoneCode,
     setUserRole
 } from 'api/blog/login';
 import Cookies from 'js-cookie';
@@ -77,6 +78,15 @@ const user = {
         Login({commit, state}, data) {
             return new Promise((resolve, reject) => {
                 login(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        SendPhoneCode({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                sendPhoneCode(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

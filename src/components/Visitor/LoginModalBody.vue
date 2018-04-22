@@ -9,7 +9,7 @@
                 <Row style="padding-left: 20px;">
                     <Col span="21">
                         <Tabs>
-                            <TabPane label="身份验证》" icon="person">
+                            <TabPane label="身份验证" icon="person">
                                 <FormItem
                                         label="手机号"
                                         prop="loginName" style="margin-top: 30px;">

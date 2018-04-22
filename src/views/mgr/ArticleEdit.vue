@@ -2,6 +2,16 @@
     <div>
         <Form ref="articleForm" :rules="articleRule" :model="article" :label-width="70" label-position="right">
             <Row>
+                <Col span="12" style="margin-right: 10px;">
+                    <Form-item prop="typeList" label="类型">
+                        <Select v-model="article.type" filterable>
+                            <Option v-for="item in types" :value="item.value" :key="item.value">{{ item.name }}
+                            </Option>
+                        </Select>
+                    </Form-item>
+                </Col>
+            </Row>
+            <Row>
                 <Col span="22">
                     <Form-item prop="title" label="文章标题">
                         <Input v-model="article.title" size="large" placeholder="请输入文章标题"/>
@@ -191,6 +201,11 @@
                 },
                 categories: [],
                 tags: [],
+                types: [
+                    {name: '原创作品', value: 'original'},
+                    {name: '转载', value: 'reshipment'},
+                    {name: '翻译', value: 'translation'}
+                ],
                 articleRule: {
                     title: [
                         {required: true, message: '文章标题不能为空', trigger: 'blur'}

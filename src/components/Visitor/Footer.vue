@@ -38,6 +38,7 @@
                         <li><a href="https://developer.qiniu.com/kodo/sdk/1283/javascript"
                                target="_blank">七牛JavaScript SDK</a></li>
                         <li><a href="http://iconfont.cn/" target="_blank">阿里巴巴Iconfont</a></li>
+                        <li><a href="http://jmesnil.net/stomp-websocket/doc/" target="_blank">Stompjs</a></li>
                     </ul>
                 </Col>
 
@@ -71,6 +72,12 @@
                             <a href="https://common-buy.aliyun.com/?spm=5176.sms-account.1001.1.23001cbeLwmCYY&&commodityCode=newdysmsbag#/buy"
                                target="_blank">
                                 阿里云短信
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://spring.io/guides/gs/messaging-stomp-websocket/"
+                               target="_blank">
+                                Websocket
                             </a>
                         </li>
 

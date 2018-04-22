@@ -2,6 +2,14 @@ import fetch from 'utils/fetch';
 
 const prefix = '/blog';
 
+export function sendPhoneCode(params) {
+    return fetch({
+        url: prefix + '/user/phone/code',
+        method: 'post',
+        params: params
+    });
+}
+
 export function register(user) {
     return fetch({
         url: prefix + '/user/register',
