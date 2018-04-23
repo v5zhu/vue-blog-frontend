@@ -130,7 +130,7 @@
         components: {},
         methods: {
             sendVerifyCode() {
-                if (!this.user.loginName) {
+                if (!this.user.phone) {
                     this.$Message.error({
                         content: '请输入手机号',
                         duration: 5,
@@ -139,7 +139,7 @@
                     return;
                 }
                 var that = this;
-                store.dispatch('SendPhoneCode', {phoneNumber: this.user.loginName}).then(res => { // 拉取user_info
+                store.dispatch('SendPhoneCode', {phoneNumber: this.user.phone}).then(res => { // 拉取user_info
                     var resp = res.data;
                     var timer = setInterval(function () {
                         var finished = that.setTime();

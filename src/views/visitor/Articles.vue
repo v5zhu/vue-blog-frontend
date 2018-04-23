@@ -35,7 +35,7 @@
                                 <Col span="8">
                                     <div v-if="article.tagList!=null && article.tagList.length!=0">
                                         <a class="article-tags"
-                                           @click="filterTags(tag)"
+                                           @click="filterTags(tag.name)"
                                            v-for="tag in article.tagList">
                                             {{tag.name}}
                                         </a>

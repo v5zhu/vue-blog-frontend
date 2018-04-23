@@ -106,7 +106,6 @@
 
         <Modal v-model="categoryModel"
                title="添加分类"
-               :loading="true"
                @on-ok="addCategory">
             <Form ref="categoryForm" :model="category" :label-width="60" label-position="right">
                 <Row style="padding-left: 50px;">
@@ -128,7 +127,6 @@
         </Modal>
         <Modal v-model="tagModel"
                title="添加标签"
-               :loading="true"
                @on-ok="addTag">
             <Form ref="tagForm" :model="tag" :label-width="60" label-position="right">
                 <Row style="padding-left: 50px;">
@@ -264,13 +262,17 @@
                             }
                             this.categoryList();
                             this.$Message.success('添加分类成功');
+                            this.categoryModel = false;
                         } else {
                             this.$Message.error('添加分类失败');
                         }
-                    }).catch(() => {
-                        this.$Message.error("添加分类异常");
+                    }).catch(err => {
+                        this.$Message.error({
+                            content:err.data.error,
+                            duration:5,
+                            closeable:true
+                        });
                     })
-                    this.categoryModel = false;
                 }, 1000);
             },
             addTag() {
@@ -291,14 +293,18 @@
                             }
                             this.tagList();
                             this.$Message.success('添加标签成功');
+                            this.tagModel = false;
                         } else {
                             this.$Message.error('添加标签失败');
                         }
-                    }).catch(() => {
-                        this.$Message.error("添加标签异常");
+                    }).catch(err => {
+                        this.$Message.error({
+                            content:err.data.error,
+                            duration:5,
+                            closeable:true
+                        });
                     })
 
-                    this.tagModel = false;
                 }, 1000);
             },
             articlePreview(id) {
