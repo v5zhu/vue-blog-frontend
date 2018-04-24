@@ -178,7 +178,7 @@
                 },
                 category: {
                     id: '',
-                    authorId:'',
+                    authorId: '',
                     name: '',
                     value: '',
                     type: '',
@@ -188,14 +188,14 @@
                 },
                 tag: {
                     id: '',
-                    authorId:'',
+                    authorId: '',
                     name: '',
                     value: '',
                     type: '',
                     description: '',
                     sort: '',
                     parent: '',
-                    articleNumbers:0
+                    articleNumbers: 0
                 },
                 categories: [],
                 tags: [],
@@ -232,7 +232,7 @@
         mounted() {
             var jsonString = Cookies.get('LOGIN-USER');
             if (jsonString) {
-                this.loginUser=JSON.parse(jsonString);
+                this.loginUser = JSON.parse(jsonString);
             }
 
             const vue = this;
@@ -247,7 +247,7 @@
             addCategory() {
                 setTimeout(() => {
                     this.category.type = 'category';
-                    this.category.authorId=this.loginUser.id;
+                    this.category.authorId = this.loginUser.id;
                     store.dispatch('CategoryAdd', this.category).then(res => { // 拉取user_info
                         var resp = res.data;
                         if (resp.success == true) {
@@ -268,9 +268,9 @@
                         }
                     }).catch(err => {
                         this.$Message.error({
-                            content:err.data.error,
-                            duration:5,
-                            closeable:true
+                            content: err.data.error,
+                            duration: 5,
+                            closeable: true
                         });
                     })
                 }, 1000);
@@ -278,7 +278,7 @@
             addTag() {
                 setTimeout(() => {
                     this.tag.type = 'tag';
-                    this.tag.authorId=this.loginUser.id;
+                    this.tag.authorId = this.loginUser.id;
                     store.dispatch('TagAdd', this.tag).then(res => { // 拉取user_info
                         var resp = res.data;
                         if (resp.success == true) {
@@ -299,9 +299,9 @@
                         }
                     }).catch(err => {
                         this.$Message.error({
-                            content:err.data.error,
-                            duration:5,
-                            closeable:true
+                            content: err.data.error,
+                            duration: 5,
+                            closeable: true
                         });
                     })
 
@@ -317,12 +317,16 @@
                 })
             },
             categoryList() {
-                store.dispatch('CategoryList', {token: null}).then(res => { // 拉取user_info
+                store.dispatch('FilterCategoryList', {token: null}).then(res => { // 拉取user_info
                     var cates = res.data.payload;
                     this.categories = cates;
 
-                }).catch(() => {
-                    console.log("请求分类列表失败");
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
                 })
             },
             tagList() {
@@ -330,8 +334,12 @@
                     var tags = res.data.payload;
                     this.tags = tags;
 
-                }).catch(() => {
-                    console.log("请求标签列表失败");
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
                 })
             },
             goBack() {
@@ -343,36 +351,40 @@
                 this.$refs[refName].validate((valid) => {
                     if (valid) {
                         this.article.status = status;
-                        this.article.authorId=this.loginUser.id;
+                        this.article.authorId = this.loginUser.id;
                         var msg = status == 'audit' ? '提交审核' : '保存草稿';
                         if (!this.article.id) {
                             this.article.id = null;
                             store.dispatch('ArticlePublish', {article: this.article}).then(res => { // 拉取user_info
                                 var resp = res.data;
-                                if (resp.success == true) {
-                                    this.$Message.success(msg + '成功!');
-                                    this.$router.push({path: '/admin/mgr/blog/article'});
-                                } else {
-                                    this.$Message.error(msg + '失败!');
-                                }
-                            }).catch(() => {
-                                this.$Message.error('提交失败!');
+                                this.$Message.success(msg + '成功!');
+                                this.$router.push({path: '/admin/mgr/blog/article'});
+                            }).catch(err => {
+                                this.$Message.error({
+                                    content: err.data.error,
+                                    duration: 5,
+                                    closable: true
+                                });
                             })
                         } else {
                             store.dispatch('ArticleEdit', {article: this.article}).then(res => { // 拉取user_info
                                 var resp = res.data;
-                                if (resp.success == true) {
-                                    this.$Message.success(msg + '成功!');
-                                    this.$router.push({path: '/admin/mgr/blog/article'});
-                                } else {
-                                    this.$Message.error(msg + '失败!');
-                                }
-                            }).catch(() => {
-                                this.$Message.error('提交失败!');
+                                this.$Message.success(msg + '成功!');
+                                this.$router.push({path: '/admin/mgr/blog/article'});
+                            }).catch(err => {
+                                this.$Message.error({
+                                    content: err.data.error,
+                                    duration: 5,
+                                    closable: true
+                                });
                             })
                         }
                     } else {
-                        this.$Message.error('提交失败!');
+                        this.$Message.error({
+                            content: '验证失败',
+                            duration: 5,
+                            closable: true
+                        });
                     }
                 })
             },

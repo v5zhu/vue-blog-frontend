@@ -2,7 +2,7 @@ import fetch from 'utils/fetch';
 
 const prefix = '/blog';
 
-export function categoryList(token) {
+export function filterCategoryList(token) {
     return fetch({
         url: prefix + '/admin/category/list.token',
         method: 'get',

@@ -437,7 +437,7 @@
                 })
             },
             categoryList() {
-                store.dispatch('CategoryList', {token: this.loginUser.token}).then(res => { // 拉取user_info
+                store.dispatch('FilterCategoryList', {token: this.loginUser.token}).then(res => { // 拉取user_info
                     var cates = res.data.payload;
                     this.categories = cates;
 

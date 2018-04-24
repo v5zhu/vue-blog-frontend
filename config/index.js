@@ -32,8 +32,8 @@ module.exports = {
                 }
             },
             '/thirdapi': {
-                target: 'http://blog.mofaxue.com',
-                // target: 'http://localhost:8800',
+                // target: 'http://blog.mofaxue.com',
+                target: 'http://localhost:8800',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/': ''
