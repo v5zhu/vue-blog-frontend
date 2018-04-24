@@ -1,4 +1,4 @@
-import {filterCategoryList, categoryAdd} from 'api/blog/category';
+import {filterCategoryList, filterCategoryTree, categoryAdd} from 'api/blog/category';
 
 const category = {
     state: {
@@ -36,10 +36,20 @@ const category = {
     },
 
     actions: {
-        // 获取文章列表
+        // 获取分类列表
         FilterCategoryList({commit, state}) {
             return new Promise((resolve, reject) => {
                 filterCategoryList(state.token).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        // 获取分类树
+        FilterCategoryTree({commit, state}) {
+            return new Promise((resolve, reject) => {
+                filterCategoryTree().then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

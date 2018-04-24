@@ -20,11 +20,9 @@
             </Row>
             <Row>
                 <Col span="12" style="margin-right: 10px;">
-                    <Form-item prop="categories" label="分类">
-                        <Select v-model="article.categories" multiple filterable>
-                            <Option v-for="item in categories" :value="item.id" :key="item.id">{{ item.name }}
-                            </Option>
-                        </Select>
+                    <Form-item prop="category" label="分类">
+                        <Cascader v-model="article.category" :data="categoryTree" change-on-select
+                                  @on-change="changeParent"></Cascader>
                     </Form-item>
                 </Col>
                 <Col span="2">
@@ -174,7 +172,8 @@
                     allowComment: true,
                     allowPing: true,
                     allowFeed: true,
-                    content: ''
+                    content: '',
+                    category: null
                 },
                 category: {
                     id: '',
@@ -184,7 +183,8 @@
                     type: '',
                     description: '',
                     sort: '',
-                    parent: ''
+                    parent: '',
+                    upper: []
                 },
                 tag: {
                     id: '',
@@ -199,6 +199,7 @@
                 },
                 categories: [],
                 tags: [],
+                categoryTree: [],
                 types: [
                     {name: '原创作品', value: 'original'},
                     {name: '转载', value: 'reshipment'},
@@ -348,6 +349,11 @@
                 });
             },
             handleSubmit(status, refName) {
+                var category = this.article.category;
+                if (category && category.length > 0) {
+                    this.article.categories.push(category[category.length - 1]);
+                }
+
                 this.$refs[refName].validate((valid) => {
                     if (valid) {
                         this.article.status = status;
@@ -399,6 +405,26 @@
             handleRemove(index) {
                 this.formDynamic.items.splice(index, 1);
             },
+            filterCategoryTree() {
+                store.dispatch('FilterCategoryTree').then(res => {
+                    var data = res.data;
+                    this.categoryTree = data.payload;
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    });
+                });
+            },
+            changeParent(value) {
+                if (value && value.length > 0) {
+
+                } else {
+                    this.$Message.warning('确定不选择上级分类？');
+                }
+            }
         }
 
     }

@@ -10,6 +10,13 @@ export function filterCategoryList(token) {
     });
 }
 
+export function filterCategoryTree() {
+    return fetch({
+        url: prefix + '/admin/category/tree.token',
+        method: 'get',
+    });
+}
+
 export function categoryAdd(category) {
     return fetch({
         url: prefix + '/admin/category/save',
