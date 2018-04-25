@@ -19,11 +19,8 @@
                             </Col>
                             <Col span="6" style="margin-right: 20px">
                                 <Form-item prop="categories" label="分类">
-                                    <Select v-model="pageQuery.filterMap.category" filterable clearable>
-                                        <Option v-for="item in categories" :value="item.id" :key="item.id">{{ item.name
-                                            }}
-                                        </Option>
-                                    </Select>
+                                    <Cascader v-model="selectedCategory" :data="categoryTree"
+                                              change-on-select></Cascader>
                                 </Form-item>
                             </Col>
                             <Col span="6">
@@ -104,6 +101,7 @@
                     prePage: undefined,
                     nextPage: undefined
                 },
+                selectedCategory:[],
                 pageQuery: {
                     pageNum: 1,
                     pageSize: 10,
@@ -376,9 +374,6 @@
                     window.open('/admin/mgr/blog/article/edit/' + id)
                 }
             },
-            qiniu_upload() {
-                uploader.start();
-            },
             exportData(type) {
                 if (type === 1) {
                     this.$refs.table.exportCsv({
@@ -419,6 +414,11 @@
                 this.loadArticles();
             },
             loadArticles() {
+                var category = this.selectedCategory;
+                if (category && category.length > 0) {
+                    this.pageQuery.filterMap.category = category[category.length - 1];
+                }
+
                 store.dispatch('ArticleList', this.pageQuery).then(res => { // 拉取user_info
                     this.article_list = res.data.payload.list;
                     this.pageInfo = res.data.payload;
@@ -431,14 +431,18 @@
                     });
                 })
             },
-            categoryList() {
-                store.dispatch('FilterCategoryList', {token: this.loginUser.token}).then(res => { // 拉取user_info
-                    var cates = res.data.payload;
-                    this.categories = cates;
-
-                }).catch(res => {
-                    console.log(res);
-                })
+            filterCategoryTree() {
+                store.dispatch('FilterCategoryTree').then(res => {
+                    var data = res.data;
+                    this.categoryTree = data.payload;
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    });
+                });
             },
             tagList() {
                 store.dispatch('FilterTagList', {}).then(res => { // 拉取user_info
@@ -469,7 +473,7 @@
             if (jsonString) {
                 this.loginUser = JSON.parse(jsonString);
             }
-            this.categoryList();
+            this.filterCategoryTree();
             this.tagList();
 
             this.loadArticles();

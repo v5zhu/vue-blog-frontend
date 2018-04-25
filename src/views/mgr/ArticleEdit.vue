@@ -20,8 +20,8 @@
             </Row>
             <Row>
                 <Col span="12" style="margin-right: 10px;">
-                    <Form-item prop="category" label="分类">
-                        <Cascader v-model="article.category" :data="categoryTree" change-on-select
+                    <Form-item prop="categoryIds" label="分类">
+                        <Cascader v-model="article.categoryTree" :data="categoryTree" change-on-select
                                   @on-change="changeParent"></Cascader>
                     </Form-item>
                 </Col>
@@ -87,13 +87,11 @@
                     <Form-item>
                         <Button type="ghost" @click="goBack()">《 返回</Button>
                         <Button type="default" @click="clearAll('articleForm')">全部清空</Button>
-                        <Button type="warning" v-if="article.status!='audit'"
-                                @click="handleSubmit('draft','articleForm')"
+                        <Button type="warning" @click="handleSubmit('draft','articleForm')"
                                 style="margin-left: 15px">
                             保存为草稿
                         </Button>
-                        <Button type="primary" v-if="article.status!='audit'"
-                                @click="handleSubmit('audit','articleForm')"
+                        <Button type="primary" @click="handleSubmit('audit','articleForm')"
                                 style="margin-left: 15px">
                             提交审核
                         </Button>
@@ -183,14 +181,14 @@
                     status: '',
                     authorId: '',
                     tags: [],
-                    categories: [],
+                    categoryId: null,
                     hits: '',
                     comments: '',
                     allowComment: true,
                     allowPing: true,
                     allowFeed: true,
                     content: '',
-                    category: null
+                    categoryTree: []
                 },
                 category: {
                     id: '',
@@ -214,7 +212,6 @@
                     parent: '',
                     articleNumbers: 0
                 },
-                categories: [],
                 tags: [],
                 categoryTree: [],
                 types: [
@@ -226,9 +223,8 @@
                     title: [
                         {required: true, message: '文章标题不能为空', trigger: 'blur'}
                     ],
-                    categories: [
-                        {required: true, type: 'array', min: 1, message: '至少选择一个分类', trigger: 'change'},
-                        {type: 'array', max: 3, message: '最多选择三个分类', trigger: 'change'}
+                    categoryTree: [
+                        {required: true, type: 'array', min: 1, message: '至少选择一个分类', trigger: 'change'}
                     ],
                     tags: [
                         {required: true, type: 'array', min: 1, message: '至少选择一个标签', trigger: 'change'},
@@ -342,9 +338,9 @@
                 });
             },
             handleSubmit(status, refName) {
-                var category = this.article.category;
-                if (category && category.length > 0) {
-                    this.article.categories.push(category[category.length - 1]);
+                var categoryIds = this.article.categoryTree;
+                if (categoryIds && categoryIds.length > 0) {
+                    this.article.categoryId = categoryIds[categoryIds.length - 1];
                 }
 
                 this.$refs[refName].validate((valid) => {
