@@ -103,9 +103,16 @@
         </Form>
 
         <Modal v-model="categoryModel"
-               title="添加分类"
-               @on-ok="addCategory">
+               title="添加分类">
             <Form ref="categoryForm" :model="category" :label-width="60" label-position="right">
+                <Row style="padding-left: 50px;">
+                    <Col span="16">
+                        <Form-item prop="name" label="上级分类">
+                            <Cascader v-model="category.upper" :data="categoryTree" change-on-select
+                                      @on-change="changeParent"></Cascader>
+                        </Form-item>
+                    </Col>
+                </Row>
                 <Row style="padding-left: 50px;">
                     <Col span="16">
                         <Form-item prop="name" label="名称">
@@ -122,6 +129,16 @@
                     </Col>
                 </Row>
             </Form>
+            <div slot="footer" style="text-align: center">
+                <Row>
+                    <Col>
+                        <div style="text-align: right;">
+                            <Button @click="addCategory" type="primary" size="default" :loading="false">保存
+                            </Button>
+                        </div>
+                    </Col>
+                </Row>
+            </div>
         </Modal>
         <Modal v-model="tagModel"
                title="添加标签"
@@ -183,7 +200,7 @@
                     type: '',
                     description: '',
                     sort: '',
-                    parent: '',
+                    parentId: '',
                     upper: []
                 },
                 tag: {
@@ -241,7 +258,7 @@
             if (id) {
                 this.articlePreview(id);
             }
-            this.categoryList();
+            this.filterCategoryTree();
             this.tagList();
         },
         methods: {
@@ -249,24 +266,13 @@
                 setTimeout(() => {
                     this.category.type = 'category';
                     this.category.authorId = this.loginUser.id;
+                    var upper = this.category.upper;
+                    if (upper && upper.length > 0) {
+                        this.category.parentId = upper[upper.length - 1];
+                    }
                     store.dispatch('CategoryAdd', this.category).then(res => { // 拉取user_info
-                        var resp = res.data;
-                        if (resp.success == true) {
-                            this.category = {
-                                id: '',
-                                name: '',
-                                value: '',
-                                type: '',
-                                description: '',
-                                sort: '',
-                                parent: ''
-                            }
-                            this.categoryList();
-                            this.$Message.success('添加分类成功');
-                            this.categoryModel = false;
-                        } else {
-                            this.$Message.error('添加分类失败');
-                        }
+                        this.filterCategoryTree();
+                        this.$Message.success('添加分类成功');
                     }).catch(err => {
                         this.$Message.error({
                             content: err.data.error,
@@ -315,19 +321,6 @@
 
                 }).catch(() => {
                     console.log("请求文章详情失败");
-                })
-            },
-            categoryList() {
-                store.dispatch('FilterCategoryList', {token: null}).then(res => { // 拉取user_info
-                    var cates = res.data.payload;
-                    this.categories = cates;
-
-                }).catch(err => {
-                    this.$Message.error({
-                        content: err.data.error,
-                        duration: 5,
-                        closable: true
-                    })
                 })
             },
             tagList() {

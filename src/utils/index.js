@@ -255,3 +255,32 @@ export function debounce(func, wait, immediate) {
     };
 }
 
+export function formatCategories(list) {
+    if (list != null && list.length > 0) {
+        //首先找到一级分类
+        var level1 = null;
+        var text = '';
+        list.forEach(function (c) {
+            if (c.parent == null) {
+                level1 = c;
+                text = c.name;
+            }
+        })
+        text = setOtherCategory(text, level1, list);
+
+        return text;
+
+    }
+    return "未选择分类";
+}
+
+export function setOtherCategory(temp, l1, list) {
+    list.forEach(function (c) {
+        if (l1.id == c.parentId) {
+            temp += "》" + c.name;
+            return setOtherCategory(temp, c, list);
+        }
+    })
+    return temp;
+}
+

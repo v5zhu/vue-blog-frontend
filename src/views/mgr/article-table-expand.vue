@@ -30,8 +30,8 @@
                 【分类】
             </Col>
             <Col span="20">
-                <span v-for="cate in row.categoryList" style="margin-right: 5px;padding:2px;background-color: #f9e8e8">
-                    {{cate.name}}
+                <span style="margin-right: 5px;padding:2px;background-color: #f9e8e8">
+                    {{row.categoryList|formatCategory}}
                 </span>
             </Col>
         </Row>
@@ -40,7 +40,8 @@
                 【标签】
             </Col>
             <Col span="20">
-                <span v-for="tag in row.tagList" style="margin-right: 5px;padding:2px;background-color: rgba(194,180,180,0.41)">
+                <span v-for="tag in row.tagList"
+                      style="margin-right: 5px;padding:2px;background-color: rgba(194,180,180,0.41)">
                     {{tag.name}}
                 </span>
             </Col>
@@ -70,10 +71,14 @@
     </div>
 </template>
 <script>
+    import {formatCategories} from 'utils/index';
+
     export default {
         props: {
             row: Object
         },
+        computed: {},
+        methods: {},
         filters: {
             formatType(type) {
                 if (type == 'original') {
@@ -85,6 +90,9 @@
                 } else {
                     return '其他';
                 }
+            },
+            formatCategory(list) {
+                return formatCategories(list);
             }
         }
     };
