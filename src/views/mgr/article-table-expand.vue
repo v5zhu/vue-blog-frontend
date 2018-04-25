@@ -7,7 +7,7 @@
 </style>
 <template>
     <div>
-        <Row>
+        <Row style="margin-bottom: 5px;">
             <Col span="2" style="text-align: right">
                 【文章标题】
             </Col>
@@ -16,7 +16,7 @@
             </Col>
         </Row>
 
-        <Row>
+        <Row style="margin-bottom: 5px;">
             <Col span="2" style="text-align: right">
                 【类型】
             </Col>
@@ -25,17 +25,19 @@
             </Col>
         </Row>
 
-        <Row>
+        <Row style="margin-bottom: 5px;">
             <Col span="2" style="text-align: right">
                 【分类】
             </Col>
             <Col span="20">
-                <span style="margin-right: 5px;padding:2px;background-color: #f9e8e8">
-                    {{row.categoryList|formatCategory}}
+                <span v-for="(cate,index) in row.categoryList"
+                      style="margin-right: 3px;padding:2px;">
+                    {{cate.name}}
+                    <span v-if="index!=row.categoryList.length-1">》</span>
                 </span>
             </Col>
         </Row>
-        <Row>
+        <Row style="margin-bottom: 5px;">
             <Col span="2" style="text-align: right">
                 【标签】
             </Col>
@@ -47,7 +49,7 @@
             </Col>
         </Row>
 
-        <Row>
+        <Row style="margin-bottom: 5px;">
             <Col>
                 <Steps :current="0" v-if="row.status==='draft'">
                     <Step title="草稿状态" content="待提交审核"></Step>
