@@ -33,7 +33,7 @@
                 <span v-for="(cate,index) in row.categoryList"
                       style="margin-right: 3px;padding:2px;">
                     {{cate.name}}
-                    <span v-if="index!=row.categoryList.length-1">》</span>
+                    <span v-if="index!=row.categoryList.length-1">></span>
                 </span>
             </Col>
         </Row>

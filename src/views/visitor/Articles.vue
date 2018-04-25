@@ -19,13 +19,14 @@
             <Col span="14">
                 <Row style="width:56.3%;position: fixed;z-index: 1001;margin-left: -8px;">
                     <Col>
-                        <Button type="error" long v-if="pushMessageShow" @click="clickForUpdate">{{pushMessage}}</Button>
+                        <Button type="error" long v-if="pushMessageShow" @click="clickForUpdate">{{pushMessage}}
+                        </Button>
                     </Col>
                 </Row>
                 <Row style="margin-top: 50px;">
                     <Col>
                         <div class="state-overview" v-for="article in pageInfo.list">
-                            <Row style="padding-bottom: 8px;">
+                            <Row style="padding-bottom: 5px;">
                                 <Col span="15">
                                     <a class="article-title"
                                        style='font-weight: 900;color: #333;font-size: 16px;'
@@ -42,7 +43,15 @@
                                     </div>
                                 </Col>
                             </Row>
-
+                            <Row style="padding-bottom: 5px;">
+                                <Col>
+                                    <a href="#" style="margin-left: 5px;"
+                                       v-for="(cate,index) in article.categoryList">
+                                        {{cate.name}}
+                                        <span v-if="index!=article.categoryList.length-1">></span>
+                                    </a>
+                                </Col>
+                            </Row>
                             <Row style="padding-bottom: 8px;">
                                 <Col>
                                     <div style="max-width: 600px;height:35px;color: rgba(76,76,76,0.62);text-align: left;padding-left: 10px;word-wrap:break-word;overflow:hidden;text-overflow: ellipsis;">
@@ -59,6 +68,7 @@
                                         <a href="#" style="margin-left: -4px;">{{article.author.nickname}}</a>
                                     </div>
                                 </Col>
+
                                 <Col span="8">
                                     <ul style="display: flex;">
                                         <li>
@@ -233,7 +243,7 @@
                 );
             },
             subscribe() {
-                var that=this;
+                var that = this;
                 this.stompClient.subscribe('/topic/subscribeTest', function (response) {
                     var returnData = JSON.parse(response.body);
                     that.pushMessage = returnData.responseText;

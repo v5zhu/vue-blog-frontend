@@ -263,7 +263,7 @@ export function formatCategories(list) {
             if (index == 0) {
                 text = c.name;
             } else {
-                text += ' / ' + c.name;
+                text += ' > ' + c.name;
             }
         })
         return text;
