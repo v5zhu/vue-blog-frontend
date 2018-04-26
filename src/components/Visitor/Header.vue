@@ -55,15 +55,7 @@
                     </li>
 
 
-                    <li v-if="loginUser.token!=null" class="nav-item d-md-down-none"
-                        style="position: absolute;right:0;top:26px;">
-                        <a class="nav-link navbar-toggler aside-menu-toggler" style="color: #0d5477"
-                           @click="asideToggle">&#9776;
-                        </a>
-                    </li>
-
-
-                    <li v-if="loginUser.token!=null" class="nav-item d-md-down-none"
+                    <li v-if="loginUser!=null" class="nav-item d-md-down-none"
                         style="position: absolute;right:140px;top:12px;">
                         <a class="nav-link">
                             <Icon type="android-notifications" size="20"></Icon>

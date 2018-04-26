@@ -245,34 +245,27 @@
             mavonEditor
         },
         mounted() {
-            var jsonString = Cookies.get('LOGIN-USER');
-            if (jsonString) {
-                this.loginUser = JSON.parse(jsonString);
-            }
 
             const vue = this;
             var id = this.$route.params.id;
             if (id) {
                 this.articlePreview(id);
             }
-            var user = LocalStorage.getItem("LOGIN-USER");
-            if(user){
-                this.filterCategoryTree(user.id);
-                this.tagList(user.id);
-            }
+            this.loginUser = LocalStorage.getItem("LOGIN-USER");
+            this.filterCategoryTree(this.loginUser.id);
+            this.tagList(this.loginUser.id);
 
         },
         methods: {
             addCategory() {
                 setTimeout(() => {
-                    this.category.type = 'category';
                     this.category.authorId = this.loginUser.id;
                     var upper = this.category.upper;
                     if (upper && upper.length > 0) {
                         this.category.parentId = upper[upper.length - 1];
                     }
                     store.dispatch('CategoryAdd', this.category).then(res => { // 拉取user_info
-                        this.filterCategoryTree();
+                        this.filterCategoryTree(this.loginUser.id);
                         this.$Message.success('添加分类成功');
                     }).catch(err => {
                         this.$Message.error({
@@ -400,7 +393,7 @@
                 this.formDynamic.items.splice(index, 1);
             },
             filterCategoryTree(userId) {
-                store.dispatch('FilterCategoryTree',{userId:userId}).then(res => {
+                store.dispatch('FilterCategoryTree', {userId: userId}).then(res => {
                     var data = res.data;
                     this.categoryTree = data.payload;
                 }).catch(err => {

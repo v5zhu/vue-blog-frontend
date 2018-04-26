@@ -9,6 +9,7 @@ import {
     modifyPassword,
     modifyUser,
     register,
+    checkPhone,
     sendPhoneCode,
     setUserRole
 } from 'api/blog/login';
@@ -85,6 +86,15 @@ const user = {
                 login(data).then(response => {
                     commit("SET_LOGIN_USER", response.data.payload);
                     LocalStorage.setItem("LOGIN-USER", response.data.payload);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        CheckPhone({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                checkPhone(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

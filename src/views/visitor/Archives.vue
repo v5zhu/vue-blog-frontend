@@ -5,34 +5,35 @@
 
             <Col>
 
-            <div>
-                <ul>
-                    <li v-for="archive in archives">
-                        <div class="staff_list">
-                            <div class="staff_avatar">
-                                <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
-                                        size="large"/>
-                            </div>
-                            <div class="staff_progress">
-                                <div><span
-                                        class="staff_name"> {{archive.date}} </span><span> - (共{{archive.count}}篇)</span>
-                                    <ul>
-                                        <li v-for="article in archive.articles">
-                                            <p>【{{article.gmtCreate | formatDate}}】<a @click="articleView(article.path)">{{article.title}}</a>
-                                            </p>
-                                        </li>
-                                    </ul>
+                <div>
+                    <ul>
+                        <li v-for="archive in archives">
+                            <div class="staff_list">
+                                <div class="staff_avatar">
+                                    <Avatar src="http://www.jq22.com/demo/AdminEx-141217204554/images/photos/user1.png"
+                                            size="large"/>
                                 </div>
+                                <div class="staff_progress">
+                                    <div><span
+                                            class="staff_name"> {{archive.date}} </span><span> - (共{{archive.count}}篇)</span>
+                                        <ul>
+                                            <li v-for="article in archive.articles">
+                                                <p>【{{article.gmtCreate | formatDate}}】<a
+                                                        @click="articleView(article.path)">{{article.title}}</a>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
 
+                                </div>
                             </div>
-                        </div>
 
-                        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+                            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
 
-                    </li>
+                        </li>
 
-                </ul>
-            </div>
+                    </ul>
+                </div>
 
             </Col>
 
@@ -57,12 +58,6 @@
         name: 'dashboard',
         data() {
             return {
-                params: {
-                    year: '',
-                    month: '',
-                    category: '',
-                    tag: ''
-                },
                 archives: [],
                 value1: 0,
                 value2: 0,
@@ -73,12 +68,13 @@
             }
         },
         methods: {
-            getArchives() {
+            getArchives(userId, year, month, category, tag) {
                 store.dispatch('Archives', {
-                    year: this.params.year,
-                    month: this.params.month,
-                    category: this.params.category,
-                    tag: this.params.tag
+                    userId: userId,
+                    year: year,
+                    month: month,
+                    category: category,
+                    tag: tag
                 }).then(res => { // 拉取user_info
                     var archives = res.data.payload;
                     this.archives = archives;
@@ -96,16 +92,13 @@
             }
         },
         mounted() {
+            var userId = this.$route.params.userId;
             var year = this.$route.params.year;
             var month = this.$route.params.month;
             var category = this.$route.params.category;
             var tag = this.$route.params.tag;
 
-            this.params.year = year;
-            this.params.month = month;
-            this.params.category = category;
-            this.params.tag = tag;
-            this.getArchives();
+            this.getArchives(userId, year, month, category, tag);
         }
     }
 </script>
@@ -202,7 +195,7 @@
     }
 
     li {
-        list-style-type:none;
+        list-style-type: none;
         margin-bottom: 11px;
         margin-left: 10px;
         margin-right: 10px

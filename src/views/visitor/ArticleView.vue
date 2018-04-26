@@ -156,11 +156,6 @@
                                         </Button>
                                     </li>
                                 </ul>
-                                <ul>
-                                    <li style="clear: both;position:relative;margin-left:30%;top:30px;color:#808080;">
-                                        <p style="margin-top: 50px;">宇轩哥哥、熙羽妹妹等已赞赏</p>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                         <div style="background: url('https://static.segmentfault.com/v-5a9fa408/global/img/ad_bg.svg');max-height:90px; height:90px;margin-top: 50px;">

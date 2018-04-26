@@ -1,7 +1,7 @@
 <template>
     <div class="app" @mousemove="toggleHeader">
         <AppHeader @showLoginModalFunction="showLoginModalFunction" @showRegModalFunction="showRegModalFunction"
-                   :loginUser="loginUser" :scrollShow="scrollShow" :moveShow="moveShow"/>
+                   :scrollShow="scrollShow" :moveShow="moveShow"/>
         <AppHeaderFloat @showLoginModalFunction="showLoginModalFunction" @showRegModalFunction="showRegModalFunction"
                         :scrollShow="scrollShow" :moveShow="moveShow" v-show="headerFloatShow"
                         @closeHeaderFloat="closeHeaderFloat"/>
@@ -63,6 +63,7 @@
 
 
     import Cookies from 'js-cookie';
+    import LocalStorage from "utils/LocalStorage";
 
     export default {
         name: 'visitor-full',
@@ -87,9 +88,9 @@
             LoginModalBody
         },
         created() {
-            var user = Cookies.get('LOGIN-USER');
+            var user = LocalStorage.getItem('LOGIN-USER');
             if (user) {
-                this.loginUser = JSON.parse(user);
+                this.loginUser = user;
                 this.headerFloatShow = false;
             }
         },

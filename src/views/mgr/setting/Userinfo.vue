@@ -3,48 +3,48 @@
         <Form ref="userModifyForm" :model="loginUser" :label-width="80">
             <Row>
                 <Col span="6" class="link-piece">
-                <div class="echarts">
-                    <ul>
-                        <li style="margin: 10px;">
-                            <Form-item prop="loginName" label="登录账号">
-                                <Input v-model="loginUser.loginName" type="text" disabled>
-                                </Input>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="email" label="邮箱">
-                                <Input v-model="loginUser.email" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="homeUrl" label="网址">
-                                <Input v-model="loginUser.homeUrl" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="nickname" label="昵称">
-                                <Input v-model="loginUser.nickname" type="text">
-                                </Input>
-                            </Form-item>
-                        </li>
-                        <li style="margin: 10px;">
-                            <Form-item prop="gmtCreate" label="注册时间">
-                                <Icon type="ios-clock-outline"></Icon>
-                                {{loginUser.gmtCreate|formatDate}}</p>
-                            </Form-item>
-                        </li>
-                        <li>
-                            <div style="text-align: right;margin: 10px;">
-                                <Button type="ghost" @click="modifyUser">
-                                    <Icon type="ios-checkmark" size="14"></Icon>
-                                    保存
-                                </Button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                    <div class="echarts">
+                        <ul>
+                            <li style="margin: 10px;">
+                                <Form-item prop="loginName" label="登录账号">
+                                    <Input v-model="loginUser.loginName" type="text" disabled>
+                                    </Input>
+                                </Form-item>
+                            </li>
+                            <li style="margin: 10px;">
+                                <Form-item prop="email" label="邮箱">
+                                    <Input v-model="loginUser.email" type="text">
+                                    </Input>
+                                </Form-item>
+                            </li>
+                            <li style="margin: 10px;">
+                                <Form-item prop="homeUrl" label="网址">
+                                    <Input v-model="loginUser.homeUrl" type="text">
+                                    </Input>
+                                </Form-item>
+                            </li>
+                            <li style="margin: 10px;">
+                                <Form-item prop="nickname" label="昵称">
+                                    <Input v-model="loginUser.nickname" type="text">
+                                    </Input>
+                                </Form-item>
+                            </li>
+                            <li style="margin: 10px;">
+                                <Form-item prop="gmtCreate" label="注册时间">
+                                    <Icon type="ios-clock-outline"></Icon>
+                                    {{loginUser.gmtCreate|formatDate}}</p>
+                                </Form-item>
+                            </li>
+                            <li>
+                                <div style="text-align: right;margin: 10px;">
+                                    <Button type="ghost" @click="modifyUser">
+                                        <Icon type="ios-checkmark" size="14"></Icon>
+                                        保存
+                                    </Button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </Col>
             </Row>
         </Form>
@@ -55,6 +55,7 @@
     import store from 'store/';
     import Cookies from 'js-cookie';
     import {formatTime} from 'utils/index';
+    import LocalStorage from "utils/LocalStorage";
 
     export default {
         components: {},
@@ -70,10 +71,7 @@
             }
         },
         mounted() {
-            var jsonString = Cookies.get('LOGIN-USER');
-            if (jsonString) {
-                this.loginUser = JSON.parse(jsonString);
-            }
+            this.loginUser = LocalStorage.getItem('LOGIN-USER');
         },
         methods: {
             modifyUser() {
@@ -106,9 +104,10 @@
 
 
 <style type="text/css" scoped>
-    li{
+    li {
         list-style-type: none;
     }
+
     .link-piece {
         margin: 10px 25px;
     }

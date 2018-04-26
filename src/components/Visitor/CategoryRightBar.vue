@@ -9,10 +9,11 @@
                 <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
 
                 <div style="padding: 5px;height:auto;">
-                    <div v-for="(item,index) in categories" style="margin:2px;float: left;">
-                        <Button type="ghost" style="min-width: 120px;text-align: left;">
-                            {{item.name}}({{item.articleNumbers}})
-                        </Button>
+                    <div v-for="(item,index) in categories" style="margin:2px;">
+                        <p>
+                            <a :href="'/archives/filter/category/'+item.name+'?userId='+articleAuthor.id"
+                               target="_blank">{{item.name}}({{item.articleNumbers}})</a>
+                        </p>
                     </div>
                 </div>
             </Col>

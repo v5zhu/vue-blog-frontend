@@ -12,10 +12,11 @@
                             <TabPane label="手机验证》" icon="iphone">
                                 <FormItem
                                         label="手机号"
-                                        prop="phone" style="margin-top: 30px;">
+                                        prop="phone" style="margin-top: 30px;" :error="phoneErrorMessage">
                                     <Row>
                                         <Col span="15">
-                                            <Input type="text" v-model="user.phone" placeholder="请输入手机号"></Input>
+                                            <Input type="text" v-model="user.phone" placeholder="请输入手机号"
+                                                   @on-blur="checkPhone"></Input>
                                         </Col>
                                         <Col span="4" offset="1">
                                             <Button type="ghost" :disabled="sendBtnDisabled" @click="sendVerifyCode">
@@ -40,7 +41,7 @@
                                         prop="password" style="margin-top: 30px;">
                                     <Row>
                                         <Col span="15">
-                                            <Input type="text" v-model="user.password" placeholder="请输入密码"></Input>
+                                            <Input type="password" v-model="user.password" placeholder="请输入密码"></Input>
                                         </Col>
                                     </Row>
                                 </FormItem>
@@ -49,7 +50,7 @@
                                         prop="confirmPassword">
                                     <Row>
                                         <Col span="15">
-                                            <Input type="text" v-model="user.confirmPassword"
+                                            <Input type="password" v-model="user.confirmPassword"
                                                    placeholder="请再次输入密码"></Input>
                                         </Col>
                                     </Row>
@@ -84,7 +85,6 @@
 </template>
 <script>
     import store from 'store/';
-    import Cookies from 'js-cookie';
 
     export default {
         name: 'header',
@@ -124,11 +124,33 @@
                 },
                 sendInterval: 60,
                 sendBtnContent: '发送验证码',
-                sendBtnDisabled: false
+                sendBtnDisabled: true,
+                phoneErrorMessage: ''
             }
         },
         components: {},
         methods: {
+            checkPhone() {
+                var pass = false;
+                var self = this;
+                this.$refs.regForm.validateField('phone', function (errorMsg) {
+                    if (!errorMsg) {
+                        pass = true;
+                    } else {
+                        self.phoneErrorMessage = errorMsg;
+                        self.sendBtnDisabled=true;
+                    }
+                });
+                if (pass) {
+                    //请求后台校验手机号有效性
+                    store.dispatch('CheckPhone', {phone: this.user.phone}).then(res => { // 拉取user_info
+                        this.$Message.success('手机号校验通过!');
+                        this.sendBtnDisabled = false;
+                    }).catch(err => {
+                        this.phoneErrorMessage = err.data.error
+                    })
+                }
+            },
             sendVerifyCode() {
                 if (!this.user.phone) {
                     this.$Message.error({
