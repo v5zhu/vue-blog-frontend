@@ -103,21 +103,23 @@
 
     import navbar from './Navbar'
     import store from 'store/';
+    import LocalStorage from "utils/LocalStorage";
 
     export default {
-        props: ['loginUser'],
         name: 'header',
         components: {
             navbar,
         },
         data() {
             return {
+                loginUser:null,
                 headers: [],
                 isActive: -1,
             }
         },
         created() {
             this.listRoute('backheader');
+            this.loginUser=LocalStorage.getItem("LOGIN-USER");
         },
         methods: {
             listRoute(type) {

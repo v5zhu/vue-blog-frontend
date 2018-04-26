@@ -6,7 +6,7 @@
                     <div style="">
                         <ul>
                             <li class="li-nav-tag" style="background: #0d5477;color: white">
-                                <div style="font-size:14px;vertical-align: middle"><p>今日推荐</p></div>
+                                <div style="font-size:14px;vertical-align: middle"><p>热门推荐</p></div>
                             </li>
                             <li v-for="tag in tags" class="li-nav-tag">
                                 <p>

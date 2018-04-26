@@ -35,7 +35,7 @@
                         </Input>
                     </li>
 
-                    <li v-if="loginUser.token==undefined" @click="showLoginModalFunction"
+                    <li v-if="loginUser==null" @click="showLoginModalFunction"
                         class="nav-item header-item reg-login"
                         style="position: absolute;right:140px;width: 70px;">
                         <p>
@@ -45,7 +45,7 @@
                     </li>
 
 
-                    <li v-if="loginUser.token==undefined" @click="showRegModalFunction"
+                    <li v-if="loginUser==null" @click="showRegModalFunction"
                         class="nav-item header-item reg-login"
                         style="position: absolute;right:50px;width: 70px;">
                         <p>
@@ -55,7 +55,7 @@
                     </li>
 
 
-                    <li v-if="loginUser.token!=undefined" class="nav-item d-md-down-none"
+                    <li v-if="loginUser.token!=null" class="nav-item d-md-down-none"
                         style="position: absolute;right:0;top:26px;">
                         <a class="nav-link navbar-toggler aside-menu-toggler" style="color: #0d5477"
                            @click="asideToggle">&#9776;
@@ -63,13 +63,13 @@
                     </li>
 
 
-                    <li v-if="loginUser.token!=undefined" class="nav-item d-md-down-none"
+                    <li v-if="loginUser.token!=null" class="nav-item d-md-down-none"
                         style="position: absolute;right:140px;top:12px;">
                         <a class="nav-link">
                             <Icon type="android-notifications" size="20"></Icon>
                             <span class="badge badge-pill badge-danger">5</span></a>
                     </li>
-                    <Dropdown v-if="loginUser.token!=undefined" class="nav-item"
+                    <Dropdown v-if="loginUser!=null" class="nav-item"
                               style="position: absolute;right:85px;top:12px;">
 
                         <a href="javascript:void(0)" style="position: relative;">
@@ -118,8 +118,6 @@
 
                         </Dropdown-menu>
                     </Dropdown>
-
-
                 </ul>
             </navbar>
         </transition>
@@ -132,12 +130,14 @@
     import LoginModalBody from './LoginModalBody';
     import store from 'store/';
     import Cookies from 'js-cookie';
+    import LocalStorage from "utils/LocalStorage";
 
     export default {
         name: 'header',
-        props: ['scrollShow', 'moveShow', 'loginUser'],
+        props: ['scrollShow', 'moveShow'],
         data() {
             return {
+                loginUser:null,
                 q: '',
                 qfocus: false,
                 headers: [],
@@ -149,6 +149,7 @@
         },
         created() {
             this.listFrontRoute('frontheader');
+            this.loginUser=LocalStorage.getItem("LOGIN-USER");
         },
         methods: {
             changeHeaderStyle(index) {
