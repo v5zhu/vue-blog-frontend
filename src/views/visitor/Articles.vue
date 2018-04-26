@@ -45,7 +45,7 @@
                             </Row>
                             <Row style="padding-bottom: 5px;">
                                 <Col>
-                                    <a href="#" style="margin-left: 5px;"
+                                    <a :href="'/archives/filter/category/'+cate.name" style="margin-left: 5px;" target="_blank"
                                        v-for="(cate,index) in article.categoryList">
                                         {{cate.name}}
                                         <span v-if="index!=article.categoryList.length-1">></span>
