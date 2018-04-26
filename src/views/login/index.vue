@@ -118,8 +118,6 @@
                         this.loading = true;
                         this.$store.dispatch('Login', this.loginForm).then(res => {
                             this.$Message.success('登录成功');
-                            var user = res.data.payload;
-                            Cookies.set('LOGIN-USER', user);
                             this.loading = false;
                             this.$router.push({path: '/admin'});
                         }).catch(err => {

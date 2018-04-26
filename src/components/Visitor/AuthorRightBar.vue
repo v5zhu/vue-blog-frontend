@@ -3,16 +3,20 @@
     <div class="echarts">
         <Row>
             <Col>
-            <div class="clearfix">
-                <h4 style="text-align: center;font-family: serif;">关于作者</h4>
-            </div>
-            <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
-            <div>
-                <ul>
-                    <li style="margin: 10px;">邮箱：{{user.email}}</li>
-                    <li style="margin: 10px;">最后在线：{{user.lastLoginTime | formatDate}}</li>
-                </ul>
-            </div>
+                <div class="clearfix">
+                    <h5 style="text-align: center;">{{articleAuthor.nickname}}</h5>
+                </div>
+                <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
+                <div>
+                    <ul>
+                        <li style="margin: 10px;">邮箱：{{articleAuthor.email}}</li>
+                        <li style="margin: 10px;">主页：{{articleAuthor.homeUrl}}</li>
+                        <li v-if="articleAuthor.loginStatus==0" style="margin: 10px;">离线：{{articleAuthor.lastLoginTime |
+                            formatDate}}
+                        </li>
+                        <li v-else style="margin: 10px;">当前在线</li>
+                    </ul>
+                </div>
             </Col>
         </Row>
     </div>
@@ -20,6 +24,10 @@
 </template>
 
 <style scoped>
+    li {
+        list-style-type: none;
+    }
+
     .echarts {
         margin-top: 45px;
         border-radius: 4px;
@@ -36,12 +44,12 @@
 
 <script>
     import {formatTime} from 'utils/index';
-    import store from 'store/';
+    import {mapGetters} from 'vuex';
 
     export default {
         mounted() {
-            var id = this.$route.params.id;
-            this.getAuthorInfo(1);
+            // var id = this.$route.params.id;
+            // this.getAuthorInfo(1);
         },
         data() {
             return {
@@ -57,18 +65,13 @@
                     roles: []
                 },
             }
-        }
-        ,
-        methods: {
-            getAuthorInfo(authorId) {
-                store.dispatch('AuthorInfo', {authorId: authorId}).then(res => { // 拉取user_info
-                    var user = res.data.payload;
-                    this.user = user;
-                }).catch(() => {
-                    console.log("获取文章作者信息失败");
-                })
-            }
-        }
+        },
+        computed: {
+            ...mapGetters([
+                'articleAuthor'
+            ])
+        },
+        methods: {}
         ,
         filters: {
             formatDate(time) {

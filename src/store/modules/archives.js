@@ -1,12 +1,6 @@
-import {
-    archives
-} from 'api/blog/archives';
+import {archives} from 'api/blog/archives';
 
 const archive = {
-    state: {},
-
-    mutations: {},
-
 
     actions: {
         // 获取文章列表

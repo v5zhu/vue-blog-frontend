@@ -37,9 +37,9 @@ const category = {
 
     actions: {
         // 获取分类列表
-        FilterCategoryList({commit, state}) {
+        FilterCategoryList({commit, state},params) {
             return new Promise((resolve, reject) => {
-                filterCategoryList(state.token).then(response => {
+                filterCategoryList(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -47,9 +47,9 @@ const category = {
             });
         },
         // 获取分类树
-        FilterCategoryTree({commit, state}) {
+        FilterCategoryTree({commit, state},params) {
             return new Promise((resolve, reject) => {
-                filterCategoryTree().then(response => {
+                filterCategoryTree(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

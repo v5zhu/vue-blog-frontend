@@ -8,8 +8,12 @@
                             <li class="li-nav-tag" style="background: #0d5477;color: white">
                                 <div style="font-size:14px;vertical-align: middle"><p>今日推荐</p></div>
                             </li>
-                            <li v-for="tag in tags" class="li-nav-tag" @click="filterTags(tag.name)">
-                                <p>{{tag.name}}({{tag.articleNumbers}})</p>
+                            <li v-for="tag in tags" class="li-nav-tag">
+                                <p>
+                                    <a :href="'/archives/filter/tag/'+tag.name" target="_blank">
+                                        {{tag.name}}({{tag.articleNumbers}})
+                                    </a>
+                                </p>
                             </li>
                         </ul>
                     </div>
@@ -36,7 +40,7 @@
                                 <Col span="8">
                                     <div v-if="article.tagList!=null && article.tagList.length!=0">
                                         <a class="article-tags"
-                                           @click="filterTags(tag.name)"
+                                           :href="'/archives/filter/tag/'+tag.name" target="_blank"
                                            v-for="tag in article.tagList">
                                             {{tag.name}}
                                         </a>
@@ -45,7 +49,8 @@
                             </Row>
                             <Row style="padding-bottom: 5px;">
                                 <Col>
-                                    <a :href="'/archives/filter/category/'+cate.name" style="margin-left: 5px;" target="_blank"
+                                    <a :href="'/archives/filter/category/'+cate.name" style="margin-left: 5px;"
+                                       target="_blank"
                                        v-for="(cate,index) in article.categoryList">
                                         {{cate.name}}
                                         <span v-if="index!=article.categoryList.length-1">></span>
@@ -213,9 +218,6 @@
                 }).catch(() => {
                     console.log("请求标签列表失败");
                 })
-            },
-            filterTags(tag) {
-                window.open('/tag/' + tag, '_blank');
             },
             clickForUpdate() {
                 this.pushMessageShow = false;

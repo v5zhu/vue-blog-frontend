@@ -3,16 +3,16 @@
     <div class="echarts">
         <Row>
             <Col>
-            <div class="clearfix">
-                <h4 style="text-align: center;font-family: serif;">历史归档</h4>
-            </div>
-            <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
-
-            <div v-for="archive in archives">
-                <div style="margin: 5px;">
-                    <a @click="filterArchives(archive.year,archive.month)">{{archive.date}}(共{{archive.count}}篇)</a>
+                <div class="clearfix">
+                    <h5 style="text-align: center;">历史归档</h5>
                 </div>
-            </div>
+                <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
+
+                <div v-for="archive in archives">
+                    <div style="margin: 5px;">
+                        <a :href="'/archives/filter/time/' + archive.year + '/' + archive.month" target="_blank">{{archive.date}}(共{{archive.count}}篇)</a>
+                    </div>
+                </div>
             </Col>
         </Row>
     </div>
@@ -37,29 +37,45 @@
 <script>
     import {formatTime} from 'utils/index';
     import store from 'store/';
+    import {mapGetters} from 'vuex';
 
     export default {
         mounted() {
-            var id = this.$route.params.id;
-            this.getArchives();
+
         },
         data() {
             return {
                 archives: [],
             }
-        }
-        ,
+        },
+        computed: {
+            ...mapGetters([
+                'articleAuthor'
+            ])
+        },
+        watch: {
+            articleAuthor: function () {
+                this.getArchives(this.articleAuthor.id);
+            }
+        },
         methods: {
-            getArchives() {
-                store.dispatch('Archives', {year: null, month: null, category: '', tag: ''}).then(res => { // 拉取user_info
+            getArchives(userId, year, month, category, tag) {
+                store.dispatch('Archives', {
+                    userId: userId,
+                    year: year,
+                    month: month,
+                    category: category,
+                    tag: tag
+                }).then(res => { // 拉取user_info
                     var archives = res.data.payload;
                     this.archives = archives;
-                }).catch(() => {
-                    console.log("获取文章历史归档信息失败");
+                }).catch(err => {
+                    this.$Message.error({
+                        content:err.data.error,
+                        duration:5,
+                        closable:true
+                    })
                 })
-            },
-            filterArchives(year, month) {
-                window.open('/archives/' + year + '/' + month);
             }
         }
         ,

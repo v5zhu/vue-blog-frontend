@@ -2,18 +2,19 @@ import fetch from 'utils/fetch';
 
 const prefix = '/blog';
 
-export function filterCategoryList(token) {
+export function filterCategoryList(params) {
     return fetch({
-        url: prefix + '/admin/category/list.token',
+        url: prefix + '/admin/category/list.open',
         method: 'get',
-        params: {token}
+        params: params
     });
 }
 
-export function filterCategoryTree() {
+export function filterCategoryTree(params) {
     return fetch({
         url: prefix + '/admin/category/tree.token',
         method: 'get',
+        params:params
     });
 }
 

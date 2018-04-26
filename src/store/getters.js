@@ -14,5 +14,12 @@ const getters = {
     permission_routers: state => state.permission.routers,
     addRouters: state => state.permission.addRouters,
     siderbar_routers: state => state.permission.siderbar_routers,
+
+    articleAuthor: state => state.article.articleAuthor,
+    articleArchives: state => state.article.articleArchives,
+    articleCategories: state => state.article.articleCategories,
+    articleTags: state => state.article.articleTags,
+
+    loginUser: state => state.user.loginUser
 };
 export default getters

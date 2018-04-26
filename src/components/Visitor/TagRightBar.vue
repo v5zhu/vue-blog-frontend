@@ -4,15 +4,15 @@
         <Row>
             <Col>
             <div class="clearfix">
-                <h4 style="text-align: center;font-family: serif;">标签云</h4>
+                <h5 style="text-align: center;">标签云</h5>
             </div>
             <hr style="margin-top:5px;margin-bottom:5px;height:1px;border:none;border-top:1px dashed rgba(255,165,0,0.2);"/>
 
             <div style="padding: 5px;height:auto;">
                 <div v-for="(item,index) in tags" style="margin:2px;float: left;">
-                    <Button :type="getButtonType()" shape="circle" color="#0d5477" style="text-align: center;"
+                    <Button size="small" :type="getButtonType()"
                             @click="filterTags(item.name)">
-                        {{item.name}}({{item.count}})
+                        {{item.name}}({{item.articleNumbers}})
                     </Button>
                 </div>
             </div>
@@ -48,11 +48,12 @@
 <script>
     import {formatTime} from 'utils/index';
     import store from 'store/';
+    import {mapGetters} from 'vuex';
 
     export default {
         mounted() {
-            var id = this.$route.params.id;
-            this.tagList();
+            // var id = this.$route.params.id;
+            // this.tagList();
         },
         data() {
             return {
@@ -68,17 +69,31 @@
                 ]
             }
         },
+        computed: {
+            ...mapGetters([
+                'articleAuthor'
+            ])
+        },
+        watch: {
+            articleAuthor: function () {
+                this.filterTagList(this.articleAuthor.id);
+            }
+        },
         methods: {
-            tagList() {
-                store.dispatch('FilterTagList', {}).then(res => { // 拉取user_info
+            filterTagList(userId) {
+                store.dispatch('FilterTagList', {userId:userId}).then(res => { // 拉取user_info
                     var tags = res.data.payload;
                     this.tags = tags;
-                }).catch(() => {
-                    console.log("获取标签云信息失败");
+                }).catch(err=> {
+                    this.$Message.error({
+                        content:err.data.error,
+                        duration:5,
+                        closable:true
+                    })
                 })
             },
-            filterTags(categoryName) {
-                window.open('/tag/' + categoryName);
+            filterTags(tag) {
+                window.open('/archives/filter/tag/' + tag);
             },
             getButtonType() {
                 var num = Math.floor(Math.random() * 10);

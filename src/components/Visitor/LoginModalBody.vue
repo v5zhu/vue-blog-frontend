@@ -85,14 +85,8 @@
                     if (valid) {
                         store.dispatch('Login', this.user).then(res => { // 拉取user_info
                             var resp = res.data;
-                            if (resp.success == true) {
-                                this.$Message.success('登录成功!');
-                                var user = resp.payload;
-                                Cookies.set('LOGIN-USER', user);
-                                window.location.reload();
-                            } else {
-                                this.$Message.error('登录失败:' + resp.msg);
-                            }
+                            this.$Message.success('登录成功!');
+                            window.location.reload();
                         }).catch(res => {
                             this.$Message.error({
                                 content: res.data.error,

@@ -17,7 +17,6 @@
                     </router-view>
                 </div>
             </main>
-            <AppAside v-if="loginUser.token!=undefined"/>
         </div>
         <AppFooter/>
 
@@ -56,7 +55,6 @@
 <script>
     import AppHeader from '../components/Visitor/Header';
     import AppHeaderFloat from '../components/Visitor/AppHeaderFloat';
-    import AppAside from '../components/Visitor/Aside';
     import AppFooter from '../components/Visitor/Footer';
     import Sidebar from '../components/Visitor/Sidebar';
 
@@ -83,7 +81,6 @@
         components: {
             AppHeader,
             AppHeaderFloat,
-            AppAside,
             AppFooter,
             Sidebar,
             RegModalBody,

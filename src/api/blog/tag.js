@@ -4,7 +4,7 @@ const prefix = '/blog';
 
 export function filterTagList(params) {
     return fetch({
-        url: prefix + '/admin/tag/list.token',
+        url: prefix + '/admin/tag/filter/list.open',
         method: 'get',
         params: params
     });

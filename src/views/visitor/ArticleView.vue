@@ -1,217 +1,234 @@
 <template>
     <div class="animated fadeIn" style="margin-top:50px;">
-        <div style="min-height:200px;min-width:50px;position: fixed;left:20px;top:120px;">
-            <ul>
-                <li style="margin-bottom: 10px;position: relative">
-                    <Button :disabled="true" type="ghost" class="left-circle"
-                            style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="ios-clock" color="#0d5477" size="24"></Icon>
-                    </Button>
-                    <div style="position:relative;left:55px;top: -30px;">
-                        {{article.hits}}
-                    </div>
-                </li>
-                <li style="margin-bottom: 10px;position: relative">
-                    <Button :disabled="true" type="ghost" class="left-circle"
-                            style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="chatbox-working" color="#0d5477" size="24"></Icon>
-                    </Button>
-                    <div style="position:relative;left:55px;top: -30px;">
-                        {{article.comments}}
-                    </div>
-                </li>
-                <li style="margin-bottom: 10px;position: relative">
-                    <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
-                            style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="heart" color="#0d5477" size="24"></Icon>
-                    </Button>
-                    <div style="position:relative;left:55px;top: -30px;">
-                        {{article.likes}}
-                    </div>
-                </li>
-                <li style="margin-bottom: 10px;position: relative">
-                    <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
-                            style="border-radius: 50%;">
-                        <Icon class="left-icon-class" type="thumbsdown" color="#0d5477" size="24"></Icon>
-                    </Button>
-                    <div style="position:relative;left:55px;top: -30px;">
-                        {{article.dislikes}}
-                    </div>
-                </li>
-            </ul>
-        </div>
         <Row>
-
-            <Col style="margin-left: 100px;" :xs="17" :sm="17" :md="17" :lg="17">
-            <div class="post-header" style="">
-                <div class="post-title"
-                     style="color: #0d5477;text-align: center;font-size:32px;font-weight: 500;font-family: fantasy;"
-                     itemprop="name headline">
-                    {{article.title}}
-                </div>
-                <div class="post-data" style="color: #808080;text-align: right;margin-top: 50px;margin-right: 5px;">
-                    <span>发布于：{{article.gmtCreate | formatDate}}</span>
-                    浏览量：<span>{{article.hits}}</span>
-                </div>
-
-            </div>
-            <div class="post-content" id="editor">
-                <div highlight v-html="compiledMarkdown"></div>
-                <div style="min-height:150px;height:auto;margin-top: 50px;position: relative;">
-                    <ul style="width:100%;">
-                        <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
-                            <Button type="ghost" @click="awardModal=true">
-                                <Icon type="ios-flame" size="24" color="red"></Icon>
-                                <p>赞赏</p>
+            <Col span="18">
+                <div style="min-height:200px;min-width:50px;position: fixed;left:20px;top:120px;">
+                    <ul>
+                        <li style="margin-bottom: 10px;position: relative">
+                            <Button :disabled="true" type="ghost" class="left-circle"
+                                    style="border-radius: 50%;">
+                                <Icon class="left-icon-class" type="ios-clock" color="#0d5477" size="24"></Icon>
                             </Button>
+                            <div style="position:relative;left:55px;top: -30px;">
+                                {{article.hits}}
+                            </div>
+                        </li>
+                        <li style="margin-bottom: 10px;position: relative">
+                            <Button :disabled="true" type="ghost" class="left-circle"
+                                    style="border-radius: 50%;">
+                                <Icon class="left-icon-class" type="chatbox-working" color="#0d5477" size="24"></Icon>
+                            </Button>
+                            <div style="position:relative;left:55px;top: -30px;">
+                                {{article.comments}}
+                            </div>
+                        </li>
+                        <li style="margin-bottom: 10px;position: relative">
+                            <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
+                                    style="border-radius: 50%;">
+                                <Icon class="left-icon-class" type="heart" color="#0d5477" size="24"></Icon>
+                            </Button>
+                            <div style="position:relative;left:55px;top: -30px;">
+                                {{article.likes}}
+                            </div>
+                        </li>
+                        <li style="margin-bottom: 10px;position: relative">
+                            <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
+                                    style="border-radius: 50%;">
+                                <Icon class="left-icon-class" type="thumbsdown" color="#0d5477" size="24"></Icon>
+                            </Button>
+                            <div style="position:relative;left:55px;top: -30px;">
+                                {{article.dislikes}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <Row>
 
-                            <Modal v-model="awardModal" width="600" :maskClosable="false"
-                                   @on-visible-change="changeModalVisible">
-                                <p slot="header" style="color:#f60;text-align:left">
-                                    <Icon type="information-circled"></Icon>
-                                    <span>赞赏</span>
-                                </p>
-                                <div style="text-align:center">
-                                    <Form ref="awardForm" :model="award" :label-width="120" label-position="right">
-                                        <Row style="padding-left: 20px;">
-                                            <Col span="14">
-                                            <Form-item style="margin-left: 60px;" prop="name" label="赞赏金额:(RMB)"
-                                                       label-position="top">
-                                                <i-circle
-                                                        :size="100"
-                                                        :trail-width="5"
-                                                        :stroke-width="6"
-                                                        :percent="parseInt(award.money)"
-                                                        stroke-linecap="square"
-                                                        stroke-color="red">
-                                                    <div class="demo-i-circle-custom">
-                                                        <p>赞赏金额</p>
-                                                        <span>
+                    <Col style="margin-left: 100px;" :xs="17" :sm="17" :md="17" :lg="17">
+                        <div class="post-header" style="">
+                            <div class="post-title"
+                                 style="text-align: center;font-size:32px;font-weight: 700;"
+                                 itemprop="name headline">
+                                {{article.title}}
+                            </div>
+                            <div class="post-data"
+                                 style="color: #808080;text-align: right;margin-top: 50px;margin-right: 5px;">
+                                <span>发布于：{{article.gmtCreate | formatDate}}</span>
+                                浏览量：<span>{{article.hits}}</span>
+                            </div>
+
+                        </div>
+                        <div class="post-content" id="editor">
+                            <div highlight v-html="compiledMarkdown"></div>
+                            <div style="min-height:150px;height:auto;margin-top: 50px;position: relative;">
+                                <ul style="width:100%;">
+                                    <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
+                                        <Button type="ghost" @click="awardModal=true">
+                                            <Icon type="ios-flame" size="24" color="red"></Icon>
+                                            <p>赞赏</p>
+                                        </Button>
+
+                                        <Modal v-model="awardModal" width="600" :maskClosable="false"
+                                               @on-visible-change="changeModalVisible">
+                                            <p slot="header" style="color:#f60;text-align:left">
+                                                <Icon type="information-circled"></Icon>
+                                                <span>赞赏</span>
+                                            </p>
+                                            <div style="text-align:center">
+                                                <Form ref="awardForm" :model="award" :label-width="120"
+                                                      label-position="right">
+                                                    <Row style="padding-left: 20px;">
+                                                        <Col span="14">
+                                                            <Form-item style="margin-left: 60px;" prop="name"
+                                                                       label="赞赏金额:(RMB)"
+                                                                       label-position="top">
+                                                                <i-circle
+                                                                        :size="100"
+                                                                        :trail-width="5"
+                                                                        :stroke-width="6"
+                                                                        :percent="parseInt(award.money)"
+                                                                        stroke-linecap="square"
+                                                                        stroke-color="red">
+                                                                    <div class="demo-i-circle-custom">
+                                                                        <p>赞赏金额</p>
+                                                                        <span>
                                                     &nbsp;
                                                     <i>¥{{award.money}}</i>
                                                     </span>
-                                                    </div>
-                                                </i-circle>
-                                            </Form-item>
+                                                                    </div>
+                                                                </i-circle>
+                                                            </Form-item>
 
-                                            </Col>
-                                            <Col span="24">
-                                            <RadioGroup v-model="award.money" type="button" @on-change="changeMoney">
-                                                <Radio label="0.01">一分也是爱</Radio>
-                                                <Radio label="2">2元</Radio>
-                                                <Radio label="5">5元</Radio>
-                                                <Radio label="10">10元</Radio>
-                                                <Radio label="20">20元</Radio>
-                                                <Radio label="50">50元</Radio>
-                                                <Radio label="100">100元</Radio>
-                                                <Radio label="666.66">任性的土豪</Radio>
-                                            </RadioGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row style="padding-left: 20px;margin-top: 20px;" v-show="isAward">
-                                            <Col span="12">
-                                            <Avatar shape="square" style="height:150px;width:150px;"
-                                                    :src="award.alipayQrcode"></Avatar>
-                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开<span
-                                                    style="color:blue;font-size: 16px;">【支付宝】</span>扫一扫赞赏</p>
-                                            </Col>
-                                            <Col span="12">
-                                            <Avatar shape="square" style="height:150px;width:150px;"
-                                                    :src="award.weixinQrcode"></Avatar>
-                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">打开<span
-                                                    style="color:blue;font-size: 16px;">【微信】</span>扫一扫赞赏</p>
-                                            </Col>
-                                        </Row>
-                                    </Form>
-                                </div>
-                                <div slot="footer" style="text-align: center">
-                                    <Button type="error" size="large" :loading="false" v-show="!isAward"
-                                            @click="awardOk">赞赏
-                                    </Button>
-                                </div>
-                            </Modal>
-                        </li>
-                        <li style="float: left;position:relative;top:20px;margin-right: 20px;">
-                            <Button type="ghost" @click="updateStatistics('likes')"
-                                    style="height:60px;width:60px;font-size: 12px;">
-                                <Icon type="heart" size="20" color="red"></Icon>
-                                <p>{{article.likes}}喜欢</p>
-                            </Button>
-                        </li>
-                        <li style="float: left;position:relative;top:20px">
-                            <Button type="ghost" @click="updateStatistics('dislikes')"
-                                    style="height:60px;width:60px;font-size: 12px;">
-                                <Icon type="thumbsdown" size="24" color="red"></Icon>
-                                <p>{{article.dislikes}}反对</p>
-                            </Button>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li style="clear: both;position:relative;margin-left:30%;top:30px;color:#808080;">
-                            <p style="margin-top: 50px;">宇轩哥哥、熙羽妹妹等已赞赏</p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div style="background: url('https://static.segmentfault.com/v-5a9fa408/global/img/ad_bg.svg');max-height:90px; height:90px;margin-top: 50px;">
+                                                        </Col>
+                                                        <Col span="24">
+                                                            <RadioGroup v-model="award.money" type="button"
+                                                                        @on-change="changeMoney">
+                                                                <Radio label="0.01">一分也是爱</Radio>
+                                                                <Radio label="2">2元</Radio>
+                                                                <Radio label="5">5元</Radio>
+                                                                <Radio label="10">10元</Radio>
+                                                                <Radio label="20">20元</Radio>
+                                                                <Radio label="50">50元</Radio>
+                                                                <Radio label="100">100元</Radio>
+                                                                <Radio label="666.66">任性的土豪</Radio>
+                                                            </RadioGroup>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style="padding-left: 20px;margin-top: 20px;" v-show="isAward">
+                                                        <Col span="12">
+                                                            <Avatar shape="square" style="height:150px;width:150px;"
+                                                                    :src="award.alipayQrcode"></Avatar>
+                                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">
+                                                                打开<span
+                                                                    style="color:blue;font-size: 16px;">【支付宝】</span>扫一扫赞赏
+                                                            </p>
+                                                        </Col>
+                                                        <Col span="12">
+                                                            <Avatar shape="square" style="height:150px;width:150px;"
+                                                                    :src="award.weixinQrcode"></Avatar>
+                                                            <p style="margin-left: 5px;margin-top: 10px;font-size: 1.2em;">
+                                                                打开<span
+                                                                    style="color:blue;font-size: 16px;">【微信】</span>扫一扫赞赏
+                                                            </p>
+                                                        </Col>
+                                                    </Row>
+                                                </Form>
+                                            </div>
+                                            <div slot="footer" style="text-align: center">
+                                                <Button type="error" size="large" :loading="false" v-show="!isAward"
+                                                        @click="awardOk">赞赏
+                                                </Button>
+                                            </div>
+                                        </Modal>
+                                    </li>
+                                    <li style="float: left;position:relative;top:20px;margin-right: 20px;">
+                                        <Button type="ghost" @click="updateStatistics('likes')"
+                                                style="height:60px;width:60px;font-size: 12px;">
+                                            <Icon type="heart" size="20" color="red"></Icon>
+                                            <p>{{article.likes}}喜欢</p>
+                                        </Button>
+                                    </li>
+                                    <li style="float: left;position:relative;top:20px">
+                                        <Button type="ghost" @click="updateStatistics('dislikes')"
+                                                style="height:60px;width:60px;font-size: 12px;">
+                                            <Icon type="thumbsdown" size="24" color="red"></Icon>
+                                            <p>{{article.dislikes}}反对</p>
+                                        </Button>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li style="clear: both;position:relative;margin-left:30%;top:30px;color:#808080;">
+                                        <p style="margin-top: 50px;">宇轩哥哥、熙羽妹妹等已赞赏</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="background: url('https://static.segmentfault.com/v-5a9fa408/global/img/ad_bg.svg');max-height:90px; height:90px;margin-top: 50px;">
 
-            </div>
-            <div style="position: relative;margin-top:50px;margin-bottom:50px;">
-                <Row>
-                    <Col span="9">
-                    <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
+                        </div>
+                        <div style="position: relative;margin-top:50px;margin-bottom:50px;">
+                            <Row>
+                                <Col span="9">
+                                    <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
+                                </Col>
+                                <Col span="6">
+                                    <div style="position: relative;text-align: center;top:-15px;font-size: 20px;font-weight: 500">
+                                        【共{{article.comments}}条评论】
+                                    </div>
+                                </Col>
+                                <Col span="9">
+                                    <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
+                                </Col>
+                            </Row>
+                        </div>
                     </Col>
-                    <Col span="6">
-                    <div style="position: relative;text-align: center;top:-15px;font-size: 20px;font-weight: 500">
-                        【共{{article.comments}}条评论】
-                    </div>
-                    </Col>
-                    <Col span="9">
-                    <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
+                    <Col :xs="4" :sm="4" :md="4" :lg="4">
                     </Col>
                 </Row>
-            </div>
-            </Col>
-            <Col :xs="4" :sm="4" :md="4" :lg="4">
-            </Col>
-        </Row>
 
-        <Row style="position: relative;margin-bottom:50px;margin-left: 100px;">
-            <Col :xs="17" :sm="17" :md="17" :lg="17" style="padding: 10px;">
-            <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
-            <div v-for="(c,index) in comments.list">
-                <div class="staff_list" style="position: relative;margin-left: 50px;">
-                    <div class="staff_progress" style="position: relative">
-                        <div style="text-align: right;position: relative;right:-80px;">
-                            <Tag color="yellow">{{index + 1}}楼</Tag>
+                <Row style="position: relative;margin-bottom:50px;margin-left: 100px;">
+                    <Col :xs="17" :sm="17" :md="17" :lg="17" style="padding: 10px;">
+                        <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
+                        <div v-for="(c,index) in comments.list">
+                            <div class="staff_list" style="position: relative;margin-left: 50px;">
+                                <div class="staff_progress" style="position: relative">
+                                    <div style="text-align: right;position: relative;right:-80px;">
+                                        <Tag color="yellow">{{index + 1}}楼</Tag>
+                                    </div>
+
+                                    <comment :loginUser="loginUser" style="margin-top: -45px;" :OneComment="c"
+                                             :articleId="article.id"
+                                             @articleDetail="articleDetail"
+                                             @getArticleComments="getArticleComments"></comment>
+                                </div>
+                            </div>
+                            <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
                         </div>
+                        <div v-if="comments.total > commentParams.pageSize" style="text-align: center">
+                            <Button :loading="loadingComments" @click="loadMoreComments" size="large" type="ghost">
+                                加载更多
+                            </Button>
 
-                        <comment :loginUser="loginUser" style="margin-top: -45px;" :OneComment="c"
-                                 :articleId="article.id"
-                                 @articleDetail="articleDetail"
-                                 @getArticleComments="getArticleComments"></comment>
-                    </div>
-                </div>
-                <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
-            </div>
-            <div v-if="comments.total > commentParams.pageSize" style="text-align: center">
-                <Button :loading="loadingComments" @click="loadMoreComments" size="large" type="ghost">
-                    加载更多
-                </Button>
+                        </div>
+                    </Col>
+                    <Col :xs="4" :sm="4" :md="4" :lg="4">
+                    </Col>
 
-            </div>
+                </Row>
+                <Row style="position: relative;margin-bottom:50px;margin-left: 100px;"
+                     v-if="article.allowComment===true">
+                    <Col span="17">
+                        <comment-component :loginUser="loginUser" :type="type" :articleId="article.id"
+                                           :parentComment="new Object()"
+                                           @getArticleComments="getArticleComments">
+                        </comment-component>
+                    </Col>
+                    <Col :xs="4" :sm="4" :md="4" :lg="4">
+                    </Col>
+                </Row>
             </Col>
-            <Col :xs="4" :sm="4" :md="4" :lg="4">
-            </Col>
-
-        </Row>
-        <Row style="position: relative;margin-bottom:50px;margin-left: 100px;" v-if="article.allowComment===true">
-            <Col span="17">
-            <comment-component :loginUser="loginUser" :type="type" :articleId="article.id" :parentComment="new Object()"
-                               @getArticleComments="getArticleComments">
-            </comment-component>
-            </Col>
-            <Col :xs="4" :sm="4" :md="4" :lg="4">
+            <Col span="5" style="margin-left: 30px;">
+                <author-info/>
             </Col>
         </Row>
     </div>
@@ -225,6 +242,7 @@
     import DashChartVisitor from './../charts/DashChartVisitor';
     import Comment from './Comment';
     import CommentComponent from '../../components/Visitor/CommentComponent';
+    import AuthorInfo from '../../components/Visitor/AuthorInfo';
     import {quillEditor} from 'vue-quill-editor';
     import h2m from 'h2m';
     import hljs from 'highlight.js/lib/highlight';
@@ -264,6 +282,8 @@
                 },
                 article: {
                     id: undefined,
+                    authorId: null,
+                    author: null,
                     title: '',
                     cover: '',
                     path: '',
@@ -343,17 +363,17 @@
         }
         ,
         created() {
-        }
-        ,
-        components: {
-            VueMarkdown, DashChartVisitor, quillEditor, Comment, CommentComponent // 声明组件
-        }
-        ,
-        mounted() {
             window.scrollTo(0, 0);
 
             var path = this.$route.params.path;
             this.articleDetail(path);
+        }
+        ,
+        components: {
+            VueMarkdown, DashChartVisitor, quillEditor, Comment, CommentComponent, AuthorInfo // 声明组件
+        }
+        ,
+        mounted() {
         }
         ,
         methods: {
@@ -401,8 +421,12 @@
                     var article = res.data.payload;
                     this.article = article;
                     this.getArticleComments(article.id);
-                }).catch(() => {
-                    console.log("获取文章详情失败");
+                }).catch(err => {
+                    this.$Message.error({
+                        content:err.data.error,
+                        duration:5,
+                        closable:true
+                    })
                 })
             }
             ,
@@ -415,8 +439,12 @@
                     var comments = res.data.payload;
                     this.comments = comments;
                     this.loadingComments = false;
-                }).catch(() => {
-                    console.log("获取文章评论列表失败");
+                }).catch(err => {
+                    this.$Message.error({
+                        content:err.data.error,
+                        duration:5,
+                        closable:true
+                    })
                 })
             }
             ,
@@ -461,8 +489,12 @@
                             this.article.dislikes--;
                         }
                     }
-                }).catch(error => {
-                    console.log(error);
+                }).catch(err => {
+                    this.$Message.error({
+                        content:err.data.error,
+                        duration:5,
+                        closable:true
+                    })
                 })
             }
         }

@@ -13,9 +13,11 @@ import {
     setUserRole
 } from 'api/blog/login';
 import Cookies from 'js-cookie';
+import LocalStorage from 'utils/LocalStorage';
 
 const user = {
     state: {
+        loginUser: null,
         id: '',
         user: '',
         status: '',
@@ -33,6 +35,9 @@ const user = {
     },
 
     mutations: {
+        SET_LOGIN_USER: (state, loginUser) => {
+            state.loginUser = loginUser;
+        },
         SET_ID: (state, id) => {
             state.id = id;
         },
@@ -78,6 +83,8 @@ const user = {
         Login({commit, state}, data) {
             return new Promise((resolve, reject) => {
                 login(data).then(response => {
+                    commit("SET_LOGIN_USER", response.data.payload);
+                    LocalStorage.setItem("LOGIN-USER", response.data.payload);
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -96,6 +103,7 @@ const user = {
         Register({commit, state}, data) {
             return new Promise((resolve, reject) => {
                 register(data).then(response => {
+                    LocalStorage.setItem("LOGIN-USER", response.data.payload);
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -215,6 +223,8 @@ const user = {
         LogOut({commit, state}, params) {
             return new Promise((resolve, reject) => {
                 logout(params).then(res => {
+                    commit("SET_LOGIN_USER", null);
+                    LocalStorage.setItem("LOGIN-USER", res.data.payload);
                     resolve(res);
                 }).catch(error => {
                     reject(error);

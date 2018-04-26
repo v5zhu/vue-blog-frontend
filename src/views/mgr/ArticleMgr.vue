@@ -79,9 +79,10 @@
     import expandRow from './article-table-expand.vue';
 
     import {formatCategories, formatTime} from 'utils/index';
+    import LocalStorage from 'utils/LocalStorage';
+    import {mapGetters} from 'vuex';
 
     import store from 'store/';
-    import Cookies from 'js-cookie';
 
     export default {
         components: {expandRow},
@@ -89,7 +90,6 @@
         name: 'buttons',
         data() {
             return {
-                loginUser: {},
                 pageInfo: {
                     isFirstPage: undefined,
                     isLastPage: undefined,
@@ -101,11 +101,13 @@
                     prePage: undefined,
                     nextPage: undefined
                 },
-                selectedCategory:[],
+                selectedCategory: [],
+                categoryTree: [],
                 pageQuery: {
                     pageNum: 1,
                     pageSize: 10,
                     filterMap: {
+                        userId: null,
                         status: null,
                         title: null,
                         tag: null,
@@ -333,6 +335,33 @@
                 ],//cloumn
             }//return
         },//data
+        computed: {
+            ...mapGetters([
+                'loginUser'
+            ])
+        },
+        watch: {
+            loginUser: function () {
+                //loginUser发生变化时会执行该函数
+
+            }
+        },
+        mounted() {
+            const vue = this;
+
+            this.list_loadding = true;
+            setTimeout(function () {
+                vue.list_loadding = false;
+
+            }, 1000);
+            var user = LocalStorage.getItem("LOGIN-USER");
+            if (user) {
+                this.filterCategoryTree(user.id);
+                this.tagList(user.id);
+
+                this.loadArticles(user.id);
+            }
+        },
         methods: {
             remove(param) {
                 this.$Modal.confirm({
@@ -413,12 +442,13 @@
                 }
                 this.loadArticles();
             },
-            loadArticles() {
+            loadArticles(userId) {
                 var category = this.selectedCategory;
                 if (category && category.length > 0) {
                     this.pageQuery.filterMap.category = category[category.length - 1];
                 }
 
+                this.pageQuery.filterMap.userId = userId;
                 store.dispatch('ArticleList', this.pageQuery).then(res => { // 拉取user_info
                     this.article_list = res.data.payload.list;
                     this.pageInfo = res.data.payload;
@@ -431,8 +461,8 @@
                     });
                 })
             },
-            filterCategoryTree() {
-                store.dispatch('FilterCategoryTree').then(res => {
+            filterCategoryTree(userId) {
+                store.dispatch('FilterCategoryTree', {userId: userId}).then(res => {
                     var data = res.data;
                     this.categoryTree = data.payload;
                 }).catch(err => {
@@ -444,8 +474,8 @@
                     });
                 });
             },
-            tagList() {
-                store.dispatch('FilterTagList', {}).then(res => { // 拉取user_info
+            tagList(userId) {
+                store.dispatch('FilterTagList', {userId: userId}).then(res => { // 拉取user_info
                     var tags = res.data.payload;
                     this.tags = tags;
 
@@ -457,26 +487,6 @@
                 this.$refs[refName].resetFields();
 
             },
-        },
-        mounted() {
-            const vue = this;
-
-            this.list_loadding = true;
-            setTimeout(function () {
-                vue.list_loadding = false;
-
-            }, 1000)
-            // qiniuInit(vue);//初始化七牛数据
-
-
-            var jsonString = Cookies.get('LOGIN-USER');
-            if (jsonString) {
-                this.loginUser = JSON.parse(jsonString);
-            }
-            this.filterCategoryTree();
-            this.tagList();
-
-            this.loadArticles();
         },
         filters: {
             formatCategory(list) {

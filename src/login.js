@@ -3,6 +3,7 @@ import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
 import Cookies from 'js-cookie';
+import LocalStorage from 'utils/LocalStorage';
 
 const _import = require('./router/_import_' + process.env.NODE_ENV);
 
@@ -40,12 +41,8 @@ function getRoutes(routes) {
 const whiteList = ['/admin/login', '/authredirect']// 不重定向白名单
 router.beforeEach((to, from, next) => {
     NProgress.start() // 开启Progress
-    var jsonString = Cookies.get('LOGIN-USER');
-    var user = undefined;
+    var user = LocalStorage.getItem('LOGIN-USER');
 
-    if (jsonString) {
-        user = JSON.parse(jsonString);
-    }
     // console.log("用户：" + user);
 
     if (user && user.token) { // 判断是否有token

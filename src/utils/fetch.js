@@ -1,6 +1,7 @@
 import axios from 'axios';
 // import router from '../router';
 import Cookies from 'js-cookie';
+import LocalStorage from 'utils/LocalStorage';
 
 // 创建axios实例
 const service = axios.create({
@@ -11,9 +12,8 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(config => {
     // Do something before request is sent
-    var jsonString = Cookies.get('LOGIN-USER');
-    if (jsonString) {
-        var user = JSON.parse(jsonString);
+    var user = LocalStorage.getItem('LOGIN-USER');
+    if (user) {
         config.headers['token'] = user.token;
     }
     return config;

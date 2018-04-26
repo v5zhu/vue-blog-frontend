@@ -168,6 +168,7 @@
     import {mavonEditor} from 'mavon-editor';
     import Cookies from 'js-cookie';
     import 'mavon-editor/dist/css/index.css';
+    import LocalStorage from 'utils/LocalStorage';
 
     export default {
         data() {
@@ -254,8 +255,12 @@
             if (id) {
                 this.articlePreview(id);
             }
-            this.filterCategoryTree();
-            this.tagList();
+            var user = LocalStorage.getItem("LOGIN-USER");
+            if(user){
+                this.filterCategoryTree(user.id);
+                this.tagList(user.id);
+            }
+
         },
         methods: {
             addCategory() {
@@ -319,8 +324,8 @@
                     console.log("请求文章详情失败");
                 })
             },
-            tagList() {
-                store.dispatch('FilterTagList', {token: null}).then(res => { // 拉取user_info
+            tagList(userId) {
+                store.dispatch('FilterTagList', {userId: userId}).then(res => { // 拉取user_info
                     var tags = res.data.payload;
                     this.tags = tags;
 
@@ -394,8 +399,8 @@
             handleRemove(index) {
                 this.formDynamic.items.splice(index, 1);
             },
-            filterCategoryTree() {
-                store.dispatch('FilterCategoryTree').then(res => {
+            filterCategoryTree(userId) {
+                store.dispatch('FilterCategoryTree',{userId:userId}).then(res => {
                     var data = res.data;
                     this.categoryTree = data.payload;
                 }).catch(err => {

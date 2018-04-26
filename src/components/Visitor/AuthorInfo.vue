@@ -1,24 +1,24 @@
 <template>
-    <aside class="aside-menu px-4">
-        <div class="aside-options">
+    <aside style="border-left: rgba(216,194,130,0.4) solid 1px;padding-left: 20px;">
+        <div>
             <Row>
                 <Col>
-                <author-right-bar></author-right-bar>
+                    <author-right-bar></author-right-bar>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                <archives-right-bar></archives-right-bar>
+                    <archives-right-bar></archives-right-bar>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                <category-right-bar></category-right-bar>
+                    <category-right-bar></category-right-bar>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                <tag-right-bar></tag-right-bar>
+                    <tag-right-bar></tag-right-bar>
                 </Col>
             </Row>
         </div>
@@ -42,15 +42,14 @@
 
             }
         },
-        computed: {},
+        computed: {
+        },
         created() {
         },
         components: {AuthorRightBar, ArchivesRightBar, CategoryRightBar, TagRightBar},
         mounted() {
         },
-        methods: {
-
-        },
+        methods: {},
         filters: {
             formatDate(time) {
                 return formatTime(time, '{y}-{m}-{d} {h}:{i}:{s}');

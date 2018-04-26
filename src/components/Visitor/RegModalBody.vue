@@ -178,8 +178,6 @@
                         store.dispatch('Register', this.user).then(res => { // 拉取user_info
                             var resp = res.data;
                             this.$Message.success('注册成功!');
-                            var user = resp.payload;
-                            Cookies.set('LOGIN-USER', user);
                             window.location.reload();
                         }).catch(error => {
                             this.$Message.error({
