@@ -50,6 +50,19 @@
                 </Col>
             </Row>
             <Row>
+                <Col>
+                    <Upload
+                            multiple
+                            type="drag"
+                            action="/user/file/upload">
+                        <div style="padding: 20px 0">
+                            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                            <p>点击或者拖拽文件到这里上传</p>
+                        </div>
+                    </Upload>
+                </Col>
+            </Row>
+            <Row>
                 <Col span="22">
                     <Form-item prop="content">
                         <mavon-editor style="margin-top: 20px;position: static;" v-model="article.content"/>

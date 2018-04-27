@@ -9,6 +9,7 @@ import {
     modifyPassword,
     modifyUser,
     register,
+    getUptoken,
     checkPhone,
     sendPhoneCode,
     setUserRole
@@ -86,6 +87,15 @@ const user = {
                 login(data).then(response => {
                     commit("SET_LOGIN_USER", response.data.payload);
                     LocalStorage.setItem("LOGIN-USER", response.data.payload);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        GetUptoken({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                getUptoken(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

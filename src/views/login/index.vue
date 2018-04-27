@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import RegexValidateUtils from 'utils/validateUtils';
+    import RegexValidateUtils from 'utils/RegexValidateUtils';
     import Cookies from 'js-cookie';
 
     export default {

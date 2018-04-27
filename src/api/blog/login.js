@@ -2,6 +2,14 @@ import fetch from 'utils/fetch';
 
 const prefix = '/blog';
 
+export function getUptoken(params) {
+    return fetch({
+        url: prefix + '/user/uptoken',
+        method: 'get',
+        params: params
+    });
+}
+
 export function checkPhone(params) {
     return fetch({
         url: prefix + '/user/phone/check',
