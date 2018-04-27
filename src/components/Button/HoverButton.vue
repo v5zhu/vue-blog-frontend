@@ -4,7 +4,7 @@
     </button>
 </template>
 <script>
-    import {oneOf} from '../../utils/validate';
+    import RegexValidateUtils from 'utils/RegexValidateUtils';
 
     const hoverClass = 'wz-hover';
 
@@ -14,18 +14,18 @@
 
             type: {
                 validator(value) {
-                    return oneOf(value, ['height', 'width', 'lean', 'arrow', 'change']);
+                    return RegexValidateUtils.oneOf(value, ['height', 'width', 'lean', 'arrow', 'change']);
                 }
             },
             htmlType: {
                 default: 'button',
                 validator(value) {
-                    return oneOf(value, ['button']);
+                    return RegexValidateUtils.oneOf(value, ['button']);
                 }
             },
             shap: {
                 validator(value) {
-                    return oneOf(value, ['full', 'half', 'left', 'top', 'right', 'left',]);
+                    return RegexValidateUtils.oneOf(value, ['full', 'half', 'left', 'top', 'right', 'left',]);
                 }
             },
             icon: String,

@@ -23,15 +23,22 @@
 </template>
 
 <script>
-    import {isWscnEmail} from 'utils/validate';
+    import RegexValidateUtils from 'utils/validateUtils';
     import Cookies from 'js-cookie';
 
     export default {
         name: 'login',
         data() {
             const validateEmail = (rule, value, callback) => {
-                if (!isWscnEmail(value)) {
+                if (!RegexValidateUtils.isWscnEmail(value)) {
                     callback(new Error('请输入正确的合法邮箱'));
+                } else {
+                    callback();
+                }
+            };
+            const validatePhone = (rule, value, callback) => {
+                if (!RegexValidateUtils.validPhone(value)) {
+                    callback(new Error('请输入正确的账号'));
                 } else {
                     callback();
                 }
@@ -50,7 +57,7 @@
                 },
                 loginRules: {
                     loginName: [
-                        {required: true, trigger: 'blur', validator: validateEmail}
+                        {required: true, trigger: 'blur', validator: validatePhone}
                     ],
                     password: [
                         {required: true, trigger: 'blur', validator: validatePass}

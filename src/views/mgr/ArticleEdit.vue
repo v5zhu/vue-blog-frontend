@@ -265,8 +265,9 @@
                         this.category.parentId = upper[upper.length - 1];
                     }
                     store.dispatch('CategoryAdd', this.category).then(res => { // 拉取user_info
-                        this.filterCategoryTree(this.loginUser.id);
                         this.$Message.success('添加分类成功');
+                        this.$refs.categoryForm.resetFields();
+                        this.filterCategoryTree(this.loginUser.id);
                     }).catch(err => {
                         this.$Message.error({
                             content: err.data.error,
@@ -281,23 +282,9 @@
                     this.tag.type = 'tag';
                     this.tag.authorId = this.loginUser.id;
                     store.dispatch('TagAdd', this.tag).then(res => { // 拉取user_info
-                        var resp = res.data;
-                        if (resp.success == true) {
-                            this.tag = {
-                                id: '',
-                                name: '',
-                                value: '',
-                                type: '',
-                                description: '',
-                                sort: '',
-                                parent: ''
-                            }
-                            this.tagList();
-                            this.$Message.success('添加标签成功');
-                            this.tagModel = false;
-                        } else {
-                            this.$Message.error('添加标签失败');
-                        }
+                        this.$Message.success('添加标签成功');
+                        this.$refs.tagForm.resetFields();
+                        this.tagList(this.loginUser.id);
                     }).catch(err => {
                         this.$Message.error({
                             content: err.data.error,

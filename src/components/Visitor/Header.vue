@@ -61,7 +61,7 @@
                             <Icon type="android-notifications" size="20"></Icon>
                             <span class="badge badge-pill badge-danger">5</span></a>
                     </li>
-                    <Dropdown v-if="loginUser!=null" class="nav-item"
+                    <Dropdown trigger="click" v-if="loginUser!=null" class="nav-item"
                               style="position: absolute;right:85px;top:12px;">
 
                         <a href="javascript:void(0)" style="position: relative;">
