@@ -25,12 +25,40 @@
         </Row>
         <Row>
             <Col span="24" offset="1">
+                <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
+
                 <Timeline>
                     <TimelineItem v-for="img in pageInfo.list" :key="img.id">
-                        <p style="font-size: 14px;font-weight: bold;">{{img.shootTime|formatDate}}</p>
+                        <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">拍摄时间:</span>{{img.shootTime|formatDate}}
+                        </p>
 
-                        <div style="padding-left: 10px;padding-top: 10px;">
-                            <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"/>
+                        <div style="padding-top: 10px;">
+                            <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
+                                 style="border: #a2e6f8 8px solid"/>
+                        </div>
+                        <div style="padding-top: 10px;">
+                            <Icon type="ios-location" color="blue" size="20"></Icon>
+                            {{img.exif|filterLatitude}}, {{img.exif|filterLongitude}}
+                        </div>
+                        <div style="padding-top: 10px;">
+                            <Row>
+                                <Col span="3">
+                                    <Icon type="iphone" color="blue" size="20"></Icon>
+                                    {{img.exif|filterPhone}}
+                                </Col>
+                                <Col span="3">
+                                    <span style="color: #8cc5ff">光圈:</span>{{img.exif|filterFnumber}}
+                                </Col>
+                                <Col span="3">
+                                    <span style="color: #8cc5ff">焦距:</span>{{img.exif|filterFocalLength}}
+                                </Col>
+                            </Row>
+
+                        </div>
+                        <div style="padding-top: 10px;">
+                            <Button type="primary" size="small" @click="modifyImage(img)">修改</Button>
+                            <Button type="error" size="small" @click="modifyImage(img)">删除</Button>
+                            <Button type="info" size="small" @click="modifyImage(img)">大图</Button>
                         </div>
                     </TimelineItem>
                     <TimelineItem>
@@ -166,7 +194,7 @@
         name: 'buttons',
         data() {
             return {
-                loginUser:null,
+                loginUser: null,
                 uptoken: '',
                 image: {
                     name: null,
@@ -250,6 +278,9 @@
                     })
                 })
             },
+            modifyImage(image) {
+
+            },
             uploadImage(image) {
                 store.dispatch("UploadImage", image).then(response => {
 
@@ -267,7 +298,7 @@
             },
             getImagesForPage() {
                 this.$Loading.start();
-                this.pageQuery.filterMap.authorId=this.loginUser.id;
+                this.pageQuery.filterMap.authorId = this.loginUser.id;
                 store.dispatch('GetImagesForPage', this.pageQuery).then(res => {
                     this.pageInfo = res.data.payload;
                     this.$Loading.finish();
@@ -285,13 +316,82 @@
                 vue.list_loadding = false;
 
             }, 1000);
-            this.loginUser=LocalStorage.getItem("LOGIN-USER");
+            this.loginUser = LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
             this.getImagesForPage();
         },
         filters: {
             formatDate(time) {
                 return formatTime(time);
+            },
+            filterLatitude(exif) {
+                if (!exif) {
+                    return '未知';
+                }
+                var exifObj = JSON.parse(exif);
+                if (!exifObj.GPSLatitudeRef || !exifObj.GPSLatitude) {
+                    return '未知';
+                }
+                if (exifObj.GPSLatitudeRef.val && exifObj.GPSLatitude.val) {
+                    if (exifObj.GPSLatitudeRef.val == 'N') {
+                        return '北纬' + exifObj.GPSLatitude.val;
+                    } else if (exifObj.GPSLatitudeRef.val == 'S') {
+                        return '南纬' + exifObj.GPSLatitude.val;
+                    }
+                    return '未知';
+                }
+                return '未知';
+            },
+            filterLongitude(exif) {
+                if (!exif) {
+                    return '未知';
+                }
+                var exifObj = JSON.parse(exif);
+                if (!exifObj.GPSLongitudeRef || !exifObj.GPSLongitude) {
+                    return '未知';
+                }
+                if (exifObj.GPSLongitudeRef.val && exifObj.GPSLongitude.val) {
+                    if (exifObj.GPSLongitudeRef.val == 'E') {
+                        return '东经' + exifObj.GPSLongitude.val;
+                    } else if (exifObj.GPSLongitudeRef.val == 'S') {
+                        return '西经' + exifObj.GPSLongitude.val;
+                    }
+                    return '未知';
+                }
+                return '未知';
+            },
+            filterPhone(exif) {
+                if (!exif) {
+                    return '未知';
+                }
+                var exifObj = JSON.parse(exif);
+                if (!exifObj.Make || !exifObj.Model) {
+                    return '未知';
+                }
+                if (exifObj.Make.val && exifObj.Model.val) {
+                    return exifObj.Make.val + ' ' + exifObj.Model.val;
+                }
+                return '未知';
+            },
+            filterFnumber(exif) {
+                if (!exif) {
+                    return '未知';
+                }
+                var exifObj = JSON.parse(exif);
+                if (!exifObj.FNumber) {
+                    return '未知';
+                }
+                return exifObj.FNumber.val;
+            },
+            filterFocalLength(exif) {
+                if (!exif) {
+                    return '未知';
+                }
+                var exifObj = JSON.parse(exif);
+                if (!exifObj.FocalLength) {
+                    return '未知';
+                }
+                return exifObj.FocalLength.val;
             }
         }
     }
