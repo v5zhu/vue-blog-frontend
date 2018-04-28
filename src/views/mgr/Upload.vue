@@ -1,6 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
+        <div id="map-container"></div>
         <Row>
             <Col :md="24">
                 <div>
@@ -10,7 +11,7 @@
                         </Button>
 
                         <Progress :percent="progresscount" :status="progresstatus"
-                                  style="width=90%;vertical-align:middle"
+                                  style="width:90%;vertical-align:middle"
                                   v-if="progresshow">
                             <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
                             <span v-if="progresscount===100">上传成功</span>
@@ -47,10 +48,10 @@
                                     {{img.exif|filterPhone}}
                                 </Col>
                                 <Col span="3">
-                                    <span style="color: #8cc5ff">光圈:</span>{{img.exif|filterFnumber}}
+                                    光圈:{{img.exif|filterFnumber}}
                                 </Col>
                                 <Col span="3">
-                                    <span style="color: #8cc5ff">焦距:</span>{{img.exif|filterFocalLength}}
+                                    焦距:{{img.exif|filterFocalLength}}
                                 </Col>
                             </Row>
 
@@ -82,7 +83,7 @@
 
 <script>
     import store from 'store/';
-    import {formatTime} from 'utils';
+    import {formatTime, Dfm2Degree} from 'utils';
     import LocalStorage from "utils/LocalStorage";
 
     var vue;
@@ -196,6 +197,8 @@
             return {
                 loginUser: null,
                 uptoken: '',
+                progresshow: false,
+                geocoder: undefined,
                 image: {
                     name: null,
                     type: null,
@@ -307,6 +310,21 @@
                     this.$Loading.error()
                 });
             },
+            getAddress(longitude, latitude) {
+                alert(2);
+                //逆地理编码
+                var lnglatXY = [116.396574, 39.992706];//地图上所标点的坐标
+                this.geocoder.getAddress(lnglatXY, function (status, result) {
+                    if (status === 'complete' && result.info === 'OK') {
+                        //获得了有效的地址信息:
+                        //即，result.regeocode.formattedAddress
+                        console.log(result)
+                    } else {
+                        //获取地址失败
+                        console.error("获取地址失败")
+                    }
+                });
+            }
         },
         mounted() {
             const vue = this;
@@ -319,6 +337,69 @@
             this.loginUser = LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
             this.getImagesForPage();
+
+            AMap.service('AMap.Geocoder', function () {//回调函数
+                //实例化Geocoder
+                var geocoder = new AMap.Geocoder({
+                    city: "010"//城市，默认：“全国”
+                });
+
+                var lnglatXY = [104.05083333333333, 30.610000000000003];//地图上所标点的坐标
+                geocoder.getAddress(lnglatXY, function (status, result) {
+                    if (status === 'complete' && result.info === 'OK') {
+                        //获得了有效的地址信息:
+                        //即，result.regeocode.formattedAddress
+                        console.log(result)
+                    } else {
+                        //获取地址失败
+                        console.error("获取地址失败")
+                    }
+                });
+            });
+
+
+            var map = new AMap.Map('map-container', {
+                resizeEnable: true,
+                zoom: 13,
+                center:[104.13555555555556,30.593055555555555]
+            });
+            AMap.plugin('AMap.Geocoder', function () {
+                var geocoder = new AMap.Geocoder({
+                    city: "010"//城市，默认：“全国”
+                });
+                var marker = new AMap.Marker({
+                    map: map,
+                    bubble: true
+                });
+
+                // var input = document.getElementById('input');
+                // var message = document.getElementById('message');
+                map.on('click', function (e) {
+                    marker.setPosition(e.lnglat);
+                    geocoder.getAddress(e.lnglat, function (status, result) {
+                        if (status == 'complete') {
+                            // input.value = result.regeocode.formattedAddress
+                            // message.innerHTML = ''
+                        } else {
+                            // message.innerHTML = '无法获取地址'
+                        }
+                    })
+                })
+
+                /*input.onchange = function(e){
+                    var address = input.value;
+                    geocoder.getLocation(address,function(status,result){
+                        if(status=='complete'&&result.geocodes.length){
+                            marker.setPosition(result.geocodes[0].location);
+                            map.setCenter(marker.getPosition())
+                            message.innerHTML = ''
+                        }else{
+                            message.innerHTML = '无法获取位置'
+                        }
+                    })
+                }*/
+
+            });
         },
         filters: {
             formatDate(time) {
@@ -334,9 +415,9 @@
                 }
                 if (exifObj.GPSLatitudeRef.val && exifObj.GPSLatitude.val) {
                     if (exifObj.GPSLatitudeRef.val == 'N') {
-                        return '北纬' + exifObj.GPSLatitude.val;
+                        return '北纬' + Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
                     } else if (exifObj.GPSLatitudeRef.val == 'S') {
-                        return '南纬' + exifObj.GPSLatitude.val;
+                        return '南纬' + Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
                     }
                     return '未知';
                 }
@@ -352,9 +433,9 @@
                 }
                 if (exifObj.GPSLongitudeRef.val && exifObj.GPSLongitude.val) {
                     if (exifObj.GPSLongitudeRef.val == 'E') {
-                        return '东经' + exifObj.GPSLongitude.val;
+                        return '东经' + Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
                     } else if (exifObj.GPSLongitudeRef.val == 'S') {
-                        return '西经' + exifObj.GPSLongitude.val;
+                        return '西经' + Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
                     }
                     return '未知';
                 }
@@ -401,6 +482,11 @@
 
 
 <style type="text/css" scoped>
+    #map-container {
+        width: 600px;
+        height: 450px;
+    }
+
     .ivu-tag-dot {
         border: none !important;
     }
