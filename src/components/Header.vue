@@ -1,18 +1,13 @@
 <template>
     <navbar>
-        <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
-            &#9776;
-        </button>
-        <a class="navbar-brand" href="/"></a>
-
-        <ul class="nav navbar-nav d-md-down-none">
+        <ul class="nav navbar-nav" :class="{miniPaddingLeftClass:miniPaddingLeftClassIsActive==true}">
             <li class="nav-item" id="sidebar_minimize">
                 <a class="nav-link navbar-toggler sidebar-toggler" @click="sidebarMinimize">&#9776;</a>
             </li>
 
         </ul>
 
-        <ul class="nav navbar-nav d-md-down-none">
+        <ul class="nav navbar-nav">
             <li class="nav-item header-item" v-for="(route,index) in headers"
                 :class="{headerItemActiveClass:index==isActive}"
                 @click="changeHeaderStyle(index)"
@@ -31,18 +26,18 @@
 
         <ul class="nav navbar-nav ml-auto">
 
-            <li class="nav-item d-md-down-none">
+            <li class="nav-item">
                 <a class="nav-link">
                     <Icon type="android-notifications" size="20"></Icon>
                     <span class="badge badge-pill badge-danger">5</span></a>
             </li>
 
 
-            <Dropdown class="nav-item">
+            <Dropdown trigger="click" class="nav-item">
                 <a href="javascript:void(0)" style="position: relative;">
                     <div slot="button">
                         <img src="/static/img/avatars/man-avatar.png" class="img-avatar" alt="o">
-                        <div class="d-md-down-none"
+                        <div
                              style="max-width: 60px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
                             {{loginUser.nickname}}
                         </div>
@@ -93,7 +88,7 @@
             </Dropdown>
 
 
-            <li class="nav-item d-md-down-none">
+            <li class="nav-item">
                 <a class="nav-link navbar-toggler aside-menu-toggler" @click="asideToggle">&#9776;</a>
             </li>
         </ul>
@@ -112,14 +107,16 @@
         },
         data() {
             return {
-                loginUser:null,
+                loginUser: null,
                 headers: [],
                 isActive: -1,
+                miniPaddingLeftClass: 'miniPaddingLeftClass',
+                miniPaddingLeftClassIsActive: true,
             }
         },
         created() {
             this.listRoute('backheader');
-            this.loginUser=LocalStorage.getItem("LOGIN-USER");
+            this.loginUser = LocalStorage.getItem("LOGIN-USER");
         },
         methods: {
             listRoute(type) {
@@ -155,8 +152,8 @@
                 document.body.classList.toggle('sidebar-hidden')
             },
             sidebarMinimize(e) {
-                e.preventDefault()
-
+                e.preventDefault();
+                this.miniPaddingLeftClassIsActive=!this.miniPaddingLeftClassIsActive;
                 document.body.classList.toggle('sidebar-minimized')
             },
             mobileSidebarToggle(e) {
@@ -177,6 +174,10 @@
 </script>
 
 <style type="text/css" scoped>
+    .miniPaddingLeftClass {
+        margin-left: 150px;
+    }
+
     .dropdown-itemp {
         text-align: left;
         font-size: 15px;

@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <AppHeader :loginUser="loginUser"/>
+        <AppHeader />
         <div class="app-body">
             <Sidebar/>
             <main class="main">

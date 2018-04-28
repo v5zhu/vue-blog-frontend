@@ -9,6 +9,7 @@ import feedback from './modules/feedback';
 import comment from './modules/comment';
 import permission from './modules/permission';
 import route from './modules/route';
+import image from './modules/image';
 import headline from './modules/thirdapi/headline';
 import getters from './getters';
 
@@ -25,6 +26,7 @@ const store = new Vuex.Store({
         comment,
         permission,
         route,
+        image,
         headline
     },
     getters

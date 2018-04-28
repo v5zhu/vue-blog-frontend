@@ -5,12 +5,8 @@
             <Col :md="24">
                 <div>
                     <div id="container" style="margin-bottom:10px;">
-                        <Button
-                                 id='pickfiles' @click="qiniu_upload">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                                <p>Click or drag files here to upload</p>
-                            </div>
+                        <Button type="primary" size="large" icon="ios-cloud-upload-outline" id='pickfiles'
+                                @click="qiniu_upload" style="padding-bottom:5px;">上传文件
                         </Button>
 
                         <Progress :percent="progresscount" :status="progresstatus"
@@ -24,133 +20,45 @@
                                   v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
                         </Progress>
                     </div>
-                    <div style="position:relative;">
-                        <Table :columns="columns7" :data="page_video_list" ref="table"></Table>
-                        <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;
-                            align-items: center;
-                            justify-content: center;background: rgba(210, 216, 222, 0.5);" v-if="list_loadding">
-                            <Spin size="large"></Spin>
-                            <h6 style="color:#2d8cf0;margin-top:10px;">正在获取数据...</h6>
-                        </div>
-                    </div>
-                    <Page :total="this.video_list.length" show-total @on-change="setInitPage"
-                          style="text-align:right;margin-top:50px"></Page>
-                    <Button type="primary" size="large" @click="exportData(1)">
-                        <Icon type="ios-download-outline"></Icon>
-                        导出原始数据
-                    </Button>
-                    <Button type="primary" size="large" @click="exportData(2)">
-                        <Icon type="ios-download-outline"></Icon>
-                        导出排序和过滤后的数据
-                    </Button>
                 </div>
-                <div style="" class="doc-content">
-                    <h5>表格综合实例</h5>
-                    <p>轻松完成业务需求，再也不用被产品催了</p>
-                </div>
-            </Col>
-            <Col :md="12">
             </Col>
         </Row>
+        <Row>
+            <Col span="24" offset="1">
+                <Timeline>
+                    <TimelineItem v-for="img in pageInfo.list" :key="img.id">
+                        <p style="font-size: 14px;font-weight: bold;">{{img.shootTime|formatDate}}</p>
+
+                        <div style="padding-left: 10px;padding-top: 10px;">
+                            <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"/>
+                        </div>
+                    </TimelineItem>
+                    <TimelineItem>
+                        <div v-if="pageInfo.total > pageInfo.pageSize"
+                             style="text-align: left;position: relative;margin-top: -8px;margin-left: 10px;">
+                            <p @click="loadMoreImages()" style="border: none;cursor: pointer;">
+                                <Icon type="ios-more-outline" size="32"></Icon>
+                                <Icon type="ios-more-outline" size="32"></Icon>
+                            </p>
+                        </div>
+                        <div style="text-align: left;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">
+                            全部加载完成
+                        </div>
+                    </TimelineItem>
+                </Timeline>
+            </Col>
+        </Row>
+
     </div>
 </template>
 
 <script>
     import store from 'store/';
+    import {formatTime} from 'utils';
+    import LocalStorage from "utils/LocalStorage";
 
     var vue;
     var uploader;
-
-    function getVideoName(video_name) {
-        var video_name = '';
-        var img_ext_list = [".jpg", ".png", ".jpeg"];
-        img_ext_list.forEach(function (e) {
-            if (video_name.indexOf(e) !== -1) {
-                let point_index = video_name.indexOf(e);
-                let leaf_index = video_name.lastIndexOf('/', point_index);
-                let line_index = video_name.lastIndexOf('_', point_index);
-                video_name = video_name.substring(line_index + 1);
-                return video_name;
-
-            }
-        });
-
-
-        var video_ext_list = [".mp4"];
-        video_ext_list.forEach(function (e) {
-            if (video_name.indexOf(e) !== -1) {
-                let point_index = video_name.indexOf(e);
-                let leaf_index = video_name.lastIndexOf('/', point_index);
-                let line_index = video_name.lastIndexOf('_', point_index);
-                video_name = video_name.substring(line_index + 1);
-                return video_name;
-            }
-        });
-        return video_name;
-
-    };
-
-    function getVideoDuration(video_duration_before) {
-        let video_duration = parseInt(video_duration_before);
-        if (video_duration <= 60) {
-            if (video_duration < 10)
-                video_duration = "00:00:0" + video_duration;
-            else
-                video_duration = "00:00:" + video_duration;
-
-        }
-        else if (video_duration > 60 && video_duration <= 60 * 60) {
-            const minute = Math.floor(video_duration / 60);
-            const s = Math.floor(video_duration % 60);
-            if (minute < 10)
-                video_duration = "00:0" + minute;
-            else
-                video_duration = "00:" + minute;
-
-
-            if (s < 10)
-                video_duration = video_duration + ":0" + s;
-
-            else
-                video_duration = video_duration + ":" + s;
-
-        }
-        else if (video_duration > 60 * 60 && video_duration < 60 * 60 * 60) {
-            const hour = Math.floor(video_duration / 3600);
-
-            const minute = Math.floor((video_duration % 3600) / 60);
-            const s = Math.floor((video_duration % 3600) % 60);
-            if (hour < 10)
-                video_duration = "0" + hour;
-            else
-                video_duration = hour + '';
-
-            if (minute < 10)
-                video_duration = video_duration + ":0" + minute;
-            else
-                video_duration = video_duration + ":" + minute;
-
-            if (s < 10)
-                video_duration = video_duration + ":0" + s;
-            else
-                video_duration = video_duration + ":" + s;
-
-
-        }
-
-        return video_duration;
-    }
-
-    function getVideoSize(video_size) {
-        if (video_size < 1024)
-            video_size = Math.round(video_size * 100) / 100 + " B";
-        else if (video_size >= 1024 && video_size < 1024 * 1024)
-            video_size = Math.round(video_size / 1024 * 100) / 100 + " Kb";
-        else if (video_size >= 1024 * 1024 && video_size < 1024 * 1024 * 1024)
-            video_size = Math.round(video_size / (1024 * 1024) * 100) / 100 + " Mb";
-
-        return video_size;
-    }
 
     function qiniuInit(vue) {
 
@@ -203,12 +111,35 @@
                 },
                 'FileUploaded': function (up, file, response) {
                     vue.progresscount = 100;
-                    vue.$Notice.success({title: '上传成功'});
+
 
                     //在这里封装图片信息并保存到后台
                     var data = JSON.parse(response);
-                    var res=Qiniu.exif(data.key);
-                    console.log(res)
+                    var res = null;
+                    try {
+                        res = Qiniu.exif(data.key);
+                    } catch (err) {
+                        console.error(err)
+                    }
+                    vue.$Notice.success({title: file.name + '上传成功'});
+                    vue.image.name = file.name;
+                    vue.image.type = file.type;
+                    vue.image.size = file.size;
+                    vue.image.originalSize = file.origSize;
+                    vue.image.uploadedSize = file.loaded;
+
+                    if (res != null && res.DateTimeOriginal) {
+                        var time = res.DateTimeOriginal.val.replace(":", "-");
+                        time = time.replace(":", "-");
+                        vue.image.shootTime = new Date(time);
+                    }
+
+                    vue.image.lastModifiedDate = file.lastModifiedDate;
+                    vue.image.domain = Qiniu.domain;
+                    vue.image.key = data.key;
+                    vue.image.exif = res == null ? "" : JSON.stringify(res);
+                    vue.uploadImage(vue.image);
+
                 },
                 'Error': function (up, err, errTip) {
                     //上传出错时，处理相关的事情
@@ -222,6 +153,7 @@
                 },
                 'UploadComplete': function () {
                     //队列文件处理完毕后，处理相关的事情
+                    vue.getImagesForPage();
                 },
                 'Key': function (up, file) {
                 }
@@ -234,222 +166,38 @@
         name: 'buttons',
         data() {
             return {
+                loginUser:null,
                 uptoken: '',
-                progresshow: false,
-                progresscount: 0,
-                progresstatus: 'active',
-                progressspeed: 0,
-                video_list: [
-                    {
-                        task_status: 0,
-                        timestamp: "2017-08-10 17:03:54",
-                        video_duration: "11s",
-                        video_size: 1732410,
-                        video_name: "p.mp4",
-                    },
-                    {
-                        task_status: 1,
-                        timestamp: "2017-08-10 17:03:54",
-                        video_duration: "11s",
-                        video_size: 1732410,
-                        video_name: "p.mp4",
-                    },
-                    {
-                        task_status: 1,
-                        timestamp: "2017-08-10 17:03:54",
-                        video_duration: "11s",
-                        video_size: 1732410,
-                        video_name: "p.mp4",
-                    },
-                    {
-                        task_status: 0,
-                        timestamp: "2017-08-10 17:03:54",
-                        video_duration: "11s",
-                        video_size: 1732410,
-                        video_name: "p.mp4",
-                    },
-                    {
-                        task_status: 1,
-                        timestamp: "2017-08-10 17:03:54",
-                        video_duration: "11s",
-                        video_size: 1732410,
-                        video_name: "p.mp4",
-                    },
-                    {
-                        task_status: 0,
-                        timestamp: "2017-08-10 17:03:54",
-                        video_duration: "11s",
-                        video_size: 1732410,
-                        video_name: "p.mp4",
-                    },
-                ],
-                pageindex: 1,
-                page_video_list: [],
-                lodding: false,
-                list_loadding: false,
-                columns7: [
-                    {
-                        title: '视频名称',
-                        key: 'video_name',
-                        ellipsis: 'true',
-                    },
-                    {
-                        title: '上传时间',
-                        ellipsis: 'true',
-                        key: 'timestamp',
-
-                    },
-
-                    {
-                        title: '时长',
-                        ellipsis: 'true',
-                        key: 'video_duration',
-                    },
-                    {
-                        title: '大小',
-                        ellipsis: 'true',
-                        key: 'video_size',
-                        filters: [
-                            {
-                                label: '大于10M',
-                                value: 1
-                            },
-                            {
-                                label: '小于10M',
-                                value: 2
-                            }
-                        ],
-                        filterMultiple: false,
-                        filterMethod(value, row) {
-                            if (value === 1) {
-                                return row.video_size > 1024 * 1024 * 1024 * 10;
-                            } else if (value === 2) {
-                                return row.video_size < 1024 * 1024 * 10;
-                            }
-                        }
-                    },
-                    {
-                        title: '状态',
-                        ellipsis: 'true',
-                        filters: [
-                            {
-                                label: '处理完成',
-                                value: 1
-                            },
-                            {
-                                label: '正在处理',
-                                value: 2
-                            }
-                        ],
-                        filterMultiple: false,
-                        filterMethod(value, row) {
-                            if (value === 1) {
-                                return row.task_status === 1;
-                            } else if (value === 2) {
-                                return row.task_status === 0;
-                            }
-                        },
-
-                        render: (h, params) => {
-                            const task_status = parseInt(params.row.task_status);
-
-                            if (task_status === 0)
-                                return h('div', [
-                                    h('Tag', {
-                                        props: {
-                                            type: 'dot',
-                                            color: "blue"
-                                        }
-                                    }, "正在处理"),
-                                ]);
-
-                            else if (task_status === 1)
-                                return h('div', [
-
-                                    h('Tag', {
-                                        props: {
-                                            type: 'dot',
-                                            color: "green"
-                                        }
-                                    }, "处理完成"),
-                                ]);
-                        }
-                    },
-
-                    {
-                        title: '操作',
-                        key: 'action',
-                        align: 'center',
-                        ellipsis: 'true',
-
-                        render: (h, params) => {
-                            const task_status = parseInt(params.row.task_status);
-                            if (task_status === 0) {
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            content: '还未分析完成，暂时不能查看',
-                                        },
-                                    }, [
-                                        h('Button', {
-                                            props: {
-                                                type: 'primary',
-                                                size: 'small',
-                                                loading: true,
-                                            },
-                                            style: {
-                                                marginRight: '5px'
-                                            },
-                                        }, '处理中')]),
-                                    h('Button', {
-                                        props: {
-                                            type: 'error',
-                                            size: 'small',
-                                            disabled: true,
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(params.index)
-                                            }
-                                        }
-                                    }, '删除')
-
-
-                                ]);
-                            }
-                            else if (task_status === 1) {
-                                return h('div', [
-                                    h('Button', {
-                                        props: {
-                                            type: 'primary',
-                                            size: 'small',
-                                        },
-                                        style: {
-                                            marginRight: '5px'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.$router.push({path: '/tabledetail/' + (((this.pageindex - 1) * 10) + params.index)})
-
-                                            }
-                                        },
-                                    }, '查看结果'),
-                                    h('Button', {
-                                        props: {
-                                            type: 'error',
-                                            size: 'small',
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(params.index)
-                                            }
-                                        }
-                                    }, '删除')
-                                ]);
-                            }
-                        }//render
-                    },//{
-                ],//cloumn
+                image: {
+                    name: null,
+                    type: null,
+                    size: 0,
+                    originalSize: 0,
+                    uploadedSize: 0,
+                    domain: null,
+                    key: null,
+                    shootTime: null,
+                    lastModifiedDate: null,
+                    gmtCreate: null,
+                    gmtModified: null
+                },
+                pageInfo: {
+                    isFirstPage: undefined,
+                    isLastPage: undefined,
+                    pageNum: 1,
+                    pageSize: 10,
+                    pages: undefined,
+                    total: undefined,
+                    list: [],
+                    prePage: undefined,
+                    nextPage: undefined
+                },
+                pageQuery: {
+                    pageNum: 1,
+                    pageSize: 10,
+                    filterMap: {},
+                    sortMap: {}
+                },
             }//return
         },//data
         methods: {
@@ -501,7 +249,33 @@
                         closable: true
                     })
                 })
-            }
+            },
+            uploadImage(image) {
+                store.dispatch("UploadImage", image).then(response => {
+
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
+                })
+            },
+            loadMoreImages() {
+                this.pageQuery.pageSize += 10;
+                this.getImagesForPage();
+            },
+            getImagesForPage() {
+                this.$Loading.start();
+                this.pageQuery.filterMap.authorId=this.loginUser.id;
+                store.dispatch('GetImagesForPage', this.pageQuery).then(res => {
+                    this.pageInfo = res.data.payload;
+                    this.$Loading.finish();
+                }).catch(err => {
+                    this.$Message.error(err);
+                    this.$Loading.error()
+                });
+            },
         },
         mounted() {
             const vue = this;
@@ -511,9 +285,15 @@
                 vue.list_loadding = false;
 
             }, 1000);
+            this.loginUser=LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
-            this.setInitPage(1);
+            this.getImagesForPage();
         },
+        filters: {
+            formatDate(time) {
+                return formatTime(time);
+            }
+        }
     }
 
 
