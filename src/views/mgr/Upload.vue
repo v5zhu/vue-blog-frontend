@@ -39,7 +39,7 @@
                         </div>
                         <a style="padding-top: 10px;" @click="openMapModal(img)" title="点击在地图中查看拍摄地理位置">
                             <Icon type="ios-location" color="blue" size="20"></Icon>
-                            {{img.exif|filterAddress}},{{img.exif|filterLatitude}}, {{img.exif|filterLongitude}}
+                            {{img.exif|filterLatitude}}, {{img.exif|filterLongitude}}
                         </a>
                         <div style="padding-top: 10px;">
                             <Row>
@@ -402,10 +402,7 @@
                 this.getImagesForPage();
             },
             openMapModal(img) {
-                var longitude = filterLongitude(img.exif, false);
-                var latitude = filterLatitude(img.exif, false);
-
-                this.getAddress(parseFloat(longitude), parseFloat(latitude));
+                this.getAddress(img);
                 this.showMapModal = true;
             },
             getImagesForPage() {
@@ -451,8 +448,13 @@
                     })
                 });
             },
-            getAddress(longitude, latitude) {
+            getAddress(img) {
                 var self = this;
+                var longitude = filterLongitude(img.exif, false);
+                var latitude = filterLatitude(img.exif, false);
+                longitude = parseFloat(longitude);
+                latitude = parseFloat(latitude);
+
                 self.map.setCenter([longitude, latitude]);
                 // self.marker.setMap(self.map);
                 var lnglatXY = new AMap.LngLat(longitude, latitude);
@@ -463,6 +465,7 @@
                     } else {
                         self.locationAddress = '无法获取地址'
                     }
+                    return self.locationAddress;
                 })
             }
         },
