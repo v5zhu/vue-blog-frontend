@@ -1,6 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
+        <Input type="text" v-model="locationAddress"></Input>
         <div id="map-container"></div>
         <Row>
             <Col :md="24">
@@ -199,6 +200,7 @@
                 uptoken: '',
                 progresshow: false,
                 geocoder: undefined,
+                locationAddress: '',
                 image: {
                     name: null,
                     type: null,
@@ -310,19 +312,45 @@
                     this.$Loading.error()
                 });
             },
-            getAddress(longitude, latitude) {
-                alert(2);
-                //逆地理编码
-                var lnglatXY = [116.396574, 39.992706];//地图上所标点的坐标
-                this.geocoder.getAddress(lnglatXY, function (status, result) {
-                    if (status === 'complete' && result.info === 'OK') {
-                        //获得了有效的地址信息:
-                        //即，result.regeocode.formattedAddress
-                        console.log(result)
-                    } else {
-                        //获取地址失败
-                        console.error("获取地址失败")
-                    }
+            getAddress(selector,longitude, latitude) {
+                var self = this;
+                var map = new AMap.Map(selector, {
+                    resizeEnable: true,
+                    zoom: 13,
+                    center: [longitude, latitude]
+                });
+                AMap.plugin('AMap.Geocoder', function () {
+                    var geocoder = new AMap.Geocoder({
+                        city: "010"//城市，默认：“全国”
+                    });
+                    var marker = new AMap.Marker({
+                        map: map,
+                        bubble: true
+                    });
+
+                    geocoder.getAddress({
+                        P: 30.584336925012323,
+                        O: 104.14654188305138,
+                        lng: 104.146542,
+                        lat: 30.584337
+                    }, function (status, result) {
+                        if (status == 'complete') {
+                            self.locationAddress = result.regeocode.formattedAddress
+                        } else {
+                            self.locationAddress = '无法获取地址'
+                        }
+                    })
+                    map.on('click', function (e) {
+                        console.log(e.lnglat)
+                        marker.setPosition(e.lnglat);
+                        geocoder.getAddress(e.lnglat, function (status, result) {
+                            if (status == 'complete') {
+                                self.locationAddress = result.regeocode.formattedAddress
+                            } else {
+                                self.locationAddress = '无法获取地址'
+                            }
+                        })
+                    })
                 });
             }
         },
@@ -337,69 +365,7 @@
             this.loginUser = LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
             this.getImagesForPage();
-
-            AMap.service('AMap.Geocoder', function () {//回调函数
-                //实例化Geocoder
-                var geocoder = new AMap.Geocoder({
-                    city: "010"//城市，默认：“全国”
-                });
-
-                var lnglatXY = [104.05083333333333, 30.610000000000003];//地图上所标点的坐标
-                geocoder.getAddress(lnglatXY, function (status, result) {
-                    if (status === 'complete' && result.info === 'OK') {
-                        //获得了有效的地址信息:
-                        //即，result.regeocode.formattedAddress
-                        console.log(result)
-                    } else {
-                        //获取地址失败
-                        console.error("获取地址失败")
-                    }
-                });
-            });
-
-
-            var map = new AMap.Map('map-container', {
-                resizeEnable: true,
-                zoom: 13,
-                center:[104.13555555555556,30.593055555555555]
-            });
-            AMap.plugin('AMap.Geocoder', function () {
-                var geocoder = new AMap.Geocoder({
-                    city: "010"//城市，默认：“全国”
-                });
-                var marker = new AMap.Marker({
-                    map: map,
-                    bubble: true
-                });
-
-                // var input = document.getElementById('input');
-                // var message = document.getElementById('message');
-                map.on('click', function (e) {
-                    marker.setPosition(e.lnglat);
-                    geocoder.getAddress(e.lnglat, function (status, result) {
-                        if (status == 'complete') {
-                            // input.value = result.regeocode.formattedAddress
-                            // message.innerHTML = ''
-                        } else {
-                            // message.innerHTML = '无法获取地址'
-                        }
-                    })
-                })
-
-                /*input.onchange = function(e){
-                    var address = input.value;
-                    geocoder.getLocation(address,function(status,result){
-                        if(status=='complete'&&result.geocodes.length){
-                            marker.setPosition(result.geocodes[0].location);
-                            map.setCenter(marker.getPosition())
-                            message.innerHTML = ''
-                        }else{
-                            message.innerHTML = '无法获取位置'
-                        }
-                    })
-                }*/
-
-            });
+            this.getAddress('map-container',104.13555555555556, 30.593055555555555)
         },
         filters: {
             formatDate(time) {
