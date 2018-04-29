@@ -1,8 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
-        <Input type="text" v-model="locationAddress"></Input>
-        <div id="map-container"></div>
+
         <Row>
             <Col :md="24">
                 <div>
@@ -38,10 +37,10 @@
                             <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
                                  style="border: #a2e6f8 8px solid"/>
                         </div>
-                        <div style="padding-top: 10px;">
+                        <a style="padding-top: 10px;" @click="openMapModal(img)" title="点击在地图中查看拍摄地理位置">
                             <Icon type="ios-location" color="blue" size="20"></Icon>
-                            {{img.exif|filterLatitude}}, {{img.exif|filterLongitude}}
-                        </div>
+                            {{img.exif|filterAddress}},{{img.exif|filterLatitude}}, {{img.exif|filterLongitude}}
+                        </a>
                         <div style="padding-top: 10px;">
                             <Row>
                                 <Col span="3">
@@ -78,13 +77,28 @@
                 </Timeline>
             </Col>
         </Row>
+        <Modal v-model="showMapModal" width="633" :maskClosable="false"
+               style="position: relative" :styles="{top: '20px'}">
+            <p slot="header" style="color:#f60;text-align:left">
+                <Icon type="ios-pulse-strong" size="20"></Icon>
+                <span style="font-size:14px;">图片位置</span>
+            </p>
+            <div style="position: relative">
+                <Input type="text" v-model="locationAddress"></Input>
+                <div id="map-container" style="position: relative"></div>
+            </div>
 
+            <div slot="footer" style="text-align: center">
+                <Button type="primary" size="small">关闭</Button>
+            </div>
+
+        </Modal>
     </div>
 </template>
 
 <script>
     import store from 'store/';
-    import {formatTime, Dfm2Degree} from 'utils';
+    import {Dfm2Degree, formatTime} from 'utils';
     import LocalStorage from "utils/LocalStorage";
 
     var vue;
@@ -191,6 +205,88 @@
         });
     }
 
+    function filterLatitude(exif, isShowRef) {
+        if (!exif) {
+            return '未知';
+        }
+        var exifObj = JSON.parse(exif);
+        if (!exifObj.GPSLatitudeRef || !exifObj.GPSLatitude) {
+            return '未知';
+        }
+        if (exifObj.GPSLatitudeRef.val && exifObj.GPSLatitude.val) {
+            if (isShowRef) {
+                if (exifObj.GPSLatitudeRef.val == 'N') {
+                    return '北纬' + Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
+                } else if (exifObj.GPSLatitudeRef.val == 'S') {
+                    return '南纬' + Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
+                }
+            } else {
+                return Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
+            }
+            return '未知';
+        }
+        return '未知';
+    }
+
+    function filterLongitude(exif, isShowRef) {
+        if (!exif) {
+            return '未知';
+        }
+        var exifObj = JSON.parse(exif);
+        if (!exifObj.GPSLongitudeRef || !exifObj.GPSLongitude) {
+            return '未知';
+        }
+        if (exifObj.GPSLongitudeRef.val && exifObj.GPSLongitude.val) {
+            if (isShowRef) {
+                if (exifObj.GPSLongitudeRef.val == 'E') {
+                    return '东经' + Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
+                } else if (exifObj.GPSLongitudeRef.val == 'S') {
+                    return '西经' + Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
+                }
+            } else {
+                return Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
+            }
+            return '未知';
+        }
+        return '未知';
+    }
+
+    function filterPhone(exif) {
+        if (!exif) {
+            return '未知';
+        }
+        var exifObj = JSON.parse(exif);
+        if (!exifObj.Make || !exifObj.Model) {
+            return '未知';
+        }
+        if (exifObj.Make.val && exifObj.Model.val) {
+            return exifObj.Make.val + ' ' + exifObj.Model.val;
+        }
+        return '未知';
+    }
+
+    function filterFnumber(exif) {
+        if (!exif) {
+            return '未知';
+        }
+        var exifObj = JSON.parse(exif);
+        if (!exifObj.FNumber) {
+            return '未知';
+        }
+        return exifObj.FNumber.val;
+    }
+
+    function filterFocalLength(exif) {
+        if (!exif) {
+            return '未知';
+        }
+        var exifObj = JSON.parse(exif);
+        if (!exifObj.FocalLength) {
+            return '未知';
+        }
+        return exifObj.FocalLength.val;
+    }
+
     export default {
 
         name: 'buttons',
@@ -201,6 +297,8 @@
                 progresshow: false,
                 geocoder: undefined,
                 locationAddress: '',
+                showMapModal: false,
+                map: null,
                 image: {
                     name: null,
                     type: null,
@@ -301,6 +399,13 @@
                 this.pageQuery.pageSize += 10;
                 this.getImagesForPage();
             },
+            openMapModal(img) {
+                var longitude = filterLongitude(img.exif, false);
+                var latitude = filterLatitude(img.exif, false);
+
+                this.getAddress(parseFloat(longitude), parseFloat(latitude));
+                this.showMapModal = true;
+            },
             getImagesForPage() {
                 this.$Loading.start();
                 this.pageQuery.filterMap.authorId = this.loginUser.id;
@@ -312,36 +417,79 @@
                     this.$Loading.error()
                 });
             },
-            getAddress(selector,longitude, latitude) {
+            initMap(){
                 var self = this;
-                var map = new AMap.Map(selector, {
+                self.map = new AMap.Map('map-container', {
                     resizeEnable: true,
                     zoom: 13,
                     center: [longitude, latitude]
                 });
-                AMap.plugin('AMap.Geocoder', function () {
+                AMap.plugin(['AMap.Geocoder', 'AMap.ToolBar', 'AMap.Scale', 'AMap.OverView'], function () {
                     var geocoder = new AMap.Geocoder({
                         city: "010"//城市，默认：“全国”
                     });
+                    var toolBar = new AMap.ToolBar();
+                    var scale = new AMap.Scale();
+                    var overview = new AMap.OverView();
+                    self.map.addControl(toolBar);
+                    self.map.addControl(scale);
+                    self.map.addControl(overview);
+
                     var marker = new AMap.Marker({
-                        map: map,
+                        map: self.map,
                         bubble: true
                     });
-
-                    geocoder.getAddress({
-                        P: 30.584336925012323,
-                        O: 104.14654188305138,
-                        lng: 104.146542,
-                        lat: 30.584337
-                    }, function (status, result) {
+                    var lnglatXY = new AMap.LngLat(longitude, latitude);
+                    geocoder.getAddress(lnglatXY, function (status, result) {
                         if (status == 'complete') {
                             self.locationAddress = result.regeocode.formattedAddress
                         } else {
                             self.locationAddress = '无法获取地址'
                         }
                     })
-                    map.on('click', function (e) {
-                        console.log(e.lnglat)
+                    self.map.on('click', function (e) {
+                        marker.setPosition(e.lnglat);
+                        geocoder.getAddress(e.lnglat, function (status, result) {
+                            if (status == 'complete') {
+                                self.locationAddress = result.regeocode.formattedAddress
+                            } else {
+                                self.locationAddress = '无法获取地址'
+                            }
+                        })
+                    })
+                });
+            },
+            getAddress(longitude, latitude) {
+                var self = this;
+                self.map = new AMap.Map('map-container', {
+                    resizeEnable: true,
+                    zoom: 13,
+                    center: [longitude, latitude]
+                });
+                AMap.plugin(['AMap.Geocoder', 'AMap.ToolBar', 'AMap.Scale', 'AMap.OverView'], function () {
+                    var geocoder = new AMap.Geocoder({
+                        city: "010"//城市，默认：“全国”
+                    });
+                    var toolBar = new AMap.ToolBar();
+                    var scale = new AMap.Scale();
+                    var overview = new AMap.OverView();
+                    self.map.addControl(toolBar);
+                    self.map.addControl(scale);
+                    self.map.addControl(overview);
+
+                    var marker = new AMap.Marker({
+                        map: self.map,
+                        bubble: true
+                    });
+                    var lnglatXY = new AMap.LngLat(longitude, latitude);
+                    geocoder.getAddress(lnglatXY, function (status, result) {
+                        if (status == 'complete') {
+                            self.locationAddress = result.regeocode.formattedAddress
+                        } else {
+                            self.locationAddress = '无法获取地址'
+                        }
+                    })
+                    self.map.on('click', function (e) {
                         marker.setPosition(e.lnglat);
                         geocoder.getAddress(e.lnglat, function (status, result) {
                             if (status == 'complete') {
@@ -365,80 +513,28 @@
             this.loginUser = LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
             this.getImagesForPage();
-            this.getAddress('map-container',104.13555555555556, 30.593055555555555)
         },
         filters: {
             formatDate(time) {
                 return formatTime(time);
             },
             filterLatitude(exif) {
-                if (!exif) {
-                    return '未知';
-                }
-                var exifObj = JSON.parse(exif);
-                if (!exifObj.GPSLatitudeRef || !exifObj.GPSLatitude) {
-                    return '未知';
-                }
-                if (exifObj.GPSLatitudeRef.val && exifObj.GPSLatitude.val) {
-                    if (exifObj.GPSLatitudeRef.val == 'N') {
-                        return '北纬' + Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
-                    } else if (exifObj.GPSLatitudeRef.val == 'S') {
-                        return '南纬' + Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
-                    }
-                    return '未知';
-                }
-                return '未知';
+                return filterLatitude(exif, true);
             },
             filterLongitude(exif) {
-                if (!exif) {
-                    return '未知';
-                }
-                var exifObj = JSON.parse(exif);
-                if (!exifObj.GPSLongitudeRef || !exifObj.GPSLongitude) {
-                    return '未知';
-                }
-                if (exifObj.GPSLongitudeRef.val && exifObj.GPSLongitude.val) {
-                    if (exifObj.GPSLongitudeRef.val == 'E') {
-                        return '东经' + Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
-                    } else if (exifObj.GPSLongitudeRef.val == 'S') {
-                        return '西经' + Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
-                    }
-                    return '未知';
-                }
-                return '未知';
+                return filterLongitude(exif, true);
             },
             filterPhone(exif) {
-                if (!exif) {
-                    return '未知';
-                }
-                var exifObj = JSON.parse(exif);
-                if (!exifObj.Make || !exifObj.Model) {
-                    return '未知';
-                }
-                if (exifObj.Make.val && exifObj.Model.val) {
-                    return exifObj.Make.val + ' ' + exifObj.Model.val;
-                }
-                return '未知';
+                return filterPhone(exif);
             },
             filterFnumber(exif) {
-                if (!exif) {
-                    return '未知';
-                }
-                var exifObj = JSON.parse(exif);
-                if (!exifObj.FNumber) {
-                    return '未知';
-                }
-                return exifObj.FNumber.val;
+                return filterFnumber(exif);
             },
             filterFocalLength(exif) {
-                if (!exif) {
-                    return '未知';
-                }
-                var exifObj = JSON.parse(exif);
-                if (!exifObj.FocalLength) {
-                    return '未知';
-                }
-                return exifObj.FocalLength.val;
+                return filterFocalLength(exif);
+            },
+            filterAddress(exif) {
+
             }
         }
     }
@@ -450,7 +546,7 @@
 <style type="text/css" scoped>
     #map-container {
         width: 600px;
-        height: 450px;
+        height: 400px;
     }
 
     .ivu-tag-dot {
