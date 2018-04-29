@@ -37,8 +37,8 @@
                             <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
                                  style="border: #a2e6f8 8px solid"/>
                         </div>
-                        <a style="padding-top: 10px;" @click="openMapModal(img)" title="点击在地图中查看拍摄地理位置">
-                            <Icon type="ios-location" color="blue" size="20"></Icon>
+                        <a style="margin-top: 10px;" @click="openMapModal(img)" title="点击在地图中查看拍摄地理位置">
+                            <Icon type="ios-location" color="red" size="20"></Icon>
                             {{img.exif|filterLatitude}}, {{img.exif|filterLongitude}}
                         </a>
                         <div style="padding-top: 10px;">
@@ -84,12 +84,14 @@
                 <span style="font-size:14px;">图片位置</span>
             </p>
             <div style="position: relative">
-                <Input type="text" v-model="locationAddress"></Input>
+                <Input type="text" v-model="locationAddress" style="margin-bottom: 10px;">
+                    <span slot="prepend">拍摄地点:</span>
+                    <span slot="append"><Icon type="ios-location" color="red" size="20"></Icon></span>
+                </Input>
                 <div id="map-container" style="position: relative"></div>
             </div>
-
             <div slot="footer" style="text-align: center">
-                <Button type="primary" size="small">关闭</Button>
+                <Button type="primary" size="small" @click="showMapModal=false">关闭</Button>
             </div>
 
         </Modal>
