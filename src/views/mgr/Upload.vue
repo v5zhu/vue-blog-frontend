@@ -299,6 +299,8 @@
                 locationAddress: '',
                 showMapModal: false,
                 map: null,
+                geocoder: null,
+                marker: null,
                 image: {
                     name: null,
                     type: null,
@@ -417,39 +419,29 @@
                     this.$Loading.error()
                 });
             },
-            initMap(){
+            initMap() {
                 var self = this;
                 self.map = new AMap.Map('map-container', {
                     resizeEnable: true,
-                    zoom: 13,
-                    center: [longitude, latitude]
+                    zoom: 15,
+                    center: [104.55555, 30.4445555]
                 });
                 AMap.plugin(['AMap.Geocoder', 'AMap.ToolBar', 'AMap.Scale', 'AMap.OverView'], function () {
-                    var geocoder = new AMap.Geocoder({
+                    self.geocoder = new AMap.Geocoder({
                         city: "010"//城市，默认：“全国”
                     });
                     var toolBar = new AMap.ToolBar();
                     var scale = new AMap.Scale();
-                    var overview = new AMap.OverView();
                     self.map.addControl(toolBar);
                     self.map.addControl(scale);
-                    self.map.addControl(overview);
 
-                    var marker = new AMap.Marker({
+                    self.marker = new AMap.Marker({
                         map: self.map,
                         bubble: true
                     });
-                    var lnglatXY = new AMap.LngLat(longitude, latitude);
-                    geocoder.getAddress(lnglatXY, function (status, result) {
-                        if (status == 'complete') {
-                            self.locationAddress = result.regeocode.formattedAddress
-                        } else {
-                            self.locationAddress = '无法获取地址'
-                        }
-                    })
                     self.map.on('click', function (e) {
-                        marker.setPosition(e.lnglat);
-                        geocoder.getAddress(e.lnglat, function (status, result) {
+                        self.marker.setPosition(e.lnglat);
+                        self.geocoder.getAddress(e.lnglat, function (status, result) {
                             if (status == 'complete') {
                                 self.locationAddress = result.regeocode.formattedAddress
                             } else {
@@ -461,45 +453,17 @@
             },
             getAddress(longitude, latitude) {
                 var self = this;
-                self.map = new AMap.Map('map-container', {
-                    resizeEnable: true,
-                    zoom: 13,
-                    center: [longitude, latitude]
-                });
-                AMap.plugin(['AMap.Geocoder', 'AMap.ToolBar', 'AMap.Scale', 'AMap.OverView'], function () {
-                    var geocoder = new AMap.Geocoder({
-                        city: "010"//城市，默认：“全国”
-                    });
-                    var toolBar = new AMap.ToolBar();
-                    var scale = new AMap.Scale();
-                    var overview = new AMap.OverView();
-                    self.map.addControl(toolBar);
-                    self.map.addControl(scale);
-                    self.map.addControl(overview);
-
-                    var marker = new AMap.Marker({
-                        map: self.map,
-                        bubble: true
-                    });
-                    var lnglatXY = new AMap.LngLat(longitude, latitude);
-                    geocoder.getAddress(lnglatXY, function (status, result) {
-                        if (status == 'complete') {
-                            self.locationAddress = result.regeocode.formattedAddress
-                        } else {
-                            self.locationAddress = '无法获取地址'
-                        }
-                    })
-                    self.map.on('click', function (e) {
-                        marker.setPosition(e.lnglat);
-                        geocoder.getAddress(e.lnglat, function (status, result) {
-                            if (status == 'complete') {
-                                self.locationAddress = result.regeocode.formattedAddress
-                            } else {
-                                self.locationAddress = '无法获取地址'
-                            }
-                        })
-                    })
-                });
+                self.map.setCenter([longitude, latitude]);
+                // self.marker.setMap(self.map);
+                var lnglatXY = new AMap.LngLat(longitude, latitude);
+                self.marker.setPosition(lnglatXY);
+                self.geocoder.getAddress(lnglatXY, function (status, result) {
+                    if (status == 'complete') {
+                        self.locationAddress = result.regeocode.formattedAddress
+                    } else {
+                        self.locationAddress = '无法获取地址'
+                    }
+                })
             }
         },
         mounted() {
@@ -513,6 +477,7 @@
             this.loginUser = LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
             this.getImagesForPage();
+            this.initMap();
         },
         filters: {
             formatDate(time) {
