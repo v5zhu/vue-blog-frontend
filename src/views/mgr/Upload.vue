@@ -4,77 +4,78 @@
 
         <Row>
             <Col :md="24">
-                <div>
-                    <div id="container" style="margin-bottom:10px;">
-                        <Button type="primary" size="large" icon="ios-cloud-upload-outline" id='pickfiles'
-                                @click="qiniu_upload" style="padding-bottom:5px;">上传文件
-                        </Button>
+            <div>
+                <div id="container" style="margin-bottom:10px;">
+                    <Button type="primary" size="large" icon="ios-cloud-upload-outline" id='pickfiles'
+                            @click="qiniu_upload" style="padding-bottom:5px;">上传文件
+                    </Button>
 
-                        <Progress :percent="progresscount" :status="progresstatus"
-                                  style="width:90%;vertical-align:middle"
-                                  v-if="progresshow">
-                            <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
-                            <span v-if="progresscount===100">上传成功</span>
-                            <Icon type="close-circled" v-if="progresstatus==='wrong'"></Icon>
-                            <span v-if="progresstatus==='wrong'">上传失败</span>
-                            <span style="position:absolute;left:50%;top:-5px;"
-                                  v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
-                        </Progress>
-                    </div>
+                    <Progress :percent="progresscount" :status="progresstatus"
+                              style="width:90%;vertical-align:middle"
+                              v-if="progresshow">
+                        <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
+                        <span v-if="progresscount===100">上传成功</span>
+                        <Icon type="close-circled" v-if="progresstatus==='wrong'"></Icon>
+                        <span v-if="progresstatus==='wrong'">上传失败</span>
+                        <span style="position:absolute;left:50%;top:-5px;"
+                              v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
+                    </Progress>
                 </div>
+            </div>
             </Col>
         </Row>
         <Row>
             <Col span="24" offset="1">
-                <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
+            <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
 
-                <Timeline>
-                    <TimelineItem v-for="img in pageInfo.list" :key="img.id">
-                        <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">拍摄时间:</span>{{img.shootTime|formatDate}}
+            <Timeline>
+                <TimelineItem v-for="img in pageInfo.list" :key="img.id">
+                    <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">拍摄时间:</span>{{img.shootTime|formatDate}}
+                    </p>
+
+                    <div style="padding-top: 10px;">
+                        <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
+                             style="border: #a2e6f8 8px solid"/>
+                    </div>
+                    <a style="margin-top: 10px;" @click="openMapModal(img)"
+                       title="点击在地图中查看拍摄地理位置">
+                        <Icon type="ios-location" color="red" size="20"></Icon>
+                        {{img.address}},{{img.longitude}}, {{img.latitude}}
+                    </a>
+                    <div style="padding-top: 10px;">
+                        <Row>
+                            <Col span="3">
+                            <Icon type="iphone" color="blue" size="20"></Icon>
+                            {{img.model}}
+                            </Col>
+                            <Col span="3">
+                            光圈:{{img.exif|filterFnumber}}
+                            </Col>
+                            <Col span="3">
+                            焦距:{{img.exif|filterFocalLength}}
+                            </Col>
+                        </Row>
+
+                    </div>
+                    <div style="padding-top: 10px;">
+                        <Button type="primary" size="small" @click="modifyPhoto(img)">修改</Button>
+                        <Button type="error" size="small" @click="modifyPhoto(img)">删除</Button>
+                        <Button type="info" size="small" @click="modifyPhoto(img)">大图</Button>
+                    </div>
+                </TimelineItem>
+                <TimelineItem>
+                    <div v-if="pageInfo.total > pageInfo.pageSize"
+                         style="text-align: left;position: relative;margin-top: -8px;margin-left: 10px;">
+                        <p @click="loadMorePhotos()" style="border: none;cursor: pointer;">
+                            <Icon type="ios-more-outline" size="32"></Icon>
+                            <Icon type="ios-more-outline" size="32"></Icon>
                         </p>
-
-                        <div style="padding-top: 10px;">
-                            <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
-                                 style="border: #a2e6f8 8px solid"/>
-                        </div>
-                        <a style="margin-top: 10px;" @click="openMapModal(img)" title="点击在地图中查看拍摄地理位置">
-                            <Icon type="ios-location" color="red" size="20"></Icon>
-                            {{img.exif|filterLatitude}}, {{img.exif|filterLongitude}}
-                        </a>
-                        <div style="padding-top: 10px;">
-                            <Row>
-                                <Col span="3">
-                                    <Icon type="iphone" color="blue" size="20"></Icon>
-                                    {{img.exif|filterPhone}}
-                                </Col>
-                                <Col span="3">
-                                    光圈:{{img.exif|filterFnumber}}
-                                </Col>
-                                <Col span="3">
-                                    焦距:{{img.exif|filterFocalLength}}
-                                </Col>
-                            </Row>
-
-                        </div>
-                        <div style="padding-top: 10px;">
-                            <Button type="primary" size="small" @click="modifyImage(img)">修改</Button>
-                            <Button type="error" size="small" @click="modifyImage(img)">删除</Button>
-                            <Button type="info" size="small" @click="modifyImage(img)">大图</Button>
-                        </div>
-                    </TimelineItem>
-                    <TimelineItem>
-                        <div v-if="pageInfo.total > pageInfo.pageSize"
-                             style="text-align: left;position: relative;margin-top: -8px;margin-left: 10px;">
-                            <p @click="loadMoreImages()" style="border: none;cursor: pointer;">
-                                <Icon type="ios-more-outline" size="32"></Icon>
-                                <Icon type="ios-more-outline" size="32"></Icon>
-                            </p>
-                        </div>
-                        <div style="text-align: left;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">
-                            全部加载完成
-                        </div>
-                    </TimelineItem>
-                </Timeline>
+                    </div>
+                    <div style="text-align: left;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">
+                        全部加载完成
+                    </div>
+                </TimelineItem>
+            </Timeline>
             </Col>
         </Row>
         <Modal v-model="showMapModal" width="633" :maskClosable="false"
@@ -100,7 +101,7 @@
 
 <script>
     import store from 'store/';
-    import {Dfm2Degree, formatTime} from 'utils';
+    import {comma2Degree, comma2Dfm, dfm2Degree, formatTime} from 'utils';
     import LocalStorage from "utils/LocalStorage";
 
     var vue;
@@ -167,24 +168,47 @@
                     } catch (err) {
                         console.error(err)
                     }
-                    vue.$Notice.success({title: file.name + '上传成功'});
-                    vue.image.name = file.name;
-                    vue.image.type = file.type;
-                    vue.image.size = file.size;
-                    vue.image.originalSize = file.origSize;
-                    vue.image.uploadedSize = file.loaded;
+                    // 设置作者
+                    vue.photo.authorId = vue.loginUser.id;
+                    vue.photo.name = file.name;
+                    vue.photo.type = file.type;
+                    vue.photo.size = file.size;
+                    vue.photo.originalSize = file.origSize;
+                    vue.photo.uploadedSize = file.loaded;
 
                     if (res != null && res.DateTimeOriginal) {
                         var time = res.DateTimeOriginal.val.replace(":", "-");
                         time = time.replace(":", "-");
-                        vue.image.shootTime = new Date(time);
+                        vue.photo.shootTime = new Date(time);
                     }
 
-                    vue.image.lastModifiedDate = file.lastModifiedDate;
-                    vue.image.domain = Qiniu.domain;
-                    vue.image.key = data.key;
-                    vue.image.exif = res == null ? "" : JSON.stringify(res);
-                    vue.uploadImage(vue.image);
+                    vue.photo.lastModifiedDate = file.lastModifiedDate;
+                    vue.photo.domain = Qiniu.domain;
+                    vue.photo.key = data.key;
+                    vue.photo.exif = res == null ? "" : JSON.stringify(res);
+                    //设置照片经纬度、地理位置、制造商、手机型号
+                    vue.photo.longitudeRef = filterExif(res, 'GPSLongitudeRef');
+                    vue.photo.longitude = comma2Degree(filterExif(res, 'GPSLongitude'));
+                    vue.photo.latitudeRef = filterExif(res, 'GPSLatitudeRef');
+                    vue.photo.latitude = comma2Degree(filterExif(res, 'GPSLatitude'));
+                    vue.photo.make = filterExif(res, 'Make');
+                    vue.photo.model = filterExif(res, 'Model');
+
+                    if (vue.photo.longitude && vue.photo.latitude) {
+                        var lnglatXY = new AMap.LngLat(vue.photo.longitude, vue.photo.latitude);
+                        vue.geocoder.getAddress(lnglatXY, function (status, result) {
+                            if (status == 'complete') {
+                                vue.photo.address = result.regeocode.formattedAddress;
+                                console.log(vue.photo)
+                                vue.uploadPhoto(vue.photo);
+                            } else {
+                                console.log('无法获取地址');
+                            }
+                        })
+                    } else {
+                        vue.uploadPhoto(vue.photo);
+                    }
+
 
                 },
                 'Error': function (up, err, errTip) {
@@ -197,9 +221,11 @@
                     })
 
                 },
-                'UploadComplete': function () {
+                'UploadComplete': function (res) {
                     //队列文件处理完毕后，处理相关的事情
-                    vue.getImagesForPage();
+                    if (res.files.length > 0) {
+                        vue.getPhotosForPage();
+                    }
                 },
                 'Key': function (up, file) {
                 }
@@ -207,65 +233,17 @@
         });
     }
 
-    function filterLatitude(exif, isShowRef) {
+
+    function filterExif(exif, property) {
         if (!exif) {
-            return '未知';
+            return null;
         }
-        var exifObj = JSON.parse(exif);
-        if (!exifObj.GPSLatitudeRef || !exifObj.GPSLatitude) {
-            return '未知';
+        if (!exif[property] || !exif[property].val) {
+            return null;
         }
-        if (exifObj.GPSLatitudeRef.val && exifObj.GPSLatitude.val) {
-            if (isShowRef) {
-                if (exifObj.GPSLatitudeRef.val == 'N') {
-                    return '北纬' + Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
-                } else if (exifObj.GPSLatitudeRef.val == 'S') {
-                    return '南纬' + Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
-                }
-            } else {
-                return Dfm2Degree(exifObj.GPSLatitude.val.replace(",", "°").replace(",", "′") + "″");
-            }
-            return '未知';
-        }
-        return '未知';
+        return exif[property].val;
     }
 
-    function filterLongitude(exif, isShowRef) {
-        if (!exif) {
-            return '未知';
-        }
-        var exifObj = JSON.parse(exif);
-        if (!exifObj.GPSLongitudeRef || !exifObj.GPSLongitude) {
-            return '未知';
-        }
-        if (exifObj.GPSLongitudeRef.val && exifObj.GPSLongitude.val) {
-            if (isShowRef) {
-                if (exifObj.GPSLongitudeRef.val == 'E') {
-                    return '东经' + Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
-                } else if (exifObj.GPSLongitudeRef.val == 'S') {
-                    return '西经' + Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
-                }
-            } else {
-                return Dfm2Degree(exifObj.GPSLongitude.val.replace(",", "°").replace(",", "′") + "″");
-            }
-            return '未知';
-        }
-        return '未知';
-    }
-
-    function filterPhone(exif) {
-        if (!exif) {
-            return '未知';
-        }
-        var exifObj = JSON.parse(exif);
-        if (!exifObj.Make || !exifObj.Model) {
-            return '未知';
-        }
-        if (exifObj.Make.val && exifObj.Model.val) {
-            return exifObj.Make.val + ' ' + exifObj.Model.val;
-        }
-        return '未知';
-    }
 
     function filterFnumber(exif) {
         if (!exif) {
@@ -288,6 +266,7 @@
         }
         return exifObj.FocalLength.val;
     }
+
 
     export default {
 
@@ -397,7 +376,11 @@
             },
             uploadPhoto(photo) {
                 store.dispatch("UploadPhoto", photo).then(response => {
-
+                    this.$Notice.success({
+                        title: photo.name + '上传成功',
+                        desc: '访问路径:' + photo.domain + photo.key,
+                        duration: 3
+                    });
                 }).catch(err => {
                     this.$Message.error({
                         content: err.data.error,
@@ -411,7 +394,7 @@
                 this.getPhotosForPage();
             },
             openMapModal(img) {
-                this.getAddress(img);
+                this.getAddress(img.longitude,img.latitude);
                 this.showMapModal = true;
             },
             getPhotosForPage() {
@@ -457,25 +440,24 @@
                     })
                 });
             },
-            getAddress(img) {
+            getAddress(longitude, latitude) {
                 var self = this;
-                var longitude = filterLongitude(img.exif, false);
-                var latitude = filterLatitude(img.exif, false);
-                longitude = parseFloat(longitude);
-                latitude = parseFloat(latitude);
-
-                self.map.setCenter([longitude, latitude]);
-                // self.marker.setMap(self.map);
-                var lnglatXY = new AMap.LngLat(longitude, latitude);
-                self.marker.setPosition(lnglatXY);
-                self.geocoder.getAddress(lnglatXY, function (status, result) {
-                    if (status == 'complete') {
-                        self.locationAddress = result.regeocode.formattedAddress
-                    } else {
-                        self.locationAddress = '无法获取地址'
-                    }
-                    return self.locationAddress;
-                })
+                if (longitude && latitude) {
+                    self.map.setCenter([longitude, latitude]);
+                    // self.marker.setMap(self.map);
+                    var lnglatXY = new AMap.LngLat(longitude, latitude);
+                    self.marker.setPosition(lnglatXY);
+                    self.geocoder.getAddress(lnglatXY, function (status, result) {
+                        if (status == 'complete') {
+                            self.locationAddress = result.regeocode.formattedAddress
+                        } else {
+                            self.locationAddress = '无法获取地址'
+                        }
+                    })
+                } else {
+                    self.locationAddress = '';
+                }
+                return self.locationAddress;
             }
         },
         mounted() {
@@ -500,9 +482,6 @@
             },
             filterLongitude(exif) {
                 return filterLongitude(exif, true);
-            },
-            filterPhone(exif) {
-                return filterPhone(exif);
             },
             filterFnumber(exif) {
                 return filterFnumber(exif);

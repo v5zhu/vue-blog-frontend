@@ -272,10 +272,39 @@ export function formatCategories(list) {
     return "未选择分类";
 }
 
-export function Dfm2Degree(num) {
-    var d = num.split('°')[0] || 0;
-    var f = num.split('°')[1].split('′')[0] || 0;
-    var m = num.split('°')[1].split('′')[0].split('″')[0] || 0;
-    return new Number(d) + new Number(f) / 60 + new Number(m) / 60 / 60;
+export function dfm2Degree(num) {
+    try {
+        if (!num) {
+            return null;
+        }
+        var d = num.split('°')[0] || 0;
+        var f = num.split('°')[1].split('′')[0] || 0;
+        var m = num.split('°')[1].split('′')[0].split('″')[0] || 0;
+        return new Number(d) + new Number(f) / 60 + new Number(m) / 60 / 60;
+    } catch (err) {
+        return null;
+    }
+}
+
+export function comma2Dfm(num) {
+    try {
+        if (!num) {
+            return null;
+        }
+        return num.replace(',', "°").replace(',', '′') + '″';
+    } catch (err) {
+        return null;
+    }
+}
+
+export function comma2Degree(num) {
+    try {
+        if (!num) {
+            return null;
+        }
+        return dfm2Degree(comma2Dfm(num));
+    } catch (err) {
+        return null;
+    }
 }
 
