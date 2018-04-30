@@ -85,8 +85,8 @@
             </p>
             <div style="position: relative">
                 <Input type="text" v-model="locationAddress" style="margin-bottom: 10px;">
-                    <span slot="prepend">拍摄地点:</span>
-                    <span slot="append"><Icon type="ios-location" color="red" size="20"></Icon></span>
+                <span slot="prepend">拍摄地点:</span>
+                <span slot="append"><Icon type="ios-location" color="red" size="20"></Icon></span>
                 </Input>
                 <div id="map-container" style="position: relative"></div>
             </div>
@@ -303,7 +303,7 @@
                 map: null,
                 geocoder: null,
                 marker: null,
-                image: {
+                photo: {
                     name: null,
                     type: null,
                     size: 0,
@@ -311,6 +311,13 @@
                     uploadedSize: 0,
                     domain: null,
                     key: null,
+                    longitudeRef: null,
+                    longitude: null,
+                    latitudeRef: null,
+                    latitude: null,
+                    address: null,
+                    make: null,
+                    model: null,
                     shootTime: null,
                     lastModifiedDate: null,
                     gmtCreate: null,
@@ -385,11 +392,11 @@
                     })
                 })
             },
-            modifyImage(image) {
+            modifyPhoto(photo) {
 
             },
-            uploadImage(image) {
-                store.dispatch("UploadImage", image).then(response => {
+            uploadPhoto(photo) {
+                store.dispatch("UploadPhoto", photo).then(response => {
 
                 }).catch(err => {
                     this.$Message.error({
@@ -399,18 +406,18 @@
                     })
                 })
             },
-            loadMoreImages() {
+            loadMorePhotos() {
                 this.pageQuery.pageSize += 10;
-                this.getImagesForPage();
+                this.getPhotosForPage();
             },
             openMapModal(img) {
                 this.getAddress(img);
                 this.showMapModal = true;
             },
-            getImagesForPage() {
+            getPhotosForPage() {
                 this.$Loading.start();
                 this.pageQuery.filterMap.authorId = this.loginUser.id;
-                store.dispatch('GetImagesForPage', this.pageQuery).then(res => {
+                store.dispatch('GetPhotosForPage', this.pageQuery).then(res => {
                     this.pageInfo = res.data.payload;
                     this.$Loading.finish();
                 }).catch(err => {
@@ -481,7 +488,7 @@
             }, 1000);
             this.loginUser = LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
-            this.getImagesForPage();
+            this.getPhotosForPage();
             this.initMap();
         },
         filters: {

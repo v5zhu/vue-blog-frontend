@@ -1,22 +1,22 @@
 import {
-    uploadImage,
-    getImagesForPage
-} from 'api/blog/image';
+    uploadPhoto,
+    getPhotosForPage
+} from 'api/blog/photo';
 
 const image = {
     actions: {
-        UploadImage({commit, state}, data) {
+        UploadPhoto({commit, state}, data) {
             return new Promise((resolve, reject) => {
-                uploadImage(data).then(response => {
+                uploadPhoto(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
                 });
             });
         },
-        GetImagesForPage({commit, state}, data) {
+        GetPhotosForPage({commit, state}, data) {
             return new Promise((resolve, reject) => {
-                getImagesForPage(data).then(response => {
+                getPhotosForPage(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

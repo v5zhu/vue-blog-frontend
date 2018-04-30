@@ -2,18 +2,18 @@ import fetch from 'utils/fetch';
 
 const prefix = '/blog';
 
-export function uploadImage(data) {
+export function uploadPhoto(data) {
     return fetch({
-        url: prefix + '/image/upload.token',
+        url: prefix + '/photo/upload.token',
         method: 'post',
         data: data
     });
 }
 
 
-export function getImagesForPage(data) {
+export function getPhotosForPage(data) {
     return fetch({
-        url: prefix + '/image/page/list.token',
+        url: prefix + '/photo/page/list.token',
         method: 'post',
         data: data
     });
