@@ -46,7 +46,7 @@
                         <Row>
                             <Col span="3">
                             <Icon type="iphone" color="blue" size="20"></Icon>
-                            {{img.model}}
+                            {{img.make}}&nbsp;{{img.model}}
                             </Col>
                             <Col span="3">
                             光圈:{{img.exif|filterFnumber}}
