@@ -13,7 +13,7 @@ export function addAlbum(data) {
 
 export function getAlbumsForPage(data) {
     return fetch({
-        url: prefix + '/photo/page/list.token',
+        url: prefix + '/album/page/list.token',
         method: 'post',
         data: data
     });

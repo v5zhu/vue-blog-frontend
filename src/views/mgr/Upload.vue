@@ -1,6 +1,12 @@
 <template>
     <div class="animated fadeIn">
-
+        <Row>
+            <Col>
+                <Button type="primary" size="large" icon="ios-cloud-upload-outline"
+                        @click="openAlbumModal" style="padding-bottom:5px;">新建相册
+                </Button>
+            </Col>
+        </Row>
 
         <Row>
             <Col :md="24">
@@ -96,6 +102,52 @@
             </div>
 
         </Modal>
+        <Modal v-model="showAlbumModal" width="633" :maskClosable="false"
+               style="position: relative" :styles="{top: '20px'}">
+            <p slot="header" style="color:#f60;text-align:left">
+                <Icon type="ios-pulse-strong" size="20"></Icon>
+                <span style="font-size:14px;">新建相册</span>
+            </p>
+            <div style="position: relative">
+                <Row>
+                    <Col>
+                        <Form-item prop="albumTypes" label="相册类型">
+                            <Select v-model="album.type" filterable clearable>
+                                <Option v-for="item in albumTypes" :value="item.value" :key="item.value">
+                                    {{item.name }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col>
+                        <Form-item prop="albumTypes" label="是否公开">
+                            <Select v-model="album.locked" filterable clearable>
+                                <Option v-for="item in lockedTypes" :value="item.value" :key="item.value">
+                                    {{item.name }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col>
+                        <FormItem label="相册名称" prop="name">
+                            <Input v-model="album.name" type="text" placeholder="请输入相册名称">
+                            </Input>
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="描述" prop="description">
+                            <Input v-model="album.description" type="textarea"
+                                   placeholder="请输入相册的描述信息" :rows="6">
+                            </Input>
+                        </FormItem>
+                    </Col>
+                </Row>
+            </div>
+            <div slot="footer" style="text-align: center">
+                <Button type="primary" size="small" @click="addAlbum">保存</Button>
+            </div>
+
+        </Modal>
     </div>
 </template>
 
@@ -106,6 +158,264 @@
 
     var vue;
     var uploader;
+
+    export default {
+
+        name: 'buttons',
+        data() {
+            return {
+                loginUser: null,
+                uptoken: '',
+                progresshow: false,
+                geocoder: undefined,
+                locationAddress: '',
+                showMapModal: false,
+                showAlbumModal: false,
+                map: null,
+                geocoder: null,
+                marker: null,
+                albumTypes: [
+                    {value: 'life', name: '生活'},
+                    {value: 'baby', name: '亲子'},
+                    {value: 'travel', name: '旅行'},
+                    {value: 'other', name: '其他'}
+                ],
+                lockedTypes: [
+                    {value: 0, name: '隐藏'},
+                    {value: 1, name: '公开'}
+                ],
+                album: {
+                    id: null,
+                    authorId: null,
+                    name: null,
+                    type: null,
+                    locked: false,
+                    photoNumber: 0,
+                    description: null,
+                    gmtCreate: null,
+                    gmtModified: null
+                },
+                photo: {
+                    name: null,
+                    type: null,
+                    size: 0,
+                    originalSize: 0,
+                    uploadedSize: 0,
+                    domain: null,
+                    key: null,
+                    longitudeRef: null,
+                    longitude: null,
+                    latitudeRef: null,
+                    latitude: null,
+                    address: null,
+                    make: null,
+                    model: null,
+                    shootTime: null,
+                    lastModifiedDate: null,
+                    gmtCreate: null,
+                    gmtModified: null
+                },
+                pageInfo: {
+                    isFirstPage: undefined,
+                    isLastPage: undefined,
+                    pageNum: 1,
+                    pageSize: 10,
+                    pages: undefined,
+                    total: undefined,
+                    list: [],
+                    prePage: undefined,
+                    nextPage: undefined
+                },
+                pageQuery: {
+                    pageNum: 1,
+                    pageSize: 10,
+                    filterMap: {
+                        authorId: null
+                    },
+                    sortMap: {}
+                },
+            }//return
+        },//data
+        mounted() {
+            const vue = this;
+
+            this.list_loadding = true;
+            setTimeout(function () {
+                vue.list_loadding = false;
+
+            }, 1000);
+            this.loginUser = LocalStorage.getItem("LOGIN-USER");
+            this.getUptoken();
+            this.getAlbumsForPage();
+            this.initMap();
+        },
+        methods: {
+            openAlbumModal() {
+                this.showAlbumModal = true;
+            },
+            getAlbumsForPage() {
+                this.$Loading.start();
+                this.pageQuery.filterMap.authorId = this.loginUser.id;
+                store.dispatch('GetAlbumsForPage', this.pageQuery).then(res => {
+                    this.pageInfo = res.data.payload;
+                    this.$Loading.finish();
+                }).catch(err => {
+                    this.$Message.error(err);
+                    this.$Loading.error()
+                });
+            },
+            addAlbum() {
+                this.$Loading.start();
+                store.dispatch('AddAlbum', this.album).then(res => {
+                    this.$Loading.finish();
+                    this.getAlbumsForPage();
+                }).catch(err => {
+                    this.$Message.error(err);
+                    this.$Loading.error()
+                });
+            },
+            deletePhoto(photo) {
+                store.dispatch("DeletePhoto", {photoId: photo.id}).then(res => {
+                    this.$Notice.success({
+                        title: '删除成功',
+                        desc: '删除照片:' + photo.name,
+                        duration: 3
+                    });
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
+                })
+            },
+            qiniu_upload() {
+                uploader.start();
+            },
+            getUptoken() {
+                store.dispatch("GetUptoken", {bucket: 'touch6'}).then(response => {
+                    var uptoken = response.data.payload;
+                    this.uptoken = uptoken;
+                    qiniuInit(this);//初始化七牛数据
+
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
+                })
+            },
+            modifyPhoto(photo) {
+
+            },
+            uploadPhoto(photo) {
+                store.dispatch("UploadPhoto", photo).then(response => {
+                    this.$Notice.success({
+                        title: photo.name + '上传成功',
+                        desc: '访问路径:' + photo.domain + photo.key,
+                        duration: 3
+                    });
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
+                })
+            },
+            loadMorePhotos() {
+                this.pageQuery.pageSize += 10;
+                this.getPhotosForPage();
+            },
+            openMapModal(img) {
+                this.getAddress(img.longitude, img.latitude);
+                this.showMapModal = true;
+            },
+            getPhotosForPage() {
+                this.$Loading.start();
+                this.pageQuery.filterMap.authorId = this.loginUser.id;
+                store.dispatch('GetPhotosForPage', this.pageQuery).then(res => {
+                    this.pageInfo = res.data.payload;
+                    this.$Loading.finish();
+                }).catch(err => {
+                    this.$Message.error(err);
+                    this.$Loading.error()
+                });
+            },
+            initMap() {
+                var self = this;
+                self.map = new AMap.Map('map-container', {
+                    resizeEnable: true,
+                    zoom: 15,
+                    center: [104.55555, 30.4445555]
+                });
+                AMap.plugin(['AMap.Geocoder', 'AMap.ToolBar', 'AMap.Scale', 'AMap.OverView'], function () {
+                    self.geocoder = new AMap.Geocoder({
+                        city: "010"//城市，默认：“全国”
+                    });
+                    var toolBar = new AMap.ToolBar();
+                    var scale = new AMap.Scale();
+                    self.map.addControl(toolBar);
+                    self.map.addControl(scale);
+
+                    self.marker = new AMap.Marker({
+                        map: self.map,
+                        bubble: true
+                    });
+                    self.map.on('click', function (e) {
+                        self.marker.setPosition(e.lnglat);
+                        self.geocoder.getAddress(e.lnglat, function (status, result) {
+                            if (status == 'complete') {
+                                self.locationAddress = result.regeocode.formattedAddress
+                            } else {
+                                self.locationAddress = '无法获取地址'
+                            }
+                        })
+                    })
+                });
+            },
+            getAddress(longitude, latitude) {
+                var self = this;
+                if (longitude && latitude) {
+                    self.map.setCenter([longitude, latitude]);
+                    // self.marker.setMap(self.map);
+                    var lnglatXY = new AMap.LngLat(longitude, latitude);
+                    self.marker.setPosition(lnglatXY);
+                    self.geocoder.getAddress(lnglatXY, function (status, result) {
+                        if (status == 'complete') {
+                            self.locationAddress = result.regeocode.formattedAddress
+                        } else {
+                            self.locationAddress = '无法获取地址'
+                        }
+                    })
+                } else {
+                    self.locationAddress = '';
+                }
+                return self.locationAddress;
+            }
+        },
+        filters: {
+            formatDate(time) {
+                return formatTime(time);
+            },
+            filterLatitude(exif) {
+                return filterLatitude(exif, true);
+            },
+            filterLongitude(exif) {
+                return filterLongitude(exif, true);
+            },
+            filterFnumber(exif) {
+                return filterFnumber(exif);
+            },
+            filterFocalLength(exif) {
+                return filterFocalLength(exif);
+            },
+            filterAddress(exif) {
+
+            }
+        }
+    }
 
     function qiniuInit(vue) {
 
@@ -265,217 +575,6 @@
             return '未知';
         }
         return exifObj.FocalLength.val;
-    }
-
-
-    export default {
-
-        name: 'buttons',
-        data() {
-            return {
-                loginUser: null,
-                uptoken: '',
-                progresshow: false,
-                geocoder: undefined,
-                locationAddress: '',
-                showMapModal: false,
-                map: null,
-                geocoder: null,
-                marker: null,
-                photo: {
-                    name: null,
-                    type: null,
-                    size: 0,
-                    originalSize: 0,
-                    uploadedSize: 0,
-                    domain: null,
-                    key: null,
-                    longitudeRef: null,
-                    longitude: null,
-                    latitudeRef: null,
-                    latitude: null,
-                    address: null,
-                    make: null,
-                    model: null,
-                    shootTime: null,
-                    lastModifiedDate: null,
-                    gmtCreate: null,
-                    gmtModified: null
-                },
-                pageInfo: {
-                    isFirstPage: undefined,
-                    isLastPage: undefined,
-                    pageNum: 1,
-                    pageSize: 10,
-                    pages: undefined,
-                    total: undefined,
-                    list: [],
-                    prePage: undefined,
-                    nextPage: undefined
-                },
-                pageQuery: {
-                    pageNum: 1,
-                    pageSize: 10,
-                    filterMap: {},
-                    sortMap: {}
-                },
-            }//return
-        },//data
-        mounted() {
-            const vue = this;
-
-            this.list_loadding = true;
-            setTimeout(function () {
-                vue.list_loadding = false;
-
-            }, 1000);
-            this.loginUser = LocalStorage.getItem("LOGIN-USER");
-            this.getUptoken();
-            this.getPhotosForPage();
-            this.initMap();
-        },
-        methods: {
-            deletePhoto(photo) {
-                store.dispatch("DeletePhoto", {photoId: photo.id}).then(res => {
-                    this.$Notice.success({
-                        title: '删除成功',
-                        desc: '删除照片:' + photo.name,
-                        duration: 3
-                    });
-                }).catch(err => {
-                    this.$Message.error({
-                        content: err.data.error,
-                        duration: 5,
-                        closable: true
-                    })
-                })
-            },
-            qiniu_upload() {
-                uploader.start();
-            },
-            getUptoken() {
-                store.dispatch("GetUptoken", {bucket: 'touch6'}).then(response => {
-                    var uptoken = response.data.payload;
-                    this.uptoken = uptoken;
-                    qiniuInit(this);//初始化七牛数据
-
-                }).catch(err => {
-                    this.$Message.error({
-                        content: err.data.error,
-                        duration: 5,
-                        closable: true
-                    })
-                })
-            },
-            modifyPhoto(photo) {
-
-            },
-            uploadPhoto(photo) {
-                store.dispatch("UploadPhoto", photo).then(response => {
-                    this.$Notice.success({
-                        title: photo.name + '上传成功',
-                        desc: '访问路径:' + photo.domain + photo.key,
-                        duration: 3
-                    });
-                }).catch(err => {
-                    this.$Message.error({
-                        content: err.data.error,
-                        duration: 5,
-                        closable: true
-                    })
-                })
-            },
-            loadMorePhotos() {
-                this.pageQuery.pageSize += 10;
-                this.getPhotosForPage();
-            },
-            openMapModal(img) {
-                this.getAddress(img.longitude, img.latitude);
-                this.showMapModal = true;
-            },
-            getPhotosForPage() {
-                this.$Loading.start();
-                this.pageQuery.filterMap.authorId = this.loginUser.id;
-                store.dispatch('GetPhotosForPage', this.pageQuery).then(res => {
-                    this.pageInfo = res.data.payload;
-                    this.$Loading.finish();
-                }).catch(err => {
-                    this.$Message.error(err);
-                    this.$Loading.error()
-                });
-            },
-            initMap() {
-                var self = this;
-                self.map = new AMap.Map('map-container', {
-                    resizeEnable: true,
-                    zoom: 15,
-                    center: [104.55555, 30.4445555]
-                });
-                AMap.plugin(['AMap.Geocoder', 'AMap.ToolBar', 'AMap.Scale', 'AMap.OverView'], function () {
-                    self.geocoder = new AMap.Geocoder({
-                        city: "010"//城市，默认：“全国”
-                    });
-                    var toolBar = new AMap.ToolBar();
-                    var scale = new AMap.Scale();
-                    self.map.addControl(toolBar);
-                    self.map.addControl(scale);
-
-                    self.marker = new AMap.Marker({
-                        map: self.map,
-                        bubble: true
-                    });
-                    self.map.on('click', function (e) {
-                        self.marker.setPosition(e.lnglat);
-                        self.geocoder.getAddress(e.lnglat, function (status, result) {
-                            if (status == 'complete') {
-                                self.locationAddress = result.regeocode.formattedAddress
-                            } else {
-                                self.locationAddress = '无法获取地址'
-                            }
-                        })
-                    })
-                });
-            },
-            getAddress(longitude, latitude) {
-                var self = this;
-                if (longitude && latitude) {
-                    self.map.setCenter([longitude, latitude]);
-                    // self.marker.setMap(self.map);
-                    var lnglatXY = new AMap.LngLat(longitude, latitude);
-                    self.marker.setPosition(lnglatXY);
-                    self.geocoder.getAddress(lnglatXY, function (status, result) {
-                        if (status == 'complete') {
-                            self.locationAddress = result.regeocode.formattedAddress
-                        } else {
-                            self.locationAddress = '无法获取地址'
-                        }
-                    })
-                } else {
-                    self.locationAddress = '';
-                }
-                return self.locationAddress;
-            }
-        },
-        filters: {
-            formatDate(time) {
-                return formatTime(time);
-            },
-            filterLatitude(exif) {
-                return filterLatitude(exif, true);
-            },
-            filterLongitude(exif) {
-                return filterLongitude(exif, true);
-            },
-            filterFnumber(exif) {
-                return filterFnumber(exif);
-            },
-            filterFocalLength(exif) {
-                return filterFocalLength(exif);
-            },
-            filterAddress(exif) {
-
-            }
-        }
     }
 
 
