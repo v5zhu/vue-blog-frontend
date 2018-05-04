@@ -2,16 +2,16 @@ import fetch from 'utils/fetch';
 
 const prefix = '/blog';
 
-export function uploadPhoto(data) {
+export function addAlbum(data) {
     return fetch({
-        url: prefix + '/photo/upload.token',
+        url: prefix + '/album.token',
         method: 'post',
         data: data
     });
 }
 
 
-export function getPhotosForPage(data) {
+export function getAlbumsForPage(data) {
     return fetch({
         url: prefix + '/photo/page/list.token',
         method: 'post',
@@ -19,17 +19,17 @@ export function getPhotosForPage(data) {
     });
 }
 
-export function updatePhoto(data) {
+export function updateAlbum(data) {
     return fetch({
-        url: prefix + '/photo/update.token',
+        url: prefix + '/album.token',
         method: 'put',
         data: data
     });
 }
 
-export function deletePhoto(params) {
+export function deleteAlbum(params) {
     return fetch({
-        url: prefix + '/photo/delete.token',
+        url: prefix + '/album/delete.token',
         method: 'delete',
         params: params
     });

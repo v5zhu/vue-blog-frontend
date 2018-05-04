@@ -1,42 +1,42 @@
 import {
-    uploadPhoto,
-    getPhotosForPage,
-    updatePhoto,
-    deletePhoto
-} from 'api/blog/photo';
+    addAlbum,
+    getAlbumsForPage,
+    updateAlbum,
+    deleteAlbum
+} from 'api/blog/album';
 
-const photo = {
+const album = {
     actions: {
-        UploadPhoto({commit, state}, data) {
+        AddAlbum({commit, state}, data) {
             return new Promise((resolve, reject) => {
-                uploadPhoto(data).then(response => {
+                addAlbum(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
                 });
             });
         },
-        GetPhotosForPage({commit, state}, data) {
+        GetAlbumsForPage({commit, state}, data) {
             return new Promise((resolve, reject) => {
-                getPhotosForPage(data).then(response => {
+                getAlbumsForPage(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
                 });
             });
         },
-        UpdatePhoto({commit, state}, data) {
+        UpdateAlbum({commit, state}, data) {
             return new Promise((resolve, reject) => {
-                updatePhoto(data).then(response => {
+                updateAlbum(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
                 });
             });
         },
-        DeletePhoto({commit, state}, params) {
+        DeleteAlbum({commit, state}, params) {
             return new Promise((resolve, reject) => {
-                deletePhoto(params).then(response => {
+                deleteAlbum(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -47,4 +47,4 @@ const photo = {
     }
 };
 
-export default photo;
+export default album;

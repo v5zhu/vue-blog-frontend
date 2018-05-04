@@ -4,78 +4,78 @@
 
         <Row>
             <Col :md="24">
-            <div>
-                <div id="container" style="margin-bottom:10px;">
-                    <Button type="primary" size="large" icon="ios-cloud-upload-outline" id='pickfiles'
-                            @click="qiniu_upload" style="padding-bottom:5px;">上传文件
-                    </Button>
+                <div>
+                    <div id="container" style="margin-bottom:10px;">
+                        <Button type="primary" size="large" icon="ios-cloud-upload-outline" id='pickfiles'
+                                @click="qiniu_upload" style="padding-bottom:5px;">上传文件
+                        </Button>
 
-                    <Progress :percent="progresscount" :status="progresstatus"
-                              style="width:90%;vertical-align:middle"
-                              v-if="progresshow">
-                        <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
-                        <span v-if="progresscount===100">上传成功</span>
-                        <Icon type="close-circled" v-if="progresstatus==='wrong'"></Icon>
-                        <span v-if="progresstatus==='wrong'">上传失败</span>
-                        <span style="position:absolute;left:50%;top:-5px;"
-                              v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
-                    </Progress>
+                        <Progress :percent="progresscount" :status="progresstatus"
+                                  style="width:90%;vertical-align:middle"
+                                  v-if="progresshow">
+                            <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
+                            <span v-if="progresscount===100">上传成功</span>
+                            <Icon type="close-circled" v-if="progresstatus==='wrong'"></Icon>
+                            <span v-if="progresstatus==='wrong'">上传失败</span>
+                            <span style="position:absolute;left:50%;top:-5px;"
+                                  v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
+                        </Progress>
+                    </div>
                 </div>
-            </div>
             </Col>
         </Row>
         <Row>
             <Col span="24" offset="1">
-            <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
+                <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
 
-            <Timeline>
-                <TimelineItem v-for="img in pageInfo.list" :key="img.id">
-                    <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">拍摄时间:</span>{{img.shootTime|formatDate}}
-                    </p>
-
-                    <div style="padding-top: 10px;">
-                        <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
-                             style="border: #a2e6f8 8px solid"/>
-                    </div>
-                    <a style="margin-top: 10px;" @click="openMapModal(img)"
-                       title="点击在地图中查看拍摄地理位置">
-                        <Icon type="ios-location" color="red" size="20"></Icon>
-                        {{img.address}},{{img.longitude}}, {{img.latitude}}
-                    </a>
-                    <div style="padding-top: 10px;">
-                        <Row>
-                            <Col span="3">
-                            <Icon type="iphone" color="blue" size="20"></Icon>
-                            {{img.make}}&nbsp;{{img.model}}
-                            </Col>
-                            <Col span="3">
-                            光圈:{{img.exif|filterFnumber}}
-                            </Col>
-                            <Col span="3">
-                            焦距:{{img.exif|filterFocalLength}}
-                            </Col>
-                        </Row>
-
-                    </div>
-                    <div style="padding-top: 10px;">
-                        <Button type="primary" size="small" @click="modifyPhoto(img)">修改</Button>
-                        <Button type="error" size="small" @click="modifyPhoto(img)">删除</Button>
-                        <Button type="info" size="small" @click="modifyPhoto(img)">大图</Button>
-                    </div>
-                </TimelineItem>
-                <TimelineItem>
-                    <div v-if="pageInfo.total > pageInfo.pageSize"
-                         style="text-align: left;position: relative;margin-top: -8px;margin-left: 10px;">
-                        <p @click="loadMorePhotos()" style="border: none;cursor: pointer;">
-                            <Icon type="ios-more-outline" size="32"></Icon>
-                            <Icon type="ios-more-outline" size="32"></Icon>
+                <Timeline>
+                    <TimelineItem v-for="img in pageInfo.list" :key="img.id">
+                        <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">拍摄时间:</span>{{img.shootTime|formatDate}}
                         </p>
-                    </div>
-                    <div style="text-align: left;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">
-                        全部加载完成
-                    </div>
-                </TimelineItem>
-            </Timeline>
+
+                        <div style="padding-top: 10px;">
+                            <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
+                                 style="border: #a2e6f8 8px solid"/>
+                        </div>
+                        <a style="margin-top: 10px;" @click="openMapModal(img)"
+                           title="点击在地图中查看拍摄地理位置">
+                            <Icon type="ios-location" color="red" size="20"></Icon>
+                            {{img.address}},{{img.longitude}}, {{img.latitude}}
+                        </a>
+                        <div style="padding-top: 10px;">
+                            <Row>
+                                <Col span="3">
+                                    <Icon type="iphone" color="blue" size="20"></Icon>
+                                    {{img.make}}&nbsp;{{img.model}}
+                                </Col>
+                                <Col span="3">
+                                    光圈:{{img.exif|filterFnumber}}
+                                </Col>
+                                <Col span="3">
+                                    焦距:{{img.exif|filterFocalLength}}
+                                </Col>
+                            </Row>
+
+                        </div>
+                        <div style="padding-top: 10px;">
+                            <Button type="primary" size="small" @click="modifyPhoto(img)">修改</Button>
+                            <Button type="error" size="small" @click="deletePhoto(img)">删除</Button>
+                            <Button type="info" size="small" @click="modifyPhoto(img)">大图</Button>
+                        </div>
+                    </TimelineItem>
+                    <TimelineItem>
+                        <div v-if="pageInfo.total > pageInfo.pageSize"
+                             style="text-align: left;position: relative;margin-top: -8px;margin-left: 10px;">
+                            <p @click="loadMorePhotos()" style="border: none;cursor: pointer;">
+                                <Icon type="ios-more-outline" size="32"></Icon>
+                                <Icon type="ios-more-outline" size="32"></Icon>
+                            </p>
+                        </div>
+                        <div style="text-align: left;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">
+                            全部加载完成
+                        </div>
+                    </TimelineItem>
+                </Timeline>
             </Col>
         </Row>
         <Modal v-model="showMapModal" width="633" :maskClosable="false"
@@ -321,41 +321,37 @@
                 },
             }//return
         },//data
+        mounted() {
+            const vue = this;
+
+            this.list_loadding = true;
+            setTimeout(function () {
+                vue.list_loadding = false;
+
+            }, 1000);
+            this.loginUser = LocalStorage.getItem("LOGIN-USER");
+            this.getUptoken();
+            this.getPhotosForPage();
+            this.initMap();
+        },
         methods: {
-            remove(index) {
-                this.video_list.splice(index, 1);
+            deletePhoto(photo) {
+                store.dispatch("DeletePhoto", {photoId: photo.id}).then(res => {
+                    this.$Notice.success({
+                        title: '删除成功',
+                        desc: '删除照片:' + photo.name,
+                        duration: 3
+                    });
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
+                })
             },
             qiniu_upload() {
                 uploader.start();
-            },
-            setInitPage(page) {
-
-                this.page_video_list = [];
-                this.pageindex = page;
-                let video_list = this.video_list;
-                for (let i = (page - 1) * 10; i < (page - 1) * 10 + 10; i++) {
-
-
-                    if (i < video_list.length) {
-
-                        this.page_video_list.push(this.video_list[i]);
-
-                    }
-                }
-            },
-            exportData(type) {
-                if (type === 1) {
-                    this.$refs.table.exportCsv({
-                        filename: '原始数据',
-                        columns: this.columns7,
-                        data: this.video_list
-                    });
-                } else if (type === 2) {
-                    this.$refs.table.exportCsv({
-                        filename: '排序和过滤后的数据',
-                        original: false
-                    });
-                }
             },
             getUptoken() {
                 store.dispatch("GetUptoken", {bucket: 'touch6'}).then(response => {
@@ -394,7 +390,7 @@
                 this.getPhotosForPage();
             },
             openMapModal(img) {
-                this.getAddress(img.longitude,img.latitude);
+                this.getAddress(img.longitude, img.latitude);
                 this.showMapModal = true;
             },
             getPhotosForPage() {
@@ -459,19 +455,6 @@
                 }
                 return self.locationAddress;
             }
-        },
-        mounted() {
-            const vue = this;
-
-            this.list_loadding = true;
-            setTimeout(function () {
-                vue.list_loadding = false;
-
-            }, 1000);
-            this.loginUser = LocalStorage.getItem("LOGIN-USER");
-            this.getUptoken();
-            this.getPhotosForPage();
-            this.initMap();
         },
         filters: {
             formatDate(time) {
