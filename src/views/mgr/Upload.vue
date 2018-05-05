@@ -76,12 +76,11 @@
 
         <Modal v-model="showAlbumModal" width="633" :maskClosable="false"
                style="position: relative" :styles="{top: '20px'}">
+            <div slot="header" style="color:#f60;text-align:left">
+                <Icon type="ios-pulse-strong" size="20"></Icon>
+                <span style="font-size:14px;">新建相册</span>
+            </div>
             <Form ref="albumForm" :rules="albumRule" :model="album" :label-width="80">
-
-                <div slot="header" style="color:#f60;text-align:left">
-                    <Icon type="ios-pulse-strong" size="20"></Icon>
-                    <span style="font-size:14px;">新建相册</span>
-                </div>
                 <Row>
                     <Col>
                         <Form-item prop="type" label="相册类型">
