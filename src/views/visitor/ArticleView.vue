@@ -5,27 +5,9 @@
                 <div style="min-height:200px;min-width:50px;position: fixed;left:20px;top:120px;">
                     <ul>
                         <li style="margin-bottom: 10px;position: relative">
-                            <Button :disabled="true" type="ghost" class="left-circle"
-                                    style="border-radius: 50%;">
-                                <Icon class="left-icon-class" type="ios-clock" color="#0d5477" size="24"></Icon>
-                            </Button>
-                            <div style="position:relative;left:55px;top: -30px;">
-                                {{article.hits}}
-                            </div>
-                        </li>
-                        <li style="margin-bottom: 10px;position: relative">
-                            <Button :disabled="true" type="ghost" class="left-circle"
-                                    style="border-radius: 50%;">
-                                <Icon class="left-icon-class" type="chatbox-working" color="#0d5477" size="24"></Icon>
-                            </Button>
-                            <div style="position:relative;left:55px;top: -30px;">
-                                {{article.comments}}
-                            </div>
-                        </li>
-                        <li style="margin-bottom: 10px;position: relative">
                             <Button @click="updateStatistics('likes')" type="ghost" class="left-circle"
                                     style="border-radius: 50%;">
-                                <Icon class="left-icon-class" type="heart" color="#0d5477" size="24"></Icon>
+                                <Icon class="left-icon-class" type="heart" color="red" size="24"></Icon>
                             </Button>
                             <div style="position:relative;left:55px;top: -30px;">
                                 {{article.likes}}
@@ -34,7 +16,7 @@
                         <li style="margin-bottom: 10px;position: relative">
                             <Button @click="updateStatistics('dislikes')" type="ghost" class="left-circle"
                                     style="border-radius: 50%;">
-                                <Icon class="left-icon-class" type="thumbsdown" color="#0d5477" size="24"></Icon>
+                                <Icon class="left-icon-class" type="thumbsdown" color="red" size="24"></Icon>
                             </Button>
                             <div style="position:relative;left:55px;top: -30px;">
                                 {{article.dislikes}}
@@ -50,12 +32,30 @@
                                  style="text-align: center;font-size:32px;font-weight: 700;"
                                  itemprop="name headline">
                                 {{article.title}}
+                                <a v-if="article.authorId==loginUser.id"
+                                   :href="'/admin/mgr/blog/article/edit/'+article.id" target="_blank">
+                                    <Icon type="compose" size="20"
+                                          style="position: relative;top:-20px;left:10px;" title="点击编辑文章"></Icon>
+                                </a>
                             </div>
-                            <div class="post-data"
-                                 style="color: #808080;text-align: right;margin-top: 50px;margin-right: 5px;">
-                                <span>发布于：{{article.gmtCreate | formatDate}}</span>
-                                浏览量：<span>{{article.hits}}</span>
-                            </div>
+                            <ul class="post-data"
+                                style="color: #808080;text-align: right;margin-top: 50px;margin-right: 5px;display: flex;">
+                                <li style="margin-left: 20px;">
+                                    发布于：{{article.gmtCreate | formatDate}}
+                                </li>
+                                <li style="margin-left: 20px;">
+                                    浏览{{article.hits}}
+                                </li>
+                                <li style="margin-left: 20px;">
+                                    评论{{article.comments}}
+                                </li>
+                                <li style="margin-left: 20px;">
+                                    喜欢{{article.likes}}
+                                </li>
+                                <li style="margin-left: 20px;">
+                                    反对{{article.dislikes}}
+                                </li>
+                            </ul>
 
                         </div>
                         <div class="post-content" id="editor">
@@ -64,7 +64,7 @@
                                 <ul style="width:100%;">
                                     <li style="float: left;position:relative;top:20px;margin-left: 30%;margin-right: 20px;">
                                         <Button type="ghost" @click="awardModal=true">
-                                            <Icon type="ios-flame" size="24" color="red"></Icon>
+                                            <Icon type="social-usd-outline" size="24" color="red"></Icon>
                                             <p>赞赏</p>
                                         </Button>
 
@@ -144,14 +144,14 @@
                                     <li style="float: left;position:relative;top:20px;margin-right: 20px;">
                                         <Button type="ghost" @click="updateStatistics('likes')"
                                                 style="height:60px;width:60px;font-size: 12px;">
-                                            <Icon type="heart" size="20" color="red"></Icon>
+                                            <Icon type="android-favorite-outline" size="20" color="red"></Icon>
                                             <p>{{article.likes}}喜欢</p>
                                         </Button>
                                     </li>
                                     <li style="float: left;position:relative;top:20px">
                                         <Button type="ghost" @click="updateStatistics('dislikes')"
                                                 style="height:60px;width:60px;font-size: 12px;">
-                                            <Icon type="thumbsdown" size="24" color="red"></Icon>
+                                            <Icon type="sad-outline" size="24" color="red"></Icon>
                                             <p>{{article.dislikes}}反对</p>
                                         </Button>
                                     </li>
@@ -418,9 +418,9 @@
                     this.getArticleComments(article.id);
                 }).catch(err => {
                     this.$Message.error({
-                        content:err.data.error,
-                        duration:5,
-                        closable:true
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
                     })
                 })
             }
@@ -436,9 +436,9 @@
                     this.loadingComments = false;
                 }).catch(err => {
                     this.$Message.error({
-                        content:err.data.error,
-                        duration:5,
-                        closable:true
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
                     })
                 })
             }
@@ -486,9 +486,9 @@
                     }
                 }).catch(err => {
                     this.$Message.error({
-                        content:err.data.error,
-                        duration:5,
-                        closable:true
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
                     })
                 })
             }

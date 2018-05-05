@@ -35,35 +35,26 @@
             <Col span="24" offset="1">
                 <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
 
-                <Timeline>
-                    <TimelineItem v-for="al in pageInfo.list" :key="al.id">
+                <Row>
+                    <Col span="7" v-for="al in pageInfo.list" :key="al.id" style="margin-top: 20px;">
                         <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">创建时间:</span>{{al.gmtCreate|formatDate}}
                         </p>
 
-                        <div  style="padding-top: 10px;border: #a2e6f8 8px solid">
+                        <div style="padding-top: 10px;border: #c3b8f5 5px solid;border-radius:5px;box-shadow: inset rgb(220, 56, 50) 0px 0px 18px 2px;height:180px;width:300px;">
                             <div v-for="img in al.covers">
-                                <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"/>
+                                <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
+                                     style="float: left;"/>
                             </div>
                         </div>
                         <div style="padding-top: 10px;">
-                            <Button type="primary" size="small" @click="modifyPhoto(al)">修改</Button>
-                            <Button type="error" size="small" @click="deletePhoto(al)">删除</Button>
-                            <Button type="info" size="small" @click="modifyPhoto(al)">大图</Button>
+                            <Button type="primary" size="small" @click="modifyAlbum(al)">修改</Button>
+                            <Button type="error" size="small" @click="deleteAlbum(al)">删除</Button>
+                            <Button type="info" size="small">
+                                <a :href="'/admin/album/'+al.id+'/photos'" target="_blank" style="color: white">查看</a>
+                            </Button>
                         </div>
-                    </TimelineItem>
-                    <TimelineItem>
-                        <div v-if="pageInfo.total > pageInfo.pageSize"
-                             style="text-align: left;position: relative;margin-top: -8px;margin-left: 10px;">
-                            <p @click="loadMorePhotos()" style="border: none;cursor: pointer;">
-                                <Icon type="ios-more-outline" size="32"></Icon>
-                                <Icon type="ios-more-outline" size="32"></Icon>
-                            </p>
-                        </div>
-                        <div style="text-align: left;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">
-                            全部加载完成
-                        </div>
-                    </TimelineItem>
-                </Timeline>
+                    </Col>
+                </Row>
             </Col>
         </Row>
         <Modal v-model="showMapModal" width="633" :maskClosable="false"
@@ -84,51 +75,54 @@
             </div>
 
         </Modal>
+
         <Modal v-model="showAlbumModal" width="633" :maskClosable="false"
                style="position: relative" :styles="{top: '20px'}">
             <div slot="header" style="color:#f60;text-align:left">
                 <Icon type="ios-pulse-strong" size="20"></Icon>
-                <span style="font-size:14px;">新建相册</span>
+                <span style="font-size:14px;">{{albumModalTitle}}</span>
             </div>
-            <div>
-                <Form ref="albumForm" :model="album" :label-width="80">
-                    <Row>
-                        <Col>
-                            <Form-item prop="albumTypes" label="相册类型">
-                                <Select v-model="album.type" filterable clearable >
-                                    <Option v-for="item in albumTypes" :value="item.name" :key="item.name">{{item.value}}</Option>
-                                </Select>
-                            </Form-item>
-                        </Col>
-                        <Col>
-                            <Form-item prop="lockedTypes" label="是否公开">
-                                <Select v-model="album.locked" filterable clearable >
-                                    <Option v-for="item in lockedTypes" :value="item.name" :key="item.name">{{item.value}}</Option>
-                                </Select>
-                            </Form-item>
-                        </Col>
-                        <Col>
-                            <FormItem label="相册名称" prop="name">
-                                <Input v-model="album.name" type="text" placeholder="请输入相册名称">
-                                </Input>
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem label="描述" prop="description">
-                                <Input v-model="album.description" type="textarea"
-                                       placeholder="请输入相册的描述信息" :rows="6">
-                                </Input>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style="margin-left: 80px">
-                            <Button type="primary" @click="addAlbum">保存</Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-            <div slot="footer" style="text-align: center">
+            <Form ref="albumForm" :rules="albumRule" :model="album" :label-width="80">
+                <Row>
+                    <Col>
+                        <Form-item prop="type" label="相册类型">
+                            <Select v-model="album.type" filterable clearable>
+                                <Option v-for="item in albumTypes" :value="item.name" :key="item.name">{{
+                                    item.value }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col>
+                        <Form-item prop="locked" label="是否公开">
+                            <Select v-model="album.locked" filterable clearable>
+                                <Option v-for="item in lockedTypes" :value="item.name" :key="item.name">{{
+                                    item.value }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col>
+                        <FormItem label="相册名称" prop="name">
+                            <Input v-model="album.name" type="text" placeholder="请输入相册名称">
+                            </Input>
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="描述" prop="description">
+                            <Input v-model="album.description" type="textarea"
+                                   placeholder="请输入相册的描述信息" :rows="6">
+                            </Input>
+                        </FormItem>
+                    </Col>
+                </Row>
+            </Form>
+            <div slot="footer" style="text-align: left">
+                <Row>
+                    <Col style="margin-left: 80px">
+                        <Button type="primary" @click="addAlbum">保存</Button>
+                    </Col>
+                </Row>
             </div>
 
         </Modal>
@@ -137,7 +131,7 @@
 
 <script>
     import store from 'store/';
-    import {comma2Degree, comma2Dfm, dfm2Degree, formatTime} from 'utils';
+    import {comma2Degree, comma2Dfm, deepCopy, dfm2Degree, formatTime} from 'utils';
     import LocalStorage from "utils/LocalStorage";
 
     var vue;
@@ -158,6 +152,7 @@
                 map: null,
                 geocoder: null,
                 marker: null,
+                albumModalTitle: null,
                 albumTypes: [
                     {name: 'life', value: '生活'},
                     {name: 'baby', value: '亲子'},
@@ -165,8 +160,8 @@
                     {name: 'other', value: '其他'}
                 ],
                 lockedTypes: [
-                    {name: 1, value: '隐藏'},
-                    {name: 0, value: '公开'}
+                    {name: true, value: '隐藏'},
+                    {name: false, value: '公开'}
                 ],
                 album: {
                     id: null,
@@ -218,6 +213,20 @@
                     },
                     sortMap: {}
                 },
+                albumRule: {
+                    name: [
+                        {required: true, message: '相册名称不能为空', trigger: 'blur'}
+                    ],
+                    type: [
+                        {required: true, type: 'string', message: '选择相册类型', trigger: 'change'}
+                    ],
+                    locked: [
+                        {required: true, type: 'boolean', message: '选择相册是否公开', trigger: 'change'}
+                    ],
+                    description: [
+                        {required: true, message: '输入相册描述信息', trigger: 'blur'}
+                    ]
+                },
             }//return
         },//data
         mounted() {
@@ -236,6 +245,7 @@
         methods: {
             openAlbumModal() {
                 this.$refs.albumForm.resetFields();
+                this.albumModalTitle = '创建相册';
                 this.showAlbumModal = true;
             },
             getAlbumsForPage() {
@@ -254,18 +264,63 @@
                 });
             },
             addAlbum() {
-                this.$Loading.start();
-                this.album.authorId=this.loginUser.id;
-                store.dispatch('AddAlbum', this.album).then(res => {
-                    this.$Loading.finish();
-                    this.getAlbumsForPage();
-                }).catch(err => {
-                    this.$Message.error({
-                        content: err.data.error,
-                        duration: 5,
-                        closable: true
-                    })
-                    this.$Loading.error()
+                this.$refs.albumForm.validate(valid => {
+                    if (valid) {
+                        this.$Loading.start();
+                        this.album.authorId = this.loginUser.id;
+                        store.dispatch('AddAlbum', this.album).then(res => {
+                            this.$Loading.finish();
+                            this.getAlbumsForPage();
+                        }).catch(err => {
+                            this.$Message.error({
+                                content: err.data.error,
+                                duration: 5,
+                                closable: true
+                            })
+                            this.$Loading.error()
+                        });
+                    } else {
+                        this.$Message.error({
+                            content: '验证失败',
+                            duration: 5,
+                            closable: true
+                        });
+                    }
+                })
+            },
+            modifyAlbum(album) {
+                this.album = deepCopy(album);
+                this.albumModalTitle = '修改相册';
+                this.showAlbumModal = true;
+            },
+            deleteAlbum(album) {
+                this.$Modal.confirm({
+                    title: '删除相册',
+                    content: '<p>点击确定1秒后将删除此相册</p>',
+                    loading: true,
+                    onOk: () => {
+                        setTimeout(() => {
+                            store.dispatch("DeleteAlbum", {albumId: album.id}).then(response => {
+                                this.$Notice.success({
+                                    title: '删除成功',
+                                    desc: '删除相册:' + album.name,
+                                    duration: 5,
+                                    closable: true
+                                });
+                                this.getAlbumsForPage();
+                            }).catch(err => {
+                                this.$Message.error({
+                                    content: err.data.error,
+                                    duration: 5,
+                                    closable: true
+                                })
+                            })
+                            this.$Modal.remove();
+                        }, 1000);
+                    },
+                    onCancel: () => {
+                        this.$Message.info('点击了取消');
+                    }
                 });
             },
             deletePhoto(photo) {
@@ -391,7 +446,7 @@
         },
         filters: {
             formatDate(time) {
-                return formatTime(time);
+                return formatTime(time, '{y}年{m}月{d}日{h}点{i}分{s}秒');
             },
             filterLatitude(exif) {
                 return filterLatitude(exif, true);

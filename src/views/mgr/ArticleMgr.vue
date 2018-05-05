@@ -90,6 +90,7 @@
         name: 'buttons',
         data() {
             return {
+                loginUser: null,
                 pageInfo: {
                     isFirstPage: undefined,
                     isLastPage: undefined,
@@ -354,13 +355,11 @@
                 vue.list_loadding = false;
 
             }, 1000);
-            var user = LocalStorage.getItem("LOGIN-USER");
-            if (user) {
-                this.filterCategoryTree(user.id);
-                this.tagList(user.id);
+            this.loginUser = LocalStorage.getItem("LOGIN-USER");
+            this.filterCategoryTree();
+            this.tagList();
 
-                this.loadArticles(user.id);
-            }
+            this.loadArticles();
         },
         methods: {
             remove(param) {
@@ -442,13 +441,13 @@
                 }
                 this.loadArticles();
             },
-            loadArticles(userId) {
+            loadArticles() {
                 var category = this.selectedCategory;
                 if (category && category.length > 0) {
                     this.pageQuery.filterMap.category = category[category.length - 1];
                 }
 
-                this.pageQuery.filterMap.userId = userId;
+                this.pageQuery.filterMap.userId = this.loginUser.id;
                 store.dispatch('ArticleList', this.pageQuery).then(res => { // 拉取user_info
                     this.article_list = res.data.payload.list;
                     this.pageInfo = res.data.payload;
@@ -461,8 +460,8 @@
                     });
                 })
             },
-            filterCategoryTree(userId) {
-                store.dispatch('FilterCategoryTree', {userId: userId}).then(res => {
+            filterCategoryTree() {
+                store.dispatch('FilterCategoryTree', {userId: this.loginUser.id}).then(res => {
                     var data = res.data;
                     this.categoryTree = data.payload;
                 }).catch(err => {
@@ -474,8 +473,8 @@
                     });
                 });
             },
-            tagList(userId) {
-                store.dispatch('FilterTagList', {userId: userId}).then(res => { // 拉取user_info
+            tagList() {
+                store.dispatch('FilterTagList', {userId: this.loginUser.id}).then(res => { // 拉取user_info
                     var tags = res.data.payload;
                     this.tags = tags;
 

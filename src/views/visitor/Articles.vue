@@ -3,14 +3,14 @@
         <Row :gutter="16" style="margin-top: 45px;">
             <Col span="4">
                 <nav class="sidebar-nav-visitor">
-                    <div style="">
+                    <div>
                         <ul>
-                            <li class="li-nav-tag" style="background: #0d5477;color: white">
+                            <li class="li-nav-tag" style="background: red;color: white">
                                 <div style="font-size:14px;vertical-align: middle"><p>热门推荐</p></div>
                             </li>
                             <li v-for="tag in tags" class="li-nav-tag">
                                 <p>
-                                    <a :href="'/archives/filter/tag/'+tag.name" target="_blank">
+                                    <a :href="'/archives/filter/tag/'+tag.name" target="_blank" style="color:black">
                                         {{tag.name}}({{tag.articleNumbers}})
                                     </a>
                                 </p>
@@ -77,29 +77,19 @@
                                 <Col span="8">
                                     <ul style="display: flex;">
                                         <li>
-                                            <Icon type="ios-clock" size="18"
-                                                  color="rgba(128,128,128,0.88)"></Icon>
-                                            <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.hits}}</label>
+                                            <label style="color:rgba(128,128,128,0.88);position: relative;">浏览{{article.hits}}</label>
 
                                         </li>
                                         <li>
-
-                                            <Icon type="chatbox-working" size="18"
-                                                  color="rgba(128,128,128,0.88)"></Icon>
-                                            <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.comments}}</label>
-
+                                            <label style="color:rgba(128,128,128,0.88);position: relative;">评论{{article.comments}}</label>
                                         </li>
                                         <li>
 
-                                            <Icon type="thumbsup" size="18"
-                                                  color="rgba(128,128,128,0.88)"></Icon>
-                                            <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.likes}}</label>
+                                            <label style="color:rgba(128,128,128,0.88);position: relative;">喜欢{{article.likes}}</label>
                                         </li>
                                         <li>
 
-                                            <Icon type="thumbsdown" size="18"
-                                                  color="rgba(128,128,128,0.88)"></Icon>
-                                            <label style="color:rgba(128,128,128,0.88);position: relative;">{{article.dislikes}}</label>
+                                            <label style="color:rgba(128,128,128,0.88);position: relative;">反对{{article.dislikes}}</label>
                                         </li>
                                     </ul>
                                 </Col>
@@ -296,7 +286,7 @@
     }
 
     .li-nav-tag {
-        padding: 1px 10px;
+        padding: 1px 10px 2px 10px;
         width: 140px;
         height: 37px;
         border-radius: 3px;
