@@ -27,21 +27,29 @@
                 <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
 
 
-
                 <Timeline>
-                    <TimelineItem v-for="al in pageInfo.list" :key="al.id">
-                        <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">创建时间:</span>{{al.gmtCreate|formatDate}}
+                    <TimelineItem v-for="img in pageInfo.list" :key="img.id">
+                        <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">创建时间:</span>{{img.gmtCreate|formatDate}}
                         </p>
 
-                        <div  style="padding-top: 10px;border: #a2e6f8 8px solid">
-                            <div v-for="img in al.covers">
-                                <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"/>
-                            </div>
+                        <div style="padding-top: 10px;">
+                            <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
+                                 style="border: #a2e6f8 8px solid"/>
                         </div>
                         <div style="padding-top: 10px;">
-                            <Button type="primary" size="small" @click="modifyPhoto(al)">修改</Button>
-                            <Button type="error" size="small" @click="deletePhoto(al)">删除</Button>
-                            <Button type="info" size="small" @click="modifyPhoto(al)">大图</Button>
+                            <a title="点击在地图上查看拍摄地点" @click="openMapModal(img)">
+                                <Icon type="location" size="20" color="red"></Icon>
+                                {{img.address}},{{img.longitudeRef}}{{img.longitude}},{{img.latitudeRef}}{{img.latitude}}
+                            </a>
+                        </div>
+                        <div style="padding-top: 10px;">
+                            <Icon type="iphone" size="20" color="blue"></Icon>
+                            {{img.make}}&nbsp;{{img.model}}
+                        </div>
+                        <div style="padding-top: 10px;">
+                            <Button type="primary" size="small" @click="modifyPhoto(img)">修改</Button>
+                            <Button type="error" size="small" @click="deletePhoto(img)">删除</Button>
+                            <Button type="info" size="small" @click="modifyPhoto(img)">大图</Button>
                         </div>
                     </TimelineItem>
                     <TimelineItem>
@@ -74,54 +82,6 @@
             </div>
             <div slot="footer" style="text-align: center">
                 <Button type="primary" size="small" @click="showMapModal=false">关闭</Button>
-            </div>
-
-        </Modal>
-        <Modal v-model="showAlbumModal" width="633" :maskClosable="false"
-               style="position: relative" :styles="{top: '20px'}">
-            <div slot="header" style="color:#f60;text-align:left">
-                <Icon type="ios-pulse-strong" size="20"></Icon>
-                <span style="font-size:14px;">新建相册</span>
-            </div>
-            <div>
-                <Form ref="albumForm" :model="album" :label-width="80">
-                    <Row>
-                        <Col>
-                            <Form-item prop="albumTypes" label="相册类型">
-                                <Select v-model="album.type" filterable clearable >
-                                    <Option v-for="item in albumTypes" :value="item.name" :key="item.name">{{item.value}}</Option>
-                                </Select>
-                            </Form-item>
-                        </Col>
-                        <Col>
-                            <Form-item prop="lockedTypes" label="是否公开">
-                                <Select v-model="album.locked" filterable clearable >
-                                    <Option v-for="item in lockedTypes" :value="item.name" :key="item.name">{{item.value}}</Option>
-                                </Select>
-                            </Form-item>
-                        </Col>
-                        <Col>
-                            <FormItem label="相册名称" prop="name">
-                                <Input v-model="album.name" type="text" placeholder="请输入相册名称">
-                                </Input>
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem label="描述" prop="description">
-                                <Input v-model="album.description" type="textarea"
-                                       placeholder="请输入相册的描述信息" :rows="6">
-                                </Input>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style="margin-left: 80px">
-                            <Button type="primary" @click="addAlbum">保存</Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-            <div slot="footer" style="text-align: center">
             </div>
 
         </Modal>
@@ -207,7 +167,8 @@
                     pageNum: 1,
                     pageSize: 10,
                     filterMap: {
-                        authorId: null
+                        authorId: null,
+                        albumId: null
                     },
                     sortMap: {}
                 },
@@ -216,8 +177,7 @@
         mounted() {
             const vue = this;
             var albumId = this.$route.params.albumId;
-            alert(albumId)
-
+            this.pageQuery.filterMap.albumId = albumId;
             this.list_loadding = true;
             setTimeout(function () {
                 vue.list_loadding = false;
@@ -225,8 +185,8 @@
             }, 1000);
             this.loginUser = LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
-            this.getAlbumsForPage();
             this.initMap();
+            this.getPhotosForPage();
         },
         methods: {
             openAlbumModal() {
@@ -250,7 +210,7 @@
             },
             addAlbum() {
                 this.$Loading.start();
-                this.album.authorId=this.loginUser.id;
+                this.album.authorId = this.loginUser.id;
                 store.dispatch('AddAlbum', this.album).then(res => {
                     this.$Loading.finish();
                     this.getAlbumsForPage();
@@ -328,7 +288,11 @@
                     this.pageInfo = res.data.payload;
                     this.$Loading.finish();
                 }).catch(err => {
-                    this.$Message.error(err);
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    });
                     this.$Loading.error()
                 });
             },
