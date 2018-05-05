@@ -308,3 +308,19 @@ export function comma2Degree(num) {
     }
 }
 
+export function deepCopy(obj) {
+    if (typeof obj != 'object') {
+        return obj;
+    } else if (Object.prototype.toString.call(obj) == '[object Object]') {
+        var newobj = {};
+        for (var attr in obj) {
+            newobj[attr] = deepCopy(obj[attr]);
+        }
+    } else if (Object.prototype.toString.call(obj) == '[object Array]') {
+        var newobj = [];
+        obj.forEach(function (e) {
+            newobj.push(deepCopy(e));
+        })
+    }
+    return newobj;
+}

@@ -129,7 +129,7 @@
 
 <script>
     import store from 'store/';
-    import {comma2Degree, comma2Dfm, dfm2Degree, formatTime} from 'utils';
+    import {comma2Degree, comma2Dfm, dfm2Degree, formatTime, deepCopy} from 'utils';
     import LocalStorage from "utils/LocalStorage";
 
     var vue;
@@ -285,8 +285,9 @@
                 })
             },
             modifyAlbum(album) {
-                this.album = album;
+                this.album = deepCopy(album);
                 this.showAlbumModal = true;
+                console.log(JSON.stringify(this.album))
             },
             deleteAlbum(album) {
                 store.dispatch("DeleteAlbum", {albumId: album.id}).then(response => {
