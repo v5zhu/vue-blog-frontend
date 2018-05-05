@@ -5,7 +5,7 @@
                 <Col span="12" style="margin-right: 10px;">
                     <Form-item prop="typeList" label="类型">
                         <Select v-model="article.type" filterable>
-                            <Option v-for="item in types" :value="item.value" :key="item.value">{{ item.name }}
+                            <Option v-for="item in types" :value="item.value" :key="item.value">{{item.name}}
                             </Option>
                         </Select>
                     </Form-item>
