@@ -47,9 +47,11 @@
                             {{img.make}}&nbsp;{{img.model}}
                         </div>
                         <div style="padding-top: 10px;">
-                            <Button type="primary" size="small" @click="modifyPhoto(img)">修改</Button>
+                            <Button type="primary" size="small" @click="openPhotoModal(img)">修改</Button>
                             <Button type="error" size="small" @click="deletePhoto(img)">删除</Button>
-                            <Button type="info" size="small" @click="modifyPhoto(img)">大图</Button>
+                            <Button type="info" size="small">
+                                <a :href="img.domain+img.key" target="_blank" style="color: white">大图</a>
+                            </Button>
                         </div>
                     </TimelineItem>
                     <TimelineItem>
@@ -85,12 +87,182 @@
             </div>
 
         </Modal>
+        <Modal v-model="showPhotoModal" width="800" :maskClosable="false"
+               style="position: relative" :styles="{top: '20px'}">
+            <div slot="header" style="color:#f60;text-align:left">
+                <Icon type="ios-pulse-strong" size="20"></Icon>
+                <span style="font-size:14px;">修正照片</span>
+            </div>
+            <Form ref="photoForm" :model="photo" :label-width="80">
+                <Row>
+                    <Col span="8">
+                        <FormItem label="照片名称" prop="name">
+                            <Input v-model="photo.name" type="text" placeholder="请输入照片名称">
+                            </Input>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <Form-item prop="albumId" label="相册">
+                            <Select v-model="photo.albumId" filterable clearable>
+                                <Option v-for="item in albumList" :value="item.id" :key="item.id">{{
+                                    item.name }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col span="8">
+                        <Form-item prop="locked" label="是否公开">
+                            <Select v-model="photo.locked" filterable clearable>
+                                <Option v-for="item in lockedTypes" :value="item.name" :key="item.name">{{
+                                    item.value }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Form-item prop="cover" label="设为封面">
+                            <Select v-model="photo.cover" filterable clearable>
+                                <Option v-for="item in coverTypes" :value="item.name" :key="item.name">{{
+                                    item.value }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="文件格式" prop="type">
+                            <div>{{photo.type}}</div>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="照片大小" prop="size">
+                            <div>{{photo.size}}&nbsp;{{photo.unit}}</div>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="24">
+                        <FormItem label="访问链接">
+                            <a :href="photo.domain+photo.key" target="_blank" :title="photo.domain+photo.key">
+                                {{photo.domain}}{{photo.key}}
+                            </a>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="24">
+                        <FormItem label="拍摄信息">
+                            <a :href="photo.domain+photo.key+'?exif'" target="_blank"
+                               :title="photo.domain+photo.key+'?exif'">
+                                {{photo.domain}}{{photo.key}}?exif
+                            </a>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem label="东西经" prop="longitudeRef">
+                            <Select v-model="photo.longitudeRef" filterable clearable>
+                                <Option v-for="item in longitudeTypes" :value="item.name" :key="item.name">{{
+                                    item.value }}
+                                </Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="经度" prop="longitude">
+                            <Input v-model="photo.longitude" type="text" placeholder="请输入照片经度">
+                            </Input>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem label="南北纬" prop="latitudeRef">
+                            <Select v-model="photo.latitudeRef" filterable clearable>
+                                <Option v-for="item in latitudeTypes" :value="item.name" :key="item.name">{{
+                                    item.value }}
+                                </Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="纬度" prop="latitude">
+                            <Input v-model="photo.latitude" type="text" placeholder="请输入照片纬度">
+                            </Input>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="24">
+                        <FormItem label="详细地址">
+                            {{photo.address}}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem label="手机制造商">
+                            {{photo.make}}
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="手机型号">
+                            {{photo.model}}
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="拍摄时间" prop="shootTime">
+                            <DatePicker type="datetime" v-model="photo.shootTime"
+                                        placeholder="请选择拍摄照片时间">
+                            </DatePicker>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem label="上传时间">
+                            {{photo.gmtCreate|formatDate}}
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="编辑时间">
+                            {{photo.gmtModified|formatDate}}
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="修改时间">
+                            {{photo.lastModifiedDate|formatDate}}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="24">
+                        <FormItem label="描述" prop="description">
+                            <Input v-model="photo.description" type="textarea"
+                                   placeholder="请输入相册的描述信息" :rows="6">
+                            </Input>
+                        </FormItem>
+                    </Col>
+                </Row>
+            </Form>
+            <div slot="footer" style="text-align: left">
+                <Row>
+                    <Col style="margin-left: 80px">
+                        <Button type="ghost" @click="showPhotoModal=false">关闭</Button>
+                        <Button type="error" @click="editPhoto">保存</Button>
+                    </Col>
+                </Row>
+            </div>
+
+        </Modal>
     </div>
 </template>
 
 <script>
     import store from 'store/';
-    import {comma2Degree, comma2Dfm, dfm2Degree, formatTime} from 'utils';
+    import {comma2Degree, comma2Dfm, dfm2Degree, formatTime, deepCopy} from 'utils';
     import LocalStorage from "utils/LocalStorage";
 
     var vue;
@@ -107,7 +279,7 @@
                 geocoder: undefined,
                 locationAddress: '',
                 showMapModal: false,
-                showAlbumModal: false,
+                showPhotoModal: false,
                 map: null,
                 geocoder: null,
                 marker: null,
@@ -118,9 +290,22 @@
                     {name: 'other', value: '其他'}
                 ],
                 lockedTypes: [
-                    {name: 1, value: '隐藏'},
-                    {name: 0, value: '公开'}
+                    {name: true, value: '隐藏'},
+                    {name: false, value: '公开'}
                 ],
+                coverTypes: [
+                    {name: true, value: '是'},
+                    {name: false, value: '否'}
+                ],
+                longitudeTypes: [
+                    {name: 'E', value: '东经'},
+                    {name: 'W', value: '西经'}
+                ],
+                latitudeTypes: [
+                    {name: 'N', value: '北纬'},
+                    {name: 'S', value: '南纬'}
+                ],
+                albumList: [],
                 album: {
                     id: null,
                     authorId: null,
@@ -136,6 +321,7 @@
                     name: null,
                     type: null,
                     size: 0,
+                    unit: null,
                     originalSize: 0,
                     uploadedSize: 0,
                     domain: null,
@@ -147,6 +333,7 @@
                     address: null,
                     make: null,
                     model: null,
+                    description: null,
                     shootTime: null,
                     lastModifiedDate: null,
                     gmtCreate: null,
@@ -187,8 +374,22 @@
             this.getUptoken();
             this.initMap();
             this.getPhotosForPage();
+            this.getAlbumList();
         },
         methods: {
+            getAlbumList() {
+                store.dispatch('GetAlbumList', {authorId: this.loginUser.id}).then(res => {
+                    this.albumList = res.data.payload;
+                    this.$Loading.finish();
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    });
+                    this.$Loading.error();
+                });
+            },
             openAlbumModal() {
                 this.$refs.albumForm.resetFields();
                 this.showAlbumModal = true;
@@ -223,21 +424,6 @@
                     this.$Loading.error()
                 });
             },
-            deletePhoto(photo) {
-                store.dispatch("DeletePhoto", {photoId: photo.id}).then(res => {
-                    this.$Notice.success({
-                        title: '删除成功',
-                        desc: '删除照片:' + photo.name,
-                        duration: 3
-                    });
-                }).catch(err => {
-                    this.$Message.error({
-                        content: err.data.error,
-                        duration: 5,
-                        closable: true
-                    })
-                })
-            },
             qiniu_upload() {
                 uploader.start();
             },
@@ -255,15 +441,75 @@
                     })
                 })
             },
-            modifyPhoto(photo) {
+            openPhotoModal(photo) {
+                var temp = deepCopy(photo);
+                //格式化size
+                if (temp.size < 1024) {
+                    temp.unit = '字节';
+                } else if (temp.size / 1024 < 1024) {
+                    temp.size = temp.size / 1024;
+                    temp.unit = 'KB';
+                } else if (temp.size / 1024 / 1024 < 1024) {
+                    temp.size = temp.size / 1024 / 1024;
+                    temp.unit = 'MB';
+                }
+                temp.shootTime = new Date(temp.shootTime);
+                this.photo = temp;
+                this.showPhotoModal = true;
+            },
+            editPhoto() {
+                //需要使用地图选择地点设置地点、经纬度
 
+                store.dispatch("UpdatePhoto", this.photo).then(response => {
+                    this.$Notice.success({
+                        title: '修改成功',
+                        desc: '修改照片:' + this.photo.name,
+                        duration: 5
+                    });
+                    this.getPhotosForPage();
+                }).catch(err => {
+                    this.$Message.error({
+                        content: err.data.error,
+                        duration: 5,
+                        closable: true
+                    })
+                })
+            },
+            deletePhoto(photo) {
+                this.$Modal.confirm({
+                    title: '删除照片',
+                    content: '<p>点击确定1秒后将删除此照片</p>',
+                    loading: true,
+                    onOk: () => {
+                        setTimeout(() => {
+                            store.dispatch("DeletePhoto", {photoId: photo.id}).then(res => {
+                                this.$Notice.success({
+                                    title: '删除成功',
+                                    desc: '删除照片:' + photo.name,
+                                    duration: 5
+                                });
+                                this.getPhotosForPage();
+                            }).catch(err => {
+                                this.$Message.error({
+                                    content: err.data.error,
+                                    duration: 5,
+                                    closable: true
+                                })
+                            })
+                            this.$Modal.remove();
+                        }, 1000);
+                    },
+                    onCancel: () => {
+                        this.$Message.info('点击了取消');
+                    }
+                });
             },
             uploadPhoto(photo) {
                 store.dispatch("UploadPhoto", photo).then(response => {
                     this.$Notice.success({
                         title: photo.name + '上传成功',
                         desc: '访问路径:' + photo.domain + photo.key,
-                        duration: 3
+                        duration: 5
                     });
                 }).catch(err => {
                     this.$Message.error({
@@ -350,7 +596,7 @@
         },
         filters: {
             formatDate(time) {
-                return formatTime(time);
+                return formatTime(time, '{y}年{m}月{d}日{h}点{i}分{s}秒');
             },
             filterLatitude(exif) {
                 return filterLatitude(exif, true);

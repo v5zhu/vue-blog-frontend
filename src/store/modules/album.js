@@ -1,6 +1,7 @@
 import {
     addAlbum,
     getAlbumsForPage,
+    getAlbumList,
     updateAlbum,
     deleteAlbum
 } from 'api/blog/album';
@@ -19,6 +20,15 @@ const album = {
         GetAlbumsForPage({commit, state}, data) {
             return new Promise((resolve, reject) => {
                 getAlbumsForPage(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+        GetAlbumList({commit, state}, params) {
+            return new Promise((resolve, reject) => {
+                getAlbumList(params).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

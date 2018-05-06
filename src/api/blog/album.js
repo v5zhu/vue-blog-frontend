@@ -19,6 +19,14 @@ export function getAlbumsForPage(data) {
     });
 }
 
+export function getAlbumList(params) {
+    return fetch({
+        url: prefix + '/album/list.token',
+        method: 'get',
+        params: params
+    });
+}
+
 export function updateAlbum(data) {
     return fetch({
         url: prefix + '/album.token',
