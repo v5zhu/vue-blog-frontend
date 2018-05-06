@@ -25,9 +25,8 @@
                     </ul>
                 </div>
                 <Row>
-
-                    <Col style="margin-left: 100px;" :xs="17" :sm="17" :md="17" :lg="17">
-                        <div class="post-header" style="">
+                    <Col offset="1" :xs="23" :sm="23" :md="23" :lg="23">
+                        <div class="post-header">
                             <div class="post-title"
                                  style="text-align: center;font-size:32px;font-weight: 700;"
                                  itemprop="name headline">
@@ -163,7 +162,7 @@
                         </div>
                         <div style="position: relative;margin-top:50px;margin-bottom:50px;">
                             <Row>
-                                <Col span="9">
+                                <Col span="9"  offset="1">
                                     <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
                                 </Col>
                                 <Col span="6">
@@ -171,18 +170,16 @@
                                         【共{{article.comments}}条评论】
                                     </div>
                                 </Col>
-                                <Col span="9">
+                                <Col span="8">
                                     <hr style="height:5px;border:none;border-top:1px dashed rgba(255,165,0,0.5);"/>
                                 </Col>
                             </Row>
                         </div>
                     </Col>
-                    <Col :xs="4" :sm="4" :md="4" :lg="4">
-                    </Col>
                 </Row>
 
-                <Row style="position: relative;margin-bottom:50px;margin-left: 100px;">
-                    <Col :xs="17" :sm="17" :md="17" :lg="17" style="padding: 10px;">
+                <Row style="position: relative;margin-bottom:50px;">
+                    <Col offset="2" :xs="22" :sm="22" :md="22" :lg="22" style="padding: 10px;">
                         <hr style="height:5px;margin-top:10px;margin-bottom:10px;border:none;border-top:1px solid rgba(255,165,0,0.2);"/>
                         <div v-for="(c,index) in comments.list">
                             <div class="staff_list" style="position: relative;margin-left: 50px;">
@@ -206,19 +203,14 @@
 
                         </div>
                     </Col>
-                    <Col :xs="4" :sm="4" :md="4" :lg="4">
-                    </Col>
-
                 </Row>
-                <Row style="position: relative;margin-bottom:50px;margin-left: 100px;"
+                <Row style="position: relative;margin-bottom:50px;"
                      v-if="article.allowComment===true">
-                    <Col span="17">
+                    <Col offset="1" span="23">
                         <comment-component :loginUser="loginUser" :type="type" :articleId="article.id"
                                            :parentComment="new Object()"
                                            @getArticleComments="getArticleComments">
                         </comment-component>
-                    </Col>
-                    <Col :xs="4" :sm="4" :md="4" :lg="4">
                     </Col>
                 </Row>
             </Col>

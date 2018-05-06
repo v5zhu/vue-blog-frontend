@@ -15,7 +15,7 @@ export function articleComments(params) {
 
 export function commitComment(data) {
     return fetch({
-        url: prefix+'/article/' + data.articleId + '/comment',
+        url: prefix+'/article/comment',
         method: 'post',
         data: data
     });
