@@ -137,7 +137,7 @@
                     </Col>
                     <Col span="8">
                         <FormItem label="照片大小" prop="size">
-                            <div>{{photo.size}}&nbsp;{{photo.unit}}</div>
+                            <div>{{photo.size|filterPhotoSize}}</div>
                         </FormItem>
                     </Col>
                 </Row>
@@ -202,6 +202,17 @@
                     </Col>
                 </Row>
                 <Row>
+                    <Col span="24">
+                        <div style="position: relative">
+                            <Input type="text" v-model="photo.address" style="margin-bottom: 10px;">
+                            <span slot="prepend">拍摄地点:</span>
+                            <span slot="append"><Icon type="ios-location" color="red" size="20"></Icon></span>
+                            </Input>
+                            <div id="photo-map-container" style="position: relative"></div>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
                     <Col span="8">
                         <FormItem label="手机制造商">
                             {{photo.make}}
@@ -262,7 +273,7 @@
 
 <script>
     import store from 'store/';
-    import {comma2Degree, comma2Dfm, dfm2Degree, formatTime, deepCopy} from 'utils';
+    import {comma2Degree, comma2Dfm, deepCopy, dfm2Degree, formatTime} from 'utils';
     import LocalStorage from "utils/LocalStorage";
 
     var vue;
@@ -276,13 +287,15 @@
                 loginUser: null,
                 uptoken: '',
                 progresshow: false,
-                geocoder: undefined,
                 locationAddress: '',
                 showMapModal: false,
                 showPhotoModal: false,
                 map: null,
+                photoMap: null,
                 geocoder: null,
+                photoGeocoder: null,
                 marker: null,
+                photoMarker: null,
                 albumTypes: [
                     {name: 'life', value: '生活'},
                     {name: 'baby', value: '亲子'},
@@ -373,6 +386,7 @@
             this.loginUser = LocalStorage.getItem("LOGIN-USER");
             this.getUptoken();
             this.initMap();
+            this.initPhotoMap();
             this.getPhotosForPage();
             this.getAlbumList();
         },
@@ -393,6 +407,9 @@
             openAlbumModal() {
                 this.$refs.albumForm.resetFields();
                 this.showAlbumModal = true;
+            },
+            openPhotoMapModal() {
+                this.showMapModal = true;
             },
             getAlbumsForPage() {
                 this.$Loading.start();
@@ -444,15 +461,6 @@
             openPhotoModal(photo) {
                 var temp = deepCopy(photo);
                 //格式化size
-                if (temp.size < 1024) {
-                    temp.unit = '字节';
-                } else if (temp.size / 1024 < 1024) {
-                    temp.size = temp.size / 1024;
-                    temp.unit = 'KB';
-                } else if (temp.size / 1024 / 1024 < 1024) {
-                    temp.size = temp.size / 1024 / 1024;
-                    temp.unit = 'MB';
-                }
                 temp.shootTime = new Date(temp.shootTime);
                 this.photo = temp;
                 this.showPhotoModal = true;
@@ -574,6 +582,41 @@
                     })
                 });
             },
+            initPhotoMap() {
+                var self = this;
+                self.photoMap = new AMap.Map('photo-map-container', {
+                    resizeEnable: true,
+                    zoom: 15,
+                    center: [104.55555, 30.4445555]
+                });
+                AMap.plugin(['AMap.Geocoder', 'AMap.ToolBar', 'AMap.Scale', 'AMap.OverView'], function () {
+                    self.photoGeocoder = new AMap.Geocoder({
+                        city: "010"//城市，默认：“全国”
+                    });
+                    var toolBar = new AMap.ToolBar();
+                    var scale = new AMap.Scale();
+                    self.photoMap.addControl(toolBar);
+                    self.photoMap.addControl(scale);
+
+                    self.photoMarker = new AMap.Marker({
+                        map: self.photoMap,
+                        bubble: true
+                    });
+                    self.photoMap.on('click', function (e) {
+                        console.log(e)
+                        self.photo.longitude = e.lnglat.O;
+                        self.photo.latitude = e.lnglat.P;
+                        self.photoMarker.setPosition(e.lnglat);
+                        self.photoGeocoder.getAddress(e.lnglat, function (status, result) {
+                            if (status == 'complete') {
+                                self.photo.address = result.regeocode.formattedAddress;
+                            } else {
+                                self.photo.address = '无法获取地址';
+                            }
+                        })
+                    })
+                });
+            },
             getAddress(longitude, latitude) {
                 var self = this;
                 if (longitude && latitude) {
@@ -612,6 +655,15 @@
             },
             filterAddress(exif) {
 
+            },
+            filterPhotoSize(size) {
+                if (size < 1024) {
+                    return size + ' 字节';
+                } else if (size / 1024 < 1024) {
+                    return size / 1024 + ' KB';
+                } else if (size / 1024 / 1024 < 1024) {
+                    return size / 1024 / 1024 + ' MB';
+                }
             }
         }
     }
@@ -783,6 +835,11 @@
 <style type="text/css" scoped>
     #map-container {
         width: 600px;
+        height: 400px;
+    }
+
+    #photo-map-container {
+        width: 768px;
         height: 400px;
     }
 
