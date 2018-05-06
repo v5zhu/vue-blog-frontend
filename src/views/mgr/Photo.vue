@@ -463,6 +463,7 @@
                 //格式化size
                 temp.shootTime = new Date(temp.shootTime);
                 this.photo = temp;
+                this.getPhotoAddress(this.photo.longitude, this.photo.latitude);
                 this.showPhotoModal = true;
             },
             editPhoto() {
@@ -616,6 +617,25 @@
                         })
                     })
                 });
+            },
+            getPhotoAddress(longitude, latitude) {
+                var self = this;
+                if (longitude && latitude) {
+                    self.photoMap.setCenter([longitude, latitude]);
+                    // self.marker.setMap(self.map);
+                    var lnglatXY = new AMap.LngLat(longitude, latitude);
+                    self.photoMarker.setPosition(lnglatXY);
+                    self.photoGeocoder.getAddress(lnglatXY, function (status, result) {
+                        if (status == 'complete') {
+                            self.photo.address = result.regeocode.formattedAddress
+                        } else {
+                            self.photo.address = '无法获取地址'
+                        }
+                    })
+                } else {
+                    self.photo.address = '';
+                }
+                return self.photo.address;
             },
             getAddress(longitude, latitude) {
                 var self = this;
