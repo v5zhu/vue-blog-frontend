@@ -2,71 +2,71 @@
     <div class="animated fadeIn" style="margin-left: 10px;">
         <Row>
             <Col :md="24">
-                <div>
-                    <div id="container" style="margin-bottom:10px;">
-                        <!--<Button type="primary" size="large" id='pickfiles'
-                                @click="qiniu_upload" style="padding-bottom:5px;">上传文件
-                        </Button>-->
+            <div>
+                <div id="container" style="margin-bottom:10px;">
+                    <Button type="primary" size="large" id='pickfiles'
+                            @click="qiniu_upload" style="padding-bottom:5px;">上传照片
+                    </Button>
 
-                        <Progress :percent="progresscount" :status="progresstatus"
-                                  style="width:90%;vertical-align:middle"
-                                  v-if="progresshow">
-                            <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
-                            <span v-if="progresscount===100">上传成功</span>
-                            <Icon type="close-circled" v-if="progresstatus==='wrong'"></Icon>
-                            <span v-if="progresstatus==='wrong'">上传失败</span>
-                            <span style="position:absolute;left:50%;top:-5px;"
-                                  v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
-                        </Progress>
-                    </div>
+                    <Progress :percent="progresscount" :status="progresstatus"
+                              style="width:90%;vertical-align:middle"
+                              v-if="progresshow">
+                        <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
+                        <span v-if="progresscount===100">上传成功</span>
+                        <Icon type="close-circled" v-if="progresstatus==='wrong'"></Icon>
+                        <span v-if="progresstatus==='wrong'">上传失败</span>
+                        <span style="position:absolute;left:50%;top:-5px;"
+                              v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
+                    </Progress>
                 </div>
+            </div>
             </Col>
         </Row>
         <Row>
             <Col span="24" offset="1">
-                <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
+            <p style="font-size: 16px;font-weight: bolder;">时间与生命的旅行</p>
 
 
-                <Timeline>
-                    <TimelineItem v-for="img in pageInfo.list" :key="img.id">
-                        <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">创建时间:</span>{{img.gmtCreate|formatDate}}
+            <Timeline>
+                <TimelineItem v-for="img in pageInfo.list" :key="img.id">
+                    <p style="font-size: 14px;font-weight: bold;"><span style="color: #8cc5ff">创建时间:</span>{{img.gmtCreate|formatDate}}
+                    </p>
+
+                    <div style="padding-top: 10px;">
+                        <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
+                             style="border: #a2e6f8 8px solid"/>
+                    </div>
+                    <div style="padding-top: 10px;">
+                        <a title="点击在地图上查看拍摄地点" @click="openMapModal(img)">
+                            <Icon type="location" size="20" color="red"></Icon>
+                            {{img.address}},{{img.longitudeRef}}{{img.longitude}},{{img.latitudeRef}}{{img.latitude}}
+                        </a>
+                    </div>
+                    <div style="padding-top: 10px;">
+                        <Icon type="iphone" size="20" color="blue"></Icon>
+                        {{img.make}}&nbsp;{{img.model}}
+                    </div>
+                    <div style="padding-top: 10px;">
+                        <Button type="primary" size="small" @click="openPhotoModal(img)">修改</Button>
+                        <Button type="error" size="small" @click="deletePhoto(img)">删除</Button>
+                        <Button type="info" size="small">
+                            <a :href="img.domain+img.key" target="_blank" style="color: white">大图</a>
+                        </Button>
+                    </div>
+                </TimelineItem>
+                <TimelineItem>
+                    <div v-if="pageInfo.total > pageInfo.pageSize"
+                         style="text-align: left;position: relative;margin-top: -8px;margin-left: 10px;">
+                        <p @click="loadMorePhotos()" style="border: none;cursor: pointer;">
+                            <Icon type="ios-more-outline" size="32"></Icon>
+                            <Icon type="ios-more-outline" size="32"></Icon>
                         </p>
-
-                        <div style="padding-top: 10px;">
-                            <img :src="img.domain+img.key+'?imageMogr2/auto-orient'" height="30%" width="30%"
-                                 style="border: #a2e6f8 8px solid"/>
-                        </div>
-                        <div style="padding-top: 10px;">
-                            <a title="点击在地图上查看拍摄地点" @click="openMapModal(img)">
-                                <Icon type="location" size="20" color="red"></Icon>
-                                {{img.address}},{{img.longitudeRef}}{{img.longitude}},{{img.latitudeRef}}{{img.latitude}}
-                            </a>
-                        </div>
-                        <div style="padding-top: 10px;">
-                            <Icon type="iphone" size="20" color="blue"></Icon>
-                            {{img.make}}&nbsp;{{img.model}}
-                        </div>
-                        <div style="padding-top: 10px;">
-                            <Button type="primary" size="small" @click="openPhotoModal(img)">修改</Button>
-                            <Button type="error" size="small" @click="deletePhoto(img)">删除</Button>
-                            <Button type="info" size="small">
-                                <a :href="img.domain+img.key" target="_blank" style="color: white">大图</a>
-                            </Button>
-                        </div>
-                    </TimelineItem>
-                    <TimelineItem>
-                        <div v-if="pageInfo.total > pageInfo.pageSize"
-                             style="text-align: left;position: relative;margin-top: -8px;margin-left: 10px;">
-                            <p @click="loadMorePhotos()" style="border: none;cursor: pointer;">
-                                <Icon type="ios-more-outline" size="32"></Icon>
-                                <Icon type="ios-more-outline" size="32"></Icon>
-                            </p>
-                        </div>
-                        <div style="text-align: left;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">
-                            全部加载完成
-                        </div>
-                    </TimelineItem>
-                </Timeline>
+                    </div>
+                    <div style="text-align: left;position: relative;" v-if="pageInfo.pageSize>=pageInfo.total">
+                        全部加载完成
+                    </div>
+                </TimelineItem>
+            </Timeline>
             </Col>
         </Row>
         <Modal v-model="showMapModal" width="633" :maskClosable="false"
@@ -96,173 +96,173 @@
             <Form ref="photoForm" :model="photo" :label-width="80">
                 <Row>
                     <Col span="8">
-                        <FormItem label="照片名称" prop="name">
-                            <Input v-model="photo.name" type="text" placeholder="请输入照片名称">
-                            </Input>
-                        </FormItem>
+                    <FormItem label="照片名称" prop="name">
+                        <Input v-model="photo.name" type="text" placeholder="请输入照片名称">
+                        </Input>
+                    </FormItem>
                     </Col>
                     <Col span="8">
-                        <Form-item prop="albumId" label="相册">
-                            <Select v-model="photo.albumId" filterable clearable>
-                                <Option v-for="item in albumList" :value="item.id" :key="item.id">{{
-                                    item.name }}
-                                </Option>
-                            </Select>
-                        </Form-item>
+                    <Form-item prop="albumId" label="相册">
+                        <Select v-model="photo.albumId" filterable clearable>
+                            <Option v-for="item in albumList" :value="item.id" :key="item.id">{{
+                                item.name }}
+                            </Option>
+                        </Select>
+                    </Form-item>
                     </Col>
                     <Col span="8">
-                        <Form-item prop="locked" label="是否公开">
-                            <Select v-model="photo.locked" filterable clearable>
-                                <Option v-for="item in lockedTypes" :value="item.name" :key="item.name">{{
-                                    item.value }}
-                                </Option>
-                            </Select>
-                        </Form-item>
+                    <Form-item prop="locked" label="是否公开">
+                        <Select v-model="photo.locked" filterable clearable>
+                            <Option v-for="item in lockedTypes" :value="item.name" :key="item.name">{{
+                                item.value }}
+                            </Option>
+                        </Select>
+                    </Form-item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
-                        <Form-item prop="cover" label="设为封面">
-                            <Select v-model="photo.cover" filterable clearable>
-                                <Option v-for="item in coverTypes" :value="item.name" :key="item.name">{{
-                                    item.value }}
-                                </Option>
-                            </Select>
-                        </Form-item>
+                    <Form-item prop="cover" label="设为封面">
+                        <Select v-model="photo.cover" filterable clearable>
+                            <Option v-for="item in coverTypes" :value="item.name" :key="item.name">{{
+                                item.value }}
+                            </Option>
+                        </Select>
+                    </Form-item>
                     </Col>
                     <Col span="8">
-                        <FormItem label="文件格式" prop="type">
-                            <div>{{photo.type}}</div>
-                        </FormItem>
+                    <FormItem label="文件格式" prop="type">
+                        <div>{{photo.type}}</div>
+                    </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="照片大小" prop="size">
-                            <div>{{photo.size|filterPhotoSize}}</div>
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="24">
-                        <FormItem label="访问链接">
-                            <a :href="photo.domain+photo.key" target="_blank" :title="photo.domain+photo.key">
-                                {{photo.domain}}{{photo.key}}
-                            </a>
-                        </FormItem>
+                    <FormItem label="照片大小" prop="size">
+                        <div>{{photo.size|filterPhotoSize}}</div>
+                    </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="24">
-                        <FormItem label="拍摄信息">
-                            <a :href="photo.domain+photo.key+'?exif'" target="_blank"
-                               :title="photo.domain+photo.key+'?exif'">
-                                {{photo.domain}}{{photo.key}}?exif
-                            </a>
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="8">
-                        <FormItem label="东西经" prop="longitudeRef">
-                            <Select v-model="photo.longitudeRef" filterable clearable>
-                                <Option v-for="item in longitudeTypes" :value="item.name" :key="item.name">{{
-                                    item.value }}
-                                </Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="经度" prop="longitude">
-                            <Input v-model="photo.longitude" type="text" placeholder="请输入照片经度">
-                            </Input>
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="8">
-                        <FormItem label="南北纬" prop="latitudeRef">
-                            <Select v-model="photo.latitudeRef" filterable clearable>
-                                <Option v-for="item in latitudeTypes" :value="item.name" :key="item.name">{{
-                                    item.value }}
-                                </Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="纬度" prop="latitude">
-                            <Input v-model="photo.latitude" type="text" placeholder="请输入照片纬度">
-                            </Input>
-                        </FormItem>
+                    <FormItem label="访问链接">
+                        <a :href="photo.domain+photo.key" target="_blank" :title="photo.domain+photo.key">
+                            {{photo.domain}}{{photo.key}}
+                        </a>
+                    </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="24">
-                        <FormItem label="详细地址">
-                            {{photo.address}}
-                        </FormItem>
+                    <FormItem label="拍摄信息">
+                        <a :href="photo.domain+photo.key+'?exif'" target="_blank"
+                           :title="photo.domain+photo.key+'?exif'">
+                            {{photo.domain}}{{photo.key}}?exif
+                        </a>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                    <FormItem label="东西经" prop="longitudeRef">
+                        <Select v-model="photo.longitudeRef" filterable clearable>
+                            <Option v-for="item in longitudeTypes" :value="item.name" :key="item.name">{{
+                                item.value }}
+                            </Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="经度" prop="longitude">
+                        <Input v-model="photo.longitude" type="text" placeholder="请输入照片经度">
+                        </Input>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                    <FormItem label="南北纬" prop="latitudeRef">
+                        <Select v-model="photo.latitudeRef" filterable clearable>
+                            <Option v-for="item in latitudeTypes" :value="item.name" :key="item.name">{{
+                                item.value }}
+                            </Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="纬度" prop="latitude">
+                        <Input v-model="photo.latitude" type="text" placeholder="请输入照片纬度">
+                        </Input>
+                    </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="24">
-                        <div style="position: relative">
-                            <Input type="text" v-model="photo.address" style="margin-bottom: 10px;">
-                            <span slot="prepend">拍摄地点:</span>
-                            <span slot="append"><Icon type="ios-location" color="red" size="20"></Icon></span>
-                            </Input>
-                            <div id="photo-map-container" style="position: relative"></div>
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="8">
-                        <FormItem label="手机制造商">
-                            {{photo.make}}
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="手机型号">
-                            {{photo.model}}
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="拍摄时间" prop="shootTime">
-                            <DatePicker type="datetime" v-model="photo.shootTime"
-                                        placeholder="请选择拍摄照片时间">
-                            </DatePicker>
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="8">
-                        <FormItem label="上传时间">
-                            {{photo.gmtCreate|formatDate}}
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="编辑时间">
-                            {{photo.gmtModified|formatDate}}
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="修改时间">
-                            {{photo.lastModifiedDate|formatDate}}
-                        </FormItem>
+                    <FormItem label="详细地址">
+                        {{photo.address}}
+                    </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="24">
-                        <FormItem label="描述" prop="description">
-                            <Input v-model="photo.description" type="textarea"
-                                   placeholder="请输入相册的描述信息" :rows="6">
-                            </Input>
-                        </FormItem>
+                    <div style="position: relative">
+                        <Input type="text" v-model="photo.address" style="margin-bottom: 10px;">
+                        <span slot="prepend">拍摄地点:</span>
+                        <span slot="append"><Icon type="ios-location" color="red" size="20"></Icon></span>
+                        </Input>
+                        <div id="photo-map-container" style="position: relative"></div>
+                    </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                    <FormItem label="手机制造商">
+                        {{photo.make}}
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="手机型号">
+                        {{photo.model}}
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="拍摄时间" prop="shootTime">
+                        <DatePicker type="datetime" v-model="photo.shootTime"
+                                    placeholder="请选择拍摄照片时间">
+                        </DatePicker>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                    <FormItem label="上传时间">
+                        {{photo.gmtCreate|formatDate}}
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="编辑时间">
+                        {{photo.gmtModified|formatDate}}
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="修改时间">
+                        {{photo.lastModifiedDate|formatDate}}
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="24">
+                    <FormItem label="描述" prop="description">
+                        <Input v-model="photo.description" type="textarea"
+                               placeholder="请输入相册的描述信息" :rows="6">
+                        </Input>
+                    </FormItem>
                     </Col>
                 </Row>
             </Form>
             <div slot="footer" style="text-align: left">
                 <Row>
                     <Col style="margin-left: 80px">
-                        <Button type="ghost" @click="showPhotoModal=false">关闭</Button>
-                        <Button type="error" @click="editPhoto">保存</Button>
+                    <Button type="ghost" @click="showPhotoModal=false">关闭</Button>
+                    <Button type="error" @click="editPhoto">保存</Button>
                     </Col>
                 </Row>
             </div>
@@ -750,6 +750,7 @@
                         console.error(err)
                     }
                     // 设置作者
+                    vue.photo.albumId = vue.pageQuery.filterMap.albumId;
                     vue.photo.authorId = vue.loginUser.id;
                     vue.photo.name = file.name;
                     vue.photo.type = file.type;
